@@ -1,10 +1,9 @@
 {
   "required": true,
-  "package": "ladysnake.illuminations.mixin",
+  "package": "ladysnake.ratsrats.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
   ],
-  "plugin": "ladysnake.illuminations.IlluminationsMixinConfigPlugin",
   "injectors": {
     "defaultRequire": 1
   }

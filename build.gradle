@@ -38,23 +38,19 @@ dependencies {
 //		modImplementation include(fabricApi.module(it, project.fabric_version))
 //	}
 
-	// Sodium
-	// modRuntime 'io.github.prospector:modmenu:1.14.6+build.31'
-	// modRuntime 'com.github.jellysquid3:sodium-fabric:mc1.16.1-0.1.0'
+	// Geckolib
+	modImplementation 'software.bernie.geckolib:fabric-1.16.4-geckolib:3.0.1:dev'
 
-	// cloth config
-	modApi("me.shedaniel.cloth:config-2:4.8.2") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
-	include "me.shedaniel.cloth:config-2:4.8.2"
+//	// cloth config
+//	modApi("me.shedaniel.cloth:config-2:4.8.2") {
+//		exclude(group: "net.fabricmc.fabric-api")
+//	}
+//	include "me.shedaniel.cloth:config-2:4.8.2"
 
 	// mod menu
 	modImplementation("io.github.prospector:modmenu:1.14.6+build.31") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-
-	// canvas renderer
-	modCompile "grondag:canvas-mc116:1.0.+"
 }
 
 processResources {
@@ -92,19 +88,8 @@ jar {
 repositories {
 	maven { url 'https://jitpack.io' }
 
-	// where grondag's mods live
-	maven {
-		name = "dblsaiko"
-		url = "https://maven.dblsaiko.net/"
-	}
-	maven {
-		name = "Cotton"
-		url = "http://server.bbkr.space:8081/artifactory/libs-release/"
-	}
-	// REI, odds and ends
-	maven {
-		name = "CurseForge"
-		url = "https://minecraft.curseforge.com/api/maven"
+	repositories {
+		maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' }
 	}
 }
 

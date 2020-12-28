@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Rat's Rats",
-  "description": "Introduces a new mob, the rat, as well as mechanics revolving around these new possible pets.!",
+  "description": "Introduces a new mob, the rat, as well as mechanics revolving around these new possible pets.",
   "authors": [
     "doctor4t",
 	"ArathainFarqoe"
@@ -20,7 +20,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "ladysnake.ratsrats.common.RatsRats"
+      "ladysnake.ratsrats.common.Rats"
+    ],
+    "client": [
+      "ladysnake.ratsrats.client.RatsClient"
     ]
   },
   "mixins": [
