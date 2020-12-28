@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "ratsrats",
+  "version": "${version}",
+
+  "name": "Rat's Rats",
+  "description": "Introduces a new mob, the rat, as well as mechanics revolving around these new possible pets.!",
+  "authors": [
+    "doctor4t",
+	"ArathainFarqoe"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/rats-rats",
+    "sources": "https://github.com/doctor4t/rats-rats"
+  },
+
+  "license": "Code: GNU GPLv3; Art: ARR",
+  "icon": "assets/ratsrats/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "ladysnake.ratsrats.common.RatsRats"
+    ]
+  },
+  "mixins": [
+    "ratsrats.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  }
+}

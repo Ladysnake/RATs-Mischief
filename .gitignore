@@ -1,0 +1,20 @@
+# gradle
+
+.gradle/
+build/
+out/
+
+# idea
+
+bin/
+.idea/
+.settings/
+.project
+*.iml
+*.ipr
+*.iws
+*.launch
+
+# fabric
+
+run/
