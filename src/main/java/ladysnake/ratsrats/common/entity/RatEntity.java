@@ -2,6 +2,7 @@ package ladysnake.ratsrats.common.entity;
 
 import ladysnake.ratsrats.common.Rats;
 import ladysnake.ratsrats.common.network.Packets;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -26,8 +27,6 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-
-import java.util.ArrayList;
 
 public class RatEntity extends TameableEntity implements IAnimatable {
     private final AnimationFactory factory = new AnimationFactory(this);
@@ -64,19 +63,16 @@ public class RatEntity extends TameableEntity implements IAnimatable {
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (this.getX() != this.prevX || this.getZ() != this.prevZ) {
+        if (event.isMoving()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.run", true));
-            event.getController().transitionLengthTicks = 5;
             return PlayState.CONTINUE;
-        } else {
-            event.getController().transitionLengthTicks = 5;
-            return PlayState.STOP;
         }
+        return PlayState.STOP;
     }
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, "controller", 5, this::predicate));
     }
 
     @Override
@@ -120,7 +116,12 @@ public class RatEntity extends TameableEntity implements IAnimatable {
         tag.putString("RatType", this.getRatType().toString());
     }
 
-    public static enum Type {
+    @Override
+    public void mobTick() {
+        this.setSprinting(this.getMoveControl().isMoving());
+    }
+
+    public enum Type {
         ALBINO,
         BLACK,
         GREY,
