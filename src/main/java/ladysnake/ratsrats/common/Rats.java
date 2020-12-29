@@ -20,7 +20,7 @@ public class Rats implements ModInitializer {
     public void onInitialize() {
         GeckoLib.initialize();
 
-        RAT = registerEntity("rat", FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, RatEntity::new).dimensions(EntityDimensions.changing(0.6F, 0.4F)).trackRangeBlocks(8).build());
+        RAT = registerEntity("rat", FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, RatEntity::new).dimensions(EntityDimensions.changing(0.8F, 0.4F)).trackRangeBlocks(8).build());
         FabricDefaultAttributeRegistry.register(RAT, RatEntity.createEntityAttributes());
     }
 
