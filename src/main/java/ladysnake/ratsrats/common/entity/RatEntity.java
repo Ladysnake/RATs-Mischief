@@ -2,7 +2,6 @@ package ladysnake.ratsrats.common.entity;
 
 import ladysnake.ratsrats.common.Rats;
 import ladysnake.ratsrats.common.network.Packets;
-import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -72,7 +71,7 @@ public class RatEntity extends TameableEntity implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 5, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
     }
 
     @Override
