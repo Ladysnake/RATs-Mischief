@@ -127,7 +127,8 @@ public class RatEntity extends TameableEntity implements IAnimatable {
         HUSKY_0,
         HUSKY_1,
         HUSKY_2,
-        LIGHT_BROWN
+        LIGHT_BROWN,
+        RUSSIAN_BLUE
     }
 
 }
