@@ -13,7 +13,7 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
 
     @Override
     public Identifier getTextureLocation(RatEntity object) {
-        return new Identifier(Rats.MODID, "textures/entity/grey_rat.png");
+        return new Identifier(Rats.MODID, "textures/entity/"+object.getRatType().toString().toLowerCase()+".png");
     }
 
     @Override
