@@ -27,6 +27,10 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class RatEntity extends TameableEntity implements IAnimatable {
     private final AnimationFactory factory = new AnimationFactory(this);
 
@@ -39,7 +43,12 @@ public class RatEntity extends TameableEntity implements IAnimatable {
 
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(TYPE, Type.values()[random.nextInt(Type.values().length)].toString());
+
+        if (this.random.nextInt(150) == 0) {
+            this.setRatType(Type.GOLD);
+        } else {
+            this.dataTracker.startTracking(TYPE, getRandomNaturalType(this.random).toString());
+        }
     }
 
     protected void initGoals() {
@@ -104,7 +113,7 @@ public class RatEntity extends TameableEntity implements IAnimatable {
         if (tag.contains("RatType")) {
             this.setRatType(Type.valueOf(tag.getString("RatType")));
         } else {
-            this.setRatType(Type.values()[random.nextInt(Type.values().length)]);
+            this.setRatType(getRandomNaturalType(this.random));
         }
     }
 
@@ -128,7 +137,15 @@ public class RatEntity extends TameableEntity implements IAnimatable {
         HUSKY_1,
         HUSKY_2,
         LIGHT_BROWN,
-        RUSSIAN_BLUE
+        RUSSIAN_BLUE,
+        GOLD
     }
 
+    public static Type getRandomNaturalType(Random random) {
+        return NATURAL_TYPES.get(random.nextInt(NATURAL_TYPES.size()));
+    }
+
+    public static final ArrayList<Type> NATURAL_TYPES = new ArrayList<Type>(List.of(
+            Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY_0, Type.HUSKY_1, Type.HUSKY_2, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
+    ));
 }
