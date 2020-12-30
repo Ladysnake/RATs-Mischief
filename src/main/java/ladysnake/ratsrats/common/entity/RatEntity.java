@@ -45,7 +45,7 @@ public class RatEntity extends TameableEntity implements IAnimatable {
         super.initDataTracker();
 
         if (this.random.nextInt(150) == 0) {
-            this.setRatType(Type.GOLD);
+            this.dataTracker.startTracking(TYPE, Type.GOLD.toString());
         } else {
             this.dataTracker.startTracking(TYPE, getRandomNaturalType(this.random).toString());
         }
@@ -112,8 +112,6 @@ public class RatEntity extends TameableEntity implements IAnimatable {
 
         if (tag.contains("RatType")) {
             this.setRatType(Type.valueOf(tag.getString("RatType")));
-        } else {
-            this.setRatType(getRandomNaturalType(this.random));
         }
     }
 
