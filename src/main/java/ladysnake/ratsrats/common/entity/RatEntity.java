@@ -106,8 +106,15 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     @Override
-    public @Nullable PassiveEntity createChild(ServerWorld world, PassiveEntity entity) {
-        return null;
+    public RatEntity createChild(ServerWorld world, PassiveEntity entity) {
+        RatEntity ratEntity = Rats.RAT.create(world);
+        UUID ownerUuid = this.getOwnerUuid();
+        if (ownerUuid != null) {
+            ratEntity.setOwnerUuid(ownerUuid);
+            ratEntity.setTamed(true);
+        }
+
+        return ratEntity;
     }
 
     @Override
@@ -171,7 +178,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                     this.heal((float)item.getFoodComponent().getHunger());
                     return ActionResult.SUCCESS;
                 }
-            } else if (item == Items.MELON_SLICE && !this.hasAngerTime()) {
+            } else if (((this.getRatType() != Type.GOLD && item == Items.MELON_SLICE) || (this.getRatType() == Type.GOLD && item == Items.GLISTERING_MELON_SLICE)) && !this.hasAngerTime()) {
                 if (!player.abilities.creativeMode) {
                     itemStack.decrement(1);
                 }
@@ -239,6 +246,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         } else {
             return false;
         }
+    }
+
+    @Override
+    public boolean isBreedingItem(ItemStack stack) {
+        return stack.getItem() == Items.MELON_SLICE || stack.getItem() == Items.COOKED_CHICKEN || stack.getItem() == Items.COOKED_BEEF;
     }
 
     public enum Type {
