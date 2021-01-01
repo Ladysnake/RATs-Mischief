@@ -11,14 +11,8 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.AbstractSkeletonEntity;
-import net.minecraft.entity.mob.Angerable;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.mob.*;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
@@ -227,6 +221,24 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     @Override
     public boolean isSitting() {
         return false;
+    }
+
+    @Override
+    public boolean canAttackWithOwner(LivingEntity target, LivingEntity owner) {
+        if (!(target instanceof CreeperEntity) && !(target instanceof GhastEntity)) {
+            if (target instanceof RatEntity) {
+                RatEntity ratEntity = (RatEntity)target;
+                return !ratEntity.isTamed() || ratEntity.getOwner() != owner;
+            } else if (target instanceof PlayerEntity && owner instanceof PlayerEntity && !((PlayerEntity)owner).shouldDamagePlayer((PlayerEntity)target)) {
+                return false;
+            } else if (target instanceof HorseBaseEntity && ((HorseBaseEntity)target).isTame()) {
+                return false;
+            } else {
+                return !(target instanceof TameableEntity) || !((TameableEntity)target).isTamed();
+            }
+        } else {
+            return false;
+        }
     }
 
     public enum Type {
