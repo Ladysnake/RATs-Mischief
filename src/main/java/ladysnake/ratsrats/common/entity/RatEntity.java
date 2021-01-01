@@ -3,6 +3,8 @@ package ladysnake.ratsrats.common.entity;
 import ladysnake.ratsrats.common.Rats;
 import ladysnake.ratsrats.common.network.Packets;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.Durations;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -10,15 +12,25 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
+import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Packet;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.DyeColor;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.IntRange;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -32,11 +44,16 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
-public class RatEntity extends TameableEntity implements IAnimatable {
+public class RatEntity extends TameableEntity implements IAnimatable, Angerable {
     private final AnimationFactory factory = new AnimationFactory(this);
 
     private static final TrackedData<String> TYPE = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
+
+    private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(WolfEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final IntRange ANGER_TIME_RANGE = Durations.betweenSeconds(20, 39);
+    private UUID targetUuid;
 
     public RatEntity(EntityType<? extends PathAwareEntity> type, World worldIn) {
         super(Rats.RAT, worldIn);
@@ -51,6 +68,8 @@ public class RatEntity extends TameableEntity implements IAnimatable {
         } else {
             this.dataTracker.startTracking(TYPE, getRandomNaturalType(this.random).toString());
         }
+
+        this.dataTracker.startTracking(ANGER_TIME, 0);
     }
 
     protected void initGoals() {
@@ -65,12 +84,13 @@ public class RatEntity extends TameableEntity implements IAnimatable {
         this.targetSelector.add(1, new TrackOwnerAttackerGoal(this));
         this.targetSelector.add(2, new AttackWithOwnerGoal(this));
         this.targetSelector.add(3, (new RevengeGoal(this, new Class[0])).setGroupRevenge());
-        this.targetSelector.add(7, new FollowTargetGoal(this, CatEntity.class, false));
+        this.targetSelector.add(4, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, livingEntity -> this.shouldAngerAt((LivingEntity) livingEntity)));
+        this.targetSelector.add(7, new FollowTargetGoal(this, CatEntity.class, 10, true, false, livingEntity -> this.shouldAngerAt((LivingEntity) livingEntity)));
         this.targetSelector.add(8, new UniversalAngerGoal(this, true));
     }
 
     public static DefaultAttributeContainer.Builder createEntityAttributes() {
-        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32);
+        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32);
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
@@ -116,6 +136,7 @@ public class RatEntity extends TameableEntity implements IAnimatable {
         if (tag.contains("RatType")) {
             this.setRatType(Type.valueOf(tag.getString("RatType")));
         }
+        this.angerFromTag((ServerWorld)this.world, tag);
     }
 
     @Override
@@ -123,20 +144,97 @@ public class RatEntity extends TameableEntity implements IAnimatable {
         super.writeCustomDataToTag(tag);
 
         tag.putString("RatType", this.getRatType().toString());
+        this.angerToTag(tag);
     }
 
     @Override
     public void mobTick() {
-        this.setSprinting(this.getMoveControl().isMoving());
+//        this.setSprinting(this.getMoveControl().isMoving());
+
+    }
+
+    public void tickMovement() {
+        super.tickMovement();
+
+        if (!this.world.isClient) {
+            this.tickAngerLogic((ServerWorld)this.world, true);
+        }
+    }
+
+    public ActionResult interactMob(PlayerEntity player, Hand hand) {
+        ItemStack itemStack = player.getStackInHand(hand);
+        Item item = itemStack.getItem();
+        if (this.world.isClient) {
+            boolean bl = this.isOwner(player) || this.isTamed() && !this.isTamed() && !this.hasAngerTime();
+            return bl ? ActionResult.CONSUME : ActionResult.PASS;
+        } else {
+            if (this.isTamed()) {
+                if (this.isBreedingItem(itemStack) && this.getHealth() < this.getMaxHealth()) {
+                    if (!player.abilities.creativeMode) {
+                        itemStack.decrement(1);
+                    }
+
+                    this.heal((float)item.getFoodComponent().getHunger());
+                    return ActionResult.SUCCESS;
+                }
+            } else if (item == Items.MELON_SLICE && !this.hasAngerTime()) {
+                if (!player.abilities.creativeMode) {
+                    itemStack.decrement(1);
+                }
+
+                this.setOwner(player);
+                this.navigation.stop();
+                this.setTarget((LivingEntity)null);
+                this.setSitting(true);
+                this.world.sendEntityStatus(this, (byte)7);
+
+                return ActionResult.SUCCESS;
+            }
+
+            return super.interactMob(player, hand);
+        }
+    }
+
+    @Override
+    public int getAngerTime() {
+        return (Integer)this.dataTracker.get(ANGER_TIME);
+    }
+
+    @Override
+    public void setAngerTime(int ticks) {
+        this.dataTracker.set(ANGER_TIME, ticks);
+    }
+
+    @Override
+    public void chooseRandomAngerTime() {
+        this.setAngerTime(ANGER_TIME_RANGE.choose(this.random));
+    }
+
+    @Override
+    public UUID getAngryAt() {
+        return this.targetUuid;
+    }
+
+    @Override
+    public void setAngryAt(@Nullable UUID uuid) {
+        this.targetUuid = uuid;
+    }
+
+    public boolean canBeLeashedBy(PlayerEntity player) {
+        return !this.hasAngerTime() && super.canBeLeashedBy(player);
+    }
+
+    @Override
+    public boolean isSitting() {
+        return false;
     }
 
     public enum Type {
         ALBINO,
         BLACK,
         GREY,
-        HUSKY_0,
-        HUSKY_1,
-        HUSKY_2,
+        HUSKY,
+        CHOCOLATE,
         LIGHT_BROWN,
         RUSSIAN_BLUE,
         GOLD
@@ -147,6 +245,6 @@ public class RatEntity extends TameableEntity implements IAnimatable {
     }
 
     public static final ArrayList<Type> NATURAL_TYPES = new ArrayList<Type>(List.of(
-            Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY_0, Type.HUSKY_1, Type.HUSKY_2, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
+            Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
     ));
 }
