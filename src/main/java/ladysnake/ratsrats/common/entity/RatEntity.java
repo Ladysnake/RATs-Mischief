@@ -2,6 +2,7 @@ package ladysnake.ratsrats.common.entity;
 
 import ladysnake.ratsrats.common.Rats;
 import ladysnake.ratsrats.common.network.Packets;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.Durations;
@@ -68,7 +69,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     protected void initGoals() {
         this.goalSelector.add(1, new SwimGoal(this));
-        this.goalSelector.add(4, new PounceAtTargetGoal(this, 0.4F));
+        this.goalSelector.add(4, new PounceAtTargetGoal(this, 0.3F));
         this.goalSelector.add(5, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.add(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.add(7, new AnimalMateGoal(this, 1.0D));
@@ -79,7 +80,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.targetSelector.add(2, new AttackWithOwnerGoal(this));
         this.targetSelector.add(3, (new RevengeGoal(this, new Class[0])).setGroupRevenge());
         this.targetSelector.add(4, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, livingEntity -> this.shouldAngerAt((LivingEntity) livingEntity)));
-        this.targetSelector.add(7, new FollowTargetGoal(this, CatEntity.class, 10, true, false, livingEntity -> this.shouldAngerAt((LivingEntity) livingEntity)));
+        this.targetSelector.add(7, new FollowTargetGoal(this, CatEntity.class, true));
         this.targetSelector.add(8, new UniversalAngerGoal(this, true));
     }
 
@@ -251,6 +252,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     @Override
     public boolean isBreedingItem(ItemStack stack) {
         return stack.getItem() == Items.MELON_SLICE || stack.getItem() == Items.COOKED_CHICKEN || stack.getItem() == Items.COOKED_BEEF;
+    }
+
+    @Override
+    public boolean tryAttack(Entity target) {
+        target.timeUntilRegen = 0;
+        return super.tryAttack(target);
     }
 
     public enum Type {
