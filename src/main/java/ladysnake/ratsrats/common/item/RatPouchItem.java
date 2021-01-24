@@ -3,6 +3,7 @@ package ladysnake.ratsrats.common.item;
 import ladysnake.ratsrats.common.Rats;
 import ladysnake.ratsrats.common.entity.RatEntity;
 import net.fabricmc.fabric.api.util.NbtType;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -10,10 +11,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -48,9 +51,7 @@ public class RatPouchItem extends Item {
                 ListTag listTag = user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).getList("rats", NbtType.COMPOUND);
 
                 List<RatEntity> closestTamedRats = world.getEntitiesByClass(RatEntity.class, user.getBoundingBox().expand(5.0D), CLOSEST_RAT_PREDICATE);
-                List<RatEntity> closestOwnedRats = closestTamedRats.stream().filter(ratEntity -> {
-                    return ratEntity.getOwnerUuid().equals(user.getUuid());
-                }).collect(Collectors.toList());
+                List<RatEntity> closestOwnedRats = closestTamedRats.stream().filter(ratEntity -> ratEntity.getOwnerUuid().equals(user.getUuid())).collect(Collectors.toList());
 
                 if (closestOwnedRats.size() > 0) {
                     for (int i = 0; i < this.size; i++) {
