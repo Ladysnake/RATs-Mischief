@@ -51,7 +51,7 @@ public class RatPouchItem extends Item {
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
         ListTag listTag = user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).getList("rats", NbtType.COMPOUND);
 
-        if (listTag.size() < this.size && entity instanceof RatEntity) {
+        if (listTag.size() < this.size && entity instanceof RatEntity && ((RatEntity) entity).getOwnerUuid() == user.getUuid()) {
             CompoundTag compoundTag = new CompoundTag();
             entity.saveToTag(compoundTag);
             listTag.add(compoundTag);
