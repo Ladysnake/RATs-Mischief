@@ -1,3 +1,15 @@
 {
-  "entity.ratsrats.rat": "Rat"
+  "entity.ratsrats.rat": "Rat",
+  "item.ratsrats.leather_rat_pouch": "Leather Rat Pouch",
+  "item.ratsrats.twisted_rat_pouch": "Twisted Rat Pouch",
+  "item.ratsrats.purpur_rat_pouch": "Purpur Rat Pouch",
+  "item.ratsrats.rat_pouch.tooltip.capacity": "Capacity: %s/%s",
+  "type.ratsrats.albino": "Albino",
+  "type.ratsrats.black": "Black",
+  "type.ratsrats.grey": "Grey",
+  "type.ratsrats.husky": "Husky",
+  "type.ratsrats.chocolate": "Chocolate",
+  "type.ratsrats.light_brown": "Light_brown",
+  "type.ratsrats.russian_blue": "Russian_blue",
+  "type.ratsrats.gold": "Gold"
 }
