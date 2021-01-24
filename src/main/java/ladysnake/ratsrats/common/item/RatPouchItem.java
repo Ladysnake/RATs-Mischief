@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
@@ -111,14 +112,18 @@ public class RatPouchItem extends Item {
         for (Tag ratTag : listTag) {
             TranslatableText ratType = new TranslatableText("type.ratsrats."+((CompoundTag) ratTag).getString("RatType").toLowerCase());
 
+            Style style = EMPTY.withColor(Formatting.DARK_GRAY);
+            if (((CompoundTag) ratTag).getString("RatType").equals(RatEntity.Type.GOLD.name())) {
+                style = EMPTY.withColor(Formatting.GOLD);
+            }
             if (((CompoundTag) ratTag).contains("CustomName")) {
                 Matcher matcher = Pattern.compile("\\{\"text\":\"(.+)\"\\}").matcher(((CompoundTag) ratTag).getString("CustomName"));
                 if (matcher.find()) {
                     String name = matcher.group(1);
-                    tooltip.add(new LiteralText(name).append(" (").append(ratType).append(")").setStyle(EMPTY.withColor(Formatting.DARK_GRAY)));
+                    tooltip.add(new LiteralText(name).append(" (").append(ratType).append(")").setStyle(style));
                 }
             } else {
-                tooltip.add(ratType.setStyle(EMPTY.withColor(Formatting.DARK_GRAY)));
+                tooltip.add(ratType.setStyle(style));
             }
         }
 
