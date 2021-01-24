@@ -11,8 +11,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -20,7 +23,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static net.minecraft.text.Style.EMPTY;
 
 public class RatPouchItem extends Item {
     private final int size;
@@ -95,4 +102,26 @@ public class RatPouchItem extends Item {
         }
     }
 
+    @Override
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        ListTag listTag = stack.getOrCreateSubTag(Rats.MODID).getList("rats", NbtType.COMPOUND);
+
+        tooltip.add(new TranslatableText("item.ratsrats.rat_pouch.tooltip.capacity", listTag.size(), this.size).setStyle(EMPTY.withColor(Formatting.GRAY)));
+
+        for (Tag ratTag : listTag) {
+            TranslatableText ratType = new TranslatableText("type.ratsrats."+((CompoundTag) ratTag).getString("RatType").toLowerCase());
+
+            if (((CompoundTag) ratTag).contains("CustomName")) {
+                Matcher matcher = Pattern.compile("\\{\"text\":\"(.+)\"\\}").matcher(((CompoundTag) ratTag).getString("CustomName"));
+                if (matcher.find()) {
+                    String name = matcher.group(1);
+                    tooltip.add(new LiteralText(name).append(" (").append(ratType).append(")").setStyle(EMPTY.withColor(Formatting.DARK_GRAY)));
+                }
+            } else {
+                tooltip.add(ratType.setStyle(EMPTY.withColor(Formatting.DARK_GRAY)));
+            }
+        }
+
+        super.appendTooltip(stack, world, tooltip, context);
+    }
 }
