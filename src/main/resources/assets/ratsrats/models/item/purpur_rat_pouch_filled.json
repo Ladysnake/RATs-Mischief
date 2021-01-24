@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "ratsrats:item/purpur_rat_pouch_filled"
+  }
+}
