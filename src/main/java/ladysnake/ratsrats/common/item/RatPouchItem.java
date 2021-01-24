@@ -58,7 +58,7 @@ public class RatPouchItem extends Item {
                 ListTag listTag = user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).getList("rats", NbtType.COMPOUND);
 
                 List<RatEntity> closestTamedRats = world.getEntitiesByClass(RatEntity.class, user.getBoundingBox().expand(5.0D), CLOSEST_RAT_PREDICATE);
-                List<RatEntity> closestOwnedRats = closestTamedRats.stream().filter(ratEntity -> ratEntity.getOwnerUuid().equals(user.getUuid())).collect(Collectors.toList());
+                List<RatEntity> closestOwnedRats = closestTamedRats.stream().filter(ratEntity -> ratEntity.getOwnerUuid() != null && ratEntity.getOwnerUuid().equals(user.getUuid())).collect(Collectors.toList());
 
                 if (closestOwnedRats.size() > 0) {
                     for (int i = 0; i < this.size; i++) {
@@ -88,7 +88,7 @@ public class RatPouchItem extends Item {
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
         ListTag listTag = user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).getList("rats", NbtType.COMPOUND);
 
-        if (listTag.size() < this.size && entity instanceof RatEntity && ((RatEntity) entity).getOwnerUuid().equals(user.getUuid())) {
+        if (listTag.size() < this.size && entity instanceof RatEntity && ((RatEntity) entity).getOwnerUuid() != null && ((RatEntity) entity).getOwnerUuid().equals(user.getUuid())) {
             CompoundTag compoundTag = new CompoundTag();
             entity.saveToTag(compoundTag);
             listTag.add(compoundTag);
