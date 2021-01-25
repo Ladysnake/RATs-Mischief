@@ -10,12 +10,14 @@ import net.minecraft.entity.ai.Durations;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -169,7 +171,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     @Override
     public void mobTick() {
 //        this.setSprinting(this.getMoveControl().isMoving());
-
+        if (this.isTouchingWater()) {
+            this.setSitting(false);
+        }
     }
 
     public void tickMovement() {
@@ -286,6 +290,21 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     @Override
     public void setSitting(boolean sitting) {
         this.dataTracker.set(SITTING, sitting);
+    }
+
+    @Override
+    public boolean damage(DamageSource source, float amount) {
+        if (this.isInvulnerableTo(source)) {
+            return false;
+        } else {
+            Entity entity = source.getAttacker();
+            this.setSitting(false);
+            if (entity != null && !(entity instanceof PlayerEntity) && !(entity instanceof PersistentProjectileEntity)) {
+                amount = (amount + 1.0F) / 2.0F;
+            }
+
+            return super.damage(source, amount);
+        }
     }
 
     public enum Type {
