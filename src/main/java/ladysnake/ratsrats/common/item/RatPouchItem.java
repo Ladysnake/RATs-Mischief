@@ -67,6 +67,7 @@ public class RatPouchItem extends Item {
                             CompoundTag compoundTag = new CompoundTag();
                             closestOwnedRats.get(i).saveToTag(compoundTag);
                             listTag.add(compoundTag);
+                            closestOwnedRats.get(i).playSpawnEffects();
                             closestOwnedRats.get(i).remove();
                         } else {
                             break;
@@ -94,6 +95,7 @@ public class RatPouchItem extends Item {
             entity.saveToTag(compoundTag);
             listTag.add(compoundTag);
             user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).put("rats", listTag);
+            ((RatEntity) entity).playSpawnEffects();
             entity.remove();
             user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).putFloat("filled", 1F);
 
