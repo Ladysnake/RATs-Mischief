@@ -47,6 +47,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     private final AnimationFactory factory = new AnimationFactory(this);
 
     private static final TrackedData<String> TYPE = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
+    private static final TrackedData<Boolean> SITTING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);;
 
     private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(WolfEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final IntRange ANGER_TIME_RANGE = Durations.betweenSeconds(20, 39);
@@ -67,6 +68,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
 
         this.dataTracker.startTracking(ANGER_TIME, 0);
+        this.dataTracker.startTracking(SITTING, false);
     }
 
     protected void initGoals() {
@@ -148,6 +150,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             this.setRatType(Type.valueOf(tag.getString("RatType")));
         }
         this.angerFromTag((ServerWorld)this.world, tag);
+
+        if (tag.contains("Sitting")) {
+            this.setSitting(tag.getBoolean("Sitting"));
+        }
     }
 
     @Override
@@ -156,6 +162,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
         tag.putString("RatType", this.getRatType().toString());
         this.angerToTag(tag);
+
+        tag.putBoolean("Sitting", this.isSitting());
     }
 
     @Override
@@ -268,6 +276,16 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public boolean tryAttack(Entity target) {
         target.timeUntilRegen = 0;
         return super.tryAttack(target);
+    }
+
+    @Override
+    public boolean isSitting() {
+        return (Boolean) this.dataTracker.get(SITTING);
+    }
+
+    @Override
+    public void setSitting(boolean sitting) {
+        this.dataTracker.set(SITTING, sitting);
     }
 
     public enum Type {
