@@ -99,14 +99,13 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         if (this.isSitting()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.flat", true));
             return PlayState.CONTINUE;
-        }
-
-        if (event.isMoving()) {
+        } else if (event.isMoving()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.run", true));
             return PlayState.CONTINUE;
+        } else {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.idle", true));
+            return PlayState.CONTINUE;
         }
-
-        return PlayState.STOP;
     }
 
     @Override
@@ -188,9 +187,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         ItemStack itemStack = player.getStackInHand(hand);
         Item item = itemStack.getItem();
         if (this.world.isClient) {
-            if (this.isOwner(player) && !(item instanceof RatPouchItem)) {
-                this.setSitting(!this.isSitting());
-            }
             boolean bl = this.isOwner(player) || this.isTamed() && !this.isTamed() && !this.hasAngerTime();
             return bl ? ActionResult.CONSUME : ActionResult.PASS;
         } else {
@@ -204,7 +200,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                     return ActionResult.SUCCESS;
                 }
 
-                if (this.isOwner(player) && !(item instanceof RatPouchItem)) {
+                if (this.isOwner(player) && !(item instanceof RatPouchItem) && (!this.isBreedingItem(itemStack))) {
                     this.setSitting(!this.isSitting());
                 }
             } else if (((this.getRatType() != Type.GOLD && item == Items.MELON_SLICE) || (this.getRatType() == Type.GOLD && item == Items.GLISTERING_MELON_SLICE)) && !this.hasAngerTime()) {

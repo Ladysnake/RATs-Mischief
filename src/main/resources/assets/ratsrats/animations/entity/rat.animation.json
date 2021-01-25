@@ -149,6 +149,9 @@
 					}
 				}
 			}
+		},
+		"animation.rat.idle": {
+			"loop": true
 		}
 	}
 }
