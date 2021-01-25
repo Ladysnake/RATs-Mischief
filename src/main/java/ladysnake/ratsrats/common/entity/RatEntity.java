@@ -1,6 +1,7 @@
 package ladysnake.ratsrats.common.entity;
 
 import ladysnake.ratsrats.common.Rats;
+import ladysnake.ratsrats.common.item.RatPouchItem;
 import ladysnake.ratsrats.common.network.Packets;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -26,6 +27,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.IntRange;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -69,6 +71,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     protected void initGoals() {
         this.goalSelector.add(1, new SwimGoal(this));
+        this.goalSelector.add(2, new SitGoal(this));
         this.goalSelector.add(4, new PounceAtTargetGoal(this, 0.3F));
         this.goalSelector.add(5, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.add(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
@@ -89,10 +92,16 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+        if (this.isSitting()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.flat", true));
+            return PlayState.CONTINUE;
+        }
+
         if (event.isMoving()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.run", true));
             return PlayState.CONTINUE;
         }
+
         return PlayState.STOP;
     }
 
@@ -167,6 +176,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         ItemStack itemStack = player.getStackInHand(hand);
         Item item = itemStack.getItem();
         if (this.world.isClient) {
+            if (this.isOwner(player) && !(item instanceof RatPouchItem)) {
+                this.setSitting(!this.isSitting());
+            }
             boolean bl = this.isOwner(player) || this.isTamed() && !this.isTamed() && !this.hasAngerTime();
             return bl ? ActionResult.CONSUME : ActionResult.PASS;
         } else {
@@ -179,6 +191,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                     this.heal((float)item.getFoodComponent().getHunger());
                     return ActionResult.SUCCESS;
                 }
+
+                if (this.isOwner(player) && !(item instanceof RatPouchItem)) {
+                    this.setSitting(!this.isSitting());
+                }
             } else if (((this.getRatType() != Type.GOLD && item == Items.MELON_SLICE) || (this.getRatType() == Type.GOLD && item == Items.GLISTERING_MELON_SLICE)) && !this.hasAngerTime()) {
                 if (!player.abilities.creativeMode) {
                     itemStack.decrement(1);
@@ -187,7 +203,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 this.setOwner(player);
                 this.navigation.stop();
                 this.setTarget((LivingEntity)null);
-                this.setSitting(true);
                 this.world.sendEntityStatus(this, (byte)7);
 
                 return ActionResult.SUCCESS;
@@ -224,11 +239,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     public boolean canBeLeashedBy(PlayerEntity player) {
         return !this.hasAngerTime() && super.canBeLeashedBy(player);
-    }
-
-    @Override
-    public boolean isSitting() {
-        return false;
     }
 
     @Override
