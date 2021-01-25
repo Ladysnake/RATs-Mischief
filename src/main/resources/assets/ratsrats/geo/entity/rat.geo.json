@@ -18,7 +18,7 @@
 				{
 					"name": "body",
 					"parent": "root",
-					"pivot": [0, 0, 0],
+					"pivot": [0, 3, 2],
 					"cubes": [
 						{"origin": [-3, 1, -2], "size": [6, 4, 8], "uv": [0, 0]}
 					]
@@ -42,7 +42,7 @@
 				{
 					"name": "head",
 					"parent": "root",
-					"pivot": [0, 2, -2],
+					"pivot": [0, 4, -2],
 					"cubes": [
 						{"origin": [-2, 1, -6], "size": [4, 3, 4], "uv": [0, 12]},
 						{"origin": [-4, 3, -3], "size": [2, 2, 0.001], "pivot": [-2, 3, -3], "rotation": [0, 30, 0], "uv": [0, 19]},
