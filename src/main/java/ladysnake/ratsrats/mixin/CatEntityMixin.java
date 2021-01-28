@@ -4,7 +4,6 @@ import ladysnake.ratsrats.common.entity.RatEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.FleeEntityGoal;
 import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.entity.passive.OcelotEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;

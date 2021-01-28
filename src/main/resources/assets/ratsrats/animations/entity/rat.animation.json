@@ -11,7 +11,7 @@
 				},
 				"body": {
 					"position": {
-						"vector": [0, 0, 0.4]
+						"vector": [0, -0.4, 0.4]
 					},
 					"scale": {
 						"vector": [1.1, 0.8, 1.2]
