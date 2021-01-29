@@ -55,6 +55,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public RatEntity(EntityType<? extends PathAwareEntity> type, World worldIn) {
         super(Rats.RAT, worldIn);
         this.ignoreCameraFrustum = false;
+        this.stepHeight = 1f;
     }
 
     protected void initDataTracker() {
