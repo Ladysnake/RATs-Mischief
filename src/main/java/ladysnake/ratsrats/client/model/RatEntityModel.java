@@ -36,5 +36,12 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
             head.setRotationX(-entity.pitch * ((float) Math.PI / 180F));
 //            head.setRotationY(entity.getHeadYaw() * ((float) Math.PI / 180F));
         }
+
+        if (entity.isBaby()) {
+            IBone root = this.getAnimationProcessor().getBone("root");
+            root.setScaleX(0.5f);
+            root.setScaleY(0.5f);
+            root.setScaleZ(0.5f);
+        }
     }
 }

@@ -185,6 +185,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
+        super.interactMob(player, hand);
+
         ItemStack itemStack = player.getStackInHand(hand);
         Item item = itemStack.getItem();
         if (this.world.isClient) {
@@ -217,7 +219,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 return ActionResult.SUCCESS;
             }
 
-            return super.interactMob(player, hand);
+            return ActionResult.PASS;
         }
     }
 
