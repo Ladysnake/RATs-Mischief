@@ -39,7 +39,7 @@ dependencies {
 //	}
 
 	// Geckolib
-	modImplementation 'software.bernie.geckolib:fabric-1.16.4-geckolib:3.0.1:dev'
+	modImplementation 'software.bernie.geckolib:fabric-1.16.5-geckolib:3.0.14:dev'
 
 //	// cloth config
 //	modApi("me.shedaniel.cloth:config-2:4.8.2") {
