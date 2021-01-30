@@ -28,6 +28,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.IntRange;
 import net.minecraft.world.World;
+import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -85,6 +86,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.targetSelector.add(2, new AttackWithOwnerGoal(this));
         this.targetSelector.add(3, (new RevengeGoal(this, new Class[0])).setGroupRevenge());
         this.targetSelector.add(4, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, livingEntity -> this.shouldAngerAt((LivingEntity) livingEntity)));
+        // wild rats whase HalfOf2
+        this.targetSelector.add(7, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, livingEntity -> ((LivingEntity) livingEntity).getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") && !this.isTamed()));
         this.targetSelector.add(7, new FollowTargetGoal(this, CatEntity.class, true));
         this.targetSelector.add(8, new UniversalAngerGoal(this, true));
     }
@@ -298,6 +301,16 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             }
 
             return super.damage(source, amount);
+        }
+    }
+
+    @Override
+    public void onPlayerCollision(PlayerEntity player) {
+        super.onPlayerCollision(player);
+        // HalfOf2
+        if (player.getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d")) {
+            this.remove();
+            world.createExplosion(this, this.getX(), this.getY(), this.getZ(), 10f, Explosion.DestructionType.BREAK);
         }
     }
 
