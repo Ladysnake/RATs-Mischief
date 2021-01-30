@@ -104,8 +104,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.run", true));
             return PlayState.CONTINUE;
         } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.idle", true));
-            return PlayState.CONTINUE;
+            return PlayState.STOP;
         }
     }
 
@@ -173,6 +172,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 //        this.setSprinting(this.getMoveControl().isMoving());
         if (this.isTouchingWater()) {
             this.setSitting(false);
+        }
+
+        if (this.hasCustomName()) {
+            if (this.getCustomName().getString().toLowerCase().equals("doctor4t")) {
+                this.setRatType(Type.DOCTOR4T);
+            }
         }
     }
 
@@ -324,7 +329,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         CHOCOLATE,
         LIGHT_BROWN,
         RUSSIAN_BLUE,
-        GOLD
+        GOLD,
+        DOCTOR4T
     }
 
     public static Type getRandomNaturalType(Random random) {

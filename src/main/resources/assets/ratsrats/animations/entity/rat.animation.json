@@ -149,16 +149,6 @@
 					}
 				}
 			}
-		},
-		"animation.rat.idle": {
-			"loop": true,
-			"bones": {
-				"root": {
-					"position": {
-						"vector": [0, 0, 0]
-					}
-				}
-			}
 		}
 	}
 }
