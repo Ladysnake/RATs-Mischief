@@ -1,11 +1,10 @@
 package ladysnake.ratsrats.common.entity;
 
+import com.google.common.collect.ImmutableList;
 import ladysnake.ratsrats.common.Rats;
 import ladysnake.ratsrats.common.item.RatPouchItem;
 import ladysnake.ratsrats.common.network.Packets;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.Durations;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -24,6 +23,8 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Packet;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.IntRange;
@@ -38,10 +39,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Predicate;
 
 public class RatEntity extends TameableEntity implements IAnimatable, Angerable {
     private final AnimationFactory factory = new AnimationFactory(this);
@@ -52,6 +51,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(WolfEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final IntRange ANGER_TIME_RANGE = Durations.betweenSeconds(20, 39);
     private UUID targetUuid;
+
+    public static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (itemEntity) -> {
+        return !itemEntity.cannotPickup() && itemEntity.isAlive();
+    };
 
     public RatEntity(EntityType<? extends PathAwareEntity> type, World worldIn) {
         super(Rats.RAT, worldIn);
@@ -75,8 +78,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     protected void initGoals() {
         this.goalSelector.add(1, new SwimGoal(this));
         this.goalSelector.add(2, new SitGoal(this));
-        this.goalSelector.add(4, new PounceAtTargetGoal(this, 0.3F));
-        this.goalSelector.add(5, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.add(3, new PounceAtTargetGoal(this, 0.3F));
+        this.goalSelector.add(4, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.add(5, new RatEntity.PickupItemGoal());
+        this.goalSelector.add(5, new BringItemToOwnerGoal(this, 1.0D, 10.0F, 1.0F, false));
         this.goalSelector.add(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.add(7, new AnimalMateGoal(this, 1.0D));
         this.goalSelector.add(8, new WanderAroundFarGoal(this, 1.0D));
@@ -85,9 +90,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.targetSelector.add(1, new TrackOwnerAttackerGoal(this));
         this.targetSelector.add(2, new AttackWithOwnerGoal(this));
         this.targetSelector.add(3, (new RevengeGoal(this, new Class[0])).setGroupRevenge());
-        this.targetSelector.add(4, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, livingEntity -> this.shouldAngerAt((LivingEntity) livingEntity)));
-        // wild rats whase HalfOf2
-        this.targetSelector.add(7, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, livingEntity -> ((LivingEntity) livingEntity).getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") && !this.isTamed()));
+        this.targetSelector.add(4, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> this.shouldAngerAt((LivingEntity) playerEntity)));
+        // wild rats chase HalfOf2
+        this.targetSelector.add(7, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> ((PlayerEntity) playerEntity).getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") && !this.isTamed()));
         this.targetSelector.add(7, new FollowTargetGoal(this, CatEntity.class, true));
         this.targetSelector.add(8, new UniversalAngerGoal(this, true));
     }
@@ -317,8 +322,23 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         // HalfOf2
         if (player.getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d")) {
             this.remove();
-            world.createExplosion(this, this.getX(), this.getY(), this.getZ(), 10f, Explosion.DestructionType.BREAK);
+            world.createExplosion(this, this.getX(), this.getY(), this.getZ(), 1f, Explosion.DestructionType.NONE);
         }
+    }
+
+    @Override
+    public boolean canPickUpLoot() {
+        return this.isTamed();
+    }
+
+    @Override
+    protected @Nullable SoundEvent getDeathSound() {
+        return SoundEvents.ENTITY_RABBIT_DEATH;
+    }
+
+    @Override
+    protected @Nullable SoundEvent getHurtSound(DamageSource source) {
+        return SoundEvents.ENTITY_RABBIT_HURT;
     }
 
     public enum Type {
@@ -337,7 +357,74 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         return NATURAL_TYPES.get(random.nextInt(NATURAL_TYPES.size()));
     }
 
-    public static final ArrayList<Type> NATURAL_TYPES = new ArrayList<Type>(List.of(
+    public static final List<Type> NATURAL_TYPES = ImmutableList.of(
             Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
-    ));
+    );
+    
+    class PickupItemGoal extends Goal {
+        public PickupItemGoal() {
+            this.setControls(EnumSet.of(Goal.Control.MOVE));
+        }
+
+        public boolean canStart() {
+            if (!RatEntity.this.isTamed() || !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
+                return false;
+            } else if (RatEntity.this.getTarget() == null && RatEntity.this.getAttacker() == null) {
+                if (RatEntity.this.isSitting()) {
+                    return false;
+                } else if (RatEntity.this.getRandom().nextInt(10) != 0) {
+                    return false;
+                } else {
+                    List<ItemEntity> list = RatEntity.this.world.getEntitiesByClass(ItemEntity.class, RatEntity.this.getBoundingBox().expand(10.0D, 10.0D, 10.0D), RatEntity.PICKABLE_DROP_FILTER);
+                    return !list.isEmpty() && RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty();
+                }
+            } else {
+                return false;
+            }
+        }
+
+        public void tick() {
+            List<ItemEntity> list = RatEntity.this.world.getEntitiesByClass(ItemEntity.class, RatEntity.this.getBoundingBox().expand(10.0D, 10.0D, 10.0D), RatEntity.PICKABLE_DROP_FILTER);
+            ItemStack itemStack = RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND);
+            if (itemStack.isEmpty() && !list.isEmpty()) {
+                RatEntity.this.getNavigation().startMovingTo((Entity)list.get(0), 1.2000000476837158D);
+            }
+
+        }
+
+        public void start() {
+            List<ItemEntity> list = RatEntity.this.world.getEntitiesByClass(ItemEntity.class, RatEntity.this.getBoundingBox().expand(10.0D, 10.0D, 10.0D), RatEntity.PICKABLE_DROP_FILTER);
+            if (!list.isEmpty()) {
+                RatEntity.this.getNavigation().startMovingTo((Entity)list.get(0), 1.2000000476837158D);
+            }
+        }
+    }
+
+    public class BringItemToOwnerGoal extends FollowOwnerGoal {
+        public BringItemToOwnerGoal(TameableEntity tameable, double speed, float minDistance, float maxDistance, boolean leavesAllowed) {
+            super(tameable, speed, 0.0f, 0.0f, leavesAllowed);
+        }
+
+        @Override
+        public void tick() {
+            super.tick();
+
+            if (RatEntity.this.squaredDistanceTo(RatEntity.this.getOwner()) <= 1.0f) {
+                RatEntity.this.dropStack(RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND));
+                RatEntity.this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            }
+        }
+
+        @Override
+        public boolean canStart() {
+            return super.canStart() && !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && RatEntity.this.isTamed();
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            return super.shouldContinue() && !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty();
+        }
+    }
+
+
 }
