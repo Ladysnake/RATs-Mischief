@@ -19,6 +19,7 @@ public class Rats implements ModInitializer {
 
     public static EntityType<RatEntity> RAT;
 
+    public static Item RAT_BOMB;
     public static Item LEATHER_RAT_POUCH;
     public static Item TWISTED_RAT_POUCH;
     public static Item PURPUR_RAT_POUCH;
@@ -33,6 +34,7 @@ public class Rats implements ModInitializer {
         LEATHER_RAT_POUCH = registerItem(new RatPouchItem((new Item.Settings()).group(ItemGroup.MISC).maxCount(1), 3), "leather_rat_pouch");
         TWISTED_RAT_POUCH = registerItem(new RatPouchItem((new Item.Settings()).group(ItemGroup.MISC).maxCount(1), 5), "twisted_rat_pouch");
         PURPUR_RAT_POUCH = registerItem(new RatPouchItem((new Item.Settings()).group(ItemGroup.MISC).maxCount(1), 7), "purpur_rat_pouch");
+        RAT_BOMB = registerItem(new Item(new Item.Settings().group(ItemGroup.MISC).maxCount(1)), "rat_bomb");
     }
 
     private static <T extends Entity> EntityType<T> registerEntity(String s, EntityType<T> entityType) {

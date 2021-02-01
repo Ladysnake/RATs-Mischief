@@ -13,6 +13,8 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.*;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.HorseBaseEntity;
@@ -31,6 +33,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.IntRange;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
@@ -42,11 +45,14 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.function.Predicate;
+
+import net.fabricmc.loader.api.FabricLoader;
 
 public class RatEntity extends TameableEntity implements IAnimatable, Angerable {
     private final AnimationFactory factory = new AnimationFactory(this);
@@ -57,6 +63,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final IntRange ANGER_TIME_RANGE = Durations.betweenSeconds(20, 39);
     private UUID targetUuid;
+    private boolean isExplosive;
 
     private static final TrackedData<Boolean> SNIFFING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
@@ -84,11 +91,32 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.dataTracker.startTracking(SNIFFING, false);
     }
 
+    @Override
+    public CompoundTag toTag(CompoundTag tag) {
+        tag.putBoolean("explosive", this.isExplosive);
+        return super.toTag(tag);
+    }
+
+    @Override
+    public void fromTag(CompoundTag tag) {
+        this.isExplosive = tag.getBoolean("explosive");
+        super.fromTag(tag);
+    }
+
+    private Goal attack;
+    private void setAttackGoal(Goal goal) {
+        if(this.attack != null) {
+            this.goalSelector.remove(this.attack);
+        }
+        this.goalSelector.add(4, goal);
+        this.attack = goal;
+    }
+
     protected void initGoals() {
         this.goalSelector.add(1, new SwimGoal(this));
         this.goalSelector.add(2, new SitGoal(this));
         this.goalSelector.add(3, new PounceAtTargetGoal(this, 0.3F));
-        this.goalSelector.add(4, new MeleeAttackGoal(this, 1.0D, true));
+        this.setAttackGoal(new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.add(5, new RatEntity.PickupItemGoal());
         this.goalSelector.add(5, new BringItemToOwnerGoal(this, 1.0D, 10.0F, 1.0F, false));
         this.goalSelector.add(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
@@ -101,7 +129,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.targetSelector.add(3, (new RevengeGoal(this, new Class[0])).setGroupRevenge());
         this.targetSelector.add(4, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> this.shouldAngerAt((LivingEntity) playerEntity)));
         // wild rats chase HalfOf2
-        this.targetSelector.add(7, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> ((PlayerEntity) playerEntity).getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") && !this.isTamed()));
+        if(!FabricLoader.getInstance().isDevelopmentEnvironment()) { // so I can actually test stuff - HalfOf2
+            this.targetSelector.add(7,
+                    new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> ((PlayerEntity) playerEntity).getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") && !this.isTamed()));
+        }
         this.targetSelector.add(7, new FollowTargetGoal(this, CatEntity.class, true));
         this.targetSelector.add(8, new UniversalAngerGoal(this, true));
     }
@@ -245,6 +276,14 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 this.world.sendEntityStatus(this, (byte)7);
 
                 return ActionResult.SUCCESS;
+            } else if(item == Rats.RAT_BOMB && !this.isExplosive) {
+                if(!player.abilities.creativeMode) {
+                    itemStack.decrement(1);
+                }
+                this.isExplosive = true;
+                this.setAttackGoal(new ExplodeGoal(1d, true, 3));
+
+                return ActionResult.SUCCESS;
             }
 
             return ActionResult.PASS;
@@ -386,7 +425,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public static final List<Type> NATURAL_TYPES = ImmutableList.of(
             Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
     );
-    
+
     class PickupItemGoal extends Goal {
         public PickupItemGoal() {
             this.setControls(EnumSet.of(Goal.Control.MOVE));
@@ -452,5 +491,49 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
     }
 
+    public class ExplodeGoal extends MeleeAttackGoal {
+        private final float explosion_radius;
+        public ExplodeGoal(double speed, boolean pauseWhenMobIdle, float radius) {
+            super(RatEntity.this, speed, pauseWhenMobIdle);
+            this.explosion_radius = radius;
+        }
 
+        @Override
+        protected void attack(LivingEntity target, double squaredDistance) {
+            if (squaredDistance <= this.explosion_radius * this.explosion_radius) {
+                Explosion.DestructionType destructionType = RatEntity.this.world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE;
+                RatEntity.this.dead = true;
+                RatEntity.this.world.createExplosion(RatEntity.this, RatEntity.this.getX(), RatEntity.this.getY(), RatEntity.this.getZ(),
+                        this.explosion_radius, destructionType);
+                RatEntity.this.remove();
+                this.spawnEffectsCloud();
+            }
+            super.attack(target, squaredDistance);
+        }
+
+        /**
+         * modified from creeper code
+         * @see CreeperEntity#spawnEffectsCloud()
+         */
+        private void spawnEffectsCloud() {
+            Collection<StatusEffectInstance> collection = RatEntity.this.getStatusEffects();
+            AreaEffectCloudEntity areaEffectCloudEntity = new AreaEffectCloudEntity(RatEntity.this.world, RatEntity.this.getX(), RatEntity.this.getY(), RatEntity.this.getZ());
+            areaEffectCloudEntity.setRadius(2.5F);
+            areaEffectCloudEntity.setRadiusOnUse(-0.5F);
+            areaEffectCloudEntity.setWaitTime(10);
+            areaEffectCloudEntity.setDuration(areaEffectCloudEntity.getDuration() / 2);
+            areaEffectCloudEntity.setRadiusGrowth(-areaEffectCloudEntity.getRadius() / (float)areaEffectCloudEntity.getDuration());
+            boolean poison = true;
+            for (StatusEffectInstance statusEffectInstance : collection) {
+                areaEffectCloudEntity.addEffect(new StatusEffectInstance(statusEffectInstance));
+                if(statusEffectInstance.getEffectType() == StatusEffects.POISON) {
+                    poison = false;
+                }
+            }
+            if(poison) {
+                areaEffectCloudEntity.addEffect(new StatusEffectInstance(StatusEffects.POISON, 1200, 1));
+            }
+            RatEntity.this.world.spawnEntity(areaEffectCloudEntity);
+        }
+    }
 }
