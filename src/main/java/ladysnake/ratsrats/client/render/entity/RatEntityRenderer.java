@@ -1,4 +1,4 @@
-package ladysnake.ratsrats.client.renderer.entity;
+package ladysnake.ratsrats.client.render.entity;
 
 import ladysnake.ratsrats.client.model.RatEntityModel;
 import ladysnake.ratsrats.common.entity.RatEntity;
