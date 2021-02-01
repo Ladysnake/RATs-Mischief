@@ -14,7 +14,10 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.*;
-import net.minecraft.entity.passive.*;
+import net.minecraft.entity.passive.CatEntity;
+import net.minecraft.entity.passive.HorseBaseEntity;
+import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.Item;
@@ -39,7 +42,10 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class RatEntity extends TameableEntity implements IAnimatable, Angerable {
@@ -48,9 +54,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     private static final TrackedData<String> TYPE = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
     private static final TrackedData<Boolean> SITTING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);;
 
-    private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(WolfEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final IntRange ANGER_TIME_RANGE = Durations.betweenSeconds(20, 39);
     private UUID targetUuid;
+
+    private static final TrackedData<Boolean> SNIFFING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     public static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (itemEntity) -> {
         return !itemEntity.cannotPickup() && itemEntity.isAlive();
@@ -73,6 +81,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
         this.dataTracker.startTracking(ANGER_TIME, 0);
         this.dataTracker.startTracking(SITTING, false);
+        this.dataTracker.startTracking(SNIFFING, false);
     }
 
     protected void initGoals() {
@@ -103,14 +112,19 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (this.isSitting()) {
+            this.setSniffing(false);
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.flat", true));
             return PlayState.CONTINUE;
         } else if (event.isMoving()) {
+            this.setSniffing(false);
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.run", true));
             return PlayState.CONTINUE;
-        } else {
-            return PlayState.STOP;
+        } else if (this.isSniffing()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.sniff", false));
+            return PlayState.CONTINUE;
         }
+
+        return PlayState.STOP;
     }
 
     @Override
@@ -183,6 +197,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             if (this.getCustomName().getString().toLowerCase().equals("doctor4t")) {
                 this.setRatType(Type.DOCTOR4T);
             }
+        }
+
+        if (!this.hasAngerTime() && random.nextInt(100) == 0) {
+            this.setSniffing(true);
         }
     }
 
@@ -299,6 +317,14 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     @Override
     public void setSitting(boolean sitting) {
         this.dataTracker.set(SITTING, sitting);
+    }
+
+    public boolean isSniffing() {
+        return (Boolean) this.dataTracker.get(SNIFFING);
+    }
+
+    public void setSniffing(boolean sniffing) {
+        this.dataTracker.set(SNIFFING, sniffing);
     }
 
     @Override

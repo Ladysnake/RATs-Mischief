@@ -32,7 +32,7 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("head");
 
-        if (head != null) {
+        if (head != null && !entity.isSniffing()) {
             head.setRotationX(-entity.pitch * ((float) Math.PI / 180F));
 //            head.setRotationY(entity.getHeadYaw() * ((float) Math.PI / 180F));
         }

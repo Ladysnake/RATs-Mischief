@@ -1,7 +1,7 @@
 package ladysnake.ratsrats.client;
 
 import ladysnake.ratsrats.client.network.EntityDispatcher;
-import ladysnake.ratsrats.client.renderer.entity.RatEntityRenderer;
+import ladysnake.ratsrats.client.render.entity.RatEntityRenderer;
 import ladysnake.ratsrats.common.Rats;
 import ladysnake.ratsrats.common.network.Packets;
 import net.fabricmc.api.ClientModInitializer;
