@@ -99,7 +99,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public void fromTag(CompoundTag tag) {
-        this.isExplosive = tag.getBoolean("explosive");
+        if(this.isExplosive = tag.getBoolean("explosive")) {
+            this.setAttackGoal(new ExplodeGoal(1d, true, 3));
+        }
         super.fromTag(tag);
     }
 
