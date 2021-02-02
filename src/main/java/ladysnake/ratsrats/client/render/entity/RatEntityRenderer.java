@@ -8,5 +8,6 @@ import software.bernie.geckolib3.renderer.geo.GeoEntityRenderer;
 public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
     public RatEntityRenderer(EntityRenderDispatcher renderManager) {
         super(renderManager, new RatEntityModel());
+        this.shadowRadius = 0.35f;
     }
 }
