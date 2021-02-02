@@ -189,6 +189,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     @Override
     public void mobTick() {
 //        this.setSprinting(this.getMoveControl().isMoving());
+
+        if (this.isSitting() && !this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
+            this.dropStack(this.getEquippedStack(EquipmentSlot.MAINHAND));
+            this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+        }
+
         if (this.isTouchingWater()) {
             this.setSitting(false);
             this.setSniffing(false);
@@ -356,7 +362,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public boolean canPickUpLoot() {
-        return this.isTamed();
+        return this.isTamed() && !this.isSitting();
     }
 
     @Override
