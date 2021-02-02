@@ -279,6 +279,36 @@
 							"easing": "easeInExpo"
 						}
 					}
+				},
+				"frontleg1": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.44": {
+							"vector": [0, -25, 0],
+							"easing": "easeOutQuad"
+						},
+						"2.4": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutQuad"
+						}
+					}
+				},
+				"frontleg2": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.44": {
+							"vector": [0, 25, 0],
+							"easing": "easeOutQuad"
+						},
+						"2.4": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutQuad"
+						}
+					}
 				}
 			}
 		}
