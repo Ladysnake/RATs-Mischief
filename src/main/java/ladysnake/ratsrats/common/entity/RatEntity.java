@@ -191,6 +191,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 //        this.setSprinting(this.getMoveControl().isMoving());
         if (this.isTouchingWater()) {
             this.setSitting(false);
+            this.setSniffing(false);
         }
 
         if (this.hasCustomName()) {
@@ -199,7 +200,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             }
         }
 
-        if (!this.hasAngerTime() && random.nextInt(100) == 0) {
+        if (!this.hasAngerTime() && !this.moveControl.isMoving() && random.nextInt(100) == 0) {
+            this.setSniffing(false);
             this.setSniffing(true);
         }
     }
@@ -365,6 +367,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     @Override
     protected @Nullable SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.ENTITY_RABBIT_HURT;
+    }
+
+    @Override
+    protected int computeFallDamage(float fallDistance, float damageMultiplier) {
+        return super.computeFallDamage(fallDistance-15.0f, damageMultiplier);
     }
 
     public enum Type {
