@@ -366,6 +366,17 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     @Override
+    protected void loot(ItemEntity item) {
+        ItemStack itemStack = item.getStack();
+        if (this.getMainHandStack().isEmpty()) {
+            this.equipStack(EquipmentSlot.MAINHAND, itemStack);
+            this.method_29499(item);
+            this.sendPickup(item, itemStack.getCount());
+            item.remove();
+        }
+    }
+
+    @Override
     protected @Nullable SoundEvent getDeathSound() {
         return SoundEvents.ENTITY_RABBIT_DEATH;
     }
