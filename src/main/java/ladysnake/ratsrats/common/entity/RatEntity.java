@@ -120,7 +120,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.run", true));
             return PlayState.CONTINUE;
         } else if (this.isSniffing()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.sniff", false));
+            if (this.getRatType() == Type.RAT_KID) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.smug_dance", true));
+            } else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.sniff", false));
+            }
             return PlayState.CONTINUE;
         }
 
