@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import ladysnake.ratsrats.common.Rats;
 import ladysnake.ratsrats.common.entity.ai.HarvestAndPlantGoal;
 import ladysnake.ratsrats.common.item.RatPouchItem;
+import ladysnake.ratsrats.common.item.RatStaffItem;
 import ladysnake.ratsrats.common.network.Packets;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.Durations;
@@ -259,7 +260,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                     return ActionResult.SUCCESS;
                 }
 
-                if (this.isOwner(player) && !(item instanceof RatPouchItem) && (!this.isBreedingItem(itemStack))) {
+                if (this.isOwner(player) && !(item instanceof RatPouchItem) && !(item instanceof RatStaffItem) && (!this.isBreedingItem(itemStack))) {
                     this.setSitting(!this.isSitting());
                 }
             } else if (((this.getRatType() != Type.GOLD && item == Items.MELON_SLICE) || (this.getRatType() == Type.GOLD && item == Items.GLISTERING_MELON_SLICE)) && !this.hasAngerTime()) {
