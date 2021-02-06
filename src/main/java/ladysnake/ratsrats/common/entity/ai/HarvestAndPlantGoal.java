@@ -15,6 +15,7 @@ import java.util.EnumSet;
 public class HarvestAndPlantGoal extends Goal {
     protected final RatEntity rat;
     protected BlockPos targetBlockPos;
+    protected double prevSquareDistance;
 
     public HarvestAndPlantGoal(RatEntity rat) {
         this.setControls(EnumSet.of(Goal.Control.MOVE));
@@ -78,8 +79,15 @@ public class HarvestAndPlantGoal extends Goal {
                 this.rat.getNavigation().startMovingTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ(), 1D);
             }
         } else {
+            if (this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ()) == prevSquareDistance) {
+                this.stop();
+            } else {
+                this.prevSquareDistance = this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ());
+            }
+
             if (this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ()) <= 2) {
                 this.rat.world.setBlockState(targetBlockPos, ((AliasedBlockItem) itemStack.getItem()).getBlock().getDefaultState());
+                this.rat.getEquippedStack(EquipmentSlot.MAINHAND).decrement(1);
                 targetBlockPos = null;
             } else {
                 this.rat.getNavigation().startMovingTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ(), 1D);
