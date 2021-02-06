@@ -448,6 +448,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public void setAction(Action action) {
+        removeAllSpecialGoals();
         this.actionTimer = 300; // 15s
 
         switch (action) {
