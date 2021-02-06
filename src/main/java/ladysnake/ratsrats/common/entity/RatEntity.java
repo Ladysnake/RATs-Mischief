@@ -490,14 +490,14 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             List<ItemEntity> list = RatEntity.this.world.getEntitiesByClass(ItemEntity.class, RatEntity.this.getBoundingBox().expand(10.0D, 10.0D, 10.0D), RatEntity.PICKABLE_DROP_FILTER);
             ItemStack itemStack = RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND);
             if (itemStack.isEmpty() && !list.isEmpty()) {
-                RatEntity.this.getNavigation().startMovingTo((Entity)list.get(0), 1.2000000476837158D);
+                RatEntity.this.getNavigation().startMovingTo((Entity)list.get(0), 1);
             }
         }
 
         public void start() {
             List<ItemEntity> list = RatEntity.this.world.getEntitiesByClass(ItemEntity.class, RatEntity.this.getBoundingBox().expand(10.0D, 10.0D, 10.0D), RatEntity.PICKABLE_DROP_FILTER);
             if (!list.isEmpty()) {
-                RatEntity.this.getNavigation().startMovingTo((Entity)list.get(0), 1.2000000476837158D);
+                RatEntity.this.getNavigation().startMovingTo((Entity)list.get(0), 1);
             }
         }
     }
