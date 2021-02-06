@@ -33,6 +33,7 @@
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
+    "geckolib3": "*",
     "minecraft": "1.16.x"
   }
 }
