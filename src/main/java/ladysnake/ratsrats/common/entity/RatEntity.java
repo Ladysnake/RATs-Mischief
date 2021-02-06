@@ -2,6 +2,7 @@ package ladysnake.ratsrats.common.entity;
 
 import com.google.common.collect.ImmutableList;
 import ladysnake.ratsrats.common.Rats;
+import ladysnake.ratsrats.common.entity.ai.HarvestAndPlantGoal;
 import ladysnake.ratsrats.common.item.RatPouchItem;
 import ladysnake.ratsrats.common.network.Packets;
 import net.minecraft.entity.*;
@@ -63,6 +64,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (itemEntity) -> {
         return !itemEntity.cannotPickup() && itemEntity.isAlive();
     };
+
+    public Action action = Action.NONE;
+    public int actionTimer = 0;
 
     public RatEntity(EntityType<? extends PathAwareEntity> type, World worldIn) {
         super(Rats.RAT, worldIn);
@@ -215,6 +219,16 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         if (!this.hasAngerTime() && !this.moveControl.isMoving() && random.nextInt(100) == 0) {
             this.setSniffing(false);
             this.setSniffing(true);
+        }
+
+        // reset
+        if (this.actionTimer <= 0) {
+            System.out.println("REMOVED ALL SPECIAL GOALS");
+            this.removeAllSpecialGoals();
+        }
+
+        if (this.action != null && this.actionTimer > 0) {
+            this.actionTimer--;
         }
     }
 
@@ -425,7 +439,30 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public static final List<Type> NATURAL_TYPES = ImmutableList.of(
             Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
     );
-    
+
+    private final HarvestAndPlantGoal HARVEST_GOAL = new HarvestAndPlantGoal(this);
+
+    public enum Action {
+        NONE,
+        HARVEST
+    }
+
+    public void setAction(Action action) {
+        this.actionTimer = 300; // 15s
+
+        switch (action) {
+            case HARVEST:
+                this.goalSelector.add(4, HARVEST_GOAL);
+                break;
+        }
+    }
+
+    public void removeAllSpecialGoals() {
+        this.action = Action.NONE;
+        this.actionTimer = 0;
+        this.goalSelector.remove(HARVEST_GOAL);
+    }
+
     class PickupItemGoal extends Goal {
         public PickupItemGoal() {
             this.setControls(EnumSet.of(Goal.Control.MOVE));
@@ -454,7 +491,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             if (itemStack.isEmpty() && !list.isEmpty()) {
                 RatEntity.this.getNavigation().startMovingTo((Entity)list.get(0), 1.2000000476837158D);
             }
-
         }
 
         public void start() {
