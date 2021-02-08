@@ -456,6 +456,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         DOCTOR4T,
         RAT_KID
         RATATER,
+        JORATO
     }
 
     public static Type getRandomNaturalType(Random random) {
