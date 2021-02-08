@@ -25,6 +25,7 @@ public class Rats implements ModInitializer {
     public static Item PURPUR_RAT_POUCH;
 
     public static Item HARVEST_STAFF;
+    public static Item EXCAVATION_STAFF;
 
     @Override
     public void onInitialize() {
@@ -38,6 +39,7 @@ public class Rats implements ModInitializer {
         PURPUR_RAT_POUCH = registerItem(new RatPouchItem((new Item.Settings()).group(ItemGroup.MISC).maxCount(1), 7), "purpur_rat_pouch");
 
         HARVEST_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatEntity.Action.HARVEST), "harvest_staff");
+        EXCAVATION_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatEntity.Action.EXCAVATE), "excavation_staff");
     }
 
     private static <T extends Entity> EntityType<T> registerEntity(String s, EntityType<T> entityType) {

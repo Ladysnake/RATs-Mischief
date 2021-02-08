@@ -2,6 +2,7 @@ package ladysnake.ratsrats.common.entity;
 
 import com.google.common.collect.ImmutableList;
 import ladysnake.ratsrats.common.Rats;
+import ladysnake.ratsrats.common.entity.ai.ClearGravelGoal;
 import ladysnake.ratsrats.common.entity.ai.HarvestAndPlantGoal;
 import ladysnake.ratsrats.common.item.RatPouchItem;
 import ladysnake.ratsrats.common.item.RatStaffItem;
@@ -35,6 +36,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.IntRange;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
@@ -448,6 +450,23 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         return super.computeFallDamage(fallDistance-15.0f, damageMultiplier);
     }
 
+    @Nullable
+    @Override
+    public ItemEntity dropStack(ItemStack stack) {
+        if (this.isTamed()) {
+            ItemEntity item = super.dropStack(stack);
+            LivingEntity owner = this.getOwner();
+            if (owner != null && item != null) {
+                Vec3d dir = owner.getPos().subtract(this.getPos()).normalize().multiply(0.6f);
+                item.setVelocity(dir);
+            }
+
+            return item;
+        } else {
+            return super.dropStack(stack);
+        }
+    }
+
     public enum Type {
         ALBINO,
         BLACK,
@@ -472,10 +491,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     );
 
     private final HarvestAndPlantGoal HARVEST_GOAL = new HarvestAndPlantGoal(this);
+    private final ClearGravelGoal EXCAVATE_GOAL = new ClearGravelGoal(this);
 
     public enum Action {
         NONE,
-        HARVEST
+        HARVEST,
+        EXCAVATE
     }
 
     public void setAction(Action action) {
@@ -485,6 +506,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         switch (action) {
             case HARVEST:
                 this.goalSelector.add(4, HARVEST_GOAL);
+                break;
+            case EXCAVATE:
+                this.goalSelector.add(4, EXCAVATE_GOAL);
                 break;
         }
     }
@@ -542,7 +566,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         public void tick() {
             super.tick();
 
-            if (RatEntity.this.squaredDistanceTo(RatEntity.this.getOwner()) <= 1.0f) {
+            if (RatEntity.this.squaredDistanceTo(RatEntity.this.getOwner()) <= 2.0f) {
                 RatEntity.this.dropStack(RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND));
                 RatEntity.this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
             }

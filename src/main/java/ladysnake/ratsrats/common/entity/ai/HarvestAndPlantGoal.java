@@ -23,46 +23,32 @@ public class HarvestAndPlantGoal extends Goal {
     }
 
     public boolean canStart() {
-        if (this.rat.getTarget() == null && this.rat.getAttacker() == null && !this.rat.isSitting() && this.rat.isTamed() && (this.rat.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() || (this.rat.getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof AliasedBlockItem && ((AliasedBlockItem) this.rat.getEquippedStack(EquipmentSlot.MAINHAND).getItem()).getBlock() instanceof CropBlock))) {
-//        List<ItemEntity> list = this.rat.world.getEntitiesByClass(ItemEntity.class, this.rat.getBoundingBox().expand(10.0D, 10.0D, 10.0D), RatEntity.PICKABLE_DROP_FILTER);
-            ItemStack itemStack = this.rat.getEquippedStack(EquipmentSlot.MAINHAND);
-            for (int i = 0; i < 20; i++) {
-                if (itemStack.isEmpty()) {
-                    int minX = (int) this.rat.getX() - 5;
-                    int maxX = (int) this.rat.getX() + 5;
-                    int minY = (int) this.rat.getY() - 1;
-                    int maxY = (int) this.rat.getY() + 1;
-                    int minZ = (int) this.rat.getZ() - 5;
-                    int maxZ = (int) this.rat.getZ() + 5;
-                    int randomX = this.rat.getRandom().nextInt(maxX - minX) + minX;
-                    int randomY = this.rat.getRandom().nextInt(maxY - minY) + minY;
-                    int randomZ = this.rat.getRandom().nextInt(maxZ - minZ) + minZ;
+        targetBlockPos = null;
 
-                    BlockPos blockPos = new BlockPos(randomX, randomY, randomZ);
+        if (this.rat.getTarget() == null && this.rat.getAttacker() == null && !this.rat.isSitting() && this.rat.isTamed() && (this.rat.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() || (this.rat.getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof AliasedBlockItem && ((AliasedBlockItem) this.rat.getEquippedStack(EquipmentSlot.MAINHAND).getItem()).getBlock() instanceof CropBlock))) {
+            ItemStack itemStack = this.rat.getEquippedStack(EquipmentSlot.MAINHAND);
+
+            for (BlockPos blockPos : BlockPos.iterateOutwards(this.rat.getBlockPos(), 8, 2, 8)) {
+                if (itemStack.isEmpty()) {
                     BlockState blockState = this.rat.world.getBlockState(blockPos);
                     if (blockState.getBlock() instanceof CropBlock && ((CropBlock) blockState.getBlock()).isMature(blockState)) {
-                        targetBlockPos = blockPos;
+                        if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
+                            targetBlockPos = blockPos;
+                            return true;
+                        }
                     }
                 } else if (itemStack.getItem() instanceof AliasedBlockItem && ((AliasedBlockItem) itemStack.getItem()).getBlock() instanceof CropBlock) {
-                    int minX = (int) this.rat.getX() - 5;
-                    int maxX = (int) this.rat.getX() + 5;
-                    int minY = (int) this.rat.getY() - 1;
-                    int maxY = (int) this.rat.getY() + 1;
-                    int minZ = (int) this.rat.getZ() - 5;
-                    int maxZ = (int) this.rat.getZ() + 5;
-                    int randomX = this.rat.getRandom().nextInt(maxX - minX) + minX;
-                    int randomY = this.rat.getRandom().nextInt(maxY - minY) + minY;
-                    int randomZ = this.rat.getRandom().nextInt(maxZ - minZ) + minZ;
-
-                    BlockPos blockPos = new BlockPos(randomX, randomY, randomZ);
                     BlockState blockState = this.rat.world.getBlockState(blockPos.add(0, -1, 0));
                     if (blockState.getBlock() == Blocks.FARMLAND && this.rat.world.getBlockState(blockPos).isAir()) {
-                        targetBlockPos = blockPos;
+                        if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
+                            targetBlockPos = blockPos;
+                            return true;
+                        }
                     }
                 }
             }
 
-            return targetBlockPos != null;
+            return false;
         } else {
             return false;
         }
@@ -72,6 +58,11 @@ public class HarvestAndPlantGoal extends Goal {
         ItemStack itemStack = this.rat.getEquippedStack(EquipmentSlot.MAINHAND);
 
         if (itemStack.isEmpty()) {
+            BlockState blockState = this.rat.world.getBlockState(targetBlockPos);
+            if (!(blockState.getBlock() instanceof CropBlock && ((CropBlock) blockState.getBlock()).isMature(blockState))) {
+                this.canStart();
+            }
+
             if (this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ()) <= 2) {
                 this.rat.world.breakBlock(targetBlockPos, true, this.rat);
                 targetBlockPos = null;
@@ -79,10 +70,9 @@ public class HarvestAndPlantGoal extends Goal {
                 this.rat.getNavigation().startMovingTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ(), 1D);
             }
         } else {
-            if (this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ()) == prevSquareDistance) {
-                this.stop();
-            } else {
-                this.prevSquareDistance = this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ());
+            BlockState blockState = this.rat.world.getBlockState(targetBlockPos.add(0, -1, 0));
+            if (!(blockState.getBlock() == Blocks.FARMLAND && this.rat.world.getBlockState(targetBlockPos).isAir())) {
+                this.canStart();
             }
 
             if (this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ()) <= 2) {
