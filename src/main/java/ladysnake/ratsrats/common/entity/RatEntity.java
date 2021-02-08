@@ -229,8 +229,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         if (this.hasCustomName()) {
             if (this.getCustomName().getString().equalsIgnoreCase("doctor4t")) {
                 this.setRatType(Type.DOCTOR4T);
+            } else if (this.getCustomName().getString().equalsIgnoreCase("ratater")) {
+                this.setRatType(Type.RATATER);
             } else if (this.getCustomName().getString().equalsIgnoreCase("rat kid") || this.getCustomName().getString().equalsIgnoreCase("hat kid")) {
                 this.setRatType(Type.RAT_KID);
+            } else if (this.getCustomName().getString().equalsIgnoreCase("jotaro") || this.getCustomName().getString().equalsIgnoreCase("jorato")) {
+                this.setRatType(Type.JORATO);
             }
         }
 
@@ -454,7 +458,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         RUSSIAN_BLUE,
         GOLD,
         DOCTOR4T,
-        RAT_KID
+        RAT_KID,
         RATATER,
         JORATO
     }
