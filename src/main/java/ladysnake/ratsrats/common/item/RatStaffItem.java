@@ -33,8 +33,14 @@ public class RatStaffItem extends Item {
                     goal = new HarvestAndPlantGoal(ratEntity);
                     break;
                 case COLLECT:
-                    if (user.getOffHandStack().getItem() instanceof BlockItem && ((BlockItem) user.getOffHandStack().getItem()).getBlock().getBlastResistance() <= 0.6f && ((BlockItem) user.getOffHandStack().getItem()).getBlock().getDefaultState().getMaterial() != Material.GLASS && !((BlockItem) user.getOffHandStack().getItem()).getBlock().getDefaultState().isToolRequired() || ((BlockItem) user.getOffHandStack().getItem()).getBlock().getDefaultState().getMaterial() == Material.SNOW_LAYER || ((BlockItem) user.getOffHandStack().getItem()).getBlock().getDefaultState().getMaterial() == Material.SNOW_BLOCK) {
-                        goal = new DigGoal(ratEntity, ((BlockItem) user.getOffHandStack().getItem()).getBlock());
+                    Hand blockHand;
+                    if (user.getMainHandStack().getItem() instanceof RatStaffItem) {
+                        blockHand = Hand.OFF_HAND;
+                    } else {
+                        blockHand = Hand.MAIN_HAND;
+                    }
+                    if (user.getStackInHand(blockHand).getItem() instanceof BlockItem && ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getBlastResistance() <= 0.6f && ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().getMaterial() != Material.GLASS && !((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().isToolRequired() || ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().getMaterial() == Material.SNOW_LAYER || ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().getMaterial() == Material.SNOW_BLOCK) {
+                        goal = new DigGoal(ratEntity, ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock());
                     } else {
                         goal = new DigGoal(ratEntity, null);
                     }
