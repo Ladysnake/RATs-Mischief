@@ -35,7 +35,7 @@ public class RatStaffItem extends Item {
                     goal = new HarvestAndPlantGoal(ratEntity);
                     break;
                 case DIG:
-                    if (user.getOffHandStack().getItem() instanceof BlockItem && ((BlockItem) user.getOffHandStack().getItem()).getBlock().getBlastResistance() <= 0.6f && ((BlockItem) user.getOffHandStack().getItem()).getBlock().getDefaultState().getMaterial() != Material.GLASS) {
+                    if (user.getOffHandStack().getItem() instanceof BlockItem && ((BlockItem) user.getOffHandStack().getItem()).getBlock().getBlastResistance() <= 0.6f && ((BlockItem) user.getOffHandStack().getItem()).getBlock().getDefaultState().getMaterial() != Material.GLASS && !((BlockItem) user.getOffHandStack().getItem()).getBlock().getDefaultState().isToolRequired()) {
                         goal = new DigGoal(ratEntity, ((BlockItem) user.getOffHandStack().getItem()).getBlock());
                     } else {
                         goal = new DigGoal(ratEntity, null);
