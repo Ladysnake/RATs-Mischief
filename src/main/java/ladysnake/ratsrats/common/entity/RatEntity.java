@@ -577,7 +577,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         public void tick() {
             super.tick();
 
-            if (RatEntity.this.squaredDistanceTo(RatEntity.this.getOwner()) <= 2.0f) {
+            if (RatEntity.this.squaredDistanceTo(RatEntity.this.getOwner()) <= 3.0f) {
                 RatEntity.this.dropStack(RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND));
                 RatEntity.this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
             }
