@@ -40,6 +40,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.IntRange;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
@@ -51,10 +52,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class RatEntity extends TameableEntity implements IAnimatable, Angerable {
@@ -260,6 +258,18 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     public void tickMovement() {
         super.tickMovement();
+
+        if (!this.world.isClient && this.canPickUpLoot() && this.isAlive() && !this.dead) {
+            List<ItemEntity> list = this.world.getNonSpectatingEntities(ItemEntity.class, this.getBoundingBox().expand(1.0D, 0.0D, 1.0D));
+            Iterator var2 = list.iterator();
+
+            while(var2.hasNext()) {
+                ItemEntity itemEntity = (ItemEntity)var2.next();
+                if (!itemEntity.removed && !itemEntity.getStack().isEmpty() && !itemEntity.cannotPickup() && this.canGather(itemEntity.getStack())) {
+                    this.loot(itemEntity);
+                }
+            }
+        }
 
         if (!this.world.isClient) {
             this.tickAngerLogic((ServerWorld)this.world, true);
