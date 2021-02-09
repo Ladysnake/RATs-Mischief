@@ -3,8 +3,6 @@ package ladysnake.ratsrats.common.item;
 import ladysnake.ratsrats.common.entity.RatEntity;
 import ladysnake.ratsrats.common.entity.ai.DigGoal;
 import ladysnake.ratsrats.common.entity.ai.HarvestAndPlantGoal;
-import net.minecraft.block.AbstractGlassBlock;
-import net.minecraft.block.GlassBlock;
 import net.minecraft.block.Material;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,7 +32,7 @@ public class RatStaffItem extends Item {
                 case HARVEST:
                     goal = new HarvestAndPlantGoal(ratEntity);
                     break;
-                case DIG:
+                case COLLECT:
                     if (user.getOffHandStack().getItem() instanceof BlockItem && ((BlockItem) user.getOffHandStack().getItem()).getBlock().getBlastResistance() <= 0.6f && ((BlockItem) user.getOffHandStack().getItem()).getBlock().getDefaultState().getMaterial() != Material.GLASS && !((BlockItem) user.getOffHandStack().getItem()).getBlock().getDefaultState().isToolRequired() || ((BlockItem) user.getOffHandStack().getItem()).getBlock().getDefaultState().getMaterial() == Material.SNOW_LAYER || ((BlockItem) user.getOffHandStack().getItem()).getBlock().getDefaultState().getMaterial() == Material.SNOW_BLOCK) {
                         goal = new DigGoal(ratEntity, ((BlockItem) user.getOffHandStack().getItem()).getBlock());
                     } else {
@@ -53,6 +51,6 @@ public class RatStaffItem extends Item {
 
     public static enum Action {
         HARVEST,
-        DIG
+        COLLECT
     }
 }

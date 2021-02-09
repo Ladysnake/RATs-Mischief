@@ -1,8 +1,6 @@
 package ladysnake.ratsrats.common;
 
 import ladysnake.ratsrats.common.entity.RatEntity;
-import ladysnake.ratsrats.common.entity.ai.DigGoal;
-import ladysnake.ratsrats.common.entity.ai.HarvestAndPlantGoal;
 import ladysnake.ratsrats.common.item.RatPouchItem;
 import ladysnake.ratsrats.common.item.RatStaffItem;
 import net.fabricmc.api.ModInitializer;
@@ -27,7 +25,7 @@ public class Rats implements ModInitializer {
     public static Item PURPUR_RAT_POUCH;
 
     public static Item HARVEST_STAFF;
-    public static Item EXCAVATION_STAFF;
+    public static Item COLLECTION_STAFF;
 
     @Override
     public void onInitialize() {
@@ -41,7 +39,7 @@ public class Rats implements ModInitializer {
         PURPUR_RAT_POUCH = registerItem(new RatPouchItem((new Item.Settings()).group(ItemGroup.MISC).maxCount(1), 7), "purpur_rat_pouch");
 
         HARVEST_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.HARVEST), "harvest_staff");
-        EXCAVATION_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.DIG), "excavation_staff");
+        COLLECTION_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.COLLECT), "collection_staff");
     }
 
     private static <T extends Entity> EntityType<T> registerEntity(String s, EntityType<T> entityType) {
