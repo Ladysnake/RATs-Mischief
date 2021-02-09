@@ -2,11 +2,14 @@ package ladysnake.ratsrats.common.entity;
 
 import com.google.common.collect.ImmutableList;
 import ladysnake.ratsrats.common.Rats;
-import ladysnake.ratsrats.common.entity.ai.ClearGravelGoal;
+import ladysnake.ratsrats.common.entity.ai.DigGoal;
 import ladysnake.ratsrats.common.entity.ai.HarvestAndPlantGoal;
 import ladysnake.ratsrats.common.item.RatPouchItem;
 import ladysnake.ratsrats.common.item.RatStaffItem;
 import ladysnake.ratsrats.common.network.Packets;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.Durations;
 import net.minecraft.entity.ai.goal.*;
@@ -23,18 +26,17 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Packet;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.IntRange;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -71,7 +73,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         return !itemEntity.cannotPickup() && itemEntity.isAlive();
     };
 
-    public Action action = Action.NONE;
+    public Goal action;
     public int actionTimer = 0;
 
     public RatEntity(EntityType<? extends PathAwareEntity> type, World worldIn) {
@@ -246,8 +248,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
 
         // reset
-        if (this.actionTimer <= 0) {
-            this.removeAllSpecialGoals();
+        if (this.actionTimer <= 0 && this.action != null) {
+            this.removeCurrentActionGoal();
         }
 
         if (this.action != null && this.actionTimer > 0) {
@@ -446,6 +448,15 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        if (!state.getMaterial().isLiquid()) {
+            BlockState blockState = this.world.getBlockState(pos.up());
+            BlockSoundGroup blockSoundGroup = blockState.isOf(Blocks.SNOW) ? blockState.getSoundGroup() : state.getSoundGroup();
+            this.playSound(blockSoundGroup.getStepSound(), blockSoundGroup.getVolume() * 0.01F, blockSoundGroup.getPitch());
+        }
+    }
+
+    @Override
     protected int computeFallDamage(float fallDistance, float damageMultiplier) {
         return super.computeFallDamage(fallDistance-15.0f, damageMultiplier);
     }
@@ -490,33 +501,22 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
     );
 
-    private final HarvestAndPlantGoal HARVEST_GOAL = new HarvestAndPlantGoal(this);
-    private final ClearGravelGoal EXCAVATE_GOAL = new ClearGravelGoal(this);
-
     public enum Action {
         NONE,
         HARVEST,
         EXCAVATE
     }
 
-    public void setAction(Action action) {
-        removeAllSpecialGoals();
+    public void setAction(Goal action) {
+        this.removeCurrentActionGoal();
         this.actionTimer = 300; // 15s
-
-        switch (action) {
-            case HARVEST:
-                this.goalSelector.add(4, HARVEST_GOAL);
-                break;
-            case EXCAVATE:
-                this.goalSelector.add(4, EXCAVATE_GOAL);
-                break;
-        }
+        this.action = action;
+        this.goalSelector.add(4, action);
     }
 
-    public void removeAllSpecialGoals() {
-        this.action = Action.NONE;
-        this.actionTimer = 0;
-        this.goalSelector.remove(HARVEST_GOAL);
+    public void removeCurrentActionGoal() {
+        this.goalSelector.remove(action);
+        this.action = null;
     }
 
     class PickupItemGoal extends Goal {

@@ -1,6 +1,8 @@
 package ladysnake.ratsrats.common;
 
 import ladysnake.ratsrats.common.entity.RatEntity;
+import ladysnake.ratsrats.common.entity.ai.DigGoal;
+import ladysnake.ratsrats.common.entity.ai.HarvestAndPlantGoal;
 import ladysnake.ratsrats.common.item.RatPouchItem;
 import ladysnake.ratsrats.common.item.RatStaffItem;
 import net.fabricmc.api.ModInitializer;
@@ -38,8 +40,8 @@ public class Rats implements ModInitializer {
         TWISTED_RAT_POUCH = registerItem(new RatPouchItem((new Item.Settings()).group(ItemGroup.MISC).maxCount(1), 5), "twisted_rat_pouch");
         PURPUR_RAT_POUCH = registerItem(new RatPouchItem((new Item.Settings()).group(ItemGroup.MISC).maxCount(1), 7), "purpur_rat_pouch");
 
-        HARVEST_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatEntity.Action.HARVEST), "harvest_staff");
-        EXCAVATION_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatEntity.Action.EXCAVATE), "excavation_staff");
+        HARVEST_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.HARVEST), "harvest_staff");
+        EXCAVATION_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.DIG), "excavation_staff");
     }
 
     private static <T extends Entity> EntityType<T> registerEntity(String s, EntityType<T> entityType) {
