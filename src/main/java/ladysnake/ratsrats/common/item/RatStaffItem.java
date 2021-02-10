@@ -4,7 +4,11 @@ import ladysnake.ratsrats.common.entity.RatEntity;
 import ladysnake.ratsrats.common.entity.ai.DigGoal;
 import ladysnake.ratsrats.common.entity.ai.HarvestAndPlantGoal;
 import net.minecraft.block.Material;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.goal.FollowTargetGoal;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -45,6 +49,9 @@ public class RatStaffItem extends Item {
                         goal = new DigGoal(ratEntity, null);
                     }
                     break;
+                case SKIRMISH:
+                    goal = new FollowTargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
+                    break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + action);
             }
@@ -57,6 +64,7 @@ public class RatStaffItem extends Item {
 
     public static enum Action {
         HARVEST,
-        COLLECT
+        COLLECT,
+        SKIRMISH
     }
 }

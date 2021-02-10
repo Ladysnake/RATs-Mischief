@@ -255,6 +255,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
     }
 
+    @Override
+    public boolean canTarget(EntityType<?> type) {
+        return type != EntityType.CREEPER && super.canTarget(type);
+    }
+
     public void tickMovement() {
         super.tickMovement();
 
