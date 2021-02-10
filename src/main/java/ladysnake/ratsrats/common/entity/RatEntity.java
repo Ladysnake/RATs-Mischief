@@ -128,7 +128,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             return PlayState.CONTINUE;
         } else if (event.isMoving()) {
             this.setSniffing(false);
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.run", true));
+            if (this.getRatType() == Type.JERMA) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.jermarun", true));
+            } else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.run", true));
+            }
             return PlayState.CONTINUE;
         } else if (this.isSniffing()) {
             if (this.getRatType() == Type.RAT_KID) {
@@ -237,6 +241,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 this.setRatType(Type.RAT_KID);
             } else if (this.getCustomName().getString().equalsIgnoreCase("jotaro") || this.getCustomName().getString().equalsIgnoreCase("jorato")) {
                 this.setRatType(Type.JORATO);
+            } else if (this.getCustomName().getString().equalsIgnoreCase("jerma") || this.getCustomName().getString().equalsIgnoreCase("jerma985")) {
+                this.setRatType(Type.JERMA);
             }
         }
 
@@ -258,6 +264,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     @Override
     public boolean canTarget(EntityType<?> type) {
         return type != EntityType.CREEPER && super.canTarget(type);
+    }
+
+    @Override
+    protected void tickStatusEffects() {
+        super.tickStatusEffects();
     }
 
     public void tickMovement() {
@@ -505,7 +516,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         DOCTOR4T,
         RAT_KID,
         RATATER,
-        JORATO
+        JORATO,
+        JERMA
     }
 
     public static Type getRandomNaturalType(Random random) {

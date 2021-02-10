@@ -674,6 +674,103 @@
 					}
 				}
 			}
+		},
+		"animation.rat.jermarun": {
+			"loop": true,
+			"animation_length": 0.4,
+			"bones": {
+				"body": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, -5]
+						},
+						"0.2": {
+							"vector": [0, 0, 5]
+						},
+						"0.4": {
+							"vector": [0, 0, -5]
+						}
+					}
+				},
+				"tail": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 20, 0]
+						},
+						"0.2": {
+							"vector": [0, -20, 0]
+						},
+						"0.4": {
+							"vector": [0, 20, 0]
+						}
+					}
+				},
+				"head": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 10, 0]
+						},
+						"0.2": {
+							"vector": [0, -10, 0]
+						},
+						"0.4": {
+							"vector": [0, 10, 0]
+						}
+					}
+				},
+				"frontleg1": {
+					"rotation": {
+						"0.0": {
+							"vector": [-25, 0, 0]
+						},
+						"0.2": {
+							"vector": [75, 0, 0]
+						},
+						"0.4": {
+							"vector": [-25, 0, 0]
+						}
+					}
+				},
+				"frontleg2": {
+					"rotation": {
+						"0.0": {
+							"vector": [75, 0, 0]
+						},
+						"0.2": {
+							"vector": [-25, 0, 0]
+						},
+						"0.4": {
+							"vector": [75, 0, 0]
+						}
+					}
+				},
+				"legnumber1": {
+					"rotation": {
+						"0.0": {
+							"vector": [75, 0, 0]
+						},
+						"0.2": {
+							"vector": [-25, 0, 0]
+						},
+						"0.4": {
+							"vector": [75, 0, 0]
+						}
+					}
+				},
+				"legnumber2": {
+					"rotation": {
+						"0.0": {
+							"vector": [-25, 0, 0]
+						},
+						"0.2": {
+							"vector": [75, 0, 0]
+						},
+						"0.4": {
+							"vector": [-25, 0, 0]
+						}
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2
