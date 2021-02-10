@@ -16,17 +16,13 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
 
     @Override
     public Identifier getTextureLocation(RatEntity rat) {
-        if (rat.hasStatusEffect(StatusEffects.POISON)) {
-            return new Identifier(Rats.MODID, "textures/entity/plague.png");
+        if (rat.getRatType() == RatEntity.Type.RUSSIAN_BLUE && rat.hasCustomName() && rat.getCustomName().getString().toLowerCase().equals("remy")) {
+            return new Identifier(Rats.MODID, "textures/entity/remy.png");
         } else {
-            if (rat.getRatType() == RatEntity.Type.RUSSIAN_BLUE && rat.hasCustomName() && rat.getCustomName().getString().toLowerCase().equals("remy")) {
-                return new Identifier(Rats.MODID, "textures/entity/remy.png");
+            if (rat.getRatType() == RatEntity.Type.RAT_KID) {
+                return new Identifier(Rats.MODID, "textures/entity/rat_kid_" + rat.getRatColor().getName().toLowerCase() + ".png");
             } else {
-                if (rat.getRatType() == RatEntity.Type.RAT_KID) {
-                    return new Identifier(Rats.MODID, "textures/entity/rat_kid_" + rat.getRatColor().getName().toLowerCase() + ".png");
-                } else {
-                    return new Identifier(Rats.MODID, "textures/entity/" + rat.getRatType().toString().toLowerCase() + ".png");
-                }
+                return new Identifier(Rats.MODID, "textures/entity/" + rat.getRatType().toString().toLowerCase() + ".png");
             }
         }
     }
@@ -41,7 +37,7 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("head");
 
-        if (head != null && !entity.isSniffing()) {
+        if (head != null && !entity.isSniffing() && !entity.isEating()) {
             head.setRotationX(-entity.pitch * ((float) Math.PI / 180F));
 //            head.setRotationY(entity.getHeadYaw() * ((float) Math.PI / 180F));
         }
