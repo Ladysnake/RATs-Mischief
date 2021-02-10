@@ -40,6 +40,8 @@ public class Rats implements ModInitializer {
 
         HARVEST_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.HARVEST), "harvest_staff");
         COLLECTION_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.COLLECT), "collection_staff");
+        // rat kid painting
+        Registry.register(Registry.PAINTING_MOTIVE, new Identifier(MODID, "a_rat_in_time"), new PaintingMotive(64, 48));
     }
 
     private static <T extends Entity> EntityType<T> registerEntity(String s, EntityType<T> entityType) {
