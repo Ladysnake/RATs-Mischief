@@ -126,13 +126,13 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (this.isSitting()) {
+        if (this.isEating()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.eat", true));
+            return PlayState.CONTINUE;
+        } else if (this.isSitting()) {
             this.setSniffing(false);
             this.setEating(false);
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.flat", true));
-            return PlayState.CONTINUE;
-        } else if (this.isEating()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.eat", false));
             return PlayState.CONTINUE;
         } else if (event.isMoving()) {
             this.setSniffing(false);
@@ -231,11 +231,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public void mobTick() {
 //        this.setSprinting(this.getMoveControl().isMoving());
 
-        if (this.isSitting() && !this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
-            this.dropStack(this.getEquippedStack(EquipmentSlot.MAINHAND));
-            this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-        }
-
         if (this.isTouchingWater()) {
             this.setSitting(false);
             this.setSniffing(false);
@@ -283,29 +278,36 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public void tickMovement() {
         super.tickMovement();
 
+        if (this.isEating()) {
+            setMovementSpeed(0.0f);
+        } else {
+            setMovementSpeed(0.5f);
+        }
+
         if (!this.world.isClient && this.canPickUpLoot() && this.isAlive() && !this.dead && !this.isEating()) {
             List<ItemEntity> list = this.world.getNonSpectatingEntities(ItemEntity.class, this.getBoundingBox().expand(1.0D, 0.0D, 1.0D));
             Iterator var2 = list.iterator();
 
-            while(var2.hasNext()) {
-                ItemEntity itemEntity = (ItemEntity)var2.next();
+            while (var2.hasNext()) {
+                ItemEntity itemEntity = (ItemEntity) var2.next();
                 if (!itemEntity.removed && !itemEntity.getStack().isEmpty() && !itemEntity.cannotPickup() && this.canGather(itemEntity.getStack())) {
                     this.loot(itemEntity);
                 }
             }
-        } else {
-            if (this.getMainHandStack().isEmpty()) {
-                this.setEating(false);
-            }
         }
 
         if (!this.world.isClient) {
-            this.tickAngerLogic((ServerWorld)this.world, true);
+            this.tickAngerLogic((ServerWorld) this.world, true);
         }
     }
 
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         super.interactMob(player, hand);
+
+        if (!this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
+            this.dropStack(this.getEquippedStack(EquipmentSlot.MAINHAND));
+            this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+        }
 
         ItemStack itemStack = player.getStackInHand(hand);
         Item item = itemStack.getItem();
@@ -400,7 +402,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public boolean isBreedingItem(ItemStack stack) {
-        return stack.getItem() == Items.MELON_SLICE || stack.getItem() == Items.COOKED_CHICKEN || stack.getItem() == Items.COOKED_BEEF;
+        return stack.getItem().isFood();
     }
 
     @Override
@@ -411,7 +413,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public boolean isSitting() {
-        return (Boolean) this.dataTracker.get(SITTING);
+        return this.dataTracker.get(SITTING) || this.dataTracker.get(EATING);
     }
 
     @Override

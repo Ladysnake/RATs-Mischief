@@ -4,11 +4,9 @@ import ladysnake.ratsrats.common.entity.RatEntity;
 import ladysnake.ratsrats.common.entity.ai.DigGoal;
 import ladysnake.ratsrats.common.entity.ai.HarvestAndPlantGoal;
 import net.minecraft.block.Material;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.FollowTargetGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -43,10 +41,11 @@ public class RatStaffItem extends Item {
                     } else {
                         blockHand = Hand.MAIN_HAND;
                     }
-                    if (user.getStackInHand(blockHand).getItem() instanceof BlockItem && ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getBlastResistance() <= 0.6f && ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().getMaterial() != Material.GLASS && !((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().isToolRequired() || ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().getMaterial() == Material.SNOW_LAYER || ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().getMaterial() == Material.SNOW_BLOCK) {
-                        goal = new DigGoal(ratEntity, ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock());
-                    } else {
-                        goal = new DigGoal(ratEntity, null);
+                    goal = new DigGoal(ratEntity, null);
+                    if (user.getStackInHand(blockHand).getItem() instanceof BlockItem) {
+                        if (user.getStackInHand(blockHand).getItem() instanceof BlockItem && ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getBlastResistance() <= 0.6f && ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().getMaterial() != Material.GLASS && !((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().isToolRequired() || ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().getMaterial() == Material.SNOW_LAYER || ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().getMaterial() == Material.SNOW_BLOCK) {
+                            goal = new DigGoal(ratEntity, ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock());
+                        }
                     }
                     break;
                 case SKIRMISH:
