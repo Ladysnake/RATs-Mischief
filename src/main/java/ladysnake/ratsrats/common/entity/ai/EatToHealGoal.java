@@ -1,15 +1,26 @@
 package ladysnake.ratsrats.common.entity.ai;
 
 import ladysnake.ratsrats.common.entity.RatEntity;
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.potion.PotionUtil;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.stat.Stats;
 import net.minecraft.util.UseAction;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class EatToHealGoal extends Goal {
     public final RatEntity rat;
@@ -21,7 +32,7 @@ public class EatToHealGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        return (this.rat.isBreedingItem(this.rat.getMainHandStack()) || this.rat.getMainHandStack().getItem() instanceof PotionItem) && this.rat.getHealth() < this.rat.getMaxHealth() && !this.rat.getMoveControl().isMoving();
+        return ((this.rat.isBreedingItem(this.rat.getMainHandStack()) && (this.rat.getHealth() < this.rat.getMaxHealth() || this.rat.hasStatusEffect(StatusEffects.HUNGER))) || this.rat.getMainHandStack().getItem() instanceof PotionItem) && !this.rat.getMoveControl().isMoving();
     }
 
     @Override
@@ -42,16 +53,35 @@ public class EatToHealGoal extends Goal {
                 }
 
                 if (this.eatingTicks <= 0) {
+                    if (this.rat.getMainHandStack().getItem() instanceof PotionItem) {
+                        ItemStack stack = this.rat.getMainHandStack();
 
-                    if (this.rat.getMainHandStack().getItem().isFood()) {
+                        if (!this.rat.world.isClient()) {
+                            List<StatusEffectInstance> list = PotionUtil.getPotionEffects(stack);
+
+                            for (StatusEffectInstance statusEffectInstance : list) {
+                                if (statusEffectInstance.getEffectType().isInstant()) {
+                                    statusEffectInstance.getEffectType().applyInstantEffect(this.rat, this.rat, this.rat, statusEffectInstance.getAmplifier(), 1.0D);
+                                } else {
+                                    this.rat.addStatusEffect(new StatusEffectInstance(statusEffectInstance));
+                                }
+                            }
+                        }
+
+                        stack.decrement(1);
+                        this.rat.dropStack(new ItemStack(Items.GLASS_BOTTLE));
+                    } else if (this.rat.getMainHandStack().getItem().isFood()) {
+                        if (this.rat.getMainHandStack().getUseAction() == UseAction.DRINK) {
+                            this.rat.dropStack(new ItemStack(Items.GLASS_BOTTLE));
+                        }
                         this.rat.heal((float) this.rat.getMainHandStack().getItem().getFoodComponent().getHunger());
                         this.rat.getMainHandStack().getItem().getFoodComponent().getStatusEffects().forEach(statusEffectInstanceFloatPair -> {
                             this.rat.addStatusEffect(statusEffectInstanceFloatPair.getFirst());
                         });
+                        this.rat.getMainHandStack().getItem().finishUsing(this.rat.getMainHandStack(), this.rat.world, this.rat);
                     }
-                    this.rat.setEating(false);
-                    this.rat.getMainHandStack().getItem().finishUsing(this.rat.getMainHandStack(), this.rat.world, this.rat);
 
+                    this.rat.setEating(false);
                 }
             } else {
                 this.rat.setEating(false);
