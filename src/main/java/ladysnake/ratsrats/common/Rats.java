@@ -3,18 +3,22 @@ package ladysnake.ratsrats.common;
 import ladysnake.ratsrats.common.entity.RatEntity;
 import ladysnake.ratsrats.common.item.RatPouchItem;
 import ladysnake.ratsrats.common.item.RatStaffItem;
+import ladysnake.ratsrats.common.world.RatSpawner;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.painting.PaintingMotive;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.SpawnSettings;
@@ -40,11 +44,13 @@ public class Rats implements ModInitializer {
         RAT = registerEntity("rat", FabricEntityTypeBuilder.createMob().entityFactory(RatEntity::new).spawnGroup(SpawnGroup.AMBIENT).dimensions(EntityDimensions.changing(0.8F, 0.4F)).trackRangeBlocks(8).spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RatEntity::canSpawn).build());
         FabricDefaultAttributeRegistry.register(RAT, RatEntity.createEntityAttributes());
 
-        BiomeModifications.create(new Identifier(MODID)).add(ModificationPhase.ADDITIONS,
-                BiomeSelectors.foundInOverworld().and(biomeSelectionContext -> biomeSelectionContext.getBiome().getTemperature() <= 1.5 && biomeSelectionContext.getBiome().getCategory() != Biome.Category.OCEAN),
-                (selection, context) -> context.getSpawnSettings()
-                        .addSpawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(Rats.RAT, 10, 4, 8))
-        );
+        // rat custom spawner
+        RatSpawner ratSpawner = new RatSpawner();
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            server.getWorlds().forEach(world -> {
+                ratSpawner.spawn(world, server.getSaveProperties().getDifficulty() != Difficulty.PEACEFUL, server.shouldSpawnAnimals());
+            });
+        });
 
         LEATHER_RAT_POUCH = registerItem(new RatPouchItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), 3), "leather_rat_pouch");
         TWISTED_RAT_POUCH = registerItem(new RatPouchItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), 5), "twisted_rat_pouch");
