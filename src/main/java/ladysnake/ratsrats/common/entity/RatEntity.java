@@ -41,6 +41,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.IntRange;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
@@ -229,6 +230,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public void mobTick() {
+        System.out.println(this.getBlockPos());
 //        this.setSprinting(this.getMoveControl().isMoving());
 
         if (this.isTouchingWater()) {
@@ -525,6 +527,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         } else {
             return super.dropStack(stack);
         }
+    }
+
+    public static boolean canSpawn(EntityType<RatEntity> entityType, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, Random random) {
+        ServerWorld world = serverWorldAccess.toServerWorld();
+
+        return !world.isDay() && blockPos.getY() >= world.getSeaLevel();
     }
 
     public enum Type {

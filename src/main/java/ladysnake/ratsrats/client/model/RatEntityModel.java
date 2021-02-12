@@ -2,7 +2,6 @@ package ladysnake.ratsrats.client.model;
 
 import ladysnake.ratsrats.common.Rats;
 import ladysnake.ratsrats.common.entity.RatEntity;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
