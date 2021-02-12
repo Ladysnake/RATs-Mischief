@@ -235,6 +235,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public void mobTick() {
 //        this.setSprinting(this.getMoveControl().isMoving());
 
+        if (this.isSitting() && !this.isEating() && !this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
+            this.dropStack(this.getEquippedStack(EquipmentSlot.MAINHAND));
+            this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+        }
+
         if (this.isTouchingWater()) {
             this.setSitting(false);
             this.setSniffing(false);
@@ -306,13 +311,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        super.interactMob(player, hand);
-
-        if (!this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
-            this.dropStack(this.getEquippedStack(EquipmentSlot.MAINHAND));
-            this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-        }
-
         ItemStack itemStack = player.getStackInHand(hand);
         Item item = itemStack.getItem();
         if (this.world.isClient) {
@@ -341,6 +339,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                     this.setSitting(!this.isSitting());
                 }
             } else if (item.isFood() && !this.hasAngerTime()) {
+                player.getStackInHand(hand).decrement(1);
                 if (this.random.nextInt(Math.max(1, 6 - item.getFoodComponent().getHunger())) == 0) {
                     this.setOwner(player);
                     this.navigation.stop();
@@ -357,9 +356,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
                 return ActionResult.SUCCESS;
             }
-
-            return ActionResult.PASS;
         }
+
+        return super.interactMob(player, hand);
     }
 
     @Override
