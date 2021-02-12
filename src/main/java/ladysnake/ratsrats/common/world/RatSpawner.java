@@ -1,15 +1,10 @@
 package ladysnake.ratsrats.common.world;
 
-import java.util.List;
-import java.util.Random;
-
 import ladysnake.ratsrats.common.Rats;
 import ladysnake.ratsrats.common.entity.RatEntity;
 import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.SpawnRestriction;
-import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
@@ -18,9 +13,11 @@ import net.minecraft.util.math.Box;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.SpawnHelper;
 import net.minecraft.world.gen.Spawner;
-import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.poi.PointOfInterestStorage;
 import net.minecraft.world.poi.PointOfInterestType;
+
+import java.util.List;
+import java.util.Random;
 
 public class RatSpawner implements Spawner {
     private int ticksUntilNextSpawn;

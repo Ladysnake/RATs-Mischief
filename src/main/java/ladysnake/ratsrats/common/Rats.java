@@ -5,9 +5,6 @@ import ladysnake.ratsrats.common.item.RatPouchItem;
 import ladysnake.ratsrats.common.item.RatStaffItem;
 import ladysnake.ratsrats.common.world.RatSpawner;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -16,14 +13,10 @@ import net.minecraft.entity.decoration.painting.PaintingMotive;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.SpawnSettings;
 import software.bernie.geckolib3.GeckoLib;
 
 public class Rats implements ModInitializer {
