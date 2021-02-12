@@ -15,8 +15,10 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.painting.PaintingMotive;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.Heightmap;
@@ -28,6 +30,9 @@ public class Rats implements ModInitializer {
     public static final String MODID = "ratsrats";
 
     public static EntityType<RatEntity> RAT;
+
+    public static Item RAT_SPAWN_EGG;
+    public static Item LOYALTY_OF_THE_MISCHIEF;
 
     public static Item LEATHER_RAT_POUCH;
     public static Item TWISTED_RAT_POUCH;
@@ -51,6 +56,9 @@ public class Rats implements ModInitializer {
                 ratSpawner.spawn(world, server.getSaveProperties().getDifficulty() != Difficulty.PEACEFUL, server.shouldSpawnAnimals());
             });
         });
+
+        RAT_SPAWN_EGG = registerItem(new SpawnEggItem(RAT, 0xF2ADA1, 0x1A1A1A, (new Item.Settings()).group(ItemGroup.MISC)), "rat_spawn_egg");
+//        LOYALTY_OF_THE_MISCHIEF = registerItem(new Item((new Item.Settings()).group(ItemGroup.MATERIALS).rarity(Rarity.UNCOMMON)), "loyalty_of_the_mischief");
 
         LEATHER_RAT_POUCH = registerItem(new RatPouchItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), 3), "leather_rat_pouch");
         TWISTED_RAT_POUCH = registerItem(new RatPouchItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), 5), "twisted_rat_pouch");
