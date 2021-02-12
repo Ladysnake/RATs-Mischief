@@ -31,6 +31,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Packet;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
@@ -230,7 +231,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public void mobTick() {
-        System.out.println(this.getBlockPos());
 //        this.setSprinting(this.getMoveControl().isMoving());
 
         if (this.isTouchingWater()) {
@@ -338,15 +338,20 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 if (this.isOwner(player) && !(item instanceof RatPouchItem) && !(item instanceof RatStaffItem) && (!this.isBreedingItem(itemStack)) && !(itemStack.getItem() instanceof DyeItem && this.getRatType() == Type.RAT_KID)) {
                     this.setSitting(!this.isSitting());
                 }
-            } else if (((this.getRatType() != Type.GOLD && item == Items.MELON_SLICE) || (this.getRatType() == Type.GOLD && item == Items.GLISTERING_MELON_SLICE)) && !this.hasAngerTime()) {
-                if (!player.abilities.creativeMode) {
-                    itemStack.decrement(1);
+            } else if (item.isFood() && !this.hasAngerTime()) {
+                if (this.random.nextInt(Math.max(1, 6 - item.getFoodComponent().getHunger())) == 0) {
+                    this.setOwner(player);
+                    this.navigation.stop();
+                    this.setTarget(null);
+                    this.world.sendEntityStatus(this, (byte) 7);
+                } else {
+                    for (int i = 0; i < 7; ++i) {
+                        double d = this.random.nextGaussian() * 0.02D;
+                        double e = this.random.nextGaussian() * 0.02D;
+                        double f = this.random.nextGaussian() * 0.02D;
+                        ((ServerWorld) this.world).spawnParticles(ParticleTypes.SMOKE, this.getParticleX(1.0D), this.getRandomBodyY() + 0.5D, this.getParticleZ(1.0D), 1, d, e, f, 0f);
+                    }
                 }
-
-                this.setOwner(player);
-                this.navigation.stop();
-                this.setTarget(null);
-                this.world.sendEntityStatus(this, (byte)7);
 
                 return ActionResult.SUCCESS;
             }
@@ -532,7 +537,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public static boolean canSpawn(EntityType<RatEntity> entityType, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, Random random) {
         ServerWorld world = serverWorldAccess.toServerWorld();
 
-        return !world.isDay() && blockPos.getY() >= world.getSeaLevel();
+        world.
+
+        return blockPos.getY() >= world.getSeaLevel();
     }
 
     public enum Type {
