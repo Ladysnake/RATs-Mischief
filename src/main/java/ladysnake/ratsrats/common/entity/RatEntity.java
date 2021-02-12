@@ -25,7 +25,6 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleTypes;
@@ -40,10 +39,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.IntRange;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
-import net.minecraft.world.gen.feature.StructureFeature;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -85,6 +84,29 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.stepHeight = 2f;
     }
 
+    @Override
+    protected void initEquipment(LocalDifficulty difficulty) {
+        if (this.getRandom().nextInt(50) == 0) {
+            switch (this.getRandom().nextInt(3)) {
+                case 0:
+                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Rats.HARVEST_STAFF));
+                    break;
+                case 1:
+                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Rats.COLLECTION_STAFF));
+                    break;
+                case 2:
+                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Rats.SKIRMISH_STAFF));
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag entityTag) {
+        this.initEquipment(difficulty);
+        return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
+    }
+
     protected void initDataTracker() {
         super.initDataTracker();
 
@@ -104,7 +126,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     protected void initGoals() {
         this.goalSelector.add(1, new SwimGoal(this));
         this.goalSelector.add(2, new SitGoal(this));
-        ;
         this.goalSelector.add(3, new EatToHealGoal(this));
         this.goalSelector.add(3, new PounceAtTargetGoal(this, 0.3F));
         this.goalSelector.add(4, new MeleeAttackGoal(this, 1.0D, true));

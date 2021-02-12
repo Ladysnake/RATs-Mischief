@@ -57,7 +57,7 @@ public class Rats implements ModInitializer {
             });
         });
 
-        RAT_SPAWN_EGG = registerItem(new SpawnEggItem(RAT, 0xF2ADA1, 0x1A1A1A, (new Item.Settings()).group(ItemGroup.MISC)), "rat_spawn_egg");
+        RAT_SPAWN_EGG = registerItem(new SpawnEggItem(RAT, 0x1A1A1A, 0xF2ADA1, (new Item.Settings()).group(ItemGroup.MISC)), "rat_spawn_egg");
 //        LOYALTY_OF_THE_MISCHIEF = registerItem(new Item((new Item.Settings()).group(ItemGroup.MATERIALS).rarity(Rarity.UNCOMMON)), "loyalty_of_the_mischief");
 
         LEATHER_RAT_POUCH = registerItem(new RatPouchItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), 3), "leather_rat_pouch");

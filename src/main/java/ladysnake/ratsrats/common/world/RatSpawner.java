@@ -31,7 +31,7 @@ public class RatSpawner implements Spawner {
             if (this.ticksUntilNextSpawn > 0) {
                 return 0;
             } else {
-                this.ticksUntilNextSpawn = 300;
+                this.ticksUntilNextSpawn = 1200;
                 PlayerEntity playerEntity = world.getRandomAlivePlayer();
                 if (playerEntity == null) {
                     return 0;

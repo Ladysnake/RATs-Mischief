@@ -6,6 +6,7 @@
   "item.ratsrats.rat_pouch.tooltip.capacity": "Capacity: %s/%s",
   "item.ratsrats.harvest_staff": "Harvest Staff",
   "item.ratsrats.collection_staff": "Collection Staff",
+  "item.ratsrats.skirmish_staff": "Skirmish Staff",
   "type.ratsrats.albino": "Albino",
   "type.ratsrats.black": "Black",
   "type.ratsrats.grey": "Grey",
@@ -17,5 +18,6 @@
   "type.ratsrats.doctor4t": "doctor4t",
   "type.ratsrats.rat_kid": "Rat Kid",
   "type.ratsrats.ratater": "Ratater",
-  "type.ratsrats.jorato": "Jorato"
+  "type.ratsrats.jorato": "Jorato",
+  "type.ratsrats.jerma": "Jerma"
 }
