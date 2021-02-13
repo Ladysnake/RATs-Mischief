@@ -48,7 +48,6 @@ public class RatSpawner implements Spawner {
         List<RatEntity> list = world.getNonSpectatingEntities(RatEntity.class, (new Box(pos)).expand(96.0, 16.0D, 96.0D));
 
         if (list.size() < bedCount *3) {
-            System.out.println("SPAWN");
             this.spawn(world, pos);
         }
     }
