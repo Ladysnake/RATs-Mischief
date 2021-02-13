@@ -120,7 +120,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.dataTracker.startTracking(SITTING, false);
         this.dataTracker.startTracking(EATING, false);
         this.dataTracker.startTracking(SNIFFING, false);
-        this.dataTracker.startTracking(COLOR, DyeColor.WHITE.getName());
+        this.dataTracker.startTracking(COLOR, DyeColor.values()[(this.random.nextInt(DyeColor.values().length))].getName());
     }
 
     protected void initGoals() {
