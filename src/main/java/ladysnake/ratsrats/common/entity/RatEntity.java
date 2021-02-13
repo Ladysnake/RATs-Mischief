@@ -501,7 +501,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public boolean canPickUpLoot() {
-        return this.isTamed() && !this.isSitting();
+        return !this.isSitting();
     }
 
     @Override
