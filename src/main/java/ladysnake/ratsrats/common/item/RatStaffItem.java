@@ -1,6 +1,7 @@
 package ladysnake.ratsrats.common.item;
 
 import ladysnake.ratsrats.common.entity.RatEntity;
+import ladysnake.ratsrats.common.entity.ai.BreedGoal;
 import ladysnake.ratsrats.common.entity.ai.DigGoal;
 import ladysnake.ratsrats.common.entity.ai.HarvestAndPlantGoal;
 import net.minecraft.block.Material;
@@ -51,6 +52,9 @@ public class RatStaffItem extends Item {
                 case SKIRMISH:
                     goal = new FollowTargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
                     break;
+                case LOVE:
+                    goal = new BreedGoal(ratEntity);
+                    break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + action);
             }
@@ -64,6 +68,7 @@ public class RatStaffItem extends Item {
     public static enum Action {
         HARVEST,
         COLLECT,
-        SKIRMISH
+        SKIRMISH,
+        LOVE
     }
 }

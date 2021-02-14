@@ -43,6 +43,7 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
+import net.minecraft.world.gen.feature.StructureFeature;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -86,17 +87,22 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     protected void initEquipment(LocalDifficulty difficulty) {
-        if (this.getRandom().nextInt(50) == 0) {
-            switch (this.getRandom().nextInt(3)) {
-                case 0:
-                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Rats.HARVEST_STAFF));
-                    break;
-                case 1:
-                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Rats.COLLECTION_STAFF));
-                    break;
-                case 2:
-                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Rats.SKIRMISH_STAFF));
-                    break;
+        if (!this.isBaby()) {
+            if (this.getRandom().nextInt(10) == 0) {
+                switch (this.getRandom().nextInt(4)) {
+                    case 0:
+                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Rats.HARVEST_STAFF));
+                        break;
+                    case 1:
+                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Rats.COLLECTION_STAFF));
+                        break;
+                    case 2:
+                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Rats.SKIRMISH_STAFF));
+                        break;
+                    case 3:
+                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Rats.LOVE_STAFF));
+                        break;
+                }
             }
         }
     }
@@ -558,8 +564,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     public static boolean canSpawn(EntityType<RatEntity> entityType, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, Random random) {
         ServerWorld world = serverWorldAccess.toServerWorld();
-        List<VillagerEntity> villagersNearby = world.getEntitiesByType(EntityType.VILLAGER, new Box(blockPos.getX() - SPAWN_RADIUS, blockPos.getY() - SPAWN_RADIUS, blockPos.getZ() - SPAWN_RADIUS, blockPos.getX() + SPAWN_RADIUS, blockPos.getY() + SPAWN_RADIUS, blockPos.getZ() + SPAWN_RADIUS), villagerEntity -> true);
-        return villagersNearby.isEmpty();
+        if (world.locateStructure(StructureFeature.VILLAGE, blockPos, 10, false) != null) {
+            List<VillagerEntity> villagersNearby = world.getEntitiesByType(EntityType.VILLAGER, new Box(blockPos.getX() - SPAWN_RADIUS, blockPos.getY() - SPAWN_RADIUS, blockPos.getZ() - SPAWN_RADIUS, blockPos.getX() + SPAWN_RADIUS, blockPos.getY() + SPAWN_RADIUS, blockPos.getZ() + SPAWN_RADIUS), villagerEntity -> true);
+            return villagersNearby.isEmpty();
+        }
+
+        return false;
     }
 
     public enum Type {
