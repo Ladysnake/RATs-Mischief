@@ -58,7 +58,7 @@ public class RatPouchItem extends Item {
             } else {
                 ListTag listTag = user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).getList("rats", NbtType.COMPOUND);
 
-                List<RatEntity> closestTamedRats = world.getEntitiesByClass(RatEntity.class, user.getBoundingBox().expand(5.0D), CLOSEST_RAT_PREDICATE);
+                List<RatEntity> closestTamedRats = world.getEntitiesByClass(RatEntity.class, user.getBoundingBox().expand(16.0D), CLOSEST_RAT_PREDICATE);
                 List<RatEntity> closestOwnedRats = closestTamedRats.stream().filter(ratEntity -> ratEntity.getOwnerUuid() != null && ratEntity.getOwnerUuid().equals(user.getUuid())).collect(Collectors.toList());
 
                 if (closestOwnedRats.size() > 0) {
