@@ -2,10 +2,14 @@ package ladysnake.ratsrats.common.entity.ai;
 
 import ladysnake.ratsrats.common.entity.RatEntity;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+
+import java.util.List;
 
 public class BreedGoal extends Goal {
     protected final RatEntity rat;
@@ -23,7 +27,15 @@ public class BreedGoal extends Goal {
     @Override
     public void start() {
         if (!this.rat.getMainHandStack().isEmpty() && !this.rat.getEntityWorld().getEntitiesByClass(AnimalEntity.class, this.rat.getBoundingBox().expand(16, 4, 16), animalEntity -> !this.rat.world.isClient() && animalEntity.getBreedingAge() == 0 && animalEntity.canEat() && animalEntity.isBreedingItem(this.rat.getMainHandStack())).isEmpty()) {
-            target = this.rat.getEntityWorld().getEntitiesByClass(AnimalEntity.class, this.rat.getBoundingBox().expand(16, 4, 16), animalEntity -> animalEntity.getBreedingAge() == 0 && animalEntity.canEat() && animalEntity.isBreedingItem(this.rat.getMainHandStack())).get(0);
+            List<AnimalEntity> animalList = this.rat.getEntityWorld().getEntitiesByClass(AnimalEntity.class, this.rat.getBoundingBox().expand(16, 4, 16), animalEntity -> animalEntity.getBreedingAge() == 0 && animalEntity.canEat() && animalEntity.isBreedingItem(this.rat.getMainHandStack()));
+            AnimalEntity closestAnimal = animalList.get(0);
+            for (AnimalEntity animalEntity : animalList) {
+                if (animalEntity.squaredDistanceTo(rat) < closestAnimal.squaredDistanceTo(this.rat)) {
+                    closestAnimal = animalEntity;
+                }
+            }
+
+            this.target = closestAnimal;
         }
     }
 
