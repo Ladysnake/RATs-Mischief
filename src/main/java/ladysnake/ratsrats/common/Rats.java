@@ -25,7 +25,7 @@ public class Rats implements ModInitializer {
     public static EntityType<RatEntity> RAT;
 
     public static Item RAT_SPAWN_EGG;
-    public static Item LOYALTY_OF_THE_MISCHIEF;
+//    public static Item LOYALTY_OF_THE_MISCHIEF;
 
     public static Item LEATHER_RAT_POUCH;
     public static Item TWISTED_RAT_POUCH;
@@ -60,7 +60,7 @@ public class Rats implements ModInitializer {
 
         HARVEST_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.HARVEST), "harvest_staff");
         COLLECTION_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.COLLECT), "collection_staff");
-        SKIRMISH_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.SKIRMISH), "skirmish_staff");
+//        SKIRMISH_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.SKIRMISH), "skirmish_staff");
         LOVE_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.LOVE), "love_staff");
 
         // rat kid painting
