@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "ladysnake.ratsmischief.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "CatEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

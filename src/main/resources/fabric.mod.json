@@ -1,33 +1,33 @@
 {
   "schemaVersion": 1,
-  "id": "ratsrats",
+  "id": "ratsmischief",
   "version": "${version}",
 
-  "name": "Rat's Rats",
-  "description": "Introduces a new mob, the rat, as well as mechanics revolving around these new possible pets.",
+  "name": "Rat's Mischief",
+  "description": "Introduces a new mob, the rat, as well as mechanics revolving around these new pets.",
   "authors": [
     "doctor4t",
 	"ArathainFarqoe"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/rats-rats",
-    "sources": "https://github.com/doctor4t/rats-rats"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/rats-mischief",
+    "sources": "https://github.com/doctor4t/rats-mischief"
   },
 
   "license": "Code: GNU GPLv3; Art: ARR",
-  "icon": "assets/ratsrats/icon.png",
+  "icon": "assets/ratsmischief/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "ladysnake.ratsrats.common.Rats"
+      "ladysnake.ratsmischief.common.Rats"
     ],
     "client": [
-      "ladysnake.ratsrats.client.RatsClient"
+      "ladysnake.ratsmischief.client.RatsClient"
     ]
   },
   "mixins": [
-    "ratsrats.mixins.json"
+    "ratsmischief.mixins.json"
   ],
 
   "depends": {

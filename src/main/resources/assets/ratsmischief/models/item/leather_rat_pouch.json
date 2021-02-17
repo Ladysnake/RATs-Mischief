@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "ratsmischief:item/leather_rat_pouch"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "ratsmischief:filled": 1
+      },
+      "model": "ratsmischief:item/leather_rat_pouch_filled"
+    }
+  ]
+}
