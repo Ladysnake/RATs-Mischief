@@ -57,7 +57,7 @@ public class DigGoal extends Goal {
             }
 
             if (this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ()) <= 5) {
-                breakProgress += Math.max(0, 1 -this.rat.world.getBlockState(targetBlockPos).getBlock().getBlastResistance());
+                breakProgress += Math.max(0, 1 - this.rat.world.getBlockState(targetBlockPos).getBlock().getBlastResistance());
                 this.rat.world.setBlockBreakingInfo(this.rat.getEntityId(), targetBlockPos, (int) breakProgress);
                 if (breakProgress >= 9 || this.rat.world.getBlockState(targetBlockPos).getBlock().getBlastResistance() == 0.0f) {
                     this.rat.world.setBlockBreakingInfo(this.rat.getEntityId(), targetBlockPos, -1);

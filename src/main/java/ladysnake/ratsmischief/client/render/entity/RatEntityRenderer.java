@@ -45,7 +45,7 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
         if (bone.getName().equals("bodybone")) {
             stack.push();
             stack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-90));
-            stack.translate(bone.getPositionX(), bone.getPositionZ(), bone.getPositionY()-0.05);
+            stack.translate(bone.getPositionX(), bone.getPositionZ(), bone.getPositionY() - 0.05);
             stack.scale(0.7f, 0.7f, 0.7f);
             stack.multiply(new Quaternion(bone.getRotationX(), bone.getRotationZ(), bone.getRotationY(), false));
 

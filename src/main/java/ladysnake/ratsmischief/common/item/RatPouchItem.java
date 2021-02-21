@@ -112,7 +112,7 @@ public class RatPouchItem extends Item {
         tooltip.add(new TranslatableText("item.ratsmischief.rat_pouch.tooltip.capacity", listTag.size(), this.size).setStyle(EMPTY.withColor(Formatting.GRAY)));
 
         for (Tag ratTag : listTag) {
-            TranslatableText ratType = new TranslatableText("type.ratsmischief."+((CompoundTag) ratTag).getString("RatType").toLowerCase());
+            TranslatableText ratType = new TranslatableText("type.ratsmischief." + ((CompoundTag) ratTag).getString("RatType").toLowerCase());
 
             Style style = EMPTY.withColor(Formatting.DARK_GRAY);
             if (((CompoundTag) ratTag).getString("RatType").equals(RatEntity.Type.GOLD.name())) {

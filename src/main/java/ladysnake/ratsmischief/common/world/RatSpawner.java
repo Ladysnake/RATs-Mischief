@@ -47,7 +47,7 @@ public class RatSpawner implements Spawner {
         long bedCount = world.getPointOfInterestStorage().count(PointOfInterestType.HOME.getCompletionCondition(), pos, 48, PointOfInterestStorage.OccupationStatus.HAS_SPACE);
         List<RatEntity> list = world.getNonSpectatingEntities(RatEntity.class, (new Box(pos)).expand(96.0, 16.0D, 96.0D));
 
-        if (list.size() < bedCount *3) {
+        if (list.size() < bedCount * 3) {
             this.spawn(world, pos);
         }
     }
@@ -55,7 +55,7 @@ public class RatSpawner implements Spawner {
     private void spawn(ServerWorld world, BlockPos pos) {
         RatEntity ratEntity = Rats.RAT.create(world);
         if (ratEntity != null) {
-            ratEntity.initialize(world, world.getLocalDifficulty(pos), SpawnReason.NATURAL, (EntityData)null, (CompoundTag)null);
+            ratEntity.initialize(world, world.getLocalDifficulty(pos), SpawnReason.NATURAL, (EntityData) null, (CompoundTag) null);
             ratEntity.refreshPositionAndAngles(pos, 0.0F, 0.0F);
             world.spawnEntityAndPassengers(ratEntity);
         }

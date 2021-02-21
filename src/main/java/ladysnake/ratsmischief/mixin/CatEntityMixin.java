@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(CatEntity.class)
-public abstract class CatEntityMixin extends TameableEntity  {
+public abstract class CatEntityMixin extends TameableEntity {
     protected CatEntityMixin(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
     }

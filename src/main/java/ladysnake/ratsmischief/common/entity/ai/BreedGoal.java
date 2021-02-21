@@ -2,8 +2,6 @@ package ladysnake.ratsmischief.common.entity.ai;
 
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;

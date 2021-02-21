@@ -4,7 +4,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.pathing.*;
+import net.minecraft.entity.ai.pathing.BirdNavigation;
+import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.entity.ai.pathing.LandPathNodeMaker;
+import net.minecraft.entity.ai.pathing.MobNavigation;
+import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
@@ -45,7 +49,7 @@ public class FollowOwnerRatGoal extends Goal {
             return false;
         } else if (this.tameable.isSitting()) {
             return false;
-        } else if (this.tameable.squaredDistanceTo(livingEntity) < (double)(this.minDistance * this.minDistance)) {
+        } else if (this.tameable.squaredDistanceTo(livingEntity) < (double) (this.minDistance * this.minDistance)) {
             return false;
         } else {
             this.owner = livingEntity;
@@ -59,7 +63,7 @@ public class FollowOwnerRatGoal extends Goal {
         } else if (this.tameable.isSitting()) {
             return false;
         } else {
-            return this.tameable.squaredDistanceTo(this.owner) > (double)(this.maxDistance * this.maxDistance);
+            return this.tameable.squaredDistanceTo(this.owner) > (double) (this.maxDistance * this.maxDistance);
         }
     }
 
@@ -76,7 +80,7 @@ public class FollowOwnerRatGoal extends Goal {
     }
 
     public void tick() {
-        this.tameable.getLookControl().lookAt(this.owner, 10.0F, (float)this.tameable.getLookPitchSpeed());
+        this.tameable.getLookControl().lookAt(this.owner, 10.0F, (float) this.tameable.getLookPitchSpeed());
         if (--this.updateCountdownTicks <= 0) {
             this.updateCountdownTicks = 10;
             if (!this.tameable.isLeashed() && !this.tameable.hasVehicle()) {
@@ -93,7 +97,7 @@ public class FollowOwnerRatGoal extends Goal {
     private void tryTeleport() {
         BlockPos blockPos = this.owner.getBlockPos();
 
-        for(int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; ++i) {
             int j = this.getRandomInt(-3, 3);
             int k = this.getRandomInt(-1, 1);
             int l = this.getRandomInt(-3, 3);
@@ -106,12 +110,12 @@ public class FollowOwnerRatGoal extends Goal {
     }
 
     private boolean tryTeleportTo(int x, int y, int z) {
-        if (Math.abs((double)x - this.owner.getX()) < 2.0D && Math.abs((double)z - this.owner.getZ()) < 2.0D) {
+        if (Math.abs((double) x - this.owner.getX()) < 2.0D && Math.abs((double) z - this.owner.getZ()) < 2.0D) {
             return false;
         } else if (!this.canTeleportTo(new BlockPos(x, y, z))) {
             return false;
         } else {
-            this.tameable.refreshPositionAndAngles((double)x + 0.5D, (double)y, (double)z + 0.5D, this.tameable.yaw, this.tameable.pitch);
+            this.tameable.refreshPositionAndAngles((double) x + 0.5D, (double) y, (double) z + 0.5D, this.tameable.yaw, this.tameable.pitch);
             this.navigation.stop();
             return true;
         }

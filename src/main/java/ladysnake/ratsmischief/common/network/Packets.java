@@ -33,7 +33,7 @@ public final class Packets {
         return new CustomPayloadS2CPacket(SPAWN, bytes);
     }
 
-    public static  <T extends Packet<?>> Optional<T> readFrom(final PacketByteBuf bytes, final Supplier<T> packet) {
+    public static <T extends Packet<?>> Optional<T> readFrom(final PacketByteBuf bytes, final Supplier<T> packet) {
         final T deserializedPacket = packet.get();
         try {
             deserializedPacket.read(bytes);
