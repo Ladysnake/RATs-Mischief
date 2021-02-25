@@ -181,7 +181,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.targetSelector.add(4, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> this.shouldAngerAt((LivingEntity) playerEntity)));
         // wild rats chase HalfOf2
 //        this.targetSelector.add(7, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> ((LivingEntity) playerEntity).getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") && !this.isTamed()));
-        this.targetSelector.add(7, new ChaseForFunGoal(this, CatEntity.class, true));
+        this.targetSelector.add(8, new ChaseForFunGoal(this, CatEntity.class, true));
         this.targetSelector.add(8, new UniversalAngerGoal(this, true));
     }
 
@@ -696,9 +696,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         public void tick() {
             super.tick();
 
-            if (RatEntity.this.squaredDistanceTo(RatEntity.this.getOwner()) <= 3.0f) {
-                RatEntity.this.dropStack(RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND));
-                RatEntity.this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            if (RatEntity.this.squaredDistanceTo(RatEntity.this.getOwner()) <= 3.0f && RatEntity.this.getOwner() instanceof PlayerEntity) {
+                if (((PlayerEntity) RatEntity.this.getOwner()).inventory.getEmptySlot() >= 0) {
+                    RatEntity.this.dropStack(RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND));
+                    RatEntity.this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                }
             }
         }
 
