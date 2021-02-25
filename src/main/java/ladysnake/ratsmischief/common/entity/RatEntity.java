@@ -2,6 +2,7 @@ package ladysnake.ratsmischief.common.entity;
 
 import com.google.common.collect.ImmutableList;
 import ladysnake.ratsmischief.common.Rats;
+import ladysnake.ratsmischief.common.entity.ai.ChaseForFunGoal;
 import ladysnake.ratsmischief.common.entity.ai.EatToHealGoal;
 import ladysnake.ratsmischief.common.entity.ai.FollowOwnerRatGoal;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
@@ -179,8 +180,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.targetSelector.add(3, (new RevengeGoal(this, new Class[0])).setGroupRevenge());
         this.targetSelector.add(4, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> this.shouldAngerAt((LivingEntity) playerEntity)));
         // wild rats chase HalfOf2
-        this.targetSelector.add(7, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> ((LivingEntity) playerEntity).getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") && !this.isTamed()));
-        this.targetSelector.add(7, new FollowTargetGoal(this, CatEntity.class, true));
+//        this.targetSelector.add(7, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> ((LivingEntity) playerEntity).getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") && !this.isTamed()));
+        this.targetSelector.add(7, new ChaseForFunGoal(this, CatEntity.class, true));
         this.targetSelector.add(8, new UniversalAngerGoal(this, true));
     }
 
