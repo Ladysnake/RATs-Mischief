@@ -43,7 +43,7 @@ public class ChaseForFunGoal<T extends LivingEntity> extends TrackTargetGoal {
 
     @Override
     public boolean shouldContinue() {
-        return this.targetEntity != null && !this.targetEntity.isDead();
+        return this.targetEntity != null && !this.targetEntity.isDead() && this.mob.getRandom().nextInt(10) != 0;
     }
 
     protected Box getSearchBox(double distance) {
@@ -51,7 +51,7 @@ public class ChaseForFunGoal<T extends LivingEntity> extends TrackTargetGoal {
     }
 
     protected void findClosestTarget() {
-        this.targetEntity = this.mob.world.getClosestEntityIncludingUngeneratedChunks(this.targetClass, this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(), this.getSearchBox(this.getFollowRange()));
+        this.targetEntity = this.mob.world.getClosestEntityIncludingUngeneratedChunks(this.targetClass, this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(), this.getSearchBox(10));
     }
 
     public void setTargetEntity(@Nullable LivingEntity targetEntity) {
