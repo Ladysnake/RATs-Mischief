@@ -3,7 +3,7 @@
 ### Rat's Mischief 1.0.1 - 1.16.5
 - Rats no longer attack cats, but just chase them for fun
 - Rats will no longer drop items if their owner's inventory is full
-
+- Rats are no longer able to drink splash and lingering potions
 
 ### Rat's Mischief 1.0 - 1.16.5
 - Added rats, with 8 color variants (albino, black, grey, husky, chocolate, light brown, russian blue, and the very rare gold rat)

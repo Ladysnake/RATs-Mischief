@@ -6,6 +6,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
+import net.minecraft.item.ThrowablePotionItem;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.PotionUtil;
@@ -25,7 +26,7 @@ public class EatToHealGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        return ((this.rat.isBreedingItem(this.rat.getMainHandStack()) && this.rat.getHealth() < this.rat.getMaxHealth()) || this.rat.getMainHandStack().getItem() instanceof PotionItem) && !this.rat.getMoveControl().isMoving();
+        return ((this.rat.isBreedingItem(this.rat.getMainHandStack()) && this.rat.getHealth() < this.rat.getMaxHealth()) || (this.rat.getMainHandStack().getItem() instanceof PotionItem && !(this.rat.getMainHandStack().getItem() instanceof ThrowablePotionItem))) && !this.rat.getMoveControl().isMoving();
     }
 
     @Override
