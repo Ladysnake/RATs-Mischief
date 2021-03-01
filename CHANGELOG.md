@@ -1,5 +1,10 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.0.2 - 1.16.5
+- Fixed a bug that caused rats to not properly check for spawn conditions, leading to rats spawning whenever beds are present
+- Fixed a crash that would occur when rats are trying to bring back an item but their owner is dead
+- Fixed a crash that would occur when an order is given with a staff but the owner isn't present
+
 ### Rat's Mischief 1.0.1 - 1.16.5
 - Rats no longer attack cats, but just chase them for fun
 - Rats will no longer drop items if their owner's inventory is full
