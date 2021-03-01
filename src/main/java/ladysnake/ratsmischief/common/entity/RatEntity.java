@@ -696,22 +696,24 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         public void tick() {
             super.tick();
 
-            if (RatEntity.this.squaredDistanceTo(RatEntity.this.getOwner()) <= 3.0f && RatEntity.this.getOwner() instanceof PlayerEntity) {
-                if (((PlayerEntity) RatEntity.this.getOwner()).inventory.getEmptySlot() >= 0) {
-                    RatEntity.this.dropStack(RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND));
-                    RatEntity.this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            if (RatEntity.this.getOwner() != null && RatEntity.this.getOwner().isAlive()) {
+                if (RatEntity.this.squaredDistanceTo(RatEntity.this.getOwner()) <= 3.0f && RatEntity.this.getOwner() instanceof PlayerEntity) {
+                    if (((PlayerEntity) RatEntity.this.getOwner()).inventory.getEmptySlot() >= 0) {
+                        RatEntity.this.dropStack(RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND));
+                        RatEntity.this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                    }
                 }
             }
         }
 
         @Override
         public boolean canStart() {
-            return super.canStart() && !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && RatEntity.this.isTamed() && !RatEntity.this.isSitting() && !RatEntity.this.isEating();
+            return super.canStart() && !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && RatEntity.this.isTamed() && !RatEntity.this.isSitting() && !RatEntity.this.isEating() && RatEntity.this.getOwner() != null && RatEntity.this.getOwner().isAlive();
         }
 
         @Override
         public boolean shouldContinue() {
-            return super.shouldContinue() && !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty();
+            return super.shouldContinue() && !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && RatEntity.this.isTamed() && !RatEntity.this.isSitting() && !RatEntity.this.isEating() && RatEntity.this.getOwner() != null && RatEntity.this.getOwner().isAlive();
         }
     }
 
