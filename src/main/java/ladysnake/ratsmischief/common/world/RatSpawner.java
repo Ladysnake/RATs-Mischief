@@ -10,6 +10,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.SpawnHelper;
 import net.minecraft.world.gen.Spawner;
 import net.minecraft.world.poi.PointOfInterestStorage;
@@ -53,11 +54,13 @@ public class RatSpawner implements Spawner {
     }
 
     private void spawn(ServerWorld world, BlockPos pos) {
-        RatEntity ratEntity = Rats.RAT.create(world);
-        if (ratEntity != null) {
-            ratEntity.initialize(world, world.getLocalDifficulty(pos), SpawnReason.NATURAL, (EntityData) null, (CompoundTag) null);
-            ratEntity.refreshPositionAndAngles(pos, 0.0F, 0.0F);
-            world.spawnEntityAndPassengers(ratEntity);
+        if (RatEntity.canSpawn(Rats.RAT, world, SpawnReason.NATURAL, pos, world.getRandom())) {
+            RatEntity ratEntity = Rats.RAT.create(world);
+            if (ratEntity != null) {
+                ratEntity.initialize(world, world.getLocalDifficulty(pos), SpawnReason.NATURAL, (EntityData) null, (CompoundTag) null);
+                ratEntity.refreshPositionAndAngles(pos, 0.0F, 0.0F);
+                world.spawnEntityAndPassengers(ratEntity);
+            }
         }
     }
 }
