@@ -1,6 +1,10 @@
 # Rat's Mischief - Changelog:
 
 ### Rat's Mischief 1.1 - 1.16.5
+- Added the Mask of Rat
+    - Grants a bit of protection as well as all enchantments present on it to your rats when their owner has one equipped 
+    - Can be repaired with Phantom Membrane
+    - Will always drop when a player kills doctor4t
 - Tamed rats now drop what they hold upon dying
 
 ### Rat's Mischief 1.0.3 - 1.16.5

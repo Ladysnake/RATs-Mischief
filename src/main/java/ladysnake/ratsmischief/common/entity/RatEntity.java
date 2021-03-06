@@ -619,8 +619,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     @Override
     public ItemStack getEquippedStack(EquipmentSlot slot) {
         if (slot == EquipmentSlot.HEAD) {
-            if (this.isTamed() && this.getOwner() != null && !this.getOwner().getEquippedStack(slot).isEmpty() && this.getOwner().getEquippedStack(slot).getItem() == Mischief.RAT_MASK) {
-                return this.getOwner().getEquippedStack(slot);
+            if (this.isTamed() && this.getOwner() != null && !this.getOwner().getEquippedStack(EquipmentSlot.HEAD).isEmpty() && this.getOwner().getEquippedStack(EquipmentSlot.HEAD).getItem() == Mischief.RAT_MASK) {
+                return this.getOwner().getEquippedStack(EquipmentSlot.HEAD);
             }
         }
 
