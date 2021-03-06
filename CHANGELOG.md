@@ -1,5 +1,9 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.0.3 - 1.16.5
+- Added compatibility with Eldritch Mobs so eldritch rats can naturally spawn
+- Reduced the range check for villages when spawning rats
+
 ### Rat's Mischief 1.0.2 - 1.16.5
 - Fixed a bug that caused rats to not properly check for spawn conditions, leading to rats spawning whenever beds are present
 - Fixed a crash that would occur when rats are trying to bring back an item but their owner is dead
