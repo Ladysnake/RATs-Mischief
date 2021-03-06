@@ -607,6 +607,15 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         return false;
     }
 
+    @Override
+    public void onDeath(DamageSource source) {
+        if (this.isTamed()) {
+            this.dropStack(this.getMainHandStack());
+        }
+
+        super.onDeath(source);
+    }
+
     public enum Type {
         ALBINO,
         BLACK,
