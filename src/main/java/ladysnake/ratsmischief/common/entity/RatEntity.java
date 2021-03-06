@@ -599,7 +599,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     public static boolean canSpawn(EntityType<RatEntity> entityType, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, Random random) {
         ServerWorld world = serverWorldAccess.toServerWorld();
-        if (world.locateStructure(StructureFeature.VILLAGE, blockPos, 10, false) != null) {
+        if (world.locateStructure(StructureFeature.VILLAGE, blockPos, 5, false) != null) {
             List<VillagerEntity> villagersNearby = world.getEntitiesByType(EntityType.VILLAGER, new Box(blockPos.getX() - SPAWN_RADIUS, blockPos.getY() - SPAWN_RADIUS, blockPos.getZ() - SPAWN_RADIUS, blockPos.getX() + SPAWN_RADIUS, blockPos.getY() + SPAWN_RADIUS, blockPos.getZ() + SPAWN_RADIUS), villagerEntity -> true);
             return villagersNearby.isEmpty();
         }
