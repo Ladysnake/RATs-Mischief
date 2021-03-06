@@ -30,6 +30,6 @@ public class MischiefClient implements ClientModInitializer {
         FabricModelPredicateProviderRegistry.register(new Identifier(Mischief.MODID + ":filled"), (itemStack, world, livingEntity) -> itemStack.getOrCreateSubTag(Mischief.MODID).getFloat("filled"));
 
         // rat mask
-//        ArmorRenderingRegistry.registerTexture((livingEntity, itemStack, equipmentSlot, b, s, identifier) -> new Identifier(Mischief.MODID, "textures/models/armor/rat_mask_layer_1.png"), Mischief.RAT_MASK);
+        ArmorRenderingRegistry.registerTexture((livingEntity, itemStack, equipmentSlot, b, s, identifier) -> new Identifier(Mischief.MODID, "textures/models/armor/rat_mask_layer_1.png"), Mischief.RAT_MASK);
     }
 }
