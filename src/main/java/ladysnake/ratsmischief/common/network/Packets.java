@@ -1,7 +1,7 @@
 package ladysnake.ratsmischief.common.network;
 
 import io.netty.buffer.Unpooled;
-import ladysnake.ratsmischief.common.Rats;
+import ladysnake.ratsmischief.common.Mischief;
 import net.fabricmc.fabric.api.server.PlayerStream;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
@@ -18,7 +18,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class Packets {
-    public static final Identifier SPAWN = new Identifier(Rats.MODID, "spawn");
+    public static final Identifier SPAWN = new Identifier(Mischief.MODID, "spawn");
 
     private Packets() {
     }

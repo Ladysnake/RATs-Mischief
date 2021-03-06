@@ -1,7 +1,7 @@
 package ladysnake.ratsmischief.common.entity;
 
 import com.google.common.collect.ImmutableList;
-import ladysnake.ratsmischief.common.Rats;
+import ladysnake.ratsmischief.common.Mischief;
 import ladysnake.ratsmischief.common.entity.ai.ChaseForFunGoal;
 import ladysnake.ratsmischief.common.entity.ai.EatToHealGoal;
 import ladysnake.ratsmischief.common.entity.ai.FollowOwnerRatGoal;
@@ -113,7 +113,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public int actionTimer = 0;
 
     public RatEntity(EntityType<? extends PathAwareEntity> type, World worldIn) {
-        super(Rats.RAT, worldIn);
+        super(Mischief.RAT, worldIn);
         this.ignoreCameraFrustum = false;
         this.stepHeight = 2f;
     }
@@ -124,16 +124,16 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             if (this.getRandom().nextInt(10) == 0) {
                 switch (this.getRandom().nextInt(4)) {
                     case 0:
-                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Rats.HARVEST_STAFF));
+                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.HARVEST_STAFF));
                         break;
                     case 1:
-                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Rats.COLLECTION_STAFF));
+                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.COLLECTION_STAFF));
                         break;
                     case 2:
-                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Rats.SKIRMISH_STAFF));
+                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.SKIRMISH_STAFF));
                         break;
                     case 3:
-                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Rats.LOVE_STAFF));
+                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.LOVE_STAFF));
                         break;
                 }
             }
@@ -231,7 +231,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public RatEntity createChild(ServerWorld world, PassiveEntity entity) {
-        RatEntity ratEntity = Rats.RAT.create(world);
+        RatEntity ratEntity = Mischief.RAT.create(world);
         UUID ownerUuid = this.getOwnerUuid();
         if (ownerUuid != null) {
             ratEntity.setOwnerUuid(ownerUuid);

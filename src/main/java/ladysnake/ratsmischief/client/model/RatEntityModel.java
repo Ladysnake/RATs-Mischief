@@ -1,6 +1,6 @@
 package ladysnake.ratsmischief.client.model;
 
-import ladysnake.ratsmischief.common.Rats;
+import ladysnake.ratsmischief.common.Mischief;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -10,25 +10,25 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
     @Override
     public Identifier getModelLocation(RatEntity rat) {
-        return new Identifier(Rats.MODID, "geo/entity/rat.geo.json");
+        return new Identifier(Mischief.MODID, "geo/entity/rat.geo.json");
     }
 
     @Override
     public Identifier getTextureLocation(RatEntity rat) {
         if (rat.getRatType() == RatEntity.Type.RUSSIAN_BLUE && rat.hasCustomName() && rat.getCustomName().getString().toLowerCase().equals("remy")) {
-            return new Identifier(Rats.MODID, "textures/entity/remy.png");
+            return new Identifier(Mischief.MODID, "textures/entity/remy.png");
         } else {
             if (rat.getRatType() == RatEntity.Type.RAT_KID) {
-                return new Identifier(Rats.MODID, "textures/entity/rat_kid_" + rat.getRatColor().getName().toLowerCase() + ".png");
+                return new Identifier(Mischief.MODID, "textures/entity/rat_kid_" + rat.getRatColor().getName().toLowerCase() + ".png");
             } else {
-                return new Identifier(Rats.MODID, "textures/entity/" + rat.getRatType().toString().toLowerCase() + ".png");
+                return new Identifier(Mischief.MODID, "textures/entity/" + rat.getRatType().toString().toLowerCase() + ".png");
             }
         }
     }
 
     @Override
     public Identifier getAnimationFileLocation(RatEntity rat) {
-        return new Identifier(Rats.MODID, "animations/entity/rat.animation.json");
+        return new Identifier(Mischief.MODID, "animations/entity/rat.animation.json");
     }
 
     @Override

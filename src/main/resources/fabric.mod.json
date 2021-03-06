@@ -17,10 +17,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "ladysnake.ratsmischief.common.Rats"
+      "ladysnake.ratsmischief.common.Mischief"
     ],
     "client": [
-      "ladysnake.ratsmischief.client.RatsClient"
+      "ladysnake.ratsmischief.client.MischiefClient"
     ]
   },
   "mixins": [

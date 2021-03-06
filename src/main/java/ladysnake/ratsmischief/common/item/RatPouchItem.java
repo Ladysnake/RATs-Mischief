@@ -1,6 +1,6 @@
 package ladysnake.ratsmischief.common.item;
 
-import ladysnake.ratsmischief.common.Rats;
+import ladysnake.ratsmischief.common.Mischief;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.client.item.TooltipContext;
@@ -42,21 +42,21 @@ public class RatPouchItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         if (!world.isClient() && user.isSneaking()) {
-            if (user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).getFloat("filled") == 1f) {
-                for (Tag ratTag : user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).getList("rats", NbtType.COMPOUND)) {
-                    RatEntity rat = Rats.RAT.create(world);
+            if (user.getStackInHand(hand).getOrCreateSubTag(Mischief.MODID).getFloat("filled") == 1f) {
+                for (Tag ratTag : user.getStackInHand(hand).getOrCreateSubTag(Mischief.MODID).getList("rats", NbtType.COMPOUND)) {
+                    RatEntity rat = Mischief.RAT.create(world);
                     rat.fromTag((CompoundTag) ratTag);
                     rat.updatePosition(user.getX(), user.getY(), user.getZ());
                     rat.setPos(user.getX(), user.getY(), user.getZ());
                     world.spawnEntity(rat);
                 }
 
-                user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).put("rats", new ListTag());
-                user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).putFloat("filled", 0F);
+                user.getStackInHand(hand).getOrCreateSubTag(Mischief.MODID).put("rats", new ListTag());
+                user.getStackInHand(hand).getOrCreateSubTag(Mischief.MODID).putFloat("filled", 0F);
 
                 return TypedActionResult.success(user.getStackInHand(hand));
             } else {
-                ListTag listTag = user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).getList("rats", NbtType.COMPOUND);
+                ListTag listTag = user.getStackInHand(hand).getOrCreateSubTag(Mischief.MODID).getList("rats", NbtType.COMPOUND);
 
                 List<RatEntity> closestTamedRats = world.getEntitiesByClass(RatEntity.class, user.getBoundingBox().expand(16.0D), CLOSEST_RAT_PREDICATE);
                 List<RatEntity> closestOwnedRats = closestTamedRats.stream().filter(ratEntity -> ratEntity.getOwnerUuid() != null && ratEntity.getOwnerUuid().equals(user.getUuid())).collect(Collectors.toList());
@@ -74,8 +74,8 @@ public class RatPouchItem extends Item {
                         }
                     }
 
-                    user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).put("rats", listTag);
-                    user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).putFloat("filled", 1F);
+                    user.getStackInHand(hand).getOrCreateSubTag(Mischief.MODID).put("rats", listTag);
+                    user.getStackInHand(hand).getOrCreateSubTag(Mischief.MODID).putFloat("filled", 1F);
                     return TypedActionResult.success(user.getStackInHand(hand));
                 } else {
                     return TypedActionResult.fail(user.getStackInHand(hand));
@@ -88,16 +88,16 @@ public class RatPouchItem extends Item {
 
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
-        ListTag listTag = user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).getList("rats", NbtType.COMPOUND);
+        ListTag listTag = user.getStackInHand(hand).getOrCreateSubTag(Mischief.MODID).getList("rats", NbtType.COMPOUND);
 
         if (listTag.size() < this.size && entity instanceof RatEntity && ((RatEntity) entity).getOwnerUuid() != null && ((RatEntity) entity).getOwnerUuid().equals(user.getUuid())) {
             CompoundTag compoundTag = new CompoundTag();
             entity.saveToTag(compoundTag);
             listTag.add(compoundTag);
-            user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).put("rats", listTag);
+            user.getStackInHand(hand).getOrCreateSubTag(Mischief.MODID).put("rats", listTag);
             ((RatEntity) entity).playSpawnEffects();
             entity.remove();
-            user.getStackInHand(hand).getOrCreateSubTag(Rats.MODID).putFloat("filled", 1F);
+            user.getStackInHand(hand).getOrCreateSubTag(Mischief.MODID).putFloat("filled", 1F);
 
             return ActionResult.SUCCESS;
         } else {
@@ -107,7 +107,7 @@ public class RatPouchItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        ListTag listTag = stack.getOrCreateSubTag(Rats.MODID).getList("rats", NbtType.COMPOUND);
+        ListTag listTag = stack.getOrCreateSubTag(Mischief.MODID).getList("rats", NbtType.COMPOUND);
 
         tooltip.add(new TranslatableText("item.ratsmischief.rat_pouch.tooltip.capacity", listTag.size(), this.size).setStyle(EMPTY.withColor(Formatting.GRAY)));
 

@@ -1,5 +1,6 @@
 package ladysnake.ratsmischief.common;
 
+import ladysnake.ratsmischief.common.armormaterials.RatMaskArmorMaterial;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
 import ladysnake.ratsmischief.common.item.RatStaffItem;
@@ -11,9 +12,12 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.decoration.painting.PaintingMotive;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
@@ -23,7 +27,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.Heightmap;
 import software.bernie.geckolib3.GeckoLib;
 
-public class Rats implements ModInitializer {
+public class Mischief implements ModInitializer {
     public static final String MODID = "ratsmischief";
 
     public static EntityType<RatEntity> RAT;
@@ -39,6 +43,8 @@ public class Rats implements ModInitializer {
     public static Item COLLECTION_STAFF;
     public static Item SKIRMISH_STAFF;
     public static Item LOVE_STAFF;
+
+    public static Item RAT_MASK;
 
     @Override
     public void onInitialize() {
@@ -66,6 +72,8 @@ public class Rats implements ModInitializer {
         COLLECTION_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.COLLECT), "collection_staff");
 //        SKIRMISH_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.SKIRMISH), "skirmish_staff");
         LOVE_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.LOVE), "love_staff");
+
+        RAT_MASK = registerItem(new ArmorItem(RatMaskArmorMaterial.RAT_MASK, EquipmentSlot.HEAD, (new Item.Settings()).group(ItemGroup.COMBAT)), "rat_mask");
 
         // rat kid painting
         Registry.register(Registry.PAINTING_MOTIVE, new Identifier(MODID, "a_rat_in_time"), new PaintingMotive(64, 48));
