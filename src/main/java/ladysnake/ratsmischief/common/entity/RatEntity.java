@@ -616,6 +616,14 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         super.onDeath(source);
     }
 
+    @Override
+    public ItemStack getEquippedStack(EquipmentSlot slot) {
+//        if (this.isTamed() && this.getOwner() != null && !this.getOwner().getEquippedStack(EquipmentSlot.HEAD).isEmpty() && this.getOwner().getEquippedStack(EquipmentSlot.HEAD).getItem() == Mischief.RAT_MASK) {
+//            return
+//        }
+        return super.getEquippedStack(slot);
+    }
+
     public enum Type {
         ALBINO,
         BLACK,
