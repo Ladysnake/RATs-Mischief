@@ -11,7 +11,8 @@
 - Rats affected by Strength are now able to mine blocks that have a hardness of 1 additional hardness per Strength level.
     - Rats without Strength are able to mine blocks that don't require tools and have a hardness of 1 or lower
     - Rats under Strength I are able to mine blocks that have a hardness of 2 or lower, for instance tree logs and stone
-    - Rats under Strength II are able to mine blocks that have a hardness of 3 or lower, for instance ore blocks
+    - Rats under Strength II are able to mine blocks that have a hardness of 3 or lower, for instance ores
+- Furthermore, rats affected by Haste will mine 20% faster per Haste level
 - Rats can now mine blocks that are under the glass material category
 - Rats can now mine blocks even if they require a tool
 
