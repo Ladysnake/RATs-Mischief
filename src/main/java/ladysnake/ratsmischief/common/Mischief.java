@@ -1,6 +1,7 @@
 package ladysnake.ratsmischief.common;
 
 import ladysnake.ratsmischief.common.armormaterials.RatMaskArmorMaterial;
+import ladysnake.ratsmischief.common.entity.ElytratEntity;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
 import ladysnake.ratsmischief.common.item.RatStaffItem;
@@ -9,15 +10,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.SpawnRestriction;
+import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.painting.PaintingMotive;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
@@ -31,6 +26,7 @@ public class Mischief implements ModInitializer {
     public static final String MODID = "ratsmischief";
 
     public static EntityType<RatEntity> RAT;
+    public static EntityType<ElytratEntity> ELYTRAT;
 
     public static Item RAT_SPAWN_EGG;
 //    public static Item LOYALTY_OF_THE_MISCHIEF;
@@ -52,6 +48,8 @@ public class Mischief implements ModInitializer {
 
         RAT = registerEntity("rat", FabricEntityTypeBuilder.createMob().entityFactory(RatEntity::new).spawnGroup(SpawnGroup.AMBIENT).dimensions(EntityDimensions.changing(0.8F, 0.4F)).trackRangeBlocks(8).spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RatEntity::canSpawn).build());
         FabricDefaultAttributeRegistry.register(RAT, RatEntity.createEntityAttributes());
+        ELYTRAT = registerEntity("elytrat", FabricEntityTypeBuilder.createMob().entityFactory(ElytratEntity::new).spawnGroup(SpawnGroup.AMBIENT).dimensions(EntityDimensions.changing(0.8F, 0.4F)).trackRangeBlocks(8).build());
+        FabricDefaultAttributeRegistry.register(ELYTRAT, ElytratEntity.createEntityAttributes());
 
         // rat custom spawner
         RatSpawner ratSpawner = new RatSpawner();
