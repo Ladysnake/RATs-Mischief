@@ -61,7 +61,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
@@ -121,7 +120,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public int actionTimer = 0;
 
     // ELYTRAT
-    public ElytratMovementType movementType = ElytratMovementType.SWOOP;
     public BlockPos circlingCenter = BlockPos.ORIGIN;
     public Vec3d targetPosition;
 
@@ -188,6 +186,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.goalSelector.add(4, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.add(5, new RatEntity.PickupItemGoal());
         this.goalSelector.add(5, new BringItemToOwnerGoal(this, 1.0D, 16.0F, 1.0F, false));
+        this.goalSelector.add(6, new FlyWithOwnerGoal()); // elytrat
         this.goalSelector.add(6, new FollowOwnerRatGoal(this, 1.0D, 20.0F, 2.0F, false));
         this.goalSelector.add(7, new AnimalMateGoal(this, 1.0D));
         this.goalSelector.add(8, new WanderAroundFarGoal(this, 1.0D));
@@ -211,7 +210,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         if (this.isFlying()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.fly", true));
             return PlayState.CONTINUE;
-        } if (this.isEating()) {
+        }
+        if (this.isEating()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.eat", true));
             return PlayState.CONTINUE;
         } else if (this.isSitting()) {
@@ -800,7 +800,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
         public void start() {
             this.cooldown = 10;
-            RatEntity.this.movementType = RatEntity.ElytratMovementType.CIRCLE;
             this.startSwoop();
             RatEntity.this.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 0.95F + RatEntity.this.random.nextFloat() * 0.1F);
             RatEntity.this.setVelocity(0, 2, 0);
@@ -810,17 +809,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         public void stop() {
             RatEntity.this.circlingCenter = RatEntity.this.world.getTopPosition(Heightmap.Type.MOTION_BLOCKING, RatEntity.this.circlingCenter).up(10 + RatEntity.this.random.nextInt(20));
             RatEntity.this.setFlying(false);
-        }
-
-        public void tick() {
-            if (RatEntity.this.movementType == RatEntity.ElytratMovementType.CIRCLE) {
-                --this.cooldown;
-                if (this.cooldown <= 0) {
-                    RatEntity.this.movementType = RatEntity.ElytratMovementType.SWOOP;
-                    this.startSwoop();
-                    this.cooldown = (8 + RatEntity.this.random.nextInt(4)) * 20;
-                }
-            }
         }
 
         private void startSwoop() {
@@ -837,7 +825,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
 
         public boolean canStart() {
-            return !RatEntity.this.isTouchingWater() && RatEntity.this.isElytrat() && RatEntity.this.getTarget() != null && RatEntity.this.movementType == RatEntity.ElytratMovementType.SWOOP;
+            return !RatEntity.this.isTouchingWater() && RatEntity.this.isElytrat() && RatEntity.this.getTarget() != null;
         }
 
         public boolean shouldContinue() {
@@ -846,31 +834,13 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 return false;
             } else if (!livingEntity.isAlive()) {
                 return false;
-            } else if (livingEntity instanceof PlayerEntity && (((PlayerEntity)livingEntity).isSpectator() || ((PlayerEntity)livingEntity).isCreative())) {
+            } else if (livingEntity instanceof PlayerEntity && (((PlayerEntity) livingEntity).isSpectator() || ((PlayerEntity) livingEntity).isCreative())) {
                 return false;
             } else if (!this.canStart()) {
                 return false;
             } else {
-                if (RatEntity.this.age % 20 == 0) {
-                    List<CatEntity> list = RatEntity.this.world.getEntitiesByClass(CatEntity.class, RatEntity.this.getBoundingBox().expand(16.0D), EntityPredicates.VALID_ENTITY);
-                    if (!list.isEmpty()) {
-                        Iterator var3 = list.iterator();
-
-                        while(var3.hasNext()) {
-                            CatEntity catEntity = (CatEntity)var3.next();
-                            catEntity.hiss();
-                        }
-
-                        return false;
-                    }
-                }
-
                 return RatEntity.this.isFlying();
             }
-        }
-
-        public void stop() {
-            RatEntity.this.movementType = RatEntity.ElytratMovementType.CIRCLE;
         }
 
         public void tick() {
@@ -881,6 +851,39 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 if (!RatEntity.this.isSilent()) {
                     RatEntity.this.world.syncWorldEvent(1039, RatEntity.this.getBlockPos(), 0);
                 }
+            }
+        }
+    }
+
+    class FlyWithOwnerGoal extends MovementGoal {
+        private FlyWithOwnerGoal() {
+            super();
+        }
+
+        public boolean canStart() {
+            return RatEntity.this.getOwner() != null && RatEntity.this.getOwner().isFallFlying() && !RatEntity.this.isTouchingWater() && RatEntity.this.isElytrat();
+        }
+
+        public boolean shouldContinue() {
+            LivingEntity owner = RatEntity.this.getOwner();
+            if (owner == null) {
+                return false;
+            } else if (!owner.isAlive()) {
+                return false;
+            } else if (owner instanceof PlayerEntity && (((PlayerEntity) owner).isSpectator() || ((PlayerEntity) owner).isCreative())) {
+                return false;
+            } else if (!this.canStart()) {
+                return false;
+            } else {
+                return RatEntity.this.isFlying();
+            }
+        }
+
+        public void tick() {
+            LivingEntity owner = RatEntity.this.getOwner();
+            if (owner != null) {
+                RatEntity.this.setFlying(true);
+                RatEntity.this.targetPosition = new Vec3d(owner.getX(), owner.getBodyY(0.5D), owner.getZ());
             }
         }
     }
@@ -967,14 +970,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             } else {
                 super.tick();
             }
-        }
-    }
-
-    public static enum ElytratMovementType {
-        CIRCLE,
-        SWOOP;
-
-        private ElytratMovementType() {
         }
     }
 }
