@@ -1,13 +1,14 @@
 package ladysnake.ratsmischief.client.model;
 
 import ladysnake.ratsmischief.common.Mischief;
+import ladysnake.ratsmischief.common.entity.ElytratEntity;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
+public class ElytratEntityModel extends AnimatedGeoModel<RatEntity> {
     @Override
     public Identifier getModelLocation(RatEntity rat) {
         return new Identifier(Mischief.MODID, "geo/entity/rat.geo.json");
@@ -35,33 +36,26 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
     public void setLivingAnimations(RatEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("head");
+        IBone body = this.getAnimationProcessor().getBone("root");
+//
+//        if (head != null && !entity.isSniffing() && !entity.isEating()) {
+//            head.setRotationX(-entity.pitch * ((float) Math.PI / 180F));
+////            head.setRotationY(entity.getHeadYaw() * ((float) Math.PI / 180F));
+//        }
 
-        if (entity.isFlying()) {
-            IBone body = this.getAnimationProcessor().getBone("root");
-            if (body != null) {
-                body.setRotationX((float) entity.getVelocity().getY() * 2);
-            }
-        } else if (head != null && !entity.isSniffing() && !entity.isEating()) {
-            head.setRotationX(-entity.pitch * ((float) Math.PI / 180F));
-//            head.setRotationY(entity.getHeadYaw() * ((float) Math.PI / 180F));
+        if (body != null) {
+            body.setRotationX(entity.pitch/60-0.55f);
+//            body.setRotationZ(-(entity.bodyYaw - entity.prevBodyYaw)/5);
         }
 
-        if (entity.isBaby()) {
-            IBone root = this.getAnimationProcessor().getBone("root");
-            if (root != null) {
-                root.setScaleX(0.5f);
-                root.setScaleY(0.5f);
-                root.setScaleZ(0.5f);
-            }
-        }
-
-        IBone elytra = this.getAnimationProcessor().getBone("elytra");
-        if (elytra != null) {
-            if (entity.isElytrat()) {
-                elytra.setHidden(false);
-            } else {
-                elytra.setHidden(true);
-            }
-        }
+        // no baby rat should be able to have elytras
+//        if (entity.isBaby()) {
+//            IBone root = this.getAnimationProcessor().getBone("root");
+//            if (root != null) {
+//                root.setScaleX(0.5f);
+//                root.setScaleY(0.5f);
+//                root.setScaleZ(0.5f);
+//            }
+//        }
     }
 }

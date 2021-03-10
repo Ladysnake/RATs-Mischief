@@ -1,19 +1,26 @@
 package ladysnake.ratsmischief.common.entity;
 
-import ladysnake.ratsmischief.common.entity.ai.ChaseForFunGoal;
 import ladysnake.ratsmischief.common.entity.ai.EatToHealGoal;
 import ladysnake.ratsmischief.common.entity.ai.FollowOwnerRatGoal;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.control.BodyControl;
 import net.minecraft.entity.ai.control.LookControl;
 import net.minecraft.entity.ai.control.MoveControl;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.AttackWithOwnerGoal;
+import net.minecraft.entity.ai.goal.FollowTargetGoal;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.RevengeGoal;
+import net.minecraft.entity.ai.goal.SitGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.TrackOwnerAttackerGoal;
+import net.minecraft.entity.ai.goal.UniversalAngerGoal;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.PhantomEntity;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -21,8 +28,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
-import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +41,7 @@ public class ElytratEntity extends RatEntity {
     public ElytratMovementType movementType;
     public BlockPos circlingCenter;
     public Vec3d targetPosition;
+    private final BodyControl bodyControl;
 
     protected void initGoals() {
         this.goalSelector.add(1, new SwimGoal(this));
@@ -42,7 +53,7 @@ public class ElytratEntity extends RatEntity {
 //        this.goalSelector.add(4, new MeleeAttackGoal(this, 1.0D, true));
 //        this.goalSelector.add(5, new RatEntity.PickupItemGoal());
 //        this.goalSelector.add(5, new BringItemToOwnerGoal(this, 1.0D, 16.0F, 1.0F, false));
-        this.goalSelector.add(5, new FollowOwnerRatGoal(this, 1.0D, 20.0F, 2.0F, false));
+        this.goalSelector.add(5, new FollowOwnerRatGoal(this, 1.0D, 50.0F, 2.0F, false));
 //        this.goalSelector.add(7, new AnimalMateGoal(this, 1.0D));
 //        this.goalSelector.add(8, new WanderAroundFarGoal(this, 1.0D));
 //        this.goalSelector.add(10, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
@@ -64,6 +75,7 @@ public class ElytratEntity extends RatEntity {
         this.experiencePoints = 5;
         this.moveControl = new ElytratEntity.ElytratMoveControl(this);
         this.lookControl = new ElytratEntity.ElytratLookControl(this);
+        this.bodyControl = this.createBodyControl();
     }
 
     @Override
@@ -77,6 +89,11 @@ public class ElytratEntity extends RatEntity {
         if (this.isTamed() && this.getOwner() != null) {
             this.circlingCenter = this.getOwner().getBlockPos().add(0, 10, 0);
         }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
     }
 
     class StartAttackGoal extends Goal {
@@ -110,7 +127,6 @@ public class ElytratEntity extends RatEntity {
                     this.cooldown = (8 + ElytratEntity.this.random.nextInt(4)) * 20;
                 }
             }
-
         }
 
         private void startSwoop() {
@@ -265,9 +281,11 @@ public class ElytratEntity extends RatEntity {
         }
 
         public void tick() {
-            ElytratEntity.this.headYaw = ElytratEntity.this.bodyYaw;
-            ElytratEntity.this.bodyYaw = ElytratEntity.this.yaw;
         }
+    }
+
+    protected BodyControl createBodyControl() {
+        return new ElytratBodyControl(this);
     }
 
     class ElytratBodyControl extends BodyControl {
@@ -276,6 +294,8 @@ public class ElytratEntity extends RatEntity {
         }
 
         public void tick() {
+            ElytratEntity.this.headYaw = ElytratEntity.this.bodyYaw;
+            ElytratEntity.this.bodyYaw = ElytratEntity.this.yaw;
         }
     }
 
@@ -308,11 +328,7 @@ public class ElytratEntity extends RatEntity {
             float m = MathHelper.wrapDegrees(k * 57.295776F);
             ElytratEntity.this.yaw = MathHelper.stepUnwrappedAngleTowards(l, m, 4.0F) - 90.0F;
             ElytratEntity.this.bodyYaw = ElytratEntity.this.yaw;
-            if (MathHelper.angleBetween(j, ElytratEntity.this.yaw) < 3.0F) {
-                this.targetSpeed = MathHelper.stepTowards(this.targetSpeed, 5F, 0.02F * (5F / this.targetSpeed));
-            } else {
-                this.targetSpeed = MathHelper.stepTowards(this.targetSpeed, 0.8F, 0.1F);
-            }
+            this.targetSpeed = MathHelper.stepTowards(this.targetSpeed, 2.0F, 0.01F * (2.0F / this.targetSpeed));
 
             float n = (float)(-(MathHelper.atan2((double)(-g), d) * 57.2957763671875D));
             ElytratEntity.this.pitch = n;

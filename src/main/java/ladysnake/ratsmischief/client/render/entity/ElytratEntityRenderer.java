@@ -1,6 +1,6 @@
 package ladysnake.ratsmischief.client.render.entity;
 
-import ladysnake.ratsmischief.client.model.RatEntityModel;
+import ladysnake.ratsmischief.client.model.ElytratEntityModel;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
@@ -19,13 +19,13 @@ import net.minecraft.util.math.Quaternion;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderer.geo.GeoEntityRenderer;
 
-public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
-    public RatEntityRenderer(EntityRenderDispatcher renderManager) {
-        super(renderManager, new RatEntityModel());
+public class ElytratEntityRenderer extends GeoEntityRenderer<RatEntity> {
+    public ElytratEntityRenderer(EntityRenderDispatcher renderManager) {
+        super(renderManager, new ElytratEntityModel());
         this.shadowRadius = 0.35f;
     }
 
-    // variables needed for later
+    //variables needed for later
     private ItemStack itemStack;
     private VertexConsumerProvider vertexConsumerProvider;
     private Identifier ratTexture;
