@@ -35,14 +35,23 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
     public void setLivingAnimations(RatEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("head");
+        IBone rocket = this.getAnimationProcessor().getBone("rocket");
 
         if (entity.isFlying()) {
             IBone body = this.getAnimationProcessor().getBone("root");
             if (body != null) {
                 body.setRotationX((float) entity.getVelocity().getY() * 2);
             }
+
+            if (rocket != null) {
+                rocket.setHidden(false);
+            }
         } else if (head != null && !entity.isSniffing() && !entity.isEating()) {
             head.setRotationX(-entity.pitch * ((float) Math.PI / 180F));
+
+            if (rocket != null) {
+                rocket.setHidden(true);
+            }
 //            head.setRotationY(entity.getHeadYaw() * ((float) Math.PI / 180F));
         }
 

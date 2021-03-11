@@ -127,19 +127,40 @@
 					"pivot": [0, 0, 0]
 				},
 				{
-					"name": "left",
+					"name": "right",
 					"parent": "elytra",
 					"pivot": [0, 4, -2],
+					"rotation": [0, 0, 0.1],
 					"cubes": [
-						{"origin": [0, 4.01, -2.01], "size": [6, 1, 10], "uv": [32, 0]}
+						{"origin": [-4, 4.01, -2.01], "size": [6, 1, 10], "uv": [32, 0], "mirror": true},
+						{"origin": [-4, 5, -2.01], "size": [6, 0, 10], "uv": [26, 0], "mirror": true}
 					]
 				},
 				{
-					"name": "left2",
+					"name": "left",
 					"parent": "elytra",
 					"pivot": [0, 4, -2],
+					"rotation": [0, 0, -0.1],
 					"cubes": [
-						{"origin": [-6, 4.01, -2.01], "size": [6, 1, 10], "uv": [32, 11]}
+						{"origin": [-2, 4.01, -2.01], "size": [6, 1, 10], "uv": [32, 0]},
+						{"origin": [-2, 5, -2.01], "size": [6, 0, 10], "uv": [26, 0]}
+					]
+				},
+				{
+					"name": "rocket",
+					"parent": "body",
+					"pivot": [-0.5, -0.5, 1],
+					"cubes": [
+						{"origin": [-1.5, -1.5, -2.5], "size": [3, 3, 8], "inflate": -0.5, "uv": [32, 11], "mirror": true}
+					]
+				},
+				{
+					"name": "tip",
+					"parent": "rocket",
+					"pivot": [-0.5, -0.5, 1],
+					"cubes": [
+						{"origin": [-0.5, -2.5, -5.5], "size": [1, 5, 4], "inflate": -0.5, "uv": [54, 14], "mirror": true},
+						{"origin": [-0.5, -3.5, -5.5], "size": [1, 5, 4], "inflate": -0.5, "pivot": [-0.5, -0.5, -6], "rotation": [0, 0, -90], "uv": [54, 14], "mirror": true}
 					]
 				}
 			]

@@ -927,6 +927,16 @@
 							"easing": "easeInBounce"
 						}
 					}
+				},
+				"frontleg1": {
+					"rotation": {
+						"vector": [0, -40, 0]
+					}
+				},
+				"frontleg2": {
+					"rotation": {
+						"vector": [0, 40, 0]
+					}
 				}
 			}
 		}
