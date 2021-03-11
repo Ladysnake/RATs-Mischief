@@ -40,7 +40,7 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
         if (entity.isFlying()) {
             IBone body = this.getAnimationProcessor().getBone("root");
             if (body != null) {
-                body.setRotationX((float) entity.getVelocity().getY() * 2);
+                body.setRotationX((float) entity.getVelocity().getY());
             }
 
             if (rocket != null) {

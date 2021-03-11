@@ -368,8 +368,13 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public void tickMovement() {
         super.tickMovement();
 
-        if (this.isOnGround()) {
+        if (this.isOnGround() || this.isTouchingWater()) {
             this.setFlying(false);
+        }
+
+        if (this.isElytrat() && this.getTarget() != null && this.getTarget().getY() > this.getY() && !this.isFlying()) {
+            this.addVelocity(0, 0.5, 0);
+            this.setFlying(true);
         }
 
         if (this.isEating()) {
@@ -795,6 +800,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
 
         public boolean canStart() {
+            System.out.println("TEST START");
             return !RatEntity.this.isTouchingWater() && RatEntity.this.isElytrat() && RatEntity.this.getTarget() != null && RatEntity.this.isTarget(RatEntity.this.getTarget(), TargetPredicate.DEFAULT);
         }
 
@@ -802,7 +808,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             this.cooldown = 10;
             this.startSwoop();
             RatEntity.this.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 0.95F + RatEntity.this.random.nextFloat() * 0.1F);
-            RatEntity.this.setVelocity(0, 2, 0);
             RatEntity.this.setFlying(true);
         }
 
@@ -812,6 +817,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
 
         private void startSwoop() {
+            System.out.println("GO SWOOP");
             RatEntity.this.circlingCenter = RatEntity.this.getTarget().getBlockPos().up(20 + RatEntity.this.random.nextInt(20));
             if (RatEntity.this.circlingCenter.getY() < RatEntity.this.world.getSeaLevel()) {
                 RatEntity.this.circlingCenter = new BlockPos(RatEntity.this.circlingCenter.getX(), RatEntity.this.world.getSeaLevel() + 1, RatEntity.this.circlingCenter.getZ());
@@ -825,7 +831,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
 
         public boolean canStart() {
-            return !RatEntity.this.isTouchingWater() && RatEntity.this.isElytrat() && RatEntity.this.getTarget() != null;
+            System.out.println("TEST SWOOP");
+            return RatEntity.this.isFlying() && RatEntity.this.isElytrat() && RatEntity.this.getTarget() != null;
         }
 
         public boolean shouldContinue() {
@@ -844,6 +851,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
 
         public void tick() {
+            System.out.println("TICK SWOOP");
             LivingEntity livingEntity = RatEntity.this.getTarget();
             RatEntity.this.targetPosition = new Vec3d(livingEntity.getX(), livingEntity.getBodyY(0.5D), livingEntity.getZ());
             if (RatEntity.this.getBoundingBox().expand(0.20000000298023224D).intersects(livingEntity.getBoundingBox())) {
