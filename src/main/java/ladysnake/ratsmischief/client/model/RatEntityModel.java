@@ -3,6 +3,7 @@ package ladysnake.ratsmischief.client.model;
 import ladysnake.ratsmischief.common.Mischief;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -37,7 +38,14 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
         IBone head = this.getAnimationProcessor().getBone("head");
         IBone rocket = this.getAnimationProcessor().getBone("rocket");
 
+        IBone leftWing = this.getAnimationProcessor().getBone("left");
+        IBone rightWing = this.getAnimationProcessor().getBone("right");
         if (entity.isFlying()) {
+            if (leftWing != null && rightWing != null) {
+                leftWing.setRotationY((float) MathHelper.clamp(-(entity.getVelocity().getY()*2)-1f, -1, 0));
+                rightWing.setRotationY((float) MathHelper.clamp((entity.getVelocity().getY()*2)+1f, 0, 1));
+            }
+
             IBone body = this.getAnimationProcessor().getBone("root");
             if (body != null) {
                 body.setRotationX((float) entity.getVelocity().getY());
@@ -46,13 +54,15 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
             if (rocket != null) {
                 rocket.setHidden(false);
             }
-        } else if (head != null && !entity.isSniffing() && !entity.isEating()) {
-            head.setRotationX(-entity.pitch * ((float) Math.PI / 180F));
+        } else {
+            if (head != null && !entity.isSniffing() && !entity.isEating()) {
+                head.setRotationX(-entity.pitch * ((float) Math.PI / 180F));
 
-            if (rocket != null) {
-                rocket.setHidden(true);
-            }
+                if (rocket != null) {
+                    rocket.setHidden(true);
+                }
 //            head.setRotationY(entity.getHeadYaw() * ((float) Math.PI / 180F));
+            }
         }
 
         if (entity.isBaby()) {

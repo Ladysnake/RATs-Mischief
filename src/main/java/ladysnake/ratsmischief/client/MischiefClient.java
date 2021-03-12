@@ -1,7 +1,6 @@
 package ladysnake.ratsmischief.client;
 
 import ladysnake.ratsmischief.client.network.EntityDispatcher;
-import ladysnake.ratsmischief.client.render.entity.ElytratEntityRenderer;
 import ladysnake.ratsmischief.client.render.entity.RatEntityRenderer;
 import ladysnake.ratsmischief.common.Mischief;
 import ladysnake.ratsmischief.common.network.Packets;
@@ -19,8 +18,6 @@ public class MischiefClient implements ClientModInitializer {
 
         EntityRendererRegistry.INSTANCE.register(Mischief.RAT,
                 (entityRenderDispatcher, context) -> new RatEntityRenderer(entityRenderDispatcher));
-        EntityRendererRegistry.INSTANCE.register(Mischief.ELYTRAT,
-                (entityRenderDispatcher, context) -> new ElytratEntityRenderer(entityRenderDispatcher));
 
         // model predicates
         FabricModelPredicateProviderRegistry.register(new Identifier(Mischief.MODID + ":filled"), (itemStack, world, livingEntity) -> itemStack.getOrCreateSubTag(Mischief.MODID).getFloat("filled"));

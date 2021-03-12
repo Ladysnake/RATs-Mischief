@@ -1,7 +1,6 @@
 package ladysnake.ratsmischief.common;
 
 import ladysnake.ratsmischief.common.armormaterials.RatMaskArmorMaterial;
-import ladysnake.ratsmischief.common.entity.ElytratEntity;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
 import ladysnake.ratsmischief.common.item.RatStaffItem;
@@ -26,7 +25,6 @@ public class Mischief implements ModInitializer {
     public static final String MODID = "ratsmischief";
 
     public static EntityType<RatEntity> RAT;
-    public static EntityType<ElytratEntity> ELYTRAT;
 
     public static Item RAT_SPAWN_EGG;
 //    public static Item LOYALTY_OF_THE_MISCHIEF;
@@ -48,8 +46,6 @@ public class Mischief implements ModInitializer {
 
         RAT = registerEntity("rat", FabricEntityTypeBuilder.createMob().entityFactory(RatEntity::new).spawnGroup(SpawnGroup.AMBIENT).dimensions(EntityDimensions.changing(0.8F, 0.4F)).trackRangeBlocks(8).spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RatEntity::canSpawn).build());
         FabricDefaultAttributeRegistry.register(RAT, RatEntity.createEntityAttributes());
-        ELYTRAT = registerEntity("elytrat", FabricEntityTypeBuilder.createMob().entityFactory(ElytratEntity::new).spawnGroup(SpawnGroup.AMBIENT).dimensions(EntityDimensions.changing(0.8F, 0.4F)).trackRangeBlocks(8).build());
-        FabricDefaultAttributeRegistry.register(ELYTRAT, ElytratEntity.createEntityAttributes());
 
         // rat custom spawner
         RatSpawner ratSpawner = new RatSpawner();
