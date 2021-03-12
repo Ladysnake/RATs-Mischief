@@ -110,6 +110,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     private static final TrackedData<Boolean> SNIFFING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
+    private static final TrackedData<Integer> ROCKET_TIME = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.INTEGER);
+
     public static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (itemEntity) -> {
         return !itemEntity.cannotPickup() && itemEntity.isAlive();
     };
@@ -174,6 +176,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.dataTracker.startTracking(SNIFFING, false);
         this.dataTracker.startTracking(COLOR, DyeColor.values()[(this.random.nextInt(DyeColor.values().length))].getName());
         this.dataTracker.startTracking(FLYING, false);
+        this.dataTracker.startTracking(ROCKET_TIME, 0);
     }
 
     protected void initGoals() {
@@ -310,6 +313,17 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.angerToTag(tag);
 
         tag.putBoolean("Sitting", this.isSitting());
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (this.isFlying() && this.isElytrat() && this.world.isClient && this.getRocketTime() > 0) {
+            this.setRocketTime(this.getRocketTime()-1);
+            this.world.addParticle(ParticleTypes.FIREWORK, this.getX(), this.getY()+0.1, this.getZ(), this.random.nextGaussian() * 0.05D, -this.getVelocity().y * 0.5D, this.random.nextGaussian() * 0.05D);
+        }
+
     }
 
     @Override
@@ -541,6 +555,14 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     public void setFlying(boolean eating) {
         this.dataTracker.set(FLYING, eating);
+    }
+
+    public int getRocketTime() {
+        return (Integer) this.dataTracker.get(ROCKET_TIME);
+    }
+
+    public void setRocketTime(int ticks) {
+        this.dataTracker.set(ROCKET_TIME, ticks);
     }
 
     @Override
@@ -807,6 +829,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             this.cooldown = 10;
             this.startSwoop();
             RatEntity.this.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 0.95F + RatEntity.this.random.nextFloat() * 0.1F);
+            RatEntity.this.setRocketTime(20 + RatEntity.this.random.nextInt(10));
+            RatEntity.this.addVelocity(0, 1, 0);
             RatEntity.this.setFlying(true);
         }
 
