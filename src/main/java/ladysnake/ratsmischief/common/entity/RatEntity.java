@@ -584,8 +584,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public void onPlayerCollision(PlayerEntity player) {
         super.onPlayerCollision(player);
 
-        // HalfOf2
-        if (player.getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") && !this.isTamed()) {
+        // HalfOf2 and will_bl
+        if ((player.getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") || player.getUuidAsString().equals("9b035372-0d8d-4513-8bd5-9808d7f4a9b3")) && !this.isTamed()) {
             this.remove();
             world.createExplosion(this, this.getX(), this.getY(), this.getZ(), 1f, Explosion.DestructionType.NONE);
         }
