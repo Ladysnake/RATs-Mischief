@@ -1,5 +1,9 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.0.4 - 1.16.5
+- Tamed rats will now drop what they hold upon their death
+- Sitting rats no longer get up to chase cats
+
 ### Rat's Mischief 1.0.3 - 1.16.5
 - Added compatibility with Eldritch Mobs so eldritch rats can naturally spawn
 - Reduced the range check for villages when spawning rats
