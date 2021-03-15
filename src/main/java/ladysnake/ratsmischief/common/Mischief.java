@@ -1,6 +1,5 @@
 package ladysnake.ratsmischief.common;
 
-import ladysnake.ratsmischief.common.armormaterials.RatMaskArmorMaterial;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
 import ladysnake.ratsmischief.common.item.RatStaffItem;
@@ -9,15 +8,8 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.SpawnRestriction;
+import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.painting.PaintingMotive;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;

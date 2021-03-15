@@ -6,15 +6,8 @@ import ladysnake.ratsmischief.common.Mischief;
 import ladysnake.ratsmischief.common.network.Packets;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.LivingEntityFeatureRendererRegistrationCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderingRegistry;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.PlayerEntityModel;
-import net.minecraft.entity.EntityType;
 import net.minecraft.util.Identifier;
 
 public class MischiefClient implements ClientModInitializer {
