@@ -17,7 +17,8 @@
 - Rats can now mine blocks that are under the glass material category
 - Rats can now mine blocks even if they require a tool
 - TODO Rats will now pick up items from the ground if they can add it to their held stack
-- Introducing Elytrats and flying rats! Elytrats can be equipped on rats to allow them to fly.
+- Introducing Elytrats (and flying rats)! Elytrats can be equipped on rats to allow them to fly.
+    - Rats equipped with Elytrats will fly whenever they need to fight a foe
     - Crafted from a firework rocket, 4 phantom membranes and a piece of leather
     - Shift right click on a rat with an Elytrat in hand to make the rat equip it, shift right click with an empty hand on a rat wearing an Elytrats to make it unequip it
 

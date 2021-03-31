@@ -39,6 +39,7 @@ public class Mischief implements ModInitializer {
     public static Item LOVE_STAFF;
 
     public static Item RAT_MASK;
+    public static Item ELYTRAT;
 
     @Override
     public void onInitialize() {
@@ -68,6 +69,7 @@ public class Mischief implements ModInitializer {
         LOVE_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.LOVE), "love_staff");
 
         RAT_MASK = registerItem(new ArmorItem(RatMaskArmorMaterial.RAT_MASK, EquipmentSlot.HEAD, (new Item.Settings()).group(ItemGroup.COMBAT)), "rat_mask");
+        ELYTRAT = registerItem(new Item(new Item.Settings().group(ItemGroup.MISC).maxCount(16)), "elytrat");
 
         // rat kid painting
         Registry.register(Registry.PAINTING_MOTIVE, new Identifier(MODID, "a_rat_in_time"), new PaintingMotive(64, 48));

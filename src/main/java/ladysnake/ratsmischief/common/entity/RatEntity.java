@@ -58,6 +58,7 @@ import net.minecraft.item.DyeItem;
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleTypes;
@@ -382,10 +383,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public void tickMovement() {
         super.tickMovement();
 
-        if (this.isOnGround() || this.isTouchingWater()) {
-            this.setFlying(false);
-        }
-
         if (this.isElytrat() && this.getTarget() != null && this.getTarget().getY() > this.getY() && !this.isFlying()) {
             this.addVelocity(0, 0.5, 0);
             this.setFlying(true);
@@ -439,8 +436,25 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                     return ActionResult.SUCCESS;
                 }
 
-                if (this.isOwner(player) && !(item instanceof RatPouchItem) && !(item instanceof RatStaffItem) && (!this.isBreedingItem(itemStack)) && !(itemStack.getItem() instanceof DyeItem && this.getRatType() == Type.RAT_KID)) {
-                    this.setSitting(!this.isSitting());
+                if (this.isOwner(player)) {
+                    if (player.isSneaking()) {
+                        if (!this.isElytrat() && item == Mischief.ELYTRAT) {
+                            this.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.ELYTRA));
+                            if (!player.isCreative()) {
+                                itemStack.decrement(1);
+                            }
+                            this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_ELYTRA, 1.0F, 1.2F);
+                            return ActionResult.CONSUME;
+                        } else {
+                            if (this.isElytrat()) {
+                                this.dropStack(new ItemStack(Mischief.ELYTRAT));
+                                this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_ELYTRA, 1.0F, 1.2F);
+                                this.equipStack(EquipmentSlot.CHEST, ItemStack.EMPTY);
+                            }
+                        }
+                    } else if (!(item instanceof RatPouchItem) && !(item instanceof RatStaffItem) && (!this.isBreedingItem(itemStack)) && !(itemStack.getItem() instanceof DyeItem && this.getRatType() == Type.RAT_KID)) {
+                        this.setSitting(!this.isSitting());
+                    }
                 }
             } else if (item.isFood() && !this.hasAngerTime()) {
                 player.getStackInHand(hand).decrement(1);
@@ -605,14 +619,13 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     protected void loot(ItemEntity item) {
-        super.loot(item);
-//        ItemStack itemStack = item.getStack();
-//        if (this.getMainHandStack().isEmpty()) {
-//            this.equipStack(EquipmentSlot.MAINHAND, itemStack);
-//            this.method_29499(item);
-//            this.sendPickup(item, itemStack.getCount());
-//            item.remove();
-//        }
+        ItemStack itemStack = item.getStack();
+        if (this.getMainHandStack().isEmpty()) {
+            this.equipStack(EquipmentSlot.MAINHAND, itemStack);
+            this.method_29499(item);
+            this.sendPickup(item, itemStack.getCount());
+            item.remove();
+        }
     }
 
     @Override
@@ -685,6 +698,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public void onDeath(DamageSource source) {
         if (this.isTamed()) {
             this.dropStack(this.getMainHandStack());
+        }
+
+        if (this.isElytrat()) {
+            this.dropStack(new ItemStack(Mischief.ELYTRAT));
         }
 
         super.onDeath(source);
