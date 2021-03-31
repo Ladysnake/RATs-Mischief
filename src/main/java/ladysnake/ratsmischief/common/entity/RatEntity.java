@@ -39,6 +39,7 @@ import net.minecraft.entity.ai.goal.UniversalAngerGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -591,6 +592,15 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             }
 
             return super.damage(source, amount);
+        }
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource damageSource) {
+        if (!(damageSource.getAttacker() instanceof EnderDragonEntity)) {
+            return super.isInvulnerableTo(damageSource);
+        } else {
+            return false;
         }
     }
 
