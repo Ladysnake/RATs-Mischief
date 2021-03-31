@@ -1,8 +1,9 @@
 # Rat's Mischief - Changelog:
 
-### Rat's Mischief 1.1 - 1.16.5
+### Rat's Mischief 1.1: When Rats'll Fly Update - 1.16.5
 - Added the Mask of Rat
     - Grants a bit of protection as well as all enchantments present on it to your rats when their owner has one equipped 
+    - TODO Makes the user share their status effects (positive and negative) with all their tamed 
     - Can be repaired with Phantom Membrane
     - Will always drop when a player kills doctor4t
 - Tamed rats now drop what they hold upon dying
@@ -15,6 +16,10 @@
 - Furthermore, rats affected by Haste will mine 20% faster per Haste level
 - Rats can now mine blocks that are under the glass material category
 - Rats can now mine blocks even if they require a tool
+- TODO Rats will now pick up items from the ground if they can add it to their held stack
+- Introducing Elytrats and flying rats! Elytrats can be equipped on rats to allow them to fly.
+    - Crafted from a firework rocket, 4 phantom membranes and a piece of leather
+    - Shift right click on a rat with an Elytrat in hand to make the rat equip it, shift right click with an empty hand on a rat wearing an Elytrats to make it unequip it
 
 ### Rat's Mischief 1.0.3 - 1.16.5
 - Added compatibility with Eldritch Mobs so eldritch rats can naturally spawn
