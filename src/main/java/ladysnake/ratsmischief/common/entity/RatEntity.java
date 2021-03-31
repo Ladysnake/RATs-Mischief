@@ -44,6 +44,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.GhastEntity;
@@ -332,6 +333,14 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public void mobTick() {
 //        this.setSprinting(this.getMoveControl().isMoving());
 
+        if (this.age % 20 == 0 && this.isTamed() && this.getOwner() != null && !this.getOwner().getEquippedStack(EquipmentSlot.HEAD).isEmpty() && this.getOwner().getEquippedStack(EquipmentSlot.HEAD).getItem() == Mischief.RAT_MASK) {
+            this.getOwner().getActiveStatusEffects().forEach((statusEffect, statusEffectInstance) -> {
+                if (!this.hasStatusEffect(statusEffect) || (this.getStatusEffect(statusEffect) != null && this.getStatusEffect(statusEffect).getAmplifier() < statusEffectInstance.getAmplifier())) {
+                    this.addStatusEffect(new StatusEffectInstance(statusEffect, 60, statusEffectInstance.getAmplifier()));
+                }
+            });
+        }
+
         if (this.isSitting() && !this.isEating() && !this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
             this.dropStack(this.getEquippedStack(EquipmentSlot.MAINHAND));
             this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
@@ -582,6 +591,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public boolean damage(DamageSource source, float amount) {
+        System.out.println(source);
         if (this.isInvulnerableTo(source)) {
             return false;
         } else {
