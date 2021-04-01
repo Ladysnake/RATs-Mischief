@@ -4,7 +4,6 @@ import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.entity.ai.BreedGoal;
 import ladysnake.ratsmischief.common.entity.ai.DigGoal;
 import ladysnake.ratsmischief.common.entity.ai.HarvestAndPlantGoal;
-import net.minecraft.block.Material;
 import net.minecraft.entity.ai.goal.FollowTargetGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
@@ -44,7 +43,7 @@ public class RatStaffItem extends Item {
                     }
                     goal = new DigGoal(ratEntity, null);
                     if (user.getStackInHand(blockHand).getItem() instanceof BlockItem) {
-                        if (user.getStackInHand(blockHand).getItem() instanceof BlockItem && ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getBlastResistance() <= 0.6f && ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().getMaterial() != Material.GLASS && !((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().isToolRequired() || ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().getMaterial() == Material.SNOW_LAYER || ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock().getDefaultState().getMaterial() == Material.SNOW_BLOCK) {
+                        if (user.getStackInHand(blockHand).getItem() instanceof BlockItem) {
                             goal = new DigGoal(ratEntity, ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock());
                         }
                     }

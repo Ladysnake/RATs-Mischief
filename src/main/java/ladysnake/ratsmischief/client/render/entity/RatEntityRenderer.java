@@ -25,7 +25,7 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
         this.shadowRadius = 0.35f;
     }
 
-    //variables needed for later
+    // variables needed for later
     private ItemStack itemStack;
     private VertexConsumerProvider vertexConsumerProvider;
     private Identifier ratTexture;

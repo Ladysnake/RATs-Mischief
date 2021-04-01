@@ -1,5 +1,6 @@
 package ladysnake.ratsmischief.common.entity.ai;
 
+import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.LivingEntity;
@@ -12,7 +13,7 @@ import net.minecraft.world.WorldView;
 import java.util.EnumSet;
 
 public class FollowOwnerRatGoal extends Goal {
-    private final TameableEntity tameable;
+    private final RatEntity rat;
     private LivingEntity owner;
     private final WorldView world;
     private final double speed;
@@ -23,29 +24,29 @@ public class FollowOwnerRatGoal extends Goal {
     private float oldWaterPathfindingPenalty;
     private final boolean leavesAllowed;
 
-    public FollowOwnerRatGoal(TameableEntity tameable, double speed, float minDistance, float maxDistance, boolean leavesAllowed) {
-        this.tameable = tameable;
-        this.world = tameable.world;
+    public FollowOwnerRatGoal(RatEntity rat, double speed, float minDistance, float maxDistance, boolean leavesAllowed) {
+        this.rat = rat;
+        this.world = rat.world;
         this.speed = speed;
-        this.navigation = tameable.getNavigation();
+        this.navigation = rat.getNavigation();
         this.minDistance = minDistance;
         this.maxDistance = maxDistance;
         this.leavesAllowed = leavesAllowed;
         this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
-        if (!(tameable.getNavigation() instanceof MobNavigation) && !(tameable.getNavigation() instanceof BirdNavigation)) {
+        if (!(rat.getNavigation() instanceof MobNavigation) && !(rat.getNavigation() instanceof BirdNavigation)) {
             throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
         }
     }
 
     public boolean canStart() {
-        LivingEntity livingEntity = this.tameable.getOwner();
+        LivingEntity livingEntity = this.rat.getOwner();
         if (livingEntity == null) {
             return false;
         } else if (livingEntity.isSpectator()) {
             return false;
-        } else if (this.tameable.isSitting()) {
+        } else if (this.rat.isSitting()) {
             return false;
-        } else if (this.tameable.squaredDistanceTo(livingEntity) < (double) (this.minDistance * this.minDistance)) {
+        } else if (this.rat.squaredDistanceTo(livingEntity) < (double) (this.minDistance * this.minDistance)) {
             return false;
         } else {
             this.owner = livingEntity;
@@ -56,31 +57,31 @@ public class FollowOwnerRatGoal extends Goal {
     public boolean shouldContinue() {
         if (this.navigation.isIdle()) {
             return false;
-        } else if (this.tameable.isSitting()) {
+        } else if (this.rat.isSitting()) {
             return false;
         } else {
-            return this.tameable.squaredDistanceTo(this.owner) > (double) (this.maxDistance * this.maxDistance);
+            return this.rat.squaredDistanceTo(this.owner) > (double) (this.maxDistance * this.maxDistance);
         }
     }
 
     public void start() {
         this.updateCountdownTicks = 0;
-        this.oldWaterPathfindingPenalty = this.tameable.getPathfindingPenalty(PathNodeType.WATER);
-        this.tameable.setPathfindingPenalty(PathNodeType.WATER, 0.0F);
+        this.oldWaterPathfindingPenalty = this.rat.getPathfindingPenalty(PathNodeType.WATER);
+        this.rat.setPathfindingPenalty(PathNodeType.WATER, 0.0F);
     }
 
     public void stop() {
         this.owner = null;
         this.navigation.stop();
-        this.tameable.setPathfindingPenalty(PathNodeType.WATER, this.oldWaterPathfindingPenalty);
+        this.rat.setPathfindingPenalty(PathNodeType.WATER, this.oldWaterPathfindingPenalty);
     }
 
     public void tick() {
-        this.tameable.getLookControl().lookAt(this.owner, 10.0F, (float) this.tameable.getLookPitchSpeed());
+        this.rat.getLookControl().lookAt(this.owner, 10.0F, (float) this.rat.getLookPitchSpeed());
         if (--this.updateCountdownTicks <= 0) {
             this.updateCountdownTicks = 10;
-            if (!this.tameable.isLeashed() && !this.tameable.hasVehicle()) {
-                if (this.tameable.squaredDistanceTo(this.owner) >= 500D) {
+            if (!this.rat.isLeashed() && !this.rat.hasVehicle()) {
+                if (this.rat.squaredDistanceTo(this.owner) >= 500D) {
                     this.tryTeleport();
                 } else {
                     this.navigation.startMovingTo(this.owner, this.speed);
@@ -111,7 +112,7 @@ public class FollowOwnerRatGoal extends Goal {
         } else if (!this.canTeleportTo(new BlockPos(x, y, z))) {
             return false;
         } else {
-            this.tameable.refreshPositionAndAngles((double) x + 0.5D, (double) y, (double) z + 0.5D, this.tameable.yaw, this.tameable.pitch);
+            this.rat.refreshPositionAndAngles((double) x + 0.5D, (double) y, (double) z + 0.5D, this.rat.yaw, this.rat.pitch);
             this.navigation.stop();
             return true;
         }
@@ -126,13 +127,13 @@ public class FollowOwnerRatGoal extends Goal {
             if (!this.leavesAllowed && blockState.getBlock() instanceof LeavesBlock) {
                 return false;
             } else {
-                BlockPos blockPos = pos.subtract(this.tameable.getBlockPos());
-                return this.world.isSpaceEmpty(this.tameable, this.tameable.getBoundingBox().offset(blockPos));
+                BlockPos blockPos = pos.subtract(this.rat.getBlockPos());
+                return this.world.isSpaceEmpty(this.rat, this.rat.getBoundingBox().offset(blockPos));
             }
         }
     }
 
     private int getRandomInt(int min, int max) {
-        return this.tameable.getRandom().nextInt(max - min + 1) + min;
+        return this.rat.getRandom().nextInt(max - min + 1) + min;
     }
 }

@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.painting.PaintingMotive;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
@@ -37,6 +38,7 @@ public class Mischief implements ModInitializer {
     public static Item LOVE_STAFF;
 
     public static Item RAT_MASK;
+    public static Item ELYTRAT;
 
     @Override
     public void onInitialize() {
@@ -65,7 +67,8 @@ public class Mischief implements ModInitializer {
 //        SKIRMISH_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.SKIRMISH), "skirmish_staff");
         LOVE_STAFF = registerItem(new RatStaffItem((new Item.Settings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.LOVE), "love_staff");
 
-//        RAT_MASK = registerItem(new ArmorItem(RatMaskArmorMaterial.RAT_MASK, EquipmentSlot.HEAD, (new Item.Settings()).group(ItemGroup.COMBAT)), "rat_mask");
+        RAT_MASK = registerItem(new ArmorItem(RatMaskArmorMaterial.RAT_MASK, EquipmentSlot.HEAD, (new Item.Settings()).group(ItemGroup.COMBAT)), "rat_mask");
+        ELYTRAT = registerItem(new Item(new Item.Settings().group(ItemGroup.MISC).maxCount(16)), "elytrat");
 
         // rat kid painting
         Registry.register(Registry.PAINTING_MOTIVE, new Identifier(MODID, "a_rat_in_time"), new PaintingMotive(64, 48));

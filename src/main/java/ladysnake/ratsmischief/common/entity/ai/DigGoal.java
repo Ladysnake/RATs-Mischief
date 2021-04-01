@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
@@ -32,9 +33,15 @@ public class DigGoal extends Goal {
                 for (BlockPos blockPos : BlockPos.iterateOutwards(this.rat.getBlockPos(), 8, 2, 8)) {
                     BlockState blockState = this.rat.world.getBlockState(blockPos);
                     if (blockState.getBlock() == targetBlock) {
-                        if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
-                            targetBlockPos = blockPos;
-                            return true;
+                        int strength = 0;
+                        if (this.rat.hasStatusEffect(StatusEffects.STRENGTH)) {
+                            strength = this.rat.getStatusEffect(StatusEffects.STRENGTH).getAmplifier()+1;
+                        }
+                        if (blockState.getHardness(this.rat.world, blockPos) >= 0 && blockState.getHardness(this.rat.world, blockPos) <= 1f + strength) {
+                            if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
+                                targetBlockPos = blockPos;
+                                return true;
+                            }
                         }
                     }
                 }
@@ -56,10 +63,15 @@ public class DigGoal extends Goal {
                 return;
             }
 
+            int haste = 0;
+            if (this.rat.hasStatusEffect(StatusEffects.HASTE)) {
+                haste = this.rat.getStatusEffect(StatusEffects.HASTE).getAmplifier()+1;
+            }
+
             if (this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ()) <= 5) {
-                breakProgress += Math.max(0, 1 - this.rat.world.getBlockState(targetBlockPos).getBlock().getBlastResistance());
-                this.rat.world.setBlockBreakingInfo(this.rat.getEntityId(), targetBlockPos, (int) breakProgress);
-                if (breakProgress >= 9 || this.rat.world.getBlockState(targetBlockPos).getBlock().getBlastResistance() == 0.0f) {
+                breakProgress += 0.015 + 0.003 * haste;
+                this.rat.world.setBlockBreakingInfo(this.rat.getEntityId(), targetBlockPos, (int)(breakProgress / this.rat.world.getBlockState(targetBlockPos).getHardness(this.rat.world, targetBlockPos) * 9));
+                if (breakProgress >= this.rat.world.getBlockState(targetBlockPos).getHardness(this.rat.world, targetBlockPos)) {
                     this.rat.world.setBlockBreakingInfo(this.rat.getEntityId(), targetBlockPos, -1);
                     this.rat.world.breakBlock(targetBlockPos, true, this.rat);
                     targetBlockPos = null;
