@@ -355,6 +355,14 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 this.setRatType(Type.JORATO);
             } else if (this.getCustomName().getString().equalsIgnoreCase("jerma") || this.getCustomName().getString().equalsIgnoreCase("jerma985")) {
                 this.setRatType(Type.JERMA);
+            } else if (this.getCustomName().getString().equalsIgnoreCase("hollow rat") || this.getCustomName().getString().equalsIgnoreCase("hollow knight")) {
+                this.setRatType(Type.HOLLOW);
+            } else if (this.getCustomName().getString().equalsIgnoreCase("rateline") || this.getCustomName().getString().equalsIgnoreCase("madeline")) {
+                this.setRatType(Type.RATELINE);
+            } else if (this.getCustomName().getString().equalsIgnoreCase("biggie cheese")) {
+                this.setRatType(Type.BIGGIE_CHEESE);
+            } else if (this.getCustomName().getString().equalsIgnoreCase("arathain") || this.getCustomName().getString().equalsIgnoreCase("arathainfarqoe")) {
+                this.setRatType(Type.ARATHAIN);
             }
         }
 
@@ -744,7 +752,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         RAT_KID,
         RATATER,
         JORATO,
-        JERMA
+        JERMA,
+        HOLLOW,
+        RATELINE,
+        BIGGIE_CHEESE,
+        ARATHAIN
     }
 
     public static Type getRandomNaturalType(Random random) {
