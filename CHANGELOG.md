@@ -22,6 +22,10 @@
     - Crafted from a firework rocket, 4 phantom membranes and a piece of leather
     - Shift right click on a rat with an Elytrat in hand to make the rat equip it, shift right click with an empty hand on a rat wearing an Elytrats to make it unequip it
 
+### Rat's Mischief 1.0.4 - 1.16.5
+- Tamed rats will now drop what they hold upon their death
+- Sitting rats no longer get up to chase cats
+
 ### Rat's Mischief 1.0.3 - 1.16.5
 - Added compatibility with Eldritch Mobs so eldritch rats can naturally spawn
 - Reduced the range check for villages when spawning rats

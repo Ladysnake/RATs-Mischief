@@ -5,6 +5,7 @@ import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.TrackTargetGoal;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.util.math.Box;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,6 +16,7 @@ public class ChaseForFunGoal<T extends LivingEntity> extends TrackTargetGoal {
     protected final Class<T> targetClass;
     protected LivingEntity targetEntity;
     protected TargetPredicate targetPredicate;
+    protected final TameableEntity tameable;
 
     public ChaseForFunGoal(MobEntity mob, Class<T> targetClass, boolean checkVisibility) {
         this(mob, targetClass, checkVisibility, false);
@@ -29,6 +31,7 @@ public class ChaseForFunGoal<T extends LivingEntity> extends TrackTargetGoal {
         this.targetClass = targetClass;
         this.setControls(EnumSet.of(Goal.Control.TARGET));
         this.targetPredicate = (new TargetPredicate()).setBaseMaxDistance(this.getFollowRange()).setPredicate(targetPredicate);
+        this.tameable = (TameableEntity) mob;
     }
 
     @Override
@@ -38,12 +41,12 @@ public class ChaseForFunGoal<T extends LivingEntity> extends TrackTargetGoal {
 
     public boolean canStart() {
         this.findClosestTarget();
-        return this.targetEntity != null;
+        return this.targetEntity != null && !this.tameable.isSitting();
     }
 
     @Override
     public boolean shouldContinue() {
-        return this.targetEntity != null && !this.targetEntity.isDead() && this.mob.getRandom().nextInt(10) != 0;
+        return this.targetEntity != null && !this.targetEntity.isDead() && this.mob.getRandom().nextInt(10) != 0 && !this.tameable.isSitting();
     }
 
     protected Box getSearchBox(double distance) {

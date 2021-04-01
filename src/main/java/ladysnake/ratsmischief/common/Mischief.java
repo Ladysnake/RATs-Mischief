@@ -1,6 +1,5 @@
 package ladysnake.ratsmischief.common;
 
-import ladysnake.ratsmischief.common.armormaterials.RatMaskArmorMaterial;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
 import ladysnake.ratsmischief.common.item.RatStaffItem;
