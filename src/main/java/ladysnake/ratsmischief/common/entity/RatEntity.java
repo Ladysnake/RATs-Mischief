@@ -327,7 +327,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 //        this.setSprinting(this.getMoveControl().isMoving());
 
         // automatically equip elytrat
-        if (!this.getMainHandStack().isEmpty() && !this.isElytrat()) {
+        if (!this.getMainHandStack().isEmpty() && !this.isElytrat() && this.getMainHandStack().getItem() == Mischief.ELYTRAT) {
             this.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.ELYTRA));
             this.getMainHandStack().decrement(1);
             this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_ELYTRA, 1.0F, 1.2F);
