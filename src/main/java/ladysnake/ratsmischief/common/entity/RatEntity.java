@@ -326,6 +326,13 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public void mobTick() {
 //        this.setSprinting(this.getMoveControl().isMoving());
 
+        // automatically equip elytrat
+        if (!this.getMainHandStack().isEmpty() && !this.isElytrat()) {
+            this.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.ELYTRA));
+            this.getMainHandStack().decrement(1);
+            this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_ELYTRA, 1.0F, 1.2F);
+        }
+
         if (this.age % 20 == 0 && this.isTamed() && this.getOwner() != null && !this.getOwner().getEquippedStack(EquipmentSlot.HEAD).isEmpty() && this.getOwner().getEquippedStack(EquipmentSlot.HEAD).getItem() == Mischief.RAT_MASK) {
             this.getOwner().getActiveStatusEffects().forEach((statusEffect, statusEffectInstance) -> {
                 if (!this.hasStatusEffect(statusEffect) || (this.getStatusEffect(statusEffect) != null && this.getStatusEffect(statusEffect).getAmplifier() < statusEffectInstance.getAmplifier())) {
