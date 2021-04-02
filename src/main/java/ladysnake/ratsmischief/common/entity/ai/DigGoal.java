@@ -35,7 +35,7 @@ public class DigGoal extends Goal {
                     if (blockState.getBlock() == targetBlock) {
                         int strength = 0;
                         if (this.rat.hasStatusEffect(StatusEffects.STRENGTH)) {
-                            strength = this.rat.getStatusEffect(StatusEffects.STRENGTH).getAmplifier()+1;
+                            strength = this.rat.getStatusEffect(StatusEffects.STRENGTH).getAmplifier() + 1;
                         }
                         if (blockState.getHardness(this.rat.world, blockPos) >= 0 && blockState.getHardness(this.rat.world, blockPos) <= 1f + strength) {
                             if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
@@ -65,12 +65,12 @@ public class DigGoal extends Goal {
 
             int haste = 0;
             if (this.rat.hasStatusEffect(StatusEffects.HASTE)) {
-                haste = this.rat.getStatusEffect(StatusEffects.HASTE).getAmplifier()+1;
+                haste = this.rat.getStatusEffect(StatusEffects.HASTE).getAmplifier() + 1;
             }
 
             if (this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ()) <= 5) {
                 breakProgress += 0.015 + 0.003 * haste;
-                this.rat.world.setBlockBreakingInfo(this.rat.getEntityId(), targetBlockPos, (int)(breakProgress / this.rat.world.getBlockState(targetBlockPos).getHardness(this.rat.world, targetBlockPos) * 9));
+                this.rat.world.setBlockBreakingInfo(this.rat.getEntityId(), targetBlockPos, (int) (breakProgress / this.rat.world.getBlockState(targetBlockPos).getHardness(this.rat.world, targetBlockPos) * 9));
                 if (breakProgress >= this.rat.world.getBlockState(targetBlockPos).getHardness(this.rat.world, targetBlockPos)) {
                     this.rat.world.setBlockBreakingInfo(this.rat.getEntityId(), targetBlockPos, -1);
                     this.rat.world.breakBlock(targetBlockPos, true, this.rat);

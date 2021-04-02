@@ -5,6 +5,7 @@
     - Can be bought from the Wandering Trader for 40 emeralds
     - Grants a bit of protection as well as all enchantments present on it to your rats when their owner has one equipped 
     - Makes the user share their status effects (positive and negative) with all their tamed rats
+    - Makes the user unable to deal damage to any rat
     - Can be repaired with Phantom Membrane
     - Will always drop when a player kills doctor4t (plz no bully still)
 - Rats will now determine what blocks they can break by checking for hardness instead of resistance
@@ -21,7 +22,8 @@
     - Rats equipped with Elytrats will fly whenever they need to fight a foe
     - Crafted from a firework rocket, 4 phantom membranes and a piece of leather
     - Shift right click on a rat with an Elytrat in hand to make the rat equip it, shift right click with an empty hand on a rat wearing an Elytrats to make it unequip it
-- On World Rat Day (4th of April)
+- Added four new rat named variants: Rateline (Madeline from Celeste), Hollow Rat (Hollow Knight), Biggie Cheese and Arathain
+- On World Rat Day (4th of April), new rats have a 1 in 30 chance to be golden (instead of the normal 1/150) and all rats will smug dance! Happy World Rat Day!
 
 ### Rat's Mischief 1.0.4 - 1.16.5
 - Tamed rats will now drop what they hold upon their death

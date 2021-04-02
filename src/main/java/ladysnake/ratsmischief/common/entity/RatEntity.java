@@ -10,7 +10,13 @@ import ladysnake.ratsmischief.common.item.RatStaffItem;
 import ladysnake.ratsmischief.common.network.Packets;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityData;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.Durations;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.control.BodyControl;
@@ -31,7 +37,6 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.TrackOwnerAttackerGoal;
 import net.minecraft.entity.ai.goal.UniversalAngerGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
-import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
@@ -49,8 +54,6 @@ import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.entity.mob.*;
-import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.DyeItem;
@@ -88,7 +91,11 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class RatEntity extends TameableEntity implements IAnimatable, Angerable {
@@ -160,7 +167,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     protected void initDataTracker() {
         super.initDataTracker();
 
-        if (this.random.nextInt(150) == 0) {
+        int bound = 150;
+        if (Mischief.IS_WORLD_RAT_DAY) {
+            bound = 30;
+        }
+
+        if (this.random.nextInt(bound) == 0) {
             this.dataTracker.startTracking(TYPE, Type.GOLD.toString());
         } else {
             this.dataTracker.startTracking(TYPE, getRandomNaturalType(this.random).toString());
@@ -228,7 +240,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             }
             return PlayState.CONTINUE;
         } else if (this.isSniffing()) {
-            if (this.getRatType() == Type.RAT_KID) {
+            if (this.getRatType() == Type.RAT_KID || Mischief.IS_WORLD_RAT_DAY) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.smug_dance", true));
             } else {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.sniff", false));
@@ -316,8 +328,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         super.tick();
 
         if (this.isFlying() && this.isElytrat() && this.world.isClient && this.getRocketTime() > 0) {
-            this.setRocketTime(this.getRocketTime()-1);
-            this.world.addParticle(ParticleTypes.FIREWORK, this.getX(), this.getY()+0.1, this.getZ(), this.random.nextGaussian() * 0.05D, -this.getVelocity().y * 0.5D, this.random.nextGaussian() * 0.05D);
+            this.setRocketTime(this.getRocketTime() - 1);
+            this.world.addParticle(ParticleTypes.FIREWORK, this.getX(), this.getY() + 0.1, this.getZ(), this.random.nextGaussian() * 0.05D, -this.getVelocity().y * 0.5D, this.random.nextGaussian() * 0.05D);
         }
 
     }
@@ -603,7 +615,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public boolean damage(DamageSource source, float amount) {
-        System.out.println(source);
         if (this.isInvulnerableTo(source)) {
             return false;
         } else {
@@ -619,10 +630,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
-        if (!(damageSource.getAttacker() instanceof EnderDragonEntity)) {
-            return super.isInvulnerableTo(damageSource);
+        System.out.println(damageSource.getAttacker() instanceof PlayerEntity);
+        if (damageSource.getAttacker() instanceof EnderDragonEntity || damageSource.getAttacker() instanceof PlayerEntity && ((PlayerEntity) damageSource.getAttacker()).getEquippedStack(EquipmentSlot.HEAD).getItem() == Mischief.RAT_MASK) {
+            return true;
         } else {
-            return false;
+            return super.isInvulnerableTo(damageSource);
         }
     }
 

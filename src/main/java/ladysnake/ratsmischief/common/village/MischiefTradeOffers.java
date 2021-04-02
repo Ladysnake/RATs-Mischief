@@ -24,7 +24,7 @@ public abstract class MischiefTradeOffers {
         }
 
         public SellItemFactory(Item item, int price, int count, int experience) {
-            this((ItemStack)(new ItemStack(item)), price, count, 12, experience);
+            this((ItemStack) (new ItemStack(item)), price, count, 12, experience);
         }
 
         public SellItemFactory(Item item, int price, int count, int maxUses, int experience) {

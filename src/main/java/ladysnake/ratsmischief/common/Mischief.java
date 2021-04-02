@@ -11,27 +11,33 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.decoration.painting.PaintingMotive;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Items;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.village.TradeOffers;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.Heightmap;
 import software.bernie.geckolib3.GeckoLib;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Mischief implements ModInitializer {
     public static final String MODID = "ratsmischief";
 
     public static EntityType<RatEntity> RAT;
+    public static final boolean IS_WORLD_RAT_DAY = DateTimeFormatter.ofPattern("dd/MM").format(LocalDateTime.now()).equals("04/04");
 
     public static Item RAT_SPAWN_EGG;
-//    public static Item LOYALTY_OF_THE_MISCHIEF;
 
     public static Item LEATHER_RAT_POUCH;
     public static Item TWISTED_RAT_POUCH;
@@ -89,4 +95,5 @@ public class Mischief implements ModInitializer {
         Registry.register(Registry.ITEM, MODID + ":" + name, item);
         return item;
     }
+
 }
