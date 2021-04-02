@@ -326,6 +326,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public void mobTick() {
 //        this.setSprinting(this.getMoveControl().isMoving());
 
+        if (this.getTarget() == null && !(this.getOwner() != null && this.getOwner().isFallFlying()) && (this.isTouchingWater() || this.isOnGround())) {
+            this.setFlying(false);
+        }
+
         // automatically equip elytrat
         if (!this.getMainHandStack().isEmpty() && !this.isElytrat() && this.getMainHandStack().getItem() == Mischief.ELYTRAT) {
             this.equipStack(EquipmentSlot.CHEST, new ItemStack(Items.ELYTRA));
