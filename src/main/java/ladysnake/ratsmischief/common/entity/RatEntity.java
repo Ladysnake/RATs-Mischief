@@ -351,7 +351,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
         if (this.age % 20 == 0 && this.isTamed() && this.getOwner() != null && !this.getOwner().getEquippedStack(EquipmentSlot.HEAD).isEmpty() && this.getOwner().getEquippedStack(EquipmentSlot.HEAD).getItem() == Mischief.RAT_MASK) {
             this.getOwner().getActiveStatusEffects().forEach((statusEffect, statusEffectInstance) -> {
-                if (!this.hasStatusEffect(statusEffect) || (this.getStatusEffect(statusEffect) != null && this.getStatusEffect(statusEffect).getAmplifier() < statusEffectInstance.getAmplifier())) {
+                if (!this.hasStatusEffect(statusEffect) || (this.getStatusEffect(statusEffect) != null && this.getStatusEffect(statusEffect).getAmplifier() <= statusEffectInstance.getAmplifier())) {
                     this.addStatusEffect(new StatusEffectInstance(statusEffect, 60, statusEffectInstance.getAmplifier()));
                 }
             });
