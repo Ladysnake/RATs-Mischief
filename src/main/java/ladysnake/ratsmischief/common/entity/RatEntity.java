@@ -406,7 +406,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public boolean canTarget(EntityType<?> type) {
-        return type != EntityType.CREEPER && super.canTarget(type);
+        return type != EntityType.CREEPER;
     }
 
     @Override
@@ -544,7 +544,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public boolean canAttackWithOwner(LivingEntity target, LivingEntity owner) {
-        if (!(target instanceof CreeperEntity) && !(target instanceof GhastEntity)) {
+        if (!(target instanceof CreeperEntity || (target instanceof GhastEntity && !this.isElytrat()))) {
             if (target instanceof RatEntity) {
                 RatEntity ratEntity = (RatEntity) target;
                 return !ratEntity.isTamed() || ratEntity.getOwner() != owner;
@@ -630,7 +630,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
-        System.out.println(damageSource.getAttacker() instanceof PlayerEntity);
         if (damageSource.getAttacker() instanceof EnderDragonEntity || damageSource.getAttacker() instanceof PlayerEntity && ((PlayerEntity) damageSource.getAttacker()).getEquippedStack(EquipmentSlot.HEAD).getItem() == Mischief.RAT_MASK) {
             return true;
         } else {
