@@ -1,5 +1,9 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.1.1 - 1.16.5
+- Rats no longer take damage from cacti and berry bushes, they will still avoid them however
+- Rats now convert Saturation into Regeneration. For instance, if a rat obtains the Saturation III effect for 15 seconds, it will instead be transformed into a Regeneration III effect lasting 15 seconds
+
 ### Rat's Mischief 1.1: When Rats'll Fly Update - 1.16.5
 - Added the Mask of Rat
     - Can be bought from the Wandering Trader for 40 emeralds
@@ -10,7 +14,7 @@
     - Will always drop when a player kills doctor4t (plz no bully still)
 - Rats will now determine what blocks they can break by checking for hardness instead of resistance
     - Rats can now mine blocks that have a hardness of at most 1
-- Rats affected by Strength are now able to mine blocks that have a hardness of 1 additional hardness per Strength level.
+- Rats affected by Strength are now able to mine blocks that have a hardness of 1 additional hardness per Strength level
     - Rats without Strength are able to mine blocks that don't require tools and have a hardness of 1 or lower
     - Rats under Strength I are able to mine blocks that have a hardness of 2 or lower, for instance tree logs and stone
     - Rats under Strength II are able to mine blocks that have a hardness of 3 or lower, for instance ores
@@ -18,7 +22,7 @@
 - Rats can now mine blocks that are under the glass material category
 - Rats can now mine blocks even if they require a tool
 - Rats will now pick up items from the ground if they can add it to their held stack
-- Introducing Elytrats (and flying rats)! Elytrats can be equipped on rats to allow them to fly.
+- Introducing Elytrats (and flying rats)! Elytrats can be equipped on rats to allow them to fly
     - Rats equipped with Elytrats will fly whenever they need to fight a foe
     - Crafted from a firework rocket, 4 phantom membranes and a piece of leather
     - Shift right click on a rat with an Elytrat in hand to make the rat equip it, shift right click with an empty hand on a rat wearing an Elytrats to make it unequip it

@@ -45,6 +45,7 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.GhastEntity;
@@ -332,6 +333,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             this.world.addParticle(ParticleTypes.FIREWORK, this.getX(), this.getY() + 0.1, this.getZ(), this.random.nextGaussian() * 0.05D, -this.getVelocity().y * 0.5D, this.random.nextGaussian() * 0.05D);
         }
 
+        // turn saturation into regeneration
+        if (this.hasStatusEffect(StatusEffects.SATURATION)) {
+            StatusEffectInstance saturation = this.getStatusEffect(StatusEffects.SATURATION);
+            this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, saturation.getDuration(), saturation.getAmplifier(), saturation.isAmbient(), saturation.shouldShowParticles(), saturation.shouldShowIcon()));
+        }
     }
 
     @Override
