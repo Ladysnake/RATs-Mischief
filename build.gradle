@@ -47,10 +47,6 @@ dependencies {
 //	}
 //	include "me.shedaniel.cloth:config-2:4.8.2"
 
-	// mod menu
-	modImplementation("io.github.prospector:modmenu:1.14.6+build.31") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
 }
 
 processResources {

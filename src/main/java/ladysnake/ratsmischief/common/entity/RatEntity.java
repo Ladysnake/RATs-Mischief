@@ -630,7 +630,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
-        if (damageSource.getAttacker() instanceof EnderDragonEntity || damageSource.getAttacker() instanceof PlayerEntity && ((PlayerEntity) damageSource.getAttacker()).getEquippedStack(EquipmentSlot.HEAD).getItem() == Mischief.RAT_MASK) {
+        if (damageSource == DamageSource.CACTUS || damageSource == DamageSource.SWEET_BERRY_BUSH || damageSource.getAttacker() instanceof EnderDragonEntity || damageSource.getAttacker() instanceof PlayerEntity && ((PlayerEntity) damageSource.getAttacker()).getEquippedStack(EquipmentSlot.HEAD).getItem() == Mischief.RAT_MASK) {
             return true;
         } else {
             return super.isInvulnerableTo(damageSource);
