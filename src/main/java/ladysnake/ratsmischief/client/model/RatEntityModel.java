@@ -35,17 +35,11 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
     @Override
     public void setLivingAnimations(RatEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
+
         IBone head = this.getAnimationProcessor().getBone("head");
         IBone rocket = this.getAnimationProcessor().getBone("rocket");
 
-        IBone leftWing = this.getAnimationProcessor().getBone("left");
-        IBone rightWing = this.getAnimationProcessor().getBone("right");
         if (entity.isFlying()) {
-            if (leftWing != null && rightWing != null) {
-                leftWing.setRotationY((float) MathHelper.clamp(-(entity.getVelocity().getY() * 2) - 1f, -1, 0));
-                rightWing.setRotationY((float) MathHelper.clamp((entity.getVelocity().getY() * 2) + 1f, 0, 1));
-            }
-
             IBone body = this.getAnimationProcessor().getBone("root");
             if (body != null) {
                 body.setRotationX((float) entity.getVelocity().getY());
@@ -71,15 +65,6 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
                 root.setScaleX(0.5f);
                 root.setScaleY(0.5f);
                 root.setScaleZ(0.5f);
-            }
-        }
-
-        IBone elytra = this.getAnimationProcessor().getBone("elytra");
-        if (elytra != null) {
-            if (entity.isElytrat()) {
-                elytra.setHidden(false);
-            } else {
-                elytra.setHidden(true);
             }
         }
     }

@@ -19,11 +19,9 @@ import net.minecraft.util.math.Quaternion;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderer.geo.GeoEntityRenderer;
 
-public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
-    public RatEntityRenderer(EntityRenderDispatcher renderManager) {
+public class RatCoatEntityRenderer extends GeoEntityRenderer<RatEntity> {
+    public RatCoatEntityRenderer(EntityRenderDispatcher renderManager) {
         super(renderManager, new RatEntityModel());
-        this.shadowRadius = 0.35f;
-        this.addLayer(new ElytratFeatureRenderer(this, new ElytratEntityRenderer(renderManager)));
     }
 
     // variables needed for later
@@ -43,20 +41,6 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        if (bone.getName().equals("bodybone")) {
-            stack.push();
-            stack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-90));
-            stack.translate(bone.getPositionX(), bone.getPositionZ(), bone.getPositionY() - 0.05);
-            stack.scale(0.7f, 0.7f, 0.7f);
-            stack.multiply(new Quaternion(bone.getRotationX(), bone.getRotationZ(), bone.getRotationY(), false));
-
-            MinecraftClient.getInstance().getItemRenderer().renderItem(itemStack, ModelTransformation.Mode.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.vertexConsumerProvider);
-            stack.pop();
-
-            // restore the render buffer - GeckoLib expects this state otherwise you'll have weird texture issues
-            bufferIn = vertexConsumerProvider.getBuffer(RenderLayer.getEntityCutout(ratTexture));
-        }
-
         super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 
