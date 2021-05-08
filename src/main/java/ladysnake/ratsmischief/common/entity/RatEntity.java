@@ -795,6 +795,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
     );
 
+    public boolean hasCustomElytratTexture() {
+        return !NATURAL_TYPES.contains(this.getRatType());
+    }
+
     public void setAction(Goal action) {
         this.removeCurrentActionGoal();
         this.actionTimer = 300; // 15s

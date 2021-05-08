@@ -16,7 +16,15 @@ public class ElytratEntityModel extends AnimatedGeoModel<RatEntity> {
 
     @Override
     public Identifier getTextureLocation(RatEntity rat) {
-        return new Identifier(Mischief.MODID, "textures/entity/elytrat.png");
+        if (!rat.hasCustomElytratTexture()) {
+            return new Identifier(Mischief.MODID, "textures/entity/elytrat.png");
+        } else {
+            if (rat.getRatType() == RatEntity.Type.RAT_KID) {
+                return new Identifier(Mischief.MODID, "textures/entity/rat_kid_" + rat.getRatColor().getName().toLowerCase() + "_elytrat.png");
+            } else {
+                return new Identifier(Mischief.MODID, "textures/entity/" + rat.getRatType().toString().toLowerCase() + "_elytrat.png");
+            }
+        }
     }
 
     @Override

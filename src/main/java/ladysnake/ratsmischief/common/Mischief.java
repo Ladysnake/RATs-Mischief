@@ -3,6 +3,7 @@ package ladysnake.ratsmischief.common;
 import ladysnake.ratsmischief.common.armormaterials.RatMaskArmorMaterial;
 import ladysnake.ratsmischief.common.cca.PlayerRatComponent;
 import ladysnake.ratsmischief.common.command.PlayerRatifyCommand;
+import ladysnake.ratsmischief.common.command.PlayerUnratifyCommand;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
 import ladysnake.ratsmischief.common.item.RatStaffItem;
@@ -71,9 +72,12 @@ public class Mischief implements ModInitializer {
         RAT = registerEntity("rat", FabricEntityTypeBuilder.createMob().entityFactory(RatEntity::new).spawnGroup(SpawnGroup.AMBIENT).dimensions(EntityDimensions.changing(0.8F, 0.4F)).trackRangeBlocks(8).spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RatEntity::canSpawn).build());
         FabricDefaultAttributeRegistry.register(RAT, RatEntity.createEntityAttributes());
 
-        // ratify command
+        // ratify and untratify commands
         CommandRegistrationCallback.EVENT.register((commandDispatcher, b) ->
             PlayerRatifyCommand.register(commandDispatcher)
+        );
+        CommandRegistrationCallback.EVENT.register((commandDispatcher, b) ->
+            PlayerUnratifyCommand.register(commandDispatcher)
         );
 
         // rat custom spawner
