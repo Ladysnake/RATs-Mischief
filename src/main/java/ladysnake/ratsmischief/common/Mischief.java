@@ -1,16 +1,27 @@
 package ladysnake.ratsmischief.common;
 
 import ladysnake.ratsmischief.common.armormaterials.RatMaskArmorMaterial;
+import ladysnake.ratsmischief.common.cca.PlayerRatComponent;
+import ladysnake.ratsmischief.common.command.PlayerRatifyCommand;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
 import ladysnake.ratsmischief.common.item.RatStaffItem;
 import ladysnake.ratsmischief.common.village.MischiefTradeOffers;
 import ladysnake.ratsmischief.common.world.RatSpawner;
+import ladysnake.requiem.api.v1.event.minecraft.PlayerRespawnCallback;
+import ladysnake.requiem.api.v1.event.requiem.HumanityCheckCallback;
+import ladysnake.requiem.api.v1.event.requiem.PossessionStartCallback;
+import ladysnake.requiem.api.v1.internal.StatusEffectReapplicator;
+import ladysnake.requiem.api.v1.possession.PossessionComponent;
+import ladysnake.requiem.api.v1.remnant.AttritionFocus;
+import ladysnake.requiem.api.v1.remnant.RemnantComponent;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
+import net.fabricmc.loader.FabricLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -58,12 +69,50 @@ public class Mischief implements ModInitializer {
         RAT = registerEntity("rat", FabricEntityTypeBuilder.createMob().entityFactory(RatEntity::new).spawnGroup(SpawnGroup.AMBIENT).dimensions(EntityDimensions.changing(0.8F, 0.4F)).trackRangeBlocks(8).spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RatEntity::canSpawn).build());
         FabricDefaultAttributeRegistry.register(RAT, RatEntity.createEntityAttributes());
 
+        // ratify command
+        CommandRegistrationCallback.EVENT.register((commandDispatcher, b) ->
+            PlayerRatifyCommand.register(commandDispatcher)
+        );
+
         // rat custom spawner
         RatSpawner ratSpawner = new RatSpawner();
         ServerTickEvents.END_SERVER_TICK.register(server -> {
+            // spawn rats
             server.getWorlds().forEach(world -> {
                 ratSpawner.spawn(world, server.getSaveProperties().getDifficulty() != Difficulty.PEACEFUL, server.shouldSpawnAnimals());
             });
+
+            // kill soul players that are supposed to be rats cause being a rat is so much better than trying to find a new body requiem is cool look I love requiem but being a rat is so much better michael it's your birthday today
+            server.getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
+                if (PlayerRatComponent.KEY.get(serverPlayerEntity).isRat && RemnantComponent.get(serverPlayerEntity).isIncorporeal() && serverPlayerEntity.age > 20) {
+                    serverPlayerEntity.kill(); // haha get fucked nerd
+                }
+            });
+        });
+
+        PlayerRespawnCallback.EVENT.register((serverPlayerEntity, returnFromEnd) -> {
+            if (PlayerRatComponent.KEY.get(serverPlayerEntity).isRat && !returnFromEnd) {
+                serverPlayerEntity.clearStatusEffects();
+                StatusEffectReapplicator.KEY.get(serverPlayerEntity).definitivelyClear();
+                RatEntity rat = new RatEntity(RAT, serverPlayerEntity.getServerWorld());
+                rat.copyPositionAndRotation(serverPlayerEntity);
+                serverPlayerEntity.getServerWorld().spawnEntity(rat);
+                PossessionComponent.get(serverPlayerEntity).startPossessing(rat);
+            }
+        });
+
+        PossessionStartCallback.EVENT.register(new Identifier("ratsmischief:possession"), (mobEntity, playerEntity, b) -> {
+            if (mobEntity instanceof RatEntity && PlayerRatComponent.KEY.get(playerEntity).isRat) {
+                return PossessionStartCallback.Result.ALLOW;
+            }
+            return PossessionStartCallback.Result.PASS;
+        });
+
+        HumanityCheckCallback.EVENT.register(livingEntity -> {
+            if (livingEntity instanceof RatEntity) {
+                return 9999;
+            }
+            return 0;
         });
 
         RAT_SPAWN_EGG = registerItem(new SpawnEggItem(RAT, 0x1A1A1A, 0xF2ADA1, (new Item.Settings()).group(ItemGroup.MISC)), "rat_spawn_egg");

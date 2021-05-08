@@ -47,6 +47,16 @@ dependencies {
 //	}
 //	include "me.shedaniel.cloth:config-2:4.8.2"
 
+    modImplementation "io.github.ladysnake:requiem-api:1.+"
+    modRuntime "io.github.ladysnake:requiem:1.+"
+
+	// Replace modImplementation with modApi if you expose components in your own API
+	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:2.8.2"
+	// Includes Cardinal Components API as a Jar-in-Jar dependency (optional)
+	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:2.8.2"
+
+	runtimeOnly "me.zeroeightsix:fiber:0.23.0-2"
+
 }
 
 processResources {
@@ -87,6 +97,15 @@ repositories {
 	repositories {
 		maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' }
 	}
+
+    maven {
+        name = 'Ladysnake Mods'
+        url = 'https://ladysnake.jfrog.io/artifactory/mods'
+        content {
+            includeGroup 'io.github.ladysnake'
+            includeGroupByRegex 'io\\.github\\.onyxstudios.*'
+        }
+    }
 }
 
 // configure the maven publication

@@ -21,11 +21,19 @@
     ],
     "client": [
       "ladysnake.ratsmischief.client.MischiefClient"
+    ],
+    "cardinal-components": [
+      "ladysnake.ratsmischief.common.cca.PlayerRatComponentInitializer"
     ]
   },
   "mixins": [
     "ratsmischief.mixins.json"
   ],
+  "custom": {
+    "cardinal-components": [
+      "ratsmischief:ratplayer"
+    ]
+  },
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",

@@ -122,31 +122,6 @@
 					]
 				},
 				{
-					"name": "elytra",
-					"parent": "body",
-					"pivot": [0, 0, 0]
-				},
-				{
-					"name": "right",
-					"parent": "elytra",
-					"pivot": [0, 4, -2],
-					"rotation": [0, 0, 0.1],
-					"cubes": [
-						{"origin": [-4, 4.01, -2.01], "size": [6, 1, 10], "uv": [32, 0], "mirror": true},
-						{"origin": [-4, 5, -2.01], "size": [6, 0, 10], "uv": [26, 0], "mirror": true}
-					]
-				},
-				{
-					"name": "left",
-					"parent": "elytra",
-					"pivot": [0, 4, -2],
-					"rotation": [0, 0, -0.1],
-					"cubes": [
-						{"origin": [-2, 4.01, -2.01], "size": [6, 1, 10], "uv": [32, 0]},
-						{"origin": [-2, 5, -2.01], "size": [6, 0, 10], "uv": [26, 0]}
-					]
-				},
-				{
 					"name": "rocket",
 					"parent": "body",
 					"pivot": [-0.5, -0.5, 1],
