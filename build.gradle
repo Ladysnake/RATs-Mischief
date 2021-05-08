@@ -50,10 +50,10 @@ dependencies {
     modImplementation "io.github.ladysnake:requiem-api:1.+"
     modRuntime "io.github.ladysnake:requiem:1.+"
 
-	// Replace modImplementation with modApi if you expose components in your own API
-	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:2.8.2"
-	// Includes Cardinal Components API as a Jar-in-Jar dependency (optional)
-	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:2.8.2"
+	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cca_version}"
+	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cca_version}"
+	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cca_version}"
+	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cca_version}"
 
 	runtimeOnly "me.zeroeightsix:fiber:0.23.0-2"
 
