@@ -24,6 +24,9 @@
     ],
     "cardinal-components": [
       "ladysnake.ratsmischief.common.cca.PlayerRatComponentInitializer"
+    ],
+    "requiem:plugin": [
+      "ladysnake.ratsmischief.common.MischiefRequiemPlugin"
     ]
   },
   "mixins": [
