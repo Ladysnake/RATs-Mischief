@@ -3,7 +3,10 @@
 ### Rat's Mischief 1.1.1 - 1.16.5
 - Rats no longer take damage from cacti and berry bushes, they will still avoid them however
 - Rats now convert Saturation into Regeneration. For instance, if a rat obtains the Saturation III effect for 15 seconds, it will instead be transformed into a Regeneration III effect lasting 15 seconds
+- Rats can now hold their breath five times more than the default value (now 1500 was 300)
+- Players possessing rats in Requiem now have an inventory and food bar
 - Fixed an issue that caused thin lines to appear in place of hats for rats with no hats
+- Elytrat render is no longer part of the base model of the rat, but uses a superposed layer in order to be able to combine different textures
 
 ### Rat's Mischief 1.1: When Rats'll Fly Update - 1.16.5
 - Added the Mask of Rat
