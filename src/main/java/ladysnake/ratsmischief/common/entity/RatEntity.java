@@ -10,6 +10,7 @@ import ladysnake.ratsmischief.common.item.RatStaffItem;
 import ladysnake.ratsmischief.common.network.Packets;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -765,6 +766,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
 
         return super.getEquippedStack(slot);
+    }
+
+    @Override
+    public int getMaxAir() {
+        return 1500;
     }
 
     public enum Type {
