@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.5-SNAPSHOT'
+	id 'fabric-loom' version '0.7-SNAPSHOT'
 	id 'maven-publish'
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 	id 'org.ajoberstar.grgit' version '3.1.1'
@@ -26,6 +26,35 @@ minecraft {
 //		"fabric-particles-v1"
 //]
 
+repositories {
+	maven {
+		url = 'https://repo.repsy.io/mvn/gandiber/geckolib'
+		content {
+			includeGroupByRegex 'software\\.bernie\\..*'
+		}
+	}
+	maven {
+		name = 'Ladysnake Mods'
+		url = 'https://ladysnake.jfrog.io/artifactory/mods'
+		content {
+			includeGroup 'io.github.ladysnake'
+			includeGroupByRegex 'io\\.github\\.onyxstudios.*'
+		}
+	}
+	maven {
+		url = 'https://oss.sonatype.org/content/repositories/snapshots'
+		content {
+			includeGroup 'me.lucko'
+		}
+	}
+	maven {
+		url = 'https://jitpack.io'
+		content {
+			includeGroupByRegex '(com|io)\\.github\\..*'
+		}
+	}
+}
+
 dependencies {
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -47,13 +76,12 @@ dependencies {
 //	}
 //	include "me.shedaniel.cloth:config-2:4.8.2"
 
-    modImplementation "io.github.ladysnake:requiem-api:1.+"
-    modRuntime "io.github.ladysnake:requiem:1.+"
+    modImplementation "io.github.ladysnake:requiem-api:${requiem_version}"
+    modRuntime "io.github.ladysnake:requiem:${requiem_version}"
 
-	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cca_version}"
-	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cca_version}"
-	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cca_version}"
-	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cca_version}"
+	// Made available when Requiem is present
+	modCompileOnly "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
+	modCompileOnly "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:2.+"
 
 	runtimeOnly "me.zeroeightsix:fiber:0.23.0-2"
 
@@ -89,23 +117,6 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 
 jar {
 	from "LICENSE"
-}
-
-repositories {
-	maven { url 'https://jitpack.io' }
-
-	repositories {
-		maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' }
-	}
-
-    maven {
-        name = 'Ladysnake Mods'
-        url = 'https://ladysnake.jfrog.io/artifactory/mods'
-        content {
-            includeGroup 'io.github.ladysnake'
-            includeGroupByRegex 'io\\.github\\.onyxstudios.*'
-        }
-    }
 }
 
 // configure the maven publication

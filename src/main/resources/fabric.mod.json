@@ -22,9 +22,6 @@
     "client": [
       "ladysnake.ratsmischief.client.MischiefClient"
     ],
-    "cardinal-components": [
-      "ladysnake.ratsmischief.common.cca.PlayerRatComponentInitializer"
-    ],
     "requiem:plugin": [
       "ladysnake.ratsmischief.common.MischiefRequiemPlugin"
     ]
@@ -42,5 +39,11 @@
     "fabric": "*",
     "geckolib3": "*",
     "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "requiem": ">=1.7.1"
+  },
+  "breaks": {
+    "requiem": "<1.7.1"
   }
 }
