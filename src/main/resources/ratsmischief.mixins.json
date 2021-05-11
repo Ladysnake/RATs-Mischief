@@ -4,8 +4,10 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "CatEntityMixin",
+    "FollowTargetGoalMixin",
     "LivingEntityMixin"
   ],
+  "plugin": "ladysnake.ratsmischief.common.MischiefMixinConfigPlugin",
   "injectors": {
     "defaultRequire": 1
   }

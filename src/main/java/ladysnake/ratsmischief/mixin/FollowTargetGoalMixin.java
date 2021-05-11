@@ -36,6 +36,7 @@
 package ladysnake.ratsmischief.mixin;
 
 import ladysnake.ratsmischief.common.entity.RatEntity;
+import ladysnake.requiem.api.v1.possession.Possessable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.FollowTargetGoal;
@@ -78,7 +79,10 @@ public abstract class FollowTargetGoalMixin extends TrackTargetGoal {
     )
     private void addTargets(CallbackInfo ci) {
         if (this.targetEntity == null) {
-            this.targetEntity = this.mob.world.getClosestEntity(RatEntity.class, this.targetPredicate, this.mob, this.mob.getX(), this.mob.getY() + (double)this.mob.getStandingEyeHeight(), this.mob.getZ(), this.getSearchBox(this.getFollowRange()));
+            RatEntity closestRat = this.mob.world.getClosestEntity(RatEntity.class, this.targetPredicate, this.mob, this.mob.getX(), this.mob.getY() + (double)this.mob.getStandingEyeHeight(), this.mob.getZ(), this.getSearchBox(this.getFollowRange()));
+            if (((Possessable) closestRat).isBeingPossessed()) {
+                this.targetEntity = closestRat;
+            }
         }
     }
 }
