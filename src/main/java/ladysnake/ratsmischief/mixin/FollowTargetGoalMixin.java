@@ -80,7 +80,7 @@ public abstract class FollowTargetGoalMixin extends TrackTargetGoal {
     private void addTargets(CallbackInfo ci) {
         if (this.targetEntity == null) {
             RatEntity closestRat = this.mob.world.getClosestEntity(RatEntity.class, this.targetPredicate, this.mob, this.mob.getX(), this.mob.getY() + (double)this.mob.getStandingEyeHeight(), this.mob.getZ(), this.getSearchBox(this.getFollowRange()));
-            if (((Possessable) closestRat).isBeingPossessed()) {
+            if (closestRat != null && ((Possessable) closestRat).isBeingPossessed()) {
                 this.targetEntity = closestRat;
             }
         }
