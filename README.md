@@ -19,6 +19,10 @@ Rats take fall damage starting from 15 blocks, can breathe five times longer tha
 
 Rats will pick up any item stack on the floor they come across, and bring it back to their owner if they are tamed. If they are hurt and the item is edible, they will consume it and restore an amount of health equivalent to the amount of saturation the food gives as well as apply any effects the food provides. No matter their state, if rats come across a drinkable potion, they will consume it and get its effects and, once again, convert saturation to regeneration.
 
+#### World Rat Day
+
+On April 4th, World Rat Day, all rats will smug dance and the chance of golden rats spawning increases from 1 in 150 to 1 in 30!
+
 ### Types
 
 Rats can spawn in eight different variants and also have a few special variants that you can acquire by renaming your rats with a nametag.
@@ -53,11 +57,11 @@ Rats can spawn in eight different variants and also have a few special variants 
 
 ### Elytrats
 
-Elytrats are a special rat variant, acquired by equipping rats with the elytrat item, crafted as shown below. To equip/unequip a rat by simply shift-using a rat with the elytrat/bare fist. Normal rats will also equip elytrats upon picking them up from the floor.
+Elytrats are a special rat variant, acquired by equipping rats with the elytrat item, crafted as shown below. Equip/unequip a rat by simply shift-using the rat with the elytrat/bare fist. Normal rats will also equip elytrats upon picking them up from the floor.
 
 ![grafik](https://user-images.githubusercontent.com/83953120/117850063-3dabdd00-b285-11eb-8bbd-5222a14b4e86.png)
 
-Elytrats can and will fly to attack enemies and to follow you on your airborne adventures. Just as any other rat they can be picked up with rat pouches. Elytrats also feature custom elytra textures for special rats and the golden rat.
+Elytrats can and will fly to attack enemies and to follow you on your airborne adventures! Just as any other rat they can be picked up with rat pouches. Elytrats also feature custom elytra textures for special rat variants and the golden rat.
 
 ![Elytrat](https://user-images.githubusercontent.com/83953120/117851044-376a3080-b286-11eb-8f11-3aac740e66c6.png)
 ![ElytratFormation](https://user-images.githubusercontent.com/83953120/117851397-90d25f80-b286-11eb-8d70-5b498b5940f8.png)
