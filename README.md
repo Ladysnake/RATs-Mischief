@@ -1,3 +1,4 @@
+
 # Rat's Mischief
 
 [![img](https://img.shields.io/discord/292744693803122688?color=informational&label=Ladysnake&logo=Discord)](https://ladysnake.glitch.me)[![img](http://cf.way2muchnoise.eu/full_rats-mischief_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/rats-mischief)[![img](http://cf.way2muchnoise.eu/versions/minecraft_rats-mischief_latest.svg)](https://www.curseforge.com/minecraft/mc-mods/rats-mischief)[![img](https://img.shields.io/github/last-commit/ladysnake/rats-mischief)](https://github.com/ladysnake/rats-mischief/commits/main)
@@ -37,7 +38,7 @@ Rats can spawn in eight different variants and also have a few special variants 
 - **Black**
 - **Golden** (spawn chance of 1 in 150)
 
-![NaturalRatVariants](https://user-images.githubusercontent.com/83953120/117848983-26202480-b284-11eb-8499-067c391d4cff.png)
+![NaturalRatVariants](https://user-images.githubusercontent.com/83953120/117954718-95932400-b317-11eb-847f-8b326bd2f8f4.png)
 
 
 #### Special Variants
@@ -52,19 +53,20 @@ Rats can spawn in eight different variants and also have a few special variants 
 - **Rateline** (Madeline, Celeste)
 - **Rat Kid** (with 16 variants for each minecraft dye, can be redyed just like sheep, A Hat in Time)
 
-![SpecialRatVariants](https://user-images.githubusercontent.com/83953120/117849453-9d55b880-b284-11eb-89cf-123098d31087.png)
-![RatKidVariants](https://user-images.githubusercontent.com/83953120/117849466-a181d600-b284-11eb-8bad-09ee1ddfce3a.png)
+![SpecialRatVariants](https://user-images.githubusercontent.com/83953120/117954735-9b890500-b317-11eb-8cc4-383f550f1a71.png)
+
+![RatKidVariants](https://user-images.githubusercontent.com/83953120/117954763-a04db900-b317-11eb-8ce1-02ab109df7b6.png)
 
 ### Elytrats
 
 Elytrats are a special rat variant, acquired by equipping rats with the elytrat item, crafted as shown below. Equip/unequip a rat by simply shift-using the rat with the elytrat/bare fist. Normal rats will also equip elytrats upon picking them up from the floor.
 
-![grafik](https://user-images.githubusercontent.com/83953120/117850063-3dabdd00-b285-11eb-8bbd-5222a14b4e86.png)
+![ElytratRecipe](https://user-images.githubusercontent.com/83953120/117955672-924c6800-b318-11eb-9c03-5f0d704d1f16.png)
 
 Elytrats can and will fly to attack enemies and to follow you on your airborne adventures! Just as any other rat they can be picked up with rat pouches. Elytrats also feature custom elytra textures for special rat variants and the golden rat.
 
-![Elytrat](https://user-images.githubusercontent.com/83953120/117851044-376a3080-b286-11eb-8f11-3aac740e66c6.png)
-![ElytratFormation](https://user-images.githubusercontent.com/83953120/117851397-90d25f80-b286-11eb-8d70-5b498b5940f8.png)
+![Elytrat](https://user-images.githubusercontent.com/83953120/117953145-25d06980-b316-11eb-8da7-719b824ff8a8.png)
+![ElytratFormation](https://user-images.githubusercontent.com/83953120/117954803-ab084e00-b317-11eb-8a0d-07002855a6a1.png)
 
 ## Accessories
 
@@ -83,11 +85,12 @@ Rat pouches can be used to quickly gather rats back. Using a pouch on a rat will
 Pouches can be crafted like bundles with leather, twisted vines and popped chorus fruit, to produce respectively pouches with a capacity of 5, 10 and 20 rats.
 Rats stored in Pouches won't age, meaning they will keep status effects, health, their variant and names.
 
-![Rats-Mischief-Mod-Screenshots-18](README.assets/Rats-Mischief-Mod-Screenshots-18.jpg)
+![LeatherPouchRecipe](https://user-images.githubusercontent.com/83953120/117955697-98424900-b318-11eb-91c9-40ee74895ab7.png)
 
-![Rats-Mischief-Mod-Screenshots-19](README.assets/Rats-Mischief-Mod-Screenshots-19-1615815420424.jpg)
+![TwistedPouchRecipe](https://user-images.githubusercontent.com/83953120/117955711-9c6e6680-b318-11eb-874d-9222bd07bc94.png)
 
-![Rats-Mischief-Mod-Screenshots-20](README.assets/Rats-Mischief-Mod-Screenshots-20.jpg)
+![PurpurPouchRecipe](https://user-images.githubusercontent.com/83953120/117955733-a1331a80-b318-11eb-9bc9-4feb6685430b.png)
+
 
 ### Mask of Rat
 
@@ -97,7 +100,7 @@ The person wearing this mask will not be able to harm wild or tamed rats and all
 
 This item can be repaired in an anvil using phantom membranes.
 
-![MaskOfRat](https://user-images.githubusercontent.com/83953120/117849493-a9da1100-b284-11eb-98a0-1d7315fbea95.png)
+![MaskOfRat](https://user-images.githubusercontent.com/83953120/117954957-d25f1b00-b317-11eb-8957-735d11520d15.png)
 
 # FAQ
 
