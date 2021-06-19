@@ -2,6 +2,9 @@
 
 ### Rat's Mischief 1.1.1 - 1.17
 - Updated to Minecraft 1.17
+- The Collection staff will now order rats to collect the block the player clicks on with the staff and no longer works by detecting the block in the player's other hand
+- Using the Collection staff in the air now orders the rats to stop mining
+- Fixed the Mask of Rat rendering as a pink cube
 
 ### Rat's Mischief 1.1.1 - 1.16.5
 - Rats no longer take damage from cacti and berry bushes, they will still avoid them however

@@ -8,9 +8,10 @@ import net.minecraft.entity.ai.goal.FollowTargetGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -29,39 +30,38 @@ public class RatStaffItem extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         final List<RatEntity> ratEntityList = world.getEntitiesByClass(RatEntity.class, user.getBoundingBox().expand(16f), ratEntity -> ratEntity.isTamed() && ratEntity.getOwner() != null && ratEntity.getOwner().equals(user));
         ratEntityList.forEach(ratEntity -> {
-            Goal goal;
+            Goal goal = null;
             switch (action) {
-                case HARVEST:
-                    goal = new HarvestAndPlantGoal(ratEntity);
-                    break;
-                case COLLECT:
-                    Hand blockHand;
-                    if (user.getMainHandStack().getItem() instanceof RatStaffItem) {
-                        blockHand = Hand.OFF_HAND;
-                    } else {
-                        blockHand = Hand.MAIN_HAND;
-                    }
-                    goal = new DigGoal(ratEntity, null);
-                    if (user.getStackInHand(blockHand).getItem() instanceof BlockItem) {
-                        if (user.getStackInHand(blockHand).getItem() instanceof BlockItem) {
-                            goal = new DigGoal(ratEntity, ((BlockItem) user.getStackInHand(blockHand).getItem()).getBlock());
-                        }
-                    }
-                    break;
-                case SKIRMISH:
-                    goal = new FollowTargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
-                    break;
-                case LOVE:
-                    goal = new BreedGoal(ratEntity);
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + action);
+                case HARVEST -> goal = new HarvestAndPlantGoal(ratEntity);
+                case COLLECT -> ratEntity.removeCurrentActionGoal();
+                case SKIRMISH -> goal = new FollowTargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
+                case LOVE -> goal = new BreedGoal(ratEntity);
+                default -> throw new IllegalStateException("Unexpected value: " + action);
             }
 
-            ratEntity.setAction(goal);
+            if (goal != null) {
+                ratEntity.setAction(goal);
+            }
         });
 
         return TypedActionResult.success(user.getStackInHand(hand));
+    }
+
+    @Override
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        if (this.action == Action.COLLECT) {
+            PlayerEntity user = context.getPlayer();
+
+            final List<RatEntity> ratEntityList = context.getWorld().getEntitiesByClass(RatEntity.class, user.getBoundingBox().expand(16f), ratEntity -> ratEntity.isTamed() && ratEntity.getOwner() != null && ratEntity.getOwner().equals(user));
+            ratEntityList.forEach(ratEntity -> {
+                Goal goal = new DigGoal(ratEntity, context.getWorld().getBlockState(context.getBlockPos()).getBlock());
+                ratEntity.setAction(goal);
+            });
+
+            return ActionResult.SUCCESS;
+        } else {
+            return ActionResult.PASS;
+        }
     }
 
     public static enum Action {
