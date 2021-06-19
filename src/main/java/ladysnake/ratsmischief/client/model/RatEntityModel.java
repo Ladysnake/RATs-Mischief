@@ -62,7 +62,7 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
             }
         } else {
             if (head != null && !entity.isSniffing() && !entity.isEating()) {
-                head.setRotationX(-entity.pitch * ((float) Math.PI / 180F));
+                head.setRotationX(-entity.getPitch() * ((float) Math.PI / 180F));
 
                 if (rocket != null) {
                     rocket.setHidden(true);

@@ -5,11 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.pathing.BirdNavigation;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.ai.pathing.LandPathNodeMaker;
-import net.minecraft.entity.ai.pathing.MobNavigation;
-import net.minecraft.entity.ai.pathing.PathNodeType;
+import net.minecraft.entity.ai.pathing.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
 
@@ -17,15 +13,15 @@ import java.util.EnumSet;
 
 public class FollowOwnerRatGoal extends Goal {
     private final RatEntity rat;
-    private LivingEntity owner;
     private final WorldView world;
     private final double speed;
     private final EntityNavigation navigation;
-    private int updateCountdownTicks;
     private final float maxDistance;
     private final float minDistance;
-    private float oldWaterPathfindingPenalty;
     private final boolean leavesAllowed;
+    private LivingEntity owner;
+    private int updateCountdownTicks;
+    private float oldWaterPathfindingPenalty;
 
     public FollowOwnerRatGoal(RatEntity rat, double speed, float minDistance, float maxDistance, boolean leavesAllowed) {
         this.rat = rat;
@@ -115,7 +111,7 @@ public class FollowOwnerRatGoal extends Goal {
         } else if (!this.canTeleportTo(new BlockPos(x, y, z))) {
             return false;
         } else {
-            this.rat.refreshPositionAndAngles((double) x + 0.5D, (double) y, (double) z + 0.5D, this.rat.yaw, this.rat.pitch);
+            this.rat.refreshPositionAndAngles((double) x + 0.5D, (double) y, (double) z + 0.5D, this.rat.getYaw(), this.rat.getPitch());
             this.navigation.stop();
             return true;
         }

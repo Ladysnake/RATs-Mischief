@@ -1,4 +1,4 @@
-  
+
 /*
  * Requiem
  * Copyright (C) 2017-2021 Ladysnake
@@ -35,8 +35,6 @@
  */
 package ladysnake.ratsmischief.mixin;
 
-import ladysnake.ratsmischief.common.entity.RatEntity;
-import ladysnake.requiem.api.v1.possession.Possessable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.FollowTargetGoal;
@@ -44,45 +42,41 @@ import net.minecraft.entity.ai.goal.TrackTargetGoal;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.math.Box;
 import org.jetbrains.annotations.Nullable;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-
-import static org.spongepowered.asm.mixin.injection.At.Shift.AFTER;
 
 @Mixin(FollowTargetGoal.class)
 public abstract class FollowTargetGoalMixin extends TrackTargetGoal {
-    @Shadow @Nullable
+    @Shadow
+    @Nullable
     protected LivingEntity targetEntity;
 
-    @Shadow protected TargetPredicate targetPredicate;
-
-    @Shadow protected abstract Box getSearchBox(double double_1);
+    @Shadow
+    protected TargetPredicate targetPredicate;
 
     public FollowTargetGoalMixin(MobEntity mobEntity_1, boolean boolean_1) {
         super(mobEntity_1, boolean_1);
     }
 
-    @Inject(
-            method = "findClosestTarget",
-            at = @At(
-                    value = "FIELD",
-                    opcode = Opcodes.PUTFIELD,
-                    target = "Lnet/minecraft/entity/ai/goal/FollowTargetGoal;targetEntity:Lnet/minecraft/entity/LivingEntity;",
-                    ordinal = 0,    // Fun fact: despite the decompiled source indicating that the player branch is the second, it's actually the first
-                    shift = AFTER
-            )
-    )
-    private void addTargets(CallbackInfo ci) {
-        if (this.targetEntity == null) {
-            RatEntity closestRat = this.mob.world.getClosestEntity(RatEntity.class, this.targetPredicate, this.mob, this.mob.getX(), this.mob.getY() + (double)this.mob.getStandingEyeHeight(), this.mob.getZ(), this.getSearchBox(this.getFollowRange()));
-            if (closestRat != null && ((Possessable) closestRat).isBeingPossessed()) {
-                this.targetEntity = closestRat;
-            }
-        }
-    }
+    @Shadow
+    protected abstract Box getSearchBox(double double_1);
+//
+//    @Inject(
+//            method = "findClosestTarget",
+//            at = @At(
+//                    value = "FIELD",
+//                    opcode = Opcodes.PUTFIELD,
+//                    target = "Lnet/minecraft/entity/ai/goal/FollowTargetGoal;targetEntity:Lnet/minecraft/entity/LivingEntity;",
+//                    ordinal = 0,    // Fun fact: despite the decompiled source indicating that the player branch is the second, it's actually the first
+//                    shift = AFTER
+//            )
+//    )
+//    private void addTargets(CallbackInfo ci) {
+//        if (this.targetEntity == null) {
+//            RatEntity closestRat = this.mob.world.getClosestEntity(RatEntity.class, this.targetPredicate, this.mob, this.mob.getX(), this.mob.getY() + (double)this.mob.getStandingEyeHeight(), this.mob.getZ(), this.getSearchBox(this.getFollowRange()));
+//            if (closestRat != null && ((Possessable) closestRat).isBeingPossessed()) {
+//                this.targetEntity = closestRat;
+//            }
+//        }
+//    }
 }

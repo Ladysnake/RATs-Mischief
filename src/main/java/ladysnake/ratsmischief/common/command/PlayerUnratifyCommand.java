@@ -13,8 +13,11 @@ import java.util.Collection;
 import java.util.function.Consumer;
 
 public class PlayerUnratifyCommand {
-    /**Set by {@link ladysnake.ratsmischief.common.MischiefRequiemPlugin}, avoids referencing optional classes*/
-    public static Consumer<PlayerEntity> action = (p) -> {};
+    /**
+     * Set by {@link ladysnake.ratsmischief.common.MischiefRequiemPlugin}, avoids referencing optional classes
+     */
+    public static Consumer<PlayerEntity> action = (p) -> {
+    };
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("unratify")

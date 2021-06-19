@@ -7,37 +7,15 @@ import ladysnake.ratsmischief.common.entity.ai.EatToHealGoal;
 import ladysnake.ratsmischief.common.entity.ai.FollowOwnerRatGoal;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
 import ladysnake.ratsmischief.common.item.RatStaffItem;
-import ladysnake.ratsmischief.common.network.Packets;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.Durations;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.control.BodyControl;
 import net.minecraft.entity.ai.control.LookControl;
 import net.minecraft.entity.ai.control.MoveControl;
-import net.minecraft.entity.ai.goal.AnimalMateGoal;
-import net.minecraft.entity.ai.goal.AttackWithOwnerGoal;
-import net.minecraft.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.entity.ai.goal.FollowTargetGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.LookAroundGoal;
-import net.minecraft.entity.ai.goal.LookAtEntityGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.PounceAtTargetGoal;
-import net.minecraft.entity.ai.goal.RevengeGoal;
-import net.minecraft.entity.ai.goal.SitGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.TrackOwnerAttackerGoal;
-import net.minecraft.entity.ai.goal.UniversalAngerGoal;
-import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
@@ -51,20 +29,11 @@ import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.entity.passive.HorseBaseEntity;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ElytraItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Packet;
+import net.minecraft.item.*;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
@@ -75,9 +44,9 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.IntRange;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
@@ -93,42 +62,34 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class RatEntity extends TameableEntity implements IAnimatable, Angerable {
-    private final AnimationFactory factory = new AnimationFactory(this);
-
+    public static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (itemEntity) -> {
+        return !itemEntity.cannotPickup() && itemEntity.isAlive();
+    };
+    public static final int SPAWN_RADIUS = 100;
+    public static final List<Type> NATURAL_TYPES = ImmutableList.of(
+            Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
+    );
     private static final TrackedData<String> TYPE = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
     private static final TrackedData<String> COLOR = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
     private static final TrackedData<Boolean> SITTING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Boolean> EATING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Boolean> FLYING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-
     private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final IntRange ANGER_TIME_RANGE = Durations.betweenSeconds(20, 39);
-    private UUID targetUuid;
-
+    private static final UniformIntProvider ANGER_TIME_RANGE = Durations.betweenSeconds(20, 39);
     private static final TrackedData<Boolean> SNIFFING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-
     private static final TrackedData<Integer> ROCKET_TIME = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.INTEGER);
-
-    public static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (itemEntity) -> {
-        return !itemEntity.cannotPickup() && itemEntity.isAlive();
-    };
-
-    public static final int SPAWN_RADIUS = 100;
-
+    private final AnimationFactory factory = new AnimationFactory(this);
     public Goal action;
     public int actionTimer = 0;
 
     // ELYTRAT
     public BlockPos circlingCenter = BlockPos.ORIGIN;
     public Vec3d targetPosition;
+    private UUID targetUuid;
 
     public RatEntity(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -136,6 +97,24 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.stepHeight = 2f;
         this.moveControl = new RatMoveControl(this);
         this.lookControl = new RatLookControl(this);
+    }
+
+    public static DefaultAttributeContainer.Builder createEntityAttributes() {
+        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32);
+    }
+
+    public static boolean canSpawn(EntityType<RatEntity> entityType, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, Random random) {
+        ServerWorld world = serverWorldAccess.toServerWorld();
+        if (world.locateStructure(StructureFeature.VILLAGE, blockPos, 5, false) != null) {
+            List<VillagerEntity> villagersNearby = world.getEntitiesByType(EntityType.VILLAGER, new Box(blockPos.getX() - SPAWN_RADIUS, blockPos.getY() - SPAWN_RADIUS, blockPos.getZ() - SPAWN_RADIUS, blockPos.getX() + SPAWN_RADIUS, blockPos.getY() + SPAWN_RADIUS, blockPos.getZ() + SPAWN_RADIUS), villagerEntity -> true);
+            return villagersNearby.isEmpty();
+        }
+
+        return false;
+    }
+
+    public static Type getRandomNaturalType(Random random) {
+        return NATURAL_TYPES.get(random.nextInt(NATURAL_TYPES.size()));
     }
 
     @Override
@@ -161,7 +140,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable CompoundTag entityTag) {
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityTag) {
         this.initEquipment(difficulty);
         return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
     }
@@ -213,10 +192,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 //        this.targetSelector.add(7, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> ((LivingEntity) playerEntity).getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") && !this.isTamed()));
         this.targetSelector.add(8, new ChaseForFunGoal(this, CatEntity.class, true));
         this.targetSelector.add(8, new UniversalAngerGoal(this, true));
-    }
-
-    public static DefaultAttributeContainer.Builder createEntityAttributes() {
-        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32);
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
@@ -275,11 +250,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         return ratEntity;
     }
 
-    @Override
-    public Packet<?> createSpawnPacket() {
-        return Packets.newSpawnPacket(this);
-    }
-
     public Type getRatType() {
         return Type.valueOf(this.dataTracker.get(TYPE));
     }
@@ -297,13 +267,13 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     @Override
-    public void readCustomDataFromTag(CompoundTag tag) {
-        super.readCustomDataFromTag(tag);
+    public void readCustomDataFromNbt(NbtCompound tag) {
+        super.readCustomDataFromNbt(tag);
 
         if (tag.contains("RatType")) {
             this.setRatType(Type.valueOf(tag.getString("RatType")));
         }
-        this.angerFromTag((ServerWorld) this.world, tag);
+        this.readAngerFromNbt((ServerWorld) this.world, tag);
 
         if (tag.contains("Sitting")) {
             this.setSitting(tag.getBoolean("Sitting"));
@@ -315,12 +285,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     @Override
-    public void writeCustomDataToTag(CompoundTag tag) {
-        super.writeCustomDataToTag(tag);
+    public void writeCustomDataToNbt(NbtCompound tag) {
+        super.writeCustomDataToNbt(tag);
 
         tag.putString("RatType", this.getRatType().toString());
         tag.putString("Color", this.getRatColor().getName());
-        this.angerToTag(tag);
+        this.writeAngerToNbt(tag);
 
         tag.putBoolean("Sitting", this.isSitting());
     }
@@ -441,7 +411,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
             while (var2.hasNext()) {
                 ItemEntity itemEntity = (ItemEntity) var2.next();
-                if (!itemEntity.removed && !itemEntity.getStack().isEmpty() && !itemEntity.cannotPickup() && this.canGather(itemEntity.getStack())) {
+                if (!itemEntity.isRemoved() && !itemEntity.getStack().isEmpty() && !itemEntity.cannotPickup() && this.canGather(itemEntity.getStack())) {
                     this.loot(itemEntity);
                 }
             }
@@ -469,7 +439,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
             if (this.isTamed()) {
                 if (this.isBreedingItem(itemStack) && this.getHealth() < this.getMaxHealth()) {
-                    if (!player.abilities.creativeMode) {
+                    if (!player.getAbilities().creativeMode) {
                         itemStack.decrement(1);
                     }
 
@@ -532,7 +502,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public void chooseRandomAngerTime() {
-        this.setAngerTime(ANGER_TIME_RANGE.choose(this.random));
+        this.setAngerTime(ANGER_TIME_RANGE.get(this.random));
     }
 
     @Override
@@ -650,7 +620,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
         // HalfOf2 and will_bl
         if ((player.getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") || player.getUuidAsString().equals("9b035372-0d8d-4513-8bd5-9808d7f4a9b3")) && !this.isTamed()) {
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
             world.createExplosion(this, this.getX(), this.getY(), this.getZ(), 1f, Explosion.DestructionType.NONE);
         }
     }
@@ -672,9 +642,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         ItemStack itemStack = item.getStack();
         if (this.getMainHandStack().isEmpty()) {
             this.equipStack(EquipmentSlot.MAINHAND, itemStack);
-            this.method_29499(item);
+            this.triggerItemPickedUpByEntityCriteria(item);
             this.sendPickup(item, itemStack.getCount());
-            item.remove();
+            item.remove(RemovalReason.DISCARDED);
         }
     }
 
@@ -709,11 +679,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     @Override
-    public boolean handleFallDamage(float fallDistance, float damageMultiplier) {
+    public boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
         if (this.isElytrat()) {
             return false;
         } else {
-            return super.handleFallDamage(fallDistance, damageMultiplier);
+            return super.handleFallDamage(fallDistance, damageMultiplier, damageSource);
         }
     }
 
@@ -732,16 +702,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         } else {
             return super.dropStack(stack);
         }
-    }
-
-    public static boolean canSpawn(EntityType<RatEntity> entityType, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, Random random) {
-        ServerWorld world = serverWorldAccess.toServerWorld();
-        if (world.locateStructure(StructureFeature.VILLAGE, blockPos, 5, false) != null) {
-            List<VillagerEntity> villagersNearby = world.getEntitiesByType(EntityType.VILLAGER, new Box(blockPos.getX() - SPAWN_RADIUS, blockPos.getY() - SPAWN_RADIUS, blockPos.getZ() - SPAWN_RADIUS, blockPos.getX() + SPAWN_RADIUS, blockPos.getY() + SPAWN_RADIUS, blockPos.getZ() + SPAWN_RADIUS), villagerEntity -> true);
-            return villagersNearby.isEmpty();
-        }
-
-        return false;
     }
 
     @Override
@@ -773,6 +733,30 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         return 1500;
     }
 
+    public boolean hasCustomElytratTexture() {
+        return !NATURAL_TYPES.contains(this.getRatType());
+    }
+
+    public void setAction(Goal action) {
+        this.removeCurrentActionGoal();
+        this.actionTimer = 300; // 15s
+        this.action = action;
+        this.goalSelector.add(4, action);
+    }
+
+    public void removeCurrentActionGoal() {
+        this.goalSelector.remove(action);
+        this.action = null;
+    }
+
+    public boolean isElytrat() {
+        return !this.getEquippedStack(EquipmentSlot.CHEST).isEmpty() && this.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof ElytraItem;
+    }
+
+    protected BodyControl createBodyControl() {
+        return new ElytratBodyControl(this);
+    }
+
     public enum Type {
         ALBINO,
         BLACK,
@@ -791,30 +775,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         RATELINE,
         BIGGIE_CHEESE,
         ARATHAIN
-    }
-
-    public static Type getRandomNaturalType(Random random) {
-        return NATURAL_TYPES.get(random.nextInt(NATURAL_TYPES.size()));
-    }
-
-    public static final List<Type> NATURAL_TYPES = ImmutableList.of(
-            Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
-    );
-
-    public boolean hasCustomElytratTexture() {
-        return !NATURAL_TYPES.contains(this.getRatType());
-    }
-
-    public void setAction(Goal action) {
-        this.removeCurrentActionGoal();
-        this.actionTimer = 300; // 15s
-        this.action = action;
-        this.goalSelector.add(4, action);
-    }
-
-    public void removeCurrentActionGoal() {
-        this.goalSelector.remove(action);
-        this.action = null;
     }
 
     class PickupItemGoal extends Goal {
@@ -866,7 +826,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
             if (RatEntity.this.getOwner() != null && RatEntity.this.getOwner().isAlive()) {
                 if (RatEntity.this.squaredDistanceTo(RatEntity.this.getOwner()) <= 3.0f && RatEntity.this.getOwner() instanceof PlayerEntity) {
-                    if (((PlayerEntity) RatEntity.this.getOwner()).inventory.getEmptySlot() >= 0) {
+                    if (((PlayerEntity) RatEntity.this.getOwner()).getInventory().getEmptySlot() >= 0) {
                         RatEntity.this.dropStack(RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND));
                         RatEntity.this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
                     }
@@ -883,10 +843,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         public boolean shouldContinue() {
             return super.shouldContinue() && !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && RatEntity.this.isTamed() && !RatEntity.this.isSitting() && !RatEntity.this.isEating() && RatEntity.this.getOwner() != null && RatEntity.this.getOwner().isAlive();
         }
-    }
-
-    public boolean isElytrat() {
-        return !this.getEquippedStack(EquipmentSlot.CHEST).isEmpty() && this.getEquippedStack(EquipmentSlot.CHEST).getItem() instanceof ElytraItem;
     }
 
     class StartAttackGoal extends Goal {
@@ -1012,10 +968,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
     }
 
-    protected BodyControl createBodyControl() {
-        return new ElytratBodyControl(this);
-    }
-
     class ElytratBodyControl extends BodyControl {
         public ElytratBodyControl(MobEntity entity) {
             super(entity);
@@ -1023,7 +975,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
         public void tick() {
             RatEntity.this.headYaw = RatEntity.this.bodyYaw;
-            RatEntity.this.bodyYaw = RatEntity.this.yaw;
+            RatEntity.this.bodyYaw = RatEntity.this.getYaw();
         }
     }
 
@@ -1038,7 +990,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             if (RatEntity.this.isFlying()) {
                 if (RatEntity.this.horizontalCollision) {
                     RatEntity var10000 = RatEntity.this;
-                    var10000.yaw += 180.0F;
+                    var10000.setYaw(var10000.getYaw() + 180.0F);
                     this.targetSpeed = 0.1F;
                 }
 
@@ -1052,17 +1004,17 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                     h = (float) ((double) h * e);
                     d = (double) MathHelper.sqrt(f * f + h * h);
                     double i = (double) MathHelper.sqrt(f * f + h * h + g * g);
-                    float j = RatEntity.this.yaw;
+                    float j = RatEntity.this.getYaw();
                     float k = (float) MathHelper.atan2((double) h, (double) f);
-                    float l = MathHelper.wrapDegrees(RatEntity.this.yaw + 90.0F);
+                    float l = MathHelper.wrapDegrees(RatEntity.this.getYaw() + 90.0F);
                     float m = MathHelper.wrapDegrees(k * 57.295776F);
-                    RatEntity.this.yaw = MathHelper.stepUnwrappedAngleTowards(l, m, 4.0F) - 90.0F;
-                    RatEntity.this.bodyYaw = RatEntity.this.yaw;
+                    RatEntity.this.setYaw(MathHelper.stepUnwrappedAngleTowards(l, m, 4.0F) - 90.0F);
+                    RatEntity.this.bodyYaw = RatEntity.this.getYaw();
                     this.targetSpeed = MathHelper.stepTowards(this.targetSpeed, 2.0F, 0.01F * (2.0F / this.targetSpeed));
 
                     float n = (float) (-(MathHelper.atan2((double) (-g), d) * 57.2957763671875D));
-                    RatEntity.this.pitch = n;
-                    float o = RatEntity.this.yaw + 90.0F;
+                    RatEntity.this.setPitch(n);
+                    float o = RatEntity.this.getYaw() + 90.0F;
                     double p = (double) (this.targetSpeed * MathHelper.cos(o * 0.017453292F)) * Math.abs((double) f / i);
                     double q = (double) (this.targetSpeed * MathHelper.sin(o * 0.017453292F)) * Math.abs((double) h / i);
                     double r = (double) (this.targetSpeed * MathHelper.sin(n * 0.017453292F)) * Math.abs((double) g / i);

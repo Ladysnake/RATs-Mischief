@@ -1,28 +1,15 @@
 package ladysnake.ratsmischief.client.render.entity;
 
-import ladysnake.ratsmischief.client.model.ElytratEntityModel;
-import ladysnake.ratsmischief.client.model.RatEntityModel;
 import ladysnake.ratsmischief.common.entity.RatEntity;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.render.model.json.ModelTransformation;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.util.DyeColor;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Quaternion;
-import software.bernie.geckolib3.geo.render.built.GeoBone;
-import software.bernie.geckolib3.renderer.geo.GeoEntityRenderer;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class ElytratEntityRenderer extends GeoEntityRenderer<RatEntity> {
-    public ElytratEntityRenderer(EntityRenderDispatcher renderManager) {
-        super(renderManager, new ElytratEntityModel());
+    protected ElytratEntityRenderer(EntityRendererFactory.Context ctx, AnimatedGeoModel<RatEntity> modelProvider) {
+        super(ctx, modelProvider);
     }
 
     @Override

@@ -5,7 +5,7 @@ import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.SpawnRestriction;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -56,7 +56,7 @@ public class RatSpawner implements Spawner {
         if (RatEntity.canSpawn(Mischief.RAT, world, SpawnReason.NATURAL, pos, world.getRandom())) {
             RatEntity ratEntity = Mischief.RAT.create(world);
             if (ratEntity != null) {
-                ratEntity.initialize(world, world.getLocalDifficulty(pos), SpawnReason.NATURAL, (EntityData) null, (CompoundTag) null);
+                ratEntity.initialize(world, world.getLocalDifficulty(pos), SpawnReason.NATURAL, (EntityData) null, (NbtCompound) null);
                 ratEntity.refreshPositionAndAngles(pos, 0.0F, 0.0F);
                 world.spawnEntityAndPassengers(ratEntity);
             }

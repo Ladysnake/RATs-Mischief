@@ -31,10 +31,8 @@ import java.time.format.DateTimeFormatter;
 
 public class Mischief implements ModInitializer {
     public static final String MODID = "ratsmischief";
-
-    public static EntityType<RatEntity> RAT;
     public static final boolean IS_WORLD_RAT_DAY = DateTimeFormatter.ofPattern("dd/MM").format(LocalDateTime.now()).equals("04/04");
-
+    public static EntityType<RatEntity> RAT;
     public static Item RAT_SPAWN_EGG;
 
     public static Item LEATHER_RAT_POUCH;
@@ -49,6 +47,15 @@ public class Mischief implements ModInitializer {
     public static Item RAT_MASK;
     public static Item ELYTRAT;
 
+    private static <T extends Entity> EntityType<T> registerEntity(String s, EntityType<T> entityType) {
+        return Registry.register(Registry.ENTITY_TYPE, MODID + ":" + s, entityType);
+    }
+
+    public static Item registerItem(Item item, String name) {
+        Registry.register(Registry.ITEM, MODID + ":" + name, item);
+        return item;
+    }
+
     @Override
     public void onInitialize() {
         GeckoLib.initialize();
@@ -58,10 +65,10 @@ public class Mischief implements ModInitializer {
 
         // ratify and untratify commands
         CommandRegistrationCallback.EVENT.register((commandDispatcher, b) ->
-            PlayerRatifyCommand.register(commandDispatcher)
+                PlayerRatifyCommand.register(commandDispatcher)
         );
         CommandRegistrationCallback.EVENT.register((commandDispatcher, b) ->
-            PlayerUnratifyCommand.register(commandDispatcher)
+                PlayerUnratifyCommand.register(commandDispatcher)
         );
 
         // rat custom spawner
@@ -93,15 +100,6 @@ public class Mischief implements ModInitializer {
         Registry.register(Registry.PAINTING_MOTIVE, new Identifier(MODID, "a_rat_in_time"), new PaintingMotive(64, 48));
 
         TradeOfferHelper.registerWanderingTraderOffers(1, factories -> factories.add(new MischiefTradeOffers.SellItemFactory(Mischief.RAT_MASK, 40, 1, 3, 40)));
-    }
-
-    private static <T extends Entity> EntityType<T> registerEntity(String s, EntityType<T> entityType) {
-        return Registry.register(Registry.ENTITY_TYPE, MODID + ":" + s, entityType);
-    }
-
-    public static Item registerItem(Item item, String name) {
-        Registry.register(Registry.ITEM, MODID + ":" + name, item);
-        return item;
     }
 
 }
