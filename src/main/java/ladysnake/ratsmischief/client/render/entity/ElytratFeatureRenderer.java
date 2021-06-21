@@ -2,6 +2,7 @@ package ladysnake.ratsmischief.client.render.entity;
 
 import ladysnake.ratsmischief.common.Mischief;
 import ladysnake.ratsmischief.common.entity.RatEntity;
+import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
@@ -40,7 +41,7 @@ public class ElytratFeatureRenderer extends GeoLayerRenderer<RatEntity> {
                     matrixStackIn,
                     bufferIn,
                     bufferIn.getBuffer(RenderLayer.getEntityCutout(elytratLocation)),
-                    packedLightIn, packedLightIn, 1, 1, 1, 1);
+                    packedLightIn, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
         }
     }
 }
