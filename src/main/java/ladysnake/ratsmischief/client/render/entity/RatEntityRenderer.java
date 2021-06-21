@@ -20,7 +20,6 @@ import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
-
     // variables needed for later
     private ItemStack itemStack;
     private VertexConsumerProvider vertexConsumerProvider;

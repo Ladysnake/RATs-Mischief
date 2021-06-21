@@ -43,10 +43,6 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
         IBone rightWing = this.getAnimationProcessor().getBone("right");
 
         if (entity.isFlying()) {
-
-        }
-
-        if (entity.isFlying()) {
             if (leftWing != null && rightWing != null) {
                 leftWing.setRotationY((float) MathHelper.clamp(-(entity.getVelocity().getY() * 2) - 1f, -1, 0));
                 rightWing.setRotationY((float) MathHelper.clamp((entity.getVelocity().getY() * 2) + 1f, 0, 1));
