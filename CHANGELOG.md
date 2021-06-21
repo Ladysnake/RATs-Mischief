@@ -1,5 +1,8 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.1.2 - 1.16.5
+- Fixed a bug that sometimes caused Elytrats to not be properly colored or lit (thanks to AzureDoom!)
+
 ### Rat's Mischief 1.1.1 - 1.16.5
 - Rats no longer take damage from cacti and berry bushes, they will still avoid them however
 - Rats now convert Saturation into Regeneration. For instance, if a rat obtains the Saturation III effect for 15 seconds, it will instead be transformed into a Regeneration III effect lasting 15 seconds

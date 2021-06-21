@@ -2,6 +2,7 @@ package ladysnake.ratsmischief.client.render.entity;
 
 import ladysnake.ratsmischief.common.Mischief;
 import ladysnake.ratsmischief.common.entity.RatEntity;
+import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
@@ -20,17 +21,15 @@ public class ElytratFeatureRenderer extends GeoLayerRenderer<RatEntity> {
 
     @Override
     public void render(MatrixStack matrixStackIn, VertexConsumerProvider bufferIn, int packedLightIn, RatEntity ratEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-//        if (elytratLocation == null) {
-            if (!ratEntity.hasCustomElytratTexture()) {
-                this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/elytrat.png");
+        if (!ratEntity.hasCustomElytratTexture()) {
+            this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/elytrat.png");
+        } else {
+            if (ratEntity.getRatType() == RatEntity.Type.RAT_KID) {
+                this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/rat_kid_" + ratEntity.getRatColor().getName().toLowerCase() + "_elytrat.png");
             } else {
-                if (ratEntity.getRatType() == RatEntity.Type.RAT_KID) {
-                    this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/rat_kid_" + ratEntity.getRatColor().getName().toLowerCase() + "_elytrat.png");
-                } else {
-                    this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/" + ratEntity.getRatType().toString().toLowerCase() + "_elytrat.png");
-                }
+                this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/" + ratEntity.getRatType().toString().toLowerCase() + "_elytrat.png");
             }
-//        }
+        }
 
         if (ratEntity.isElytrat()) {
             elytratEntityRenderer.render(getEntityModel().getModel(new Identifier(Mischief.MODID,"geo/entity/rat.geo.json")),
@@ -40,7 +39,7 @@ public class ElytratFeatureRenderer extends GeoLayerRenderer<RatEntity> {
                     matrixStackIn,
                     bufferIn,
                     bufferIn.getBuffer(RenderLayer.getEntityCutout(elytratLocation)),
-                    packedLightIn, packedLightIn, 1, 1, 1, 1);
+                    packedLightIn, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
         }
     }
 }
