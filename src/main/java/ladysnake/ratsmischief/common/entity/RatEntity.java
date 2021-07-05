@@ -69,7 +69,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (itemEntity) -> {
         return !itemEntity.cannotPickup() && itemEntity.isAlive();
     };
-    public static final int SPAWN_RADIUS = 100;
     public static final List<Type> NATURAL_TYPES = ImmutableList.of(
             Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
     );
@@ -101,16 +100,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     public static DefaultAttributeContainer.Builder createEntityAttributes() {
         return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32);
-    }
-
-    public static boolean canSpawn(EntityType<RatEntity> entityType, ServerWorldAccess serverWorldAccess, SpawnReason spawnReason, BlockPos blockPos, Random random) {
-        ServerWorld world = serverWorldAccess.toServerWorld();
-        if (world.locateStructure(StructureFeature.VILLAGE, blockPos, 5, false) != null) {
-            List<VillagerEntity> villagersNearby = world.getEntitiesByType(EntityType.VILLAGER, new Box(blockPos.getX() - SPAWN_RADIUS, blockPos.getY() - SPAWN_RADIUS, blockPos.getZ() - SPAWN_RADIUS, blockPos.getX() + SPAWN_RADIUS, blockPos.getY() + SPAWN_RADIUS, blockPos.getZ() + SPAWN_RADIUS), villagerEntity -> true);
-            return villagersNearby.isEmpty();
-        }
-
-        return false;
     }
 
     public static Type getRandomNaturalType(Random random) {

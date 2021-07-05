@@ -1,5 +1,12 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.1.4 - 1.17
+- Tweaked rat spawning mechanics to allow for vertical terrain variations
+- Reduced the time interval at which rats try to spawn
+- Rats will now spawn in small groups of up to 5
+- Added a safety mob spawn cap of maximum 20 rats per village
+- Fixed an issue that caused rats to spawn no matter the proximity to a village as long as there were beds, working stations and no villagers
+
 ### Rat's Mischief 1.1.3 - 1.17
 - Updated to Minecraft 1.17
 - The Collection staff will now order rats to collect the block the player clicks on with the staff and no longer works by detecting the block in the player's other hand
