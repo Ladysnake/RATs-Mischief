@@ -32,7 +32,7 @@ import java.time.format.DateTimeFormatter;
 public class Mischief implements ModInitializer {
     public static final String MODID = "ratsmischief";
     public static final boolean IS_WORLD_RAT_DAY = DateTimeFormatter.ofPattern("dd/MM").format(LocalDateTime.now()).equals("04/04");
-    public static final boolean IS_BIRTHDAY = DateTimeFormatter.ofPattern("dd/MM").format(LocalDateTime.now()).equals("19/07");
+    public static final boolean IS_BIRTHDAY = DateTimeFormatter.ofPattern("dd/MM").format(LocalDateTime.now()).equals("16/07");
     public static EntityType<RatEntity> RAT;
     public static Item RAT_SPAWN_EGG;
 

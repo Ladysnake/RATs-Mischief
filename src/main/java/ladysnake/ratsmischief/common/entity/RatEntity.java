@@ -29,7 +29,10 @@ import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.*;
+import net.minecraft.entity.passive.CatEntity;
+import net.minecraft.entity.passive.HorseBaseEntity;
+import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.*;
@@ -43,7 +46,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
@@ -52,7 +54,6 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
-import net.minecraft.world.gen.feature.StructureFeature;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -72,8 +73,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     public static final List<Type> NATURAL_TYPES = ImmutableList.of(
             Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
     );
+    private static final List<PartyHat> PARTY_HATS = List.of(PartyHat.values());
+
     private static final TrackedData<String> TYPE = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
     private static final TrackedData<String> COLOR = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
+    private static final TrackedData<String> PARTY_HAT = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
+
     private static final TrackedData<Boolean> SITTING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Boolean> EATING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Boolean> FLYING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
@@ -155,6 +160,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.dataTracker.startTracking(COLOR, DyeColor.values()[(this.random.nextInt(DyeColor.values().length))].getName());
         this.dataTracker.startTracking(FLYING, false);
         this.dataTracker.startTracking(ROCKET_TIME, 0);
+
+        this.dataTracker.startTracking(PARTY_HAT, PARTY_HATS.get(random.nextInt(PARTY_HATS.size())).toString());
     }
 
     protected void initGoals() {
@@ -241,6 +248,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     public Type getRatType() {
         return Type.valueOf(this.dataTracker.get(TYPE));
+    }
+
+    public PartyHat getPartyHat() {
+        return PartyHat.valueOf(this.dataTracker.get(PARTY_HAT));
     }
 
     public void setRatType(Type type) {
@@ -764,6 +775,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         RATELINE,
         BIGGIE_CHEESE,
         ARATHAIN
+    }
+
+    public enum PartyHat {
+        BLUE, PINK, GREEN, RAINBOW, BRAND
     }
 
     class PickupItemGoal extends Goal {
