@@ -206,7 +206,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             }
             return PlayState.CONTINUE;
         } else if (this.isSniffing()) {
-            if (this.getRatType() == Type.RAT_KID || Mischief.IS_WORLD_RAT_DAY) {
+            if (this.getRatType() == Type.RAT_KID || Mischief.IS_WORLD_RAT_DAY || Mischief.IS_BIRTHDAY) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.smug_dance", true));
             } else {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.sniff", false));
