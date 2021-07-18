@@ -13,7 +13,7 @@ public class MischiefClient implements ClientModInitializer {
         EntityRendererRegistry.INSTANCE.register(Mischief.RAT, RatEntityRenderer::new);
 
         // model predicates
-        FabricModelPredicateProviderRegistry.register(new Identifier(Mischief.MODID + ":filled"), (itemStack, world, livingEntity, seed) -> itemStack.getOrCreateSubTag(Mischief.MODID).getFloat("filled"));
+        FabricModelPredicateProviderRegistry.register(new Identifier(Mischief.MODID + ":filled"), (itemStack, world, livingEntity, seed) -> itemStack.getOrCreateSubNbt(Mischief.MODID).getFloat("filled"));
 
         // rat mask, no need to register texture anymore
 //        ArmorRenderingRegistry.registerTexture((livingEntity, itemStack, equipmentSlot, b, s, identifier) -> new Identifier(Mischief.MODID, "textures/models/armor/rat_mask_layer_1.png"), Mischief.RAT_MASK);

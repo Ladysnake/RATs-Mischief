@@ -26,13 +26,19 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.Heightmap;
 import software.bernie.geckolib3.GeckoLib;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Mischief implements ModInitializer {
     public static final String MODID = "ratsmischief";
     public static final boolean IS_WORLD_RAT_DAY = DateTimeFormatter.ofPattern("dd/MM").format(LocalDateTime.now()).equals("04/04");
-    public static final boolean IS_BIRTHDAY = DateTimeFormatter.ofPattern("dd/MM").format(LocalDateTime.now()).equals("19/07");
+    private static final LocalDate today = LocalDate.now();
+    private static final boolean IS_RAT_BIRTHDAY = LocalDate.of(today.getYear(), Calendar.JULY, 19).compareTo(today) * today.compareTo(LocalDate.of(today.getYear(), Calendar.JULY, 25)) >= 0;
+    private static final boolean IS_MISCHIEF_BIRTHDAY = LocalDate.of(today.getYear(), Calendar.DECEMBER, 28).compareTo(today) * today.compareTo(LocalDate.of(today.getYear()+1, Calendar.JANUARY, 3)) >= 0;
+    private static final boolean IS_BIRTHDAY = IS_RAT_BIRTHDAY || IS_MISCHIEF_BIRTHDAY;
     public static EntityType<RatEntity> RAT;
     public static Item RAT_SPAWN_EGG;
 

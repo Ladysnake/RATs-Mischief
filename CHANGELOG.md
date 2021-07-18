@@ -1,5 +1,12 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.2: Party Rats - 1.17.1
+- Twice a year, the 19th of July and 28th of December and each lasting for a week, rats will celebrate respectively RAT's birthday and Rat's Mischief's birthday!
+    - During these festive times, rats will wear random party hats, smug dance around your world and wild rats may spawn with cake! (25% chance)
+    - During RAT's birthday, wild rats have a 5% chance to be named doctor4t
+    - During Rat's Mischief's birthday, wild rats will have a 5% chance to either be named doctor4t or Arathain
+- Updated to Minecraft 1.17.1
+
 ### Rat's Mischief 1.1.4 - 1.17
 - Tweaked rat spawning mechanics to allow for vertical terrain variations
 - Reduced the time interval at which rats try to spawn
