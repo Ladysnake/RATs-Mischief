@@ -778,7 +778,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public enum PartyHat {
-        BLUE, PINK, GREEN, RAINBOW, BRAND
+        BLUE, BRAND, BROWN, CYAN, GREEN, LIGHT_BLUE, LIGHT_GREEN, MAGENTA, ORANGE, PINK, PURPLE, RAINBOW, RED, YELLOW
     }
 
     class PickupItemGoal extends Goal {
