@@ -113,24 +113,31 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     protected void initEquipment(LocalDifficulty difficulty) {
-        if (!this.isBaby()) {
-            if (this.getRandom().nextInt(10) == 0) {
-                switch (this.getRandom().nextInt(4)) {
-                    case 0:
-                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.HARVEST_STAFF));
-                        break;
-                    case 1:
-                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.COLLECTION_STAFF));
-                        break;
-                    case 2:
-                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.SKIRMISH_STAFF));
-                        break;
-                    case 3:
-                        this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.LOVE_STAFF));
-                        break;
-                }
-            }
+        // try spawning a mask of rat
+        if (this.getRandom().nextInt(200) == 0) {
+            this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.RAT_MASK));
+            return;
         }
+
+        // try spawning a staff
+        if (this.getRandom().nextInt(20) == 0) {
+            switch (this.getRandom().nextInt(4)) {
+                case 0:
+                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.HARVEST_STAFF));
+                    break;
+                case 1:
+                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.COLLECTION_STAFF));
+                    break;
+                case 2:
+                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.SKIRMISH_STAFF));
+                    break;
+                case 3:
+                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.LOVE_STAFF));
+                    break;
+            }
+            return;
+        }
+        
     }
 
     @Override
