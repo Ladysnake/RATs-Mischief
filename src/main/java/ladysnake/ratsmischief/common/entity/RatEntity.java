@@ -114,7 +114,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     @Override
     protected void initEquipment(LocalDifficulty difficulty) {
         // try spawning a mask of rat
-        if (this.getRandom().nextInt(200) == 0) {
+        if (this.isBaby() && this.getRandom().nextInt(200) == 0) {
             this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.RAT_MASK));
             return;
         }
@@ -137,7 +137,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             }
             return;
         }
-        
+
+        // try spawning with cake on birthday
+        if (Mischief.IS_BIRTHDAY && !this.isBaby() && this.getRandom().nextInt(5) == 0) {
+            this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.CAKE));
+        }
     }
 
     @Override
