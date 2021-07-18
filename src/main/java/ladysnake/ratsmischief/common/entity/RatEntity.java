@@ -144,9 +144,19 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
     }
 
+
+
     @Override
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityTag) {
         this.initEquipment(difficulty);
+
+        // init doctor4t type or random type on birthday
+        if (Mischief.IS_RAT_BIRTHDAY && this.getRandom().nextInt(10) == 0) {
+            this.setRatType(Type.DOCTOR4T);
+        } else if (Mischief.IS_MISCHIEF_BIRTHDAY && this.getRandom().nextInt(5) == 0) {
+            this.setRatType(List.of(Type.values()).get(this.getRandom().nextInt(Type.values().length)));
+        }
+
         return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
     }
 
@@ -252,6 +262,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         if (ownerUuid != null) {
             ratEntity.setOwnerUuid(ownerUuid);
             ratEntity.setTamed(true);
+            ratEntity.setBaby(true);
+            ratEntity.initEquipment(world.getLocalDifficulty(this.getBlockPos()));
         }
 
         return ratEntity;
