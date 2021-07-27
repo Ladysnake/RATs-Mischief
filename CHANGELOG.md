@@ -1,5 +1,9 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.2.1 - 1.17.1
+- Using the harvest staff will now also make rats holding bone meal fertilize crops
+- If a player's inventory is full, rats will keep the item they possess until the owner has made some space
+
 ### Rat's Mischief 1.2: Party Rats - 1.17.1
 - Twice a year, the 19th of July and 28th of December and each lasting for a week, rats will celebrate respectively RAT's birthday and Rat's Mischief's birthday!
     - During these festive times, rats will wear random party hats, smug dance around your world and wild adult rats may spawn with cake! (20% chance)

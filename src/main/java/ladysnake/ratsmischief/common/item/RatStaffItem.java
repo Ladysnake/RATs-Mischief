@@ -3,7 +3,7 @@ package ladysnake.ratsmischief.common.item;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.entity.ai.BreedGoal;
 import ladysnake.ratsmischief.common.entity.ai.DigGoal;
-import ladysnake.ratsmischief.common.entity.ai.HarvestAndPlantGoal;
+import ladysnake.ratsmischief.common.entity.ai.HarvestPlantMealGoal;
 import net.minecraft.entity.ai.goal.FollowTargetGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
@@ -32,7 +32,7 @@ public class RatStaffItem extends Item {
         ratEntityList.forEach(ratEntity -> {
             Goal goal = null;
             switch (action) {
-                case HARVEST -> goal = new HarvestAndPlantGoal(ratEntity);
+                case HARVEST -> goal = new HarvestPlantMealGoal(ratEntity);
                 case COLLECT -> ratEntity.removeCurrentActionGoal();
                 case SKIRMISH -> goal = new FollowTargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
                 case LOVE -> goal = new BreedGoal(ratEntity);
