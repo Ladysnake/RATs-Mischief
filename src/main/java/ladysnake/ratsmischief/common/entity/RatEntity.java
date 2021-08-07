@@ -385,6 +385,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 this.setRatType(Type.BIGGIE_CHEESE);
             } else if (this.getCustomName().getString().equalsIgnoreCase("arathain") || this.getCustomName().getString().equalsIgnoreCase("arathainfarqoe")) {
                 this.setRatType(Type.ARATHAIN);
+            } else if (this.getCustomName().getString().equalsIgnoreCase("astron") || this.getCustomName().getString().equalsIgnoreCase("astronyu")) {
+                this.setRatType(Type.ASTRONYU);
             }
         }
 
@@ -796,7 +798,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         HOLLOW,
         RATELINE,
         BIGGIE_CHEESE,
-        ARATHAIN
+        ARATHAIN,
+        ASTRONYU
     }
 
     public enum PartyHat {
