@@ -1,5 +1,8 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.2.2 - 1.17.1
+- Added russian translation thanks to PinkGoosnick!
+
 ### Rat's Mischief 1.2.1 - 1.17.1
 - Using the harvest staff will now also make rats holding bone meal fertilize crops
 - If a player's inventory is full, rats will keep the item they possess until the owner has made some space
