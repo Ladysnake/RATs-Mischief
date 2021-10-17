@@ -1,5 +1,11 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.2.3 - 1.17.1
+- Added romanian translation thanks to WindRat
+- Added german translation thanks to UpcraftLP
+- Added latin translation thanks to WillBL
+- Added brazilian portuguese translation thanks to cominixo
+
 ### Rat's Mischief 1.2.2 - 1.17.1
 - Added russian translation thanks to PinkGoosnick!
 
