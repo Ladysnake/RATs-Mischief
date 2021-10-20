@@ -22,7 +22,7 @@
     "client": [
       "ladysnake.ratsmischief.client.MischiefClient"
     ],
-    "[DISABLED] requiem:plugin": [
+    "requiem:plugin": [
       "ladysnake.ratsmischief.common.MischiefRequiemPlugin"
     ]
   },
@@ -41,9 +41,6 @@
     "minecraft": "1.17.x"
   },
   "suggests": {
-    "requiem": ">=1.7.1"
-  },
-  "breaks": {
-    "requiem": "<1.7.1"
+    "requiem": ">=2.0.0-"
   }
 }

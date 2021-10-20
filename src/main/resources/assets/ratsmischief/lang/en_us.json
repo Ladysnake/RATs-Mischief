@@ -23,5 +23,9 @@
   "type.ratsmischief.rat_kid": "Rat Kid",
   "type.ratsmischief.ratater": "Ratater",
   "type.ratsmischief.jorato": "Jorato",
-  "type.ratsmischief.jerma": "Jerma"
+  "type.ratsmischief.jerma": "Jerma",
+  "origins:origin.ratsmischief.rat.name": "Rat",
+  "origins:origin.ratsmischief.rat.description": "You're a rat.",
+  "origins:power.ratsmischief.ratified.name": "Ratified",
+  "origins:power.ratsmischief.ratified.description": "Yes really, you're a rat!"
 }
