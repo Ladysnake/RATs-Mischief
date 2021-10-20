@@ -32,7 +32,14 @@ repositories {
 		url = 'https://ladysnake.jfrog.io/artifactory/mods'
 		content {
 			includeGroup 'io.github.ladysnake'
+			includeGroupByRegex 'dev\\.emi.*'
 			includeGroupByRegex 'io\\.github\\.onyxstudios.*'
+		}
+	}
+	maven {
+		url = 'https://maven.jamieswhiteshirt.com/libs-release/'
+		content {
+			includeGroup 'com.jamieswhiteshirt'
 		}
 	}
 	maven {
@@ -70,12 +77,13 @@ dependencies {
 //	}
 //	include "me.shedaniel.cloth:config-2:4.8.2"
 
-//    modImplementation "io.github.ladysnake:requiem-api:${requiem_version}"
-//    modRuntime "io.github.ladysnake:requiem:${requiem_version}"
+    modImplementation "io.github.ladysnake:requiem-api:${requiem_version}"
+    modRuntime "io.github.ladysnake:requiem-core:${requiem_version}"
+    modRuntime "io.github.ladysnake:requiem:${requiem_version}"
 
 	// Made available when Requiem is present
-//	modCompileOnly "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
-//	modCompileOnly "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:2.+"
+	modCompileOnly "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
+	modCompileOnly "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:3.+"
 
 	runtimeOnly "me.zeroeightsix:fiber:0.23.0-2"
 
