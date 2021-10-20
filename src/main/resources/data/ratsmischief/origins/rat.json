@@ -1,0 +1,10 @@
+{
+  "powers": [
+    "ratsmischief:ratified"
+  ],
+  "icon": "ratsmischief:rat_mask",
+  "name": "origins:origin.ratsmischief.rat.name",
+  "description": "origins:origin.ratsmischief.rat.description",
+  "order": 1,
+  "impact": 3
+}

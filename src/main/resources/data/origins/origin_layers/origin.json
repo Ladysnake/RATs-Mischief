@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "origins": [
+    {
+      "condition": {
+          "type": "requiem:start_remnant_gamerule",
+          "value": ["CHOOSE"]
+      },
+      "origins": ["ratsmischief:rat"]
+    }
+  ]
+}
