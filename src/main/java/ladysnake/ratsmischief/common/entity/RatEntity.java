@@ -261,6 +261,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     @Override
     public RatEntity createChild(ServerWorld world, PassiveEntity entity) {
         RatEntity ratEntity = Mischief.RAT.create(world);
+        ratEntity.setRatType(getRandomNaturalType(random));
+
         UUID ownerUuid = this.getOwnerUuid();
         if (ownerUuid != null) {
             ratEntity.setOwnerUuid(ownerUuid);
