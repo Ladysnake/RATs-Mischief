@@ -17,10 +17,12 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
     @Override
     public Identifier getTextureLocation(RatEntity rat) {
         if (rat.getRatType() == RatEntity.Type.RUSSIAN_BLUE && rat.hasCustomName() && rat.getCustomName().getString().toLowerCase().equals("remy")) {
-            return new Identifier(Mischief.MODID, "textures/entity/remy.png");
+            return new Identifier(Mischief.MODID, "textures/entity/named/remy.png");
         } else {
             if (rat.getRatType() == RatEntity.Type.RAT_KID) {
-                return new Identifier(Mischief.MODID, "textures/entity/rat_kid_" + rat.getRatColor().getName().toLowerCase() + ".png");
+                return new Identifier(Mischief.MODID, "textures/entity/rat_kid/rat_kid_" + rat.getRatColor().getName().toLowerCase() + ".png");
+            } else if (rat.isSpecial()) {
+                return new Identifier(Mischief.MODID, "textures/entity/named/" + rat.getRatType().toString().toLowerCase() + ".png");
             } else {
                 return new Identifier(Mischief.MODID, "textures/entity/" + rat.getRatType().toString().toLowerCase() + ".png");
             }

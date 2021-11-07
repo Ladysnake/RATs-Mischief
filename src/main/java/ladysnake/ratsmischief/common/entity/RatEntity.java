@@ -111,6 +111,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         return NATURAL_TYPES.get(random.nextInt(NATURAL_TYPES.size()));
     }
 
+    public boolean isSpecial() {
+        return !(NATURAL_TYPES.contains(this.getRatType()) || this.getRatType() == Type.WILD || this.getRatType() == Type.GOLD);
+    }
+
     @Override
     protected void initEquipment(LocalDifficulty difficulty) {
         // try spawning a mask of rat
@@ -170,7 +174,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         if (this.random.nextInt(bound) == 0) {
             this.dataTracker.startTracking(TYPE, Type.GOLD.toString());
         } else {
-            this.dataTracker.startTracking(TYPE, getRandomNaturalType(this.random).toString());
+            this.dataTracker.startTracking(TYPE, Type.WILD.toString());
         }
 
         this.dataTracker.startTracking(ANGER_TIME, 0);
@@ -782,6 +786,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public enum Type {
+        WILD,
         ALBINO,
         BLACK,
         GREY,
