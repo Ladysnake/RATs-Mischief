@@ -30,12 +30,12 @@ public class RatSpawner implements Spawner {
         if (spawnAnimals && world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
             --this.ticksUntilNextSpawn;
             if (this.ticksUntilNextSpawn <= 0) {
-                this.ticksUntilNextSpawn = 200;
+                this.ticksUntilNextSpawn = 100;
                 Random random = world.random;
                 world.getPlayers().forEach(serverPlayerEntity -> {
-                    int x = (8 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
+                    int x = (8 + random.nextInt(32)) * (random.nextBoolean() ? -1 : 1);
                     int y = (random.nextInt(4)) * (random.nextBoolean() ? -1 : 1);
-                    int z = (8 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
+                    int z = (8 + random.nextInt(32)) * (random.nextBoolean() ? -1 : 1);
                     BlockPos blockPos = serverPlayerEntity.getBlockPos().add(x, y, z);
 
                     // test early if the rat can spawn
