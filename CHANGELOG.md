@@ -1,5 +1,15 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.3 - 1.17.1
+- Added a new rat type: Wild. This and the rare golden rat will now be the only two rat types that generate naturally in abandoned villages
+- All other rat types, considered "fancy", now require breeding rats in order to be obtained
+- Breeding two rat kids together will now result in the offspring being of rat kid type (without actually being named "Rat Kid")
+- Re-added the Requiem compatibility and Ratify commands
+- Added a rat origin when Requiem and Origins are installed
+- Tweaked wild rat spawning to be less of a waiting game
+- Re-textured Chocolate and Golden rats
+- Added French translation thanks to Pyrofab
+
 ### Rat's Mischief 1.2.3 - 1.17.1
 - Added romanian translation thanks to WindRat
 - Added german translation thanks to UpcraftLP
