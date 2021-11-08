@@ -265,7 +265,16 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         if (this.getRatType() == Type.RAT_KID && entity instanceof RatEntity && ((RatEntity) entity).getRatType() == Type.RAT_KID) {
             ratEntity.setRatType(Type.RAT_KID);
         } else {
-            ratEntity.setRatType(getRandomNaturalType(random));
+            int bound = 150;
+            if (Mischief.IS_WORLD_RAT_DAY) {
+                bound = 30;
+            }
+
+            if (this.random.nextInt(bound) == 0) {
+                this.dataTracker.startTracking(TYPE, Type.GOLD.toString());
+            } else {
+                ratEntity.setRatType(getRandomNaturalType(random));
+            }
         }
 
         UUID ownerUuid = this.getOwnerUuid();
