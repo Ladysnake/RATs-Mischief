@@ -3,6 +3,7 @@ package ladysnake.ratsmischief.common;
 import ladysnake.ratsmischief.common.armormaterials.RatMaskArmorMaterial;
 import ladysnake.ratsmischief.common.command.PlayerRatifyCommand;
 import ladysnake.ratsmischief.common.command.PlayerUnratifyCommand;
+import ladysnake.ratsmischief.common.compat.MischiefOriginsCompat;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
 import ladysnake.ratsmischief.common.item.RatStaffItem;
@@ -14,6 +15,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.painting.PaintingMotive;
 import net.minecraft.item.ArmorItem;
@@ -29,8 +31,6 @@ import software.bernie.geckolib3.GeckoLib;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
 
 public class Mischief implements ModInitializer {
     public static final String MODID = "ratsmischief";
@@ -78,6 +78,11 @@ public class Mischief implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((commandDispatcher, b) ->
                 PlayerUnratifyCommand.register(commandDispatcher)
         );
+        
+        // origins compat hack
+        if (FabricLoader.getInstance().isModLoaded("origins")) {
+            MischiefOriginsCompat.init();
+        }
 
         // rat custom spawner
         RatSpawner ratSpawner = new RatSpawner();
