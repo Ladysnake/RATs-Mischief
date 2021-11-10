@@ -3,8 +3,8 @@
   "origins": [
     {
       "condition": {
-          "type": "requiem:start_remnant_gamerule",
-          "value": ["CHOOSE"]
+          "type": "ratsmischief:enable_rat",
+          "enabled": true
       },
       "origins": ["ratsmischief:rat"]
     }
