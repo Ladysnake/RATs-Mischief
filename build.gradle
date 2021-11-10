@@ -91,7 +91,8 @@ dependencies {
 
     modImplementation "io.github.ladysnake:requiem-api:${requiem_version}"
     modRuntime "io.github.ladysnake:requiem-core:${requiem_version}"
-	modImplementation "io.github.ladysnake:requiem:${requiem_version}"
+	modCompileOnly "io.github.ladysnake:requiem:${requiem_version}"
+	modRuntime "io.github.ladysnake:requiem:${requiem_version}"
 
 	// Made available when Requiem is present
 	modCompileOnly "io.github.ladysnake:PlayerAbilityLib:${pal_version}"

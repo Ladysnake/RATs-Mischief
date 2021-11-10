@@ -1,5 +1,8 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.3.1 - 1.17.1
+- Fixed an issue that caused the game to crash without Requiem and / or Origins
+
 ### Rat's Mischief 1.3 - 1.17.1
 - Added a new rat type: Wild. This and the rare golden rat will now be the only two rat types that generate naturally in abandoned villages
 - All other rat types, considered "fancy", now require breeding rats in order to be obtained
