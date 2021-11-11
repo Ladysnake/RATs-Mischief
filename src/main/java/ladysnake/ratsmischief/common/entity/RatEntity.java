@@ -89,7 +89,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     private static final TrackedData<Integer> ROCKET_TIME = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.INTEGER);
     // Rat balancing variable
     // NOTE: Isn't linear. Equation: ActualDamage = OriginalDamage * (RAT_ATTACK_MODIFIER ^ lastAttack's ratCDs)
-    private final static double RAT_ATTACK_MODIFIER = 0.9F;
+    private final static double RAT_ATTACK_MODIFIER = 0.95;
     //Rat tool attack multipler
     private final static double TOOL_ATTACK_MODIFIER = 0.5;
     // Rat universal attack CD
