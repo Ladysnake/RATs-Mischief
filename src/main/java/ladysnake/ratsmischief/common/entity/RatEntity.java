@@ -16,6 +16,7 @@ import net.minecraft.entity.ai.control.LookControl;
 import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -86,13 +87,28 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(20, 39);
     private static final TrackedData<Boolean> SNIFFING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Integer> ROCKET_TIME = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    // Rat balancing variable
+    // NOTE: Isn't linear. Equation: ActualDamage = OriginalDamage * (RAT_ATTACK_MODIFIER ^ lastAttack's ratCDs)
+    private final static double RAT_ATTACK_MODIFIER = 0.9F;
+    //Rat tool attack multipler
+    private final static double TOOL_ATTACK_MODIFIER = 0.5;
+    // Rat universal attack CD
+    private final static int RAT_ATTACK_CD = 10;
+
     private final AnimationFactory factory = new AnimationFactory(this);
     public Goal action;
     public int actionTimer = 0;
-
     // ELYTRAT
     public BlockPos circlingCenter = BlockPos.ORIGIN;
     public Vec3d targetPosition;
+
+    //Rat tool attack multipler
+    // Prevents initialization bug
+    private boolean isInitialized = false;
+    private int cooldownTicks = 0;
+
+    // Variable to keep track of last attacked LivingEntity. I've noticed that the native variable that does this is unreliable (dunno why).
+    private LivingEntity lastAttacked;
     private UUID targetUuid;
 
     public RatEntity(EntityType<? extends TameableEntity> type, World worldIn) {
@@ -101,14 +117,50 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.stepHeight = 2f;
         this.moveControl = new RatMoveControl(this);
         this.lookControl = new RatLookControl(this);
+        isInitialized = true;
     }
 
     public static DefaultAttributeContainer.Builder createEntityAttributes() {
-        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32);
+        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32).add(EntityAttributes.GENERIC_ATTACK_SPEED);
+    }
+
+    // Uses the rat balancing variable to calculate an alpha with which to modify the damage output
+    private static double calculateDamageAlpha(LivingEntity living) {
+        return Math.pow(RAT_ATTACK_MODIFIER, ((LivingEntityInterface) living).getRatCDs());
     }
 
     public static Type getRandomNaturalType(Random random) {
         return NATURAL_TYPES.get(random.nextInt(NATURAL_TYPES.size()));
+    }
+
+    // Modifies generic attack damage readouts
+    public double getAttributeValue(EntityAttribute attribute) {
+
+        double value = super.getAttributeValue(attribute);
+
+        if (attribute == EntityAttributes.GENERIC_ATTACK_DAMAGE) {
+            LivingEntity target = this.getTarget();
+            if (target != null) {
+                value *= calculateDamageAlpha(target);
+            }
+        }
+
+        if (isInitialized) {
+            ItemStack weapon = this.getMainHandStack();
+            if (!weapon.isEmpty() && weapon.getItem() instanceof ToolItem) {
+                value *= TOOL_ATTACK_MODIFIER;
+            }
+        }
+
+        return value;
+    }
+
+    // Prevent strength buff
+    public boolean addStatusEffect(StatusEffectInstance effect, @Nullable Entity source) {
+        if (effect.getEffectType() == StatusEffects.STRENGTH) {
+            return false;
+        }
+        return super.addStatusEffect(effect, source);
     }
 
     public boolean isSpecial() {
@@ -126,18 +178,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         // try spawning a staff
         if (this.getRandom().nextInt(20) == 0) {
             switch (this.getRandom().nextInt(4)) {
-                case 0:
-                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.HARVEST_STAFF));
-                    break;
-                case 1:
-                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.COLLECTION_STAFF));
-                    break;
-                case 2:
-                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.SKIRMISH_STAFF));
-                    break;
-                case 3:
-                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.LOVE_STAFF));
-                    break;
+                case 0 -> this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.HARVEST_STAFF));
+                case 1 -> this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.COLLECTION_STAFF));
+                case 2 -> this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.SKIRMISH_STAFF));
+                case 3 -> this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.LOVE_STAFF));
             }
             return;
         }
@@ -206,7 +250,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.goalSelector.add(10, new LookAroundGoal(this));
         this.targetSelector.add(1, new TrackOwnerAttackerGoal(this));
         this.targetSelector.add(2, new AttackWithOwnerGoal(this));
-        this.targetSelector.add(3, (new RevengeGoal(this, new Class[0])).setGroupRevenge());
+        this.targetSelector.add(3, (new RevengeGoal(this)).setGroupRevenge());
         this.targetSelector.add(4, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> this.shouldAngerAt((LivingEntity) playerEntity)));
         // wild rats chase HalfOf2
 //        this.targetSelector.add(7, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> ((LivingEntity) playerEntity).getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") && !this.isTamed()));
@@ -292,12 +336,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         return Type.valueOf(this.dataTracker.get(TYPE));
     }
 
-    public PartyHat getPartyHat() {
-        return PartyHat.valueOf(this.dataTracker.get(PARTY_HAT));
-    }
-
     public void setRatType(Type type) {
         this.dataTracker.set(TYPE, type.toString());
+    }
+
+    public PartyHat getPartyHat() {
+        return PartyHat.valueOf(this.dataTracker.get(PARTY_HAT));
     }
 
     public DyeColor getRatColor() {
@@ -315,7 +359,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         if (tag.contains("RatType")) {
             this.setRatType(Type.valueOf(tag.getString("RatType")));
         }
-        this.readAngerFromNbt((ServerWorld) this.world, tag);
+        this.readAngerFromNbt(this.world, tag);
 
         if (tag.contains("Sitting")) {
             this.setSitting(tag.getBoolean("Sitting"));
@@ -351,6 +395,15 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             StatusEffectInstance saturation = this.getStatusEffect(StatusEffects.SATURATION);
             this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, saturation.getDuration(), saturation.getAmplifier(), saturation.isAmbient(), saturation.shouldShowParticles(), saturation.shouldShowIcon()));
         }
+
+        if (lastAttacked != null) {
+            cooldownTicks--;
+            if (cooldownTicks <= 0) {
+                ((LivingEntityInterface) lastAttacked).incrementRatCDs(-1);
+                lastAttacked = null;
+            }
+        }
+
     }
 
     @Override
@@ -536,7 +589,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public int getAngerTime() {
-        return (Integer) this.dataTracker.get(ANGER_TIME);
+        return this.dataTracker.get(ANGER_TIME);
     }
 
     @Override
@@ -566,8 +619,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     @Override
     public boolean canAttackWithOwner(LivingEntity target, LivingEntity owner) {
         if (!(target instanceof CreeperEntity || (target instanceof GhastEntity && !this.isElytrat()))) {
-            if (target instanceof RatEntity) {
-                RatEntity ratEntity = (RatEntity) target;
+            if (target instanceof RatEntity ratEntity) {
                 return !ratEntity.isTamed() || ratEntity.getOwner() != owner;
             } else if (target instanceof PlayerEntity && owner instanceof PlayerEntity && !((PlayerEntity) owner).shouldDamagePlayer((PlayerEntity) target)) {
                 return false;
@@ -586,9 +638,29 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         return stack.getItem().isFood();
     }
 
+    private int calculateSwingLag() {
+
+        ItemStack weapon = this.getMainHandStack();
+        if (!weapon.isEmpty() && weapon.getItem() instanceof ToolItem) {
+            return (int) Math.ceil(20*(1/this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED)));
+        }
+
+        return 0;
+    }
+
     @Override
     public boolean tryAttack(Entity target) {
+        if (this.cooldownTicks > 0) {
+            return false;
+        }
+        int cdModifier = this.calculateSwingLag();
+        System.out.println(cdModifier);
+        cooldownTicks = RAT_ATTACK_CD + cdModifier;
         target.timeUntilRegen = 0;
+        if (target instanceof LivingEntity living) {
+            lastAttacked = living;
+            ((LivingEntityInterface) living).incrementRatCDs(1);
+        }
         return super.tryAttack(target);
     }
 
@@ -603,7 +675,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public boolean isSniffing() {
-        return (Boolean) this.dataTracker.get(SNIFFING);
+        return this.dataTracker.get(SNIFFING);
     }
 
     public void setSniffing(boolean sniffing) {
@@ -611,7 +683,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public boolean isEating() {
-        return (Boolean) this.dataTracker.get(EATING);
+        return this.dataTracker.get(EATING);
     }
 
     public void setEating(boolean eating) {
@@ -619,7 +691,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public boolean isFlying() {
-        return (Boolean) this.dataTracker.get(FLYING);
+        return this.dataTracker.get(FLYING);
     }
 
     public void setFlying(boolean eating) {
@@ -627,7 +699,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public int getRocketTime() {
-        return (Integer) this.dataTracker.get(ROCKET_TIME);
+        return this.dataTracker.get(ROCKET_TIME);
     }
 
     public void setRocketTime(int ticks) {
@@ -750,6 +822,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public void onDeath(DamageSource source) {
+
+        if (lastAttacked != null) {
+            ((LivingEntityInterface) lastAttacked).incrementRatCDs(-1);
+            lastAttacked = null;
+        }
+
         if (this.isTamed()) {
             this.dropStack(this.getMainHandStack());
         }
@@ -853,14 +931,14 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             List<ItemEntity> list = RatEntity.this.world.getEntitiesByClass(ItemEntity.class, RatEntity.this.getBoundingBox().expand(10.0D, 10.0D, 10.0D), RatEntity.PICKABLE_DROP_FILTER);
             ItemStack itemStack = RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND);
             if (itemStack.isEmpty() && !list.isEmpty()) {
-                RatEntity.this.getNavigation().startMovingTo((Entity) list.get(0), 1);
+                RatEntity.this.getNavigation().startMovingTo(list.get(0), 1);
             }
         }
 
         public void start() {
             List<ItemEntity> list = RatEntity.this.world.getEntitiesByClass(ItemEntity.class, RatEntity.this.getBoundingBox().expand(10.0D, 10.0D, 10.0D), RatEntity.PICKABLE_DROP_FILTER);
             if (!list.isEmpty()) {
-                RatEntity.this.getNavigation().startMovingTo((Entity) list.get(0), 1);
+                RatEntity.this.getNavigation().startMovingTo(list.get(0), 1);
             }
         }
     }
@@ -940,7 +1018,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 return false;
             } else if (!livingEntity.isAlive()) {
                 return false;
-            } else if (livingEntity instanceof PlayerEntity && (((PlayerEntity) livingEntity).isSpectator() || ((PlayerEntity) livingEntity).isCreative())) {
+            } else if (livingEntity instanceof PlayerEntity && (livingEntity.isSpectator() || ((PlayerEntity) livingEntity).isCreative())) {
                 return false;
             } else if (!this.canStart()) {
                 return false;
@@ -976,7 +1054,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 return false;
             } else if (!owner.isAlive()) {
                 return false;
-            } else if (owner instanceof PlayerEntity && (((PlayerEntity) owner).isSpectator() || ((PlayerEntity) owner).isCreative())) {
+            } else if (owner instanceof PlayerEntity && (owner.isSpectator() || ((PlayerEntity) owner).isCreative())) {
                 return false;
             } else if (!this.canStart()) {
                 return false;
@@ -1046,21 +1124,21 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                     float f = (float) (RatEntity.this.targetPosition.x - RatEntity.this.getX());
                     float g = (float) (RatEntity.this.targetPosition.y - RatEntity.this.getY());
                     float h = (float) (RatEntity.this.targetPosition.z - RatEntity.this.getZ());
-                    double d = (double) MathHelper.sqrt(f * f + h * h);
+                    double d = MathHelper.sqrt(f * f + h * h);
                     double e = 1.0D - (double) MathHelper.abs(g * 0.7F) / d;
                     f = (float) ((double) f * e);
                     h = (float) ((double) h * e);
-                    d = (double) MathHelper.sqrt(f * f + h * h);
-                    double i = (double) MathHelper.sqrt(f * f + h * h + g * g);
+                    d = MathHelper.sqrt(f * f + h * h);
+                    double i = MathHelper.sqrt(f * f + h * h + g * g);
                     float j = RatEntity.this.getYaw();
-                    float k = (float) MathHelper.atan2((double) h, (double) f);
+                    float k = (float) MathHelper.atan2(h, f);
                     float l = MathHelper.wrapDegrees(RatEntity.this.getYaw() + 90.0F);
                     float m = MathHelper.wrapDegrees(k * 57.295776F);
                     RatEntity.this.setYaw(MathHelper.stepUnwrappedAngleTowards(l, m, 4.0F) - 90.0F);
                     RatEntity.this.bodyYaw = RatEntity.this.getYaw();
                     this.targetSpeed = MathHelper.stepTowards(this.targetSpeed, 2.0F, 0.01F * (2.0F / this.targetSpeed));
 
-                    float n = (float) (-(MathHelper.atan2((double) (-g), d) * 57.2957763671875D));
+                    float n = (float) (-(MathHelper.atan2(-g, d) * 57.2957763671875D));
                     RatEntity.this.setPitch(n);
                     float o = RatEntity.this.getYaw() + 90.0F;
                     double p = (double) (this.targetSpeed * MathHelper.cos(o * 0.017453292F)) * Math.abs((double) f / i);

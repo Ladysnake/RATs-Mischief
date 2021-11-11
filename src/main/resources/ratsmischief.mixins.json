@@ -5,7 +5,8 @@
   "mixins": [
     "CatEntityMixin",
     "FollowTargetGoalMixin",
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "PlayerEntityMixin"
   ],
   "plugin": "ladysnake.ratsmischief.common.MischiefMixinConfigPlugin",
   "injectors": {
