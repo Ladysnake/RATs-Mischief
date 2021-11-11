@@ -71,7 +71,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         return !itemEntity.cannotPickup() && itemEntity.isAlive();
     };
     public static final List<Type> NATURAL_TYPES = ImmutableList.of(
-            Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE, Type.WILD
+            Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
     );
     private static final List<PartyHat> PARTY_HATS = List.of(PartyHat.values());
 
@@ -112,7 +112,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public boolean isSpecial() {
-        return !(NATURAL_TYPES.contains(this.getRatType()) || this.getRatType() == Type.GOLD);
+        return !(NATURAL_TYPES.contains(this.getRatType()) || this.getRatType() == Type.WILD || this.getRatType() == Type.GOLD);
     }
 
     @Override
