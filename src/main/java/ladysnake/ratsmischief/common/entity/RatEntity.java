@@ -695,13 +695,13 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     @Override
     protected @Nullable
     SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_RABBIT_DEATH;
+        return Mischief.ENTITY_RAT_DEATH;
     }
 
     @Override
     protected @Nullable
     SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.ENTITY_RABBIT_HURT;
+        return Mischief.ENTITY_RAT_HURT;
     }
 
     @Override
@@ -955,7 +955,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             if (RatEntity.this.getBoundingBox().expand(0.20000000298023224D).intersects(livingEntity.getBoundingBox())) {
                 RatEntity.this.tryAttack(livingEntity);
                 if (!RatEntity.this.isSilent()) {
-                    RatEntity.this.world.syncWorldEvent(1039, RatEntity.this.getBlockPos(), 0);
+                    world.playSoundFromEntity(null, RatEntity.this, Mischief.ENTITY_RAT_BITE, RatEntity.this.getSoundCategory(), RatEntity.this.getSoundVolume(), RatEntity.this.getSoundPitch());
                 }
             }
         }
