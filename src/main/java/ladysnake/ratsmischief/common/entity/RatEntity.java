@@ -139,28 +139,23 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         double value = super.getAttributeValue(attribute);
 
         if (attribute == EntityAttributes.GENERIC_ATTACK_DAMAGE) {
+            StatusEffectInstance strength = this.getStatusEffect(StatusEffects.STRENGTH);
+            if (strength != null) {
+                value -= 3*(strength.getAmplifier() + 1);
+            }
             LivingEntity target = this.getTarget();
             if (target != null) {
                 value *= calculateDamageAlpha(target);
             }
-        }
-
-        if (isInitialized) {
-            ItemStack weapon = this.getMainHandStack();
-            if (!weapon.isEmpty() && weapon.getItem() instanceof ToolItem) {
-                value *= TOOL_ATTACK_MODIFIER;
+            if (isInitialized) {
+                ItemStack weapon = this.getMainHandStack();
+                if (!weapon.isEmpty() && weapon.getItem() instanceof ToolItem) {
+                    value *= TOOL_ATTACK_MODIFIER;
+                }
             }
         }
 
         return value;
-    }
-
-    // Prevent strength buff
-    public boolean addStatusEffect(StatusEffectInstance effect, @Nullable Entity source) {
-        if (effect.getEffectType() == StatusEffects.STRENGTH) {
-            return false;
-        }
-        return super.addStatusEffect(effect, source);
     }
 
     public boolean isSpecial() {
@@ -250,7 +245,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.goalSelector.add(10, new LookAroundGoal(this));
         this.targetSelector.add(1, new TrackOwnerAttackerGoal(this));
         this.targetSelector.add(2, new AttackWithOwnerGoal(this));
-        this.targetSelector.add(3, (new RevengeGoal(this)).setGroupRevenge());
+        this.targetSelector.add(3, (new RevengeGoal(this, new Class[0])).setGroupRevenge());
         this.targetSelector.add(4, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> this.shouldAngerAt((LivingEntity) playerEntity)));
         // wild rats chase HalfOf2
 //        this.targetSelector.add(7, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> ((LivingEntity) playerEntity).getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") && !this.isTamed()));
@@ -396,12 +391,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, saturation.getDuration(), saturation.getAmplifier(), saturation.isAmbient(), saturation.shouldShowParticles(), saturation.shouldShowIcon()));
         }
 
-        if (lastAttacked != null) {
-            cooldownTicks--;
-            if (cooldownTicks <= 0) {
-                ((LivingEntityInterface) lastAttacked).incrementRatCDs(-1);
-                lastAttacked = null;
-            }
+        cooldownTicks--;
+        if (lastAttacked != null && cooldownTicks <= 0) {
+            ((LivingEntityInterface) lastAttacked).incrementRatCDs(-1);
+            lastAttacked = null;
         }
 
     }
