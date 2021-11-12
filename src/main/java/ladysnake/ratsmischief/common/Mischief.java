@@ -22,6 +22,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Difficulty;
@@ -54,6 +55,10 @@ public class Mischief implements ModInitializer {
 
     public static Item RAT_MASK;
     public static Item ELYTRAT;
+    
+    public static SoundEvent ENTITY_RAT_HURT = new SoundEvent(new Identifier(MODID, "entity.rat.hurt"));
+    public static SoundEvent ENTITY_RAT_DEATH = new SoundEvent(new Identifier(MODID, "entity.rat.death"));
+    public static SoundEvent ENTITY_RAT_BITE = new SoundEvent(new Identifier(MODID, "entity.rat.bite"));
 
     private static <T extends Entity> EntityType<T> registerEntity(String s, EntityType<T> entityType) {
         return Registry.register(Registry.ENTITY_TYPE, MODID + ":" + s, entityType);
@@ -108,6 +113,10 @@ public class Mischief implements ModInitializer {
 
         RAT_MASK = registerItem(new ArmorItem(RatMaskArmorMaterial.RAT_MASK, EquipmentSlot.HEAD, (new Item.Settings()).group(ItemGroup.COMBAT)), "rat_mask");
         ELYTRAT = registerItem(new Item(new Item.Settings().group(ItemGroup.MISC).maxCount(16)), "elytrat");
+    
+        ENTITY_RAT_HURT = Registry.register(Registry.SOUND_EVENT, ENTITY_RAT_HURT.getId(), ENTITY_RAT_HURT);
+        ENTITY_RAT_DEATH = Registry.register(Registry.SOUND_EVENT, ENTITY_RAT_DEATH.getId(), ENTITY_RAT_DEATH);
+        ENTITY_RAT_BITE = Registry.register(Registry.SOUND_EVENT, ENTITY_RAT_BITE.getId(), ENTITY_RAT_BITE);
 
         // rat kid painting
         Registry.register(Registry.PAINTING_MOTIVE, new Identifier(MODID, "a_rat_in_time"), new PaintingMotive(64, 48));
