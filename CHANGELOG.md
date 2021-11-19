@@ -1,5 +1,10 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.3.2 - 1.17.1
+- Added proper subtitles for rat sounds (thanks to MoriyaShiine)
+- Fixed a loot table path error that would be caused when killing rats (thanks to MoriyaShiine)
+- Fixed wild rats not having a texture when being equipped with an elytrat
+
 ### Rat's Mischief 1.3.1 - 1.17.1
 - Fixed an issue that caused the game to crash without Requiem and / or Origins
 
@@ -7,8 +12,8 @@
 - Added a new rat type: Wild. This and the rare golden rat will now be the only two rat types that generate naturally in abandoned villages
 - All other rat types, considered "fancy", now require breeding rats in order to be obtained
 - Breeding two rat kids together will now result in the offspring being of rat kid type (without actually being named "Rat Kid")
-- Re-added the Requiem compatibility and Ratify commands
-- Added a rat origin when Requiem and Origins are installed
+- Re-added the Requiem compatibility and Ratify commands (thanks to Pyrofab)
+- Added a rat origin when Requiem and Origins are installed (thanks to Pyrofab)
 - Tweaked wild rat spawning to be less of a waiting game
 - Re-textured Chocolate and Golden rats
 - Added French translation thanks to Pyrofab
