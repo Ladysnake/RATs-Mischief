@@ -20,22 +20,22 @@ public class ElytratFeatureRenderer extends GeoLayerRenderer<RatEntity> {
     }
 
     @Override
-    public void render(MatrixStack matrixStackIn, VertexConsumerProvider bufferIn, int packedLightIn, RatEntity ratEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(MatrixStack matrixStackIn, VertexConsumerProvider bufferIn, int packedLightIn, RatEntity rat, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 //        if (elytratLocation == null) {
-        if (!ratEntity.hasCustomElytratTexture()) {
+        if (!rat.isSpecial() && rat.getRatType() != RatEntity.Type.GOLD) {
             this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/elytrat.png");
         } else {
-            if (ratEntity.getRatType() == RatEntity.Type.RAT_KID) {
-                this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/rat_kid_" + ratEntity.getRatColor().getName().toLowerCase() + "_elytrat.png");
+            if (rat.getRatType() == RatEntity.Type.RAT_KID) {
+                this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/rat_kid_" + rat.getRatColor().getName().toLowerCase() + "_elytrat.png");
             } else {
-                this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/" + ratEntity.getRatType().toString().toLowerCase() + "_elytrat.png");
+                this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/" + rat.getRatType().toString().toLowerCase() + "_elytrat.png");
             }
         }
 //        }
 
-        if (ratEntity.isElytrat()) {
+        if (rat.isElytrat()) {
             elytratEntityRenderer.render(getEntityModel().getModel(new Identifier(Mischief.MODID, "geo/entity/rat.geo.json")),
-                    ratEntity,
+                    rat,
                     partialTicks,
                     RenderLayer.getEntityCutout(elytratLocation),
                     matrixStackIn,

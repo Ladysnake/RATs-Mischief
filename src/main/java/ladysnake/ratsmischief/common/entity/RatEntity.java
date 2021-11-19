@@ -777,10 +777,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         return 1500;
     }
 
-    public boolean hasCustomElytratTexture() {
-        return !NATURAL_TYPES.contains(this.getRatType());
-    }
-
     public void setAction(Goal action) {
         this.removeCurrentActionGoal();
         this.actionTimer = 300; // 15s
