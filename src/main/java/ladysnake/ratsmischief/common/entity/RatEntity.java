@@ -387,27 +387,20 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
 
         if (this.hasCustomName()) {
-            if (this.getCustomName().getString().equalsIgnoreCase("doctor4t")) {
-                this.setRatType(Type.DOCTOR4T);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("ratater")) {
-                this.setRatType(Type.RATATER);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("rat kid") || this.getCustomName().getString().equalsIgnoreCase("hat kid")) {
-                this.setRatType(Type.RAT_KID);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("jotaro") || this.getCustomName().getString().equalsIgnoreCase("jorato")) {
-                this.setRatType(Type.JORATO);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("jerma") || this.getCustomName().getString().equalsIgnoreCase("jerma985")) {
-                this.setRatType(Type.JERMA);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("hollow rat") || this.getCustomName().getString().equalsIgnoreCase("hollow knight")) {
-                this.setRatType(Type.HOLLOW);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("rateline") || this.getCustomName().getString().equalsIgnoreCase("madeline")) {
-                this.setRatType(Type.RATELINE);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("biggie cheese")) {
-                this.setRatType(Type.BIGGIE_CHEESE);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("arathain") || this.getCustomName().getString().equalsIgnoreCase("arathainfarqoe")) {
-                this.setRatType(Type.ARATHAIN);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("astron") || this.getCustomName().getString().equalsIgnoreCase("astronyu")) {
-                this.setRatType(Type.ASTRONYU);
-            }
+            Type type = switch (this.getCustomName().getString().toLowerCase(Locale.ROOT)) {
+                case "doctor4t" -> Type.DOCTOR4T;
+                case "ratater" -> Type.RATATER;
+                case "rat kid", "hat kid" -> Type.RAT_KID;
+                case "jotaro", "jorato" -> Type.JORATO;
+                case "jerma", "jerma985" -> Type.JERMA;
+                case "hollow rat", "hollow knight" -> Type.HOLLOW;
+                case "rateline", "madeline" -> Type.RATELINE;
+                case "biggie cheese" -> Type.BIGGIE_CHEESE;
+                case "arathain", "arathainfarqoe" -> Type.ARATHAIN;
+                case "astron", "astronyu" -> Type.ASTRONYU;
+            };
+            
+            this.setRatType(type);
         }
 
         if (!this.hasAngerTime() && !this.moveControl.isMoving() && random.nextInt(100) == 0) {
