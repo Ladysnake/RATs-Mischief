@@ -3,10 +3,12 @@
   "origins": [
     {
       "condition": {
-          "type": "ratsmischief:enable_rat",
-          "enabled": true
+        "type": "ratsmischief:enable_rat",
+        "enabled": true
       },
-      "origins": ["ratsmischief:rat"]
+      "origins": [
+        "ratsmischief:rat"
+      ]
     }
   ]
 }

@@ -1,39 +1,39 @@
 {
   "entity.rat.hurt": {
-	"sounds": [
-	  {
-		"name": "mob/rabbit/hurt1",
-		"volume": 0.5
-	  },
-	  {
-		"name": "mob/rabbit/hurt2",
-		"volume": 0.5
-	  },
-	  {
-		"name": "mob/rabbit/hurt3",
-		"volume": 0.5
-	  },
-	  {
-		"name": "mob/rabbit/hurt4",
-		"volume": 0.5
-	  }
-	],
-	"subtitle": "ratsmischief.subtitles.entity.rat.hurt"
+    "sounds": [
+      {
+        "name": "mob/rabbit/hurt1",
+        "volume": 0.5
+      },
+      {
+        "name": "mob/rabbit/hurt2",
+        "volume": 0.5
+      },
+      {
+        "name": "mob/rabbit/hurt3",
+        "volume": 0.5
+      },
+      {
+        "name": "mob/rabbit/hurt4",
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "ratsmischief.subtitles.entity.rat.hurt"
   },
   "entity.rat.death": {
-	"sounds": [
-	  {
-		"name": "mob/rabbit/bunnymurder",
-		"volume": 0.5
-	  }
-	],
-	"subtitle": "ratsmischief.subtitles.entity.rat.death"
+    "sounds": [
+      {
+        "name": "mob/rabbit/bunnymurder",
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "ratsmischief.subtitles.entity.rat.death"
   },
   "entity.rat.bite": {
-	"sounds": [
-	  "mob/phantom/bite1",
-	  "mob/phantom/bite2"
-	],
-	"subtitle": "ratsmischief.subtitles.entity.rat.bite"
+    "sounds": [
+      "mob/phantom/bite1",
+      "mob/phantom/bite2"
+    ],
+    "subtitle": "ratsmischief.subtitles.entity.rat.bite"
   }
 }

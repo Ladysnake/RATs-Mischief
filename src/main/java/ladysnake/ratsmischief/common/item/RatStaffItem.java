@@ -4,7 +4,7 @@ import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.entity.ai.BreedGoal;
 import ladysnake.ratsmischief.common.entity.ai.DigGoal;
 import ladysnake.ratsmischief.common.entity.ai.HarvestPlantMealGoal;
-import net.minecraft.entity.ai.goal.FollowTargetGoal;
+import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,7 +34,7 @@ public class RatStaffItem extends Item {
             switch (action) {
                 case HARVEST -> goal = new HarvestPlantMealGoal(ratEntity);
                 case COLLECT -> ratEntity.removeCurrentActionGoal();
-                case SKIRMISH -> goal = new FollowTargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
+                case SKIRMISH -> goal = new ActiveTargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
                 case LOVE -> goal = new BreedGoal(ratEntity);
                 default -> throw new IllegalStateException("Unexpected value: " + action);
             }

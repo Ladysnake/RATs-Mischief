@@ -35,11 +35,9 @@
  */
 package ladysnake.ratsmischief.mixin;
 
-import ladysnake.ratsmischief.common.entity.RatEntity;
-import ladysnake.requiem.api.v1.possession.Possessable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
-import net.minecraft.entity.ai.goal.FollowTargetGoal;
+import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.TrackTargetGoal;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.math.Box;
@@ -53,7 +51,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static org.spongepowered.asm.mixin.injection.At.Shift.AFTER;
 
-@Mixin(FollowTargetGoal.class)
+@Mixin(ActiveTargetGoal.class)
 public abstract class FollowTargetGoalMixin extends TrackTargetGoal {
     @Shadow
     @Nullable
@@ -80,11 +78,11 @@ public abstract class FollowTargetGoalMixin extends TrackTargetGoal {
             )
     )
     private void addTargets(CallbackInfo ci) {
-        if (this.targetEntity == null) {
-            RatEntity closestRat = this.mob.world.getClosestEntity(RatEntity.class, this.targetPredicate, this.mob, this.mob.getX(), this.mob.getY() + (double)this.mob.getStandingEyeHeight(), this.mob.getZ(), this.getSearchBox(this.getFollowRange()));
-            if (closestRat != null && ((Possessable) closestRat).isBeingPossessed()) {
-                this.targetEntity = closestRat;
-            }
-        }
+//        if (this.targetEntity == null) {
+//            RatEntity closestRat = this.mob.world.getClosestEntity(RatEntity.class, this.targetPredicate, this.mob, this.mob.getX(), this.mob.getY() + (double)this.mob.getStandingEyeHeight(), this.mob.getZ(), this.getSearchBox(this.getFollowRange()));
+//            if (closestRat != null && ((Possessable) closestRat).isBeingPossessed()) {
+//                this.targetEntity = closestRat;
+//            }
+//        }
     }
 }

@@ -1,5 +1,9 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.3.3 - 1.18
+- Update to Minecraft 1.18
+- Disabled Origins and Requiem compat. Will be re-enabled when Requiem updates to 1.18
+
 ### Rat's Mischief 1.3.2 - 1.17.1
 - Added proper subtitles for rat sounds (thanks to MoriyaShiine)
 - Fixed a loot table path error that would be caused when killing rats (thanks to MoriyaShiine)

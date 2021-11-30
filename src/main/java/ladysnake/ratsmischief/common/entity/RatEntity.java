@@ -207,7 +207,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.targetSelector.add(1, new TrackOwnerAttackerGoal(this));
         this.targetSelector.add(2, new AttackWithOwnerGoal(this));
         this.targetSelector.add(3, (new RevengeGoal(this, new Class[0])).setGroupRevenge());
-        this.targetSelector.add(4, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> this.shouldAngerAt((LivingEntity) playerEntity)));
+        this.targetSelector.add(4, new ActiveTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> this.shouldAngerAt((LivingEntity) playerEntity)));
         // wild rats chase HalfOf2
 //        this.targetSelector.add(7, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> ((LivingEntity) playerEntity).getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") && !this.isTamed()));
         this.targetSelector.add(8, new ChaseForFunGoal(this, CatEntity.class, true));
@@ -292,12 +292,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         return Type.valueOf(this.dataTracker.get(TYPE));
     }
 
-    public PartyHat getPartyHat() {
-        return PartyHat.valueOf(this.dataTracker.get(PARTY_HAT));
-    }
-
     public void setRatType(Type type) {
         this.dataTracker.set(TYPE, type.toString());
+    }
+
+    public PartyHat getPartyHat() {
+        return PartyHat.valueOf(this.dataTracker.get(PARTY_HAT));
     }
 
     public DyeColor getRatColor() {

@@ -6,7 +6,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.CropBlock;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.item.BoneMealItem;
 import net.minecraft.item.ItemStack;
@@ -15,7 +14,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 
 import java.util.EnumSet;
 
