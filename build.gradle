@@ -98,7 +98,8 @@ dependencies {
 //	modCompileOnly "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
 //	modCompileOnly "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:3.+"
 
-//	modImplementation "com.github.apace100:origins-fabric:${origins_version}"
+	modCompileOnly "com.github.apace100:origins-fabric:${origins_version}"
+	modRuntimeOnly "com.github.apace100:origins-fabric:${origins_version}"
 
 	runtimeOnly "me.zeroeightsix:fiber:0.23.0-2"
 
