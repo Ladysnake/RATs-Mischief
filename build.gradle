@@ -89,14 +89,14 @@ dependencies {
 //	}
 //	include "me.shedaniel.cloth:config-2:4.8.2"
 
-//    modImplementation "io.github.ladysnake:requiem-api:${requiem_version}"
-//    modRuntime "io.github.ladysnake:requiem-core:${requiem_version}"
-//	modCompileOnly "io.github.ladysnake:requiem:${requiem_version}"
-//	modRuntime "io.github.ladysnake:requiem:${requiem_version}"
+    modImplementation "io.github.ladysnake:requiem-api:${requiem_version}"
+    modRuntimeOnly "io.github.ladysnake:requiem-core:${requiem_version}"
+	modCompileOnly "io.github.ladysnake:requiem:${requiem_version}"
+	modRuntimeOnly "io.github.ladysnake:requiem:${requiem_version}"
 
 	// Made available when Requiem is present
-//	modCompileOnly "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
-//	modCompileOnly "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:3.+"
+	modCompileOnly "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
+	modCompileOnly "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:3.+"
 
 	modCompileOnly "com.github.apace100:origins-fabric:${origins_version}"
 	modRuntimeOnly "com.github.apace100:origins-fabric:${origins_version}"
