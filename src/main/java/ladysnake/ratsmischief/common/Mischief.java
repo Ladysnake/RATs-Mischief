@@ -3,6 +3,7 @@ package ladysnake.ratsmischief.common;
 import ladysnake.ratsmischief.common.armormaterials.RatMaskArmorMaterial;
 import ladysnake.ratsmischief.common.command.PlayerRatifyCommand;
 import ladysnake.ratsmischief.common.command.PlayerUnratifyCommand;
+import ladysnake.ratsmischief.common.compat.MischiefOriginsCompat;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
 import ladysnake.ratsmischief.common.item.RatStaffItem;
@@ -85,7 +86,7 @@ public class Mischief implements ModInitializer {
 
         // origins compat hack
         if (FabricLoader.getInstance().isModLoaded("origins")) {
-//            MischiefOriginsCompat.init();
+            MischiefOriginsCompat.init();
         }
 
         // rat custom spawner
