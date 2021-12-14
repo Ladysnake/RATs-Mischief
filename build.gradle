@@ -25,6 +25,38 @@ minecraft {
 //		"fabric-particles-v1"
 //]
 
+sourceSets {
+	testmod {
+		compileClasspath += main.compileClasspath
+		runtimeClasspath += main.runtimeClasspath
+	}
+}
+
+loom {
+	runs {
+		gametest {
+			server()
+			source sourceSets.testmod
+
+			name "Game Test"
+
+			// Enable the gametest runner
+			vmArg "-Dfabric-api.gametest"
+			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
+			runDir "build/gametest"
+		}
+		autoTestServer {
+			server()
+			source sourceSets.testmod
+
+			name "Auto Test Server"
+
+			vmArg "-Dfabric.autoTest"
+		}
+	}
+}
+check.dependsOn runGametest
+
 repositories {
 	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 	maven {
@@ -103,6 +135,7 @@ dependencies {
 
 	runtimeOnly "me.zeroeightsix:fiber:0.23.0-2"
 
+	testmodImplementation sourceSets.main.output
 }
 
 processResources {
