@@ -2,6 +2,7 @@
 
 ### Rat's Mischief 1.3.4 - 1.18.1
 - Fix Origins and Requiem compatibility (thanks to Pyrofab)
+- Fix named rats having broken textures when equipped with elytrats
 
 ### Rat's Mischief 1.3.3 - 1.18
 - Update to Minecraft 1.18
