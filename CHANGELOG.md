@@ -1,5 +1,8 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.3.4 - 1.18.1
+- Fix Origins and Requiem compatibility (thanks to Pyrofab)
+
 ### Rat's Mischief 1.3.3 - 1.18
 - Update to Minecraft 1.18
 - Disabled Origins and Requiem compat. Will be re-enabled when Requiem updates to 1.18

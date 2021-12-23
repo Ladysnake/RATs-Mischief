@@ -26,9 +26,9 @@ public class ElytratFeatureRenderer extends GeoLayerRenderer<RatEntity> {
             this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/elytrat.png");
         } else {
             if (rat.getRatType() == RatEntity.Type.RAT_KID) {
-                this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/rat_kid_" + rat.getRatColor().getName().toLowerCase() + "_elytrat.png");
+                this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/rat_kid/rat_kid_" + rat.getRatColor().getName().toLowerCase() + "_elytrat.png");
             } else {
-                this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/" + rat.getRatType().toString().toLowerCase() + "_elytrat.png");
+                this.elytratLocation = new Identifier(Mischief.MODID, "textures/entity/named/" + rat.getRatType().toString().toLowerCase() + "_elytrat.png");
             }
         }
 //        }
