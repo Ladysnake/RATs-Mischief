@@ -1,5 +1,8 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.3.5 - 1.18.1
+- Fixed rats not replanting crops in modded farmland blocks such as rich soil from farmer's delight
+
 ### Rat's Mischief 1.3.4 - 1.18.1
 - Fix Origins and Requiem compatibility (thanks to Pyrofab)
 - Fix named rats having broken textures when equipped with elytrats

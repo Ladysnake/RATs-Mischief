@@ -2,8 +2,8 @@ package ladysnake.ratsmischief.common.entity.ai;
 
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.CropBlock;
+import net.minecraft.block.FarmlandBlock;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.AliasedBlockItem;
@@ -45,7 +45,7 @@ public class HarvestPlantMealGoal extends Goal {
                 } else if (itemStack.getItem() instanceof AliasedBlockItem && ((AliasedBlockItem) itemStack.getItem()).getBlock() instanceof CropBlock) {
                     // plant
                     BlockState blockState = this.rat.world.getBlockState(blockPos.add(0, -1, 0));
-                    if (blockState.getBlock() == Blocks.FARMLAND && this.rat.world.getBlockState(blockPos).isAir()) {
+                    if (blockState.getBlock() instanceof FarmlandBlock && this.rat.world.getBlockState(blockPos).isAir()) {
                         if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
                             targetBlockPos = blockPos;
                             return true;
@@ -86,7 +86,7 @@ public class HarvestPlantMealGoal extends Goal {
         } else if (itemStack.getItem() instanceof AliasedBlockItem && ((AliasedBlockItem) itemStack.getItem()).getBlock() instanceof CropBlock) {
             // plant
             BlockState blockState = this.rat.world.getBlockState(targetBlockPos.add(0, -1, 0));
-            if (!(blockState.getBlock() == Blocks.FARMLAND && this.rat.world.getBlockState(targetBlockPos).isAir())) {
+            if (!(blockState.getBlock() instanceof FarmlandBlock && this.rat.world.getBlockState(targetBlockPos).isAir())) {
                 this.canStart();
             }
 
