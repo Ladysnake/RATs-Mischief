@@ -1,7 +1,7 @@
 {
   "required": true,
   "package": "ladysnake.ratsmischief.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_17",
   "mixins": [
     "CatEntityMixin",
     "LivingEntityMixin"

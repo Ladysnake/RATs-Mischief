@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.10-SNAPSHOT'
+	id 'fabric-loom' version '0.11-SNAPSHOT'
 	id 'maven-publish'
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 	id 'org.ajoberstar.grgit' version '3.1.1'
@@ -15,15 +15,6 @@ apply from: 'https://raw.githubusercontent.com/NerdHubMC/Gradle-Scripts/master/s
 archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
-
-minecraft {
-}
-
-//def apiModules = [
-//		"fabric-api-base",
-//		"fabric-resource-loader-v0",
-//		"fabric-particles-v1"
-//]
 
 sourceSets {
 	testmod {
@@ -62,11 +53,6 @@ repositories {
 	maven {
 		name = 'Ladysnake Mods'
 		url = 'https://ladysnake.jfrog.io/artifactory/mods'
-		content {
-			includeGroup 'io.github.ladysnake'
-			includeGroupByRegex 'dev\\.emi.*'
-			includeGroupByRegex 'io\\.github\\.onyxstudios.*'
-		}
 	}
 	maven {
 		url = 'https://maven.jamieswhiteshirt.com/libs-release/'
@@ -108,30 +94,22 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-//	apiModules.each {
-//		modImplementation include(fabricApi.module(it, project.fabric_version))
-//	}
 
 	// Geckolib
-	modImplementation 'software.bernie.geckolib:geckolib-fabric-1.18:3.0.21'
+	modImplementation "software.bernie.geckolib:geckolib-fabric-${project.geckolib_version}"
 
-//	// cloth config
-//	modApi("me.shedaniel.cloth:config-2:4.8.2") {
-//		exclude(group: "net.fabricmc.fabric-api")
-//	}
-//	include "me.shedaniel.cloth:config-2:4.8.2"
-
-    modImplementation "io.github.ladysnake:requiem-api:${requiem_version}"
-    modRuntimeOnly "io.github.ladysnake:requiem-core:${requiem_version}"
-	modCompileOnly "io.github.ladysnake:requiem:${requiem_version}"
-	modRuntimeOnly "io.github.ladysnake:requiem:${requiem_version}"
-
-	// Made available when Requiem is present
-	modCompileOnly "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
-	modCompileOnly "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:3.+"
-
-	modCompileOnly "com.github.apace100:origins-fabric:${origins_version}"
-	modRuntimeOnly "com.github.apace100:origins-fabric:${origins_version}"
+//	modCompileOnly "io.github.ladysnake:requiem-api:${requiem_version}"
+//	modCompileOnly "io.github.ladysnake:requiem-core:${requiem_version}"
+//	modCompileOnly "io.github.ladysnake:requiem:${requiem_version}"
+//	modCompileOnly "io.github.ladysnake:requiem:${requiem_version}"
+//
+//	// Made available when Requiem is present
+//	modCompileOnly "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
+//	modCompileOnly "dev.onyxstudios.cardinal-components-api:cardinal-components-base:4.+"
+//	modCompileOnly "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:4.+"
+//
+//	modCompileOnly "com.github.apace100:origins-fabric:${origins_version}"
+//	modRuntimeOnly "com.github.apace100:origins-fabric:${origins_version}"
 
 	runtimeOnly "me.zeroeightsix:fiber:0.23.0-2"
 

@@ -12,7 +12,7 @@
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/rats-mischief",
     "sources": "https://github.com/doctor4t/rats-mischief"
   },
-  "license": "Code: GNU GPLv3; Art: ARR",
+  "license": "ARR",
   "icon": "assets/ratsmischief/icon.png",
   "environment": "*",
   "entrypoints": {
@@ -21,9 +21,6 @@
     ],
     "client": [
       "ladysnake.ratsmischief.client.MischiefClient"
-    ],
-    "requiem:plugin": [
-      "ladysnake.ratsmischief.common.MischiefRequiemPlugin"
     ]
   },
   "mixins": [
@@ -35,9 +32,11 @@
     ]
   },
   "depends": {
-    "fabricloader": ">=0.7.4",
-    "fabric": "*",
-    "geckolib3": "*"
+    "fabricloader": ">=0.13.3",
+    "minecraft": "~1.18.2",
+    "java": ">=17",
+    "fabric": ">=0.48.0",
+    "geckolib3": ">=3.0.32"
   },
   "suggests": {
     "requiem": ">=2.0.0-"

@@ -9,14 +9,15 @@ import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.tag.ConfiguredStructureFeatureTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.SpawnHelper;
-import net.minecraft.world.gen.Spawner;
 import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.poi.PointOfInterestStorage;
 import net.minecraft.world.poi.PointOfInterestType;
+import net.minecraft.world.spawner.Spawner;
 
 import java.util.List;
 import java.util.Random;
@@ -40,7 +41,7 @@ public class RatSpawner implements Spawner {
 
                     // test early if the rat can spawn
                     if (RatEntity.canMobSpawn(Mischief.RAT, world, SpawnReason.NATURAL, blockPos, world.getRandom())) {
-                        BlockPos villagePos = world.locateStructure(StructureFeature.VILLAGE, blockPos, 5, false);
+                        BlockPos villagePos = world.locateStructure(ConfiguredStructureFeatureTags.VILLAGE, blockPos, 5, false);
                         // if a village was found and it's close enough
                         if (villagePos != null && blockPos.getManhattanDistance(villagePos) <= 300) {
                             List<VillagerEntity> villagersNearby = world.getEntitiesByType(EntityType.VILLAGER, new Box(blockPos.getX() - SPAWN_RADIUS, blockPos.getY() - SPAWN_RADIUS, blockPos.getZ() - SPAWN_RADIUS, blockPos.getX() + SPAWN_RADIUS, blockPos.getY() + SPAWN_RADIUS, blockPos.getZ() + SPAWN_RADIUS), villagerEntity -> true);
