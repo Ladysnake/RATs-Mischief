@@ -67,9 +67,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 public class RatEntity extends TameableEntity implements IAnimatable, Angerable {
-    public static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (itemEntity) -> {
-        return !itemEntity.cannotPickup() && itemEntity.isAlive();
-    };
+    public static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (itemEntity) -> !itemEntity.cannotPickup() && itemEntity.isAlive();
     public static final List<Type> NATURAL_TYPES = ImmutableList.of(
             Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
     );
@@ -126,18 +124,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         // try spawning a staff
         if (this.getRandom().nextInt(20) == 0) {
             switch (this.getRandom().nextInt(4)) {
-                case 0:
-                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.HARVEST_STAFF));
-                    break;
-                case 1:
-                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.COLLECTION_STAFF));
-                    break;
-                case 2:
-                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.SKIRMISH_STAFF));
-                    break;
-                case 3:
-                    this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.LOVE_STAFF));
-                    break;
+                case 0 -> this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.HARVEST_STAFF));
+                case 1 -> this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.COLLECTION_STAFF));
+                case 2 -> this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.SKIRMISH_STAFF));
+                case 3 -> this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.LOVE_STAFF));
             }
             return;
         }
@@ -197,7 +187,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.goalSelector.add(4, new RatEntity.SwoopMovementGoal()); // elytrat
         this.goalSelector.add(4, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.add(5, new RatEntity.PickupItemGoal());
-        this.goalSelector.add(5, new BringItemToOwnerGoal(this, 1.0D, 16.0F, 1.0F, false));
+        this.goalSelector.add(5, new BringItemToOwnerGoal(this, 1.0D, false));
         this.goalSelector.add(6, new FlyWithOwnerGoal()); // elytrat
         this.goalSelector.add(6, new FollowOwnerRatGoal(this, 1.0D, 20.0F, 2.0F, false));
         this.goalSelector.add(7, new AnimalMateGoal(this, 1.0D));
@@ -206,12 +196,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         this.goalSelector.add(10, new LookAroundGoal(this));
         this.targetSelector.add(1, new TrackOwnerAttackerGoal(this));
         this.targetSelector.add(2, new AttackWithOwnerGoal(this));
-        this.targetSelector.add(3, (new RevengeGoal(this, new Class[0])).setGroupRevenge());
-        this.targetSelector.add(4, new ActiveTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> this.shouldAngerAt((LivingEntity) playerEntity)));
+        this.targetSelector.add(3, (new RevengeGoal(this)).setGroupRevenge());
+        this.targetSelector.add(4, new ActiveTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
         // wild rats chase HalfOf2
 //        this.targetSelector.add(7, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, playerEntity -> ((LivingEntity) playerEntity).getUuidAsString().equals("acc98050-d266-4524-a284-05c2429b540d") && !this.isTamed()));
-        this.targetSelector.add(8, new ChaseForFunGoal(this, CatEntity.class, true));
-        this.targetSelector.add(8, new UniversalAngerGoal(this, true));
+        this.targetSelector.add(8, new ChaseForFunGoal<>(this, CatEntity.class, true));
+        this.targetSelector.add(8, new UniversalAngerGoal<>(this, true));
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
@@ -315,7 +305,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         if (tag.contains("RatType")) {
             this.setRatType(Type.valueOf(tag.getString("RatType")));
         }
-        this.readAngerFromNbt((ServerWorld) this.world, tag);
+        this.readAngerFromNbt(this.world, tag);
 
         if (tag.contains("Sitting")) {
             this.setSitting(tag.getBoolean("Sitting"));
@@ -387,26 +377,17 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
 
         if (this.hasCustomName()) {
-            if (this.getCustomName().getString().equalsIgnoreCase("doctor4t")) {
-                this.setRatType(Type.DOCTOR4T);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("ratater")) {
-                this.setRatType(Type.RATATER);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("rat kid") || this.getCustomName().getString().equalsIgnoreCase("hat kid")) {
-                this.setRatType(Type.RAT_KID);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("jotaro") || this.getCustomName().getString().equalsIgnoreCase("jorato")) {
-                this.setRatType(Type.JORATO);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("jerma") || this.getCustomName().getString().equalsIgnoreCase("jerma985")) {
-                this.setRatType(Type.JERMA);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("hollow rat") || this.getCustomName().getString().equalsIgnoreCase("hollow knight")) {
-                this.setRatType(Type.HOLLOW);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("rateline") || this.getCustomName().getString().equalsIgnoreCase("madeline")) {
-                this.setRatType(Type.RATELINE);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("biggie cheese")) {
-                this.setRatType(Type.BIGGIE_CHEESE);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("arathain") || this.getCustomName().getString().equalsIgnoreCase("arathainfarqoe")) {
-                this.setRatType(Type.ARATHAIN);
-            } else if (this.getCustomName().getString().equalsIgnoreCase("astron") || this.getCustomName().getString().equalsIgnoreCase("astronyu")) {
-                this.setRatType(Type.ASTRONYU);
+            switch (getCustomName().asString().toLowerCase(Locale.ROOT)) {
+                case "doctor4t" -> setRatType(Type.DOCTOR4T);
+                case "ratater" -> setRatType(Type.RATATER);
+                case "rat kid", "hat kid" -> setRatType(Type.RAT_KID);
+                case "jotaro", "jorato" -> setRatType(Type.JORATO);
+                case "jerma", "jerma985" -> setRatType(Type.JERMA);
+                case "hollow rat", "hollow knight" -> setRatType(Type.HOLLOW);
+                case "rateline", "madeline" -> setRatType(Type.RATELINE);
+                case "biggie cheese" -> setRatType(Type.BIGGIE_CHEESE);
+                case "arathain" -> setRatType(Type.ARATHAIN);
+                case "astron", "astronyu" -> setRatType(Type.ASTRONYU);
             }
         }
 
@@ -450,11 +431,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
 
         if (!this.world.isClient && this.canPickUpLoot() && this.isAlive() && !this.dead && !this.isEating()) {
-            List<ItemEntity> list = this.world.getNonSpectatingEntities(ItemEntity.class, this.getBoundingBox().expand(1.0D, 0.0D, 1.0D));
-            Iterator var2 = list.iterator();
-
-            while (var2.hasNext()) {
-                ItemEntity itemEntity = (ItemEntity) var2.next();
+            for (ItemEntity itemEntity : world.getNonSpectatingEntities(ItemEntity.class, this.getBoundingBox().expand(1, 0, 1))) {
                 if (!itemEntity.isRemoved() && !itemEntity.getStack().isEmpty() && !itemEntity.cannotPickup() && this.canGather(itemEntity.getStack())) {
                     this.loot(itemEntity);
                 }
@@ -486,7 +463,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                     if (!player.getAbilities().creativeMode) {
                         itemStack.decrement(1);
                     }
-
                     this.heal((float) item.getFoodComponent().getHunger());
                     return ActionResult.SUCCESS;
                 }
@@ -536,7 +512,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public int getAngerTime() {
-        return (Integer) this.dataTracker.get(ANGER_TIME);
+        return this.dataTracker.get(ANGER_TIME);
     }
 
     @Override
@@ -566,9 +542,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     @Override
     public boolean canAttackWithOwner(LivingEntity target, LivingEntity owner) {
         if (!(target instanceof CreeperEntity || (target instanceof GhastEntity && !this.isElytrat()))) {
-            if (target instanceof RatEntity) {
-                RatEntity ratEntity = (RatEntity) target;
-                return !ratEntity.isTamed() || ratEntity.getOwner() != owner;
+            if (target instanceof RatEntity rat) {
+                return !rat.isTamed() || rat.getOwner() != owner;
             } else if (target instanceof PlayerEntity && owner instanceof PlayerEntity && !((PlayerEntity) owner).shouldDamagePlayer((PlayerEntity) target)) {
                 return false;
             } else if (target instanceof HorseBaseEntity && ((HorseBaseEntity) target).isTame()) {
@@ -603,7 +578,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public boolean isSniffing() {
-        return (Boolean) this.dataTracker.get(SNIFFING);
+        return this.dataTracker.get(SNIFFING);
     }
 
     public void setSniffing(boolean sniffing) {
@@ -611,7 +586,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public boolean isEating() {
-        return (Boolean) this.dataTracker.get(EATING);
+        return this.dataTracker.get(EATING);
     }
 
     public void setEating(boolean eating) {
@@ -619,7 +594,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public boolean isFlying() {
-        return (Boolean) this.dataTracker.get(FLYING);
+        return this.dataTracker.get(FLYING);
     }
 
     public void setFlying(boolean eating) {
@@ -627,7 +602,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public int getRocketTime() {
-        return (Integer) this.dataTracker.get(ROCKET_TIME);
+        return this.dataTracker.get(ROCKET_TIME);
     }
 
     public void setRocketTime(int ticks) {
@@ -849,20 +824,20 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             List<ItemEntity> list = RatEntity.this.world.getEntitiesByClass(ItemEntity.class, RatEntity.this.getBoundingBox().expand(10.0D, 10.0D, 10.0D), RatEntity.PICKABLE_DROP_FILTER);
             ItemStack itemStack = RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND);
             if (itemStack.isEmpty() && !list.isEmpty()) {
-                RatEntity.this.getNavigation().startMovingTo((Entity) list.get(0), 1);
+                RatEntity.this.getNavigation().startMovingTo(list.get(0), 1);
             }
         }
 
         public void start() {
             List<ItemEntity> list = RatEntity.this.world.getEntitiesByClass(ItemEntity.class, RatEntity.this.getBoundingBox().expand(10.0D, 10.0D, 10.0D), RatEntity.PICKABLE_DROP_FILTER);
             if (!list.isEmpty()) {
-                RatEntity.this.getNavigation().startMovingTo((Entity) list.get(0), 1);
+                RatEntity.this.getNavigation().startMovingTo(list.get(0), 1);
             }
         }
     }
 
     public class BringItemToOwnerGoal extends FollowOwnerGoal {
-        public BringItemToOwnerGoal(TameableEntity tameable, double speed, float minDistance, float maxDistance, boolean leavesAllowed) {
+        public BringItemToOwnerGoal(TameableEntity tameable, double speed, boolean leavesAllowed) {
             super(tameable, speed, 0.0f, 0.0f, leavesAllowed);
         }
 
@@ -890,8 +865,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     class StartAttackGoal extends Goal {
-        private int cooldown;
-
         private StartAttackGoal() {
         }
 
@@ -900,7 +873,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
 
         public void start() {
-            this.cooldown = 10;
             this.startSwoop();
             RatEntity.this.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 0.95F + RatEntity.this.random.nextFloat() * 0.1F);
             RatEntity.this.setRocketTime(20 + RatEntity.this.random.nextInt(10));
@@ -936,7 +908,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 return false;
             } else if (!livingEntity.isAlive()) {
                 return false;
-            } else if (livingEntity instanceof PlayerEntity && (((PlayerEntity) livingEntity).isSpectator() || ((PlayerEntity) livingEntity).isCreative())) {
+            } else if (livingEntity instanceof PlayerEntity && (livingEntity.isSpectator() || ((PlayerEntity) livingEntity).isCreative())) {
                 return false;
             } else if (!this.canStart()) {
                 return false;
@@ -972,7 +944,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 return false;
             } else if (!owner.isAlive()) {
                 return false;
-            } else if (owner instanceof PlayerEntity && (((PlayerEntity) owner).isSpectator() || ((PlayerEntity) owner).isCreative())) {
+            } else if (owner instanceof PlayerEntity && (owner.isSpectator() || ((PlayerEntity) owner).isCreative())) {
                 return false;
             } else if (!this.canStart()) {
                 return false;
@@ -990,13 +962,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
     }
 
-    abstract class MovementGoal extends Goal {
+    abstract static class MovementGoal extends Goal {
         public MovementGoal() {
             this.setControls(EnumSet.of(Control.MOVE));
-        }
-
-        protected boolean isNearTarget() {
-            return RatEntity.this.targetPosition.squaredDistanceTo(RatEntity.this.getX(), RatEntity.this.getY(), RatEntity.this.getZ()) < 4.0D;
         }
     }
 
@@ -1042,21 +1010,20 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                     float f = (float) (RatEntity.this.targetPosition.x - RatEntity.this.getX());
                     float g = (float) (RatEntity.this.targetPosition.y - RatEntity.this.getY());
                     float h = (float) (RatEntity.this.targetPosition.z - RatEntity.this.getZ());
-                    double d = (double) MathHelper.sqrt(f * f + h * h);
+                    double d = MathHelper.sqrt(f * f + h * h);
                     double e = 1.0D - (double) MathHelper.abs(g * 0.7F) / d;
                     f = (float) ((double) f * e);
                     h = (float) ((double) h * e);
-                    d = (double) MathHelper.sqrt(f * f + h * h);
-                    double i = (double) MathHelper.sqrt(f * f + h * h + g * g);
-                    float j = RatEntity.this.getYaw();
-                    float k = (float) MathHelper.atan2((double) h, (double) f);
+                    d = MathHelper.sqrt(f * f + h * h);
+                    double i = MathHelper.sqrt(f * f + h * h + g * g);
+                    float k = (float) MathHelper.atan2(h, f);
                     float l = MathHelper.wrapDegrees(RatEntity.this.getYaw() + 90.0F);
                     float m = MathHelper.wrapDegrees(k * 57.295776F);
                     RatEntity.this.setYaw(MathHelper.stepUnwrappedAngleTowards(l, m, 4.0F) - 90.0F);
                     RatEntity.this.bodyYaw = RatEntity.this.getYaw();
                     this.targetSpeed = MathHelper.stepTowards(this.targetSpeed, 2.0F, 0.01F * (2.0F / this.targetSpeed));
 
-                    float n = (float) (-(MathHelper.atan2((double) (-g), d) * 57.2957763671875D));
+                    float n = (float) (-(MathHelper.atan2(-g, d) * 57.2957763671875D));
                     RatEntity.this.setPitch(n);
                     float o = RatEntity.this.getYaw() + 90.0F;
                     double p = (double) (this.targetSpeed * MathHelper.cos(o * 0.017453292F)) * Math.abs((double) f / i);
