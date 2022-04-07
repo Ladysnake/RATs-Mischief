@@ -41,10 +41,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TimeHelper;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -107,10 +104,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     public static Type getRandomNaturalType(Random random) {
         return NATURAL_TYPES.get(random.nextInt(NATURAL_TYPES.size()));
-    }
-
-    public boolean isSpecial() {
-        return !(NATURAL_TYPES.contains(this.getRatType()) || this.getRatType() == Type.WILD || this.getRatType() == Type.GOLD);
     }
 
     @Override
@@ -773,25 +766,32 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     public enum Type {
-        WILD,
-        ALBINO,
-        BLACK,
-        GREY,
-        HUSKY,
-        CHOCOLATE,
-        LIGHT_BROWN,
-        RUSSIAN_BLUE,
-        GOLD,
-        DOCTOR4T,
-        RAT_KID,
-        RATATER,
-        JORATO,
-        JERMA,
-        HOLLOW,
-        RATELINE,
-        BIGGIE_CHEESE,
-        ARATHAIN,
-        ASTRONYU
+        WILD(new Identifier(Mischief.MODID, "textures/entity/wild.png"), null),
+        ALBINO(new Identifier(Mischief.MODID, "textures/entity/albino.png"), null),
+        BLACK(new Identifier(Mischief.MODID, "textures/entity/black.png"), null),
+        GREY(new Identifier(Mischief.MODID, "textures/entity/grey.png"), null),
+        HUSKY(new Identifier(Mischief.MODID, "textures/entity/husky.png"), null),
+        CHOCOLATE(new Identifier(Mischief.MODID, "textures/entity/chocolate.png"), null),
+        LIGHT_BROWN(new Identifier(Mischief.MODID, "textures/entity/light_brown.png"), null),
+        RUSSIAN_BLUE(new Identifier(Mischief.MODID, "textures/entity/russian_blue.png"), null),
+        GOLD(new Identifier(Mischief.MODID, "textures/entity/gold.png"), new Identifier(Mischief.MODID, "textures/entity/gold_elytrat.png")),
+        DOCTOR4T(new Identifier(Mischief.MODID, "textures/entity/named/doctor4t.png"), new Identifier(Mischief.MODID, "textures/entity/named/doctor4t_elytrat.png")),
+        RAT_KID(null, null),
+        RATATER(new Identifier(Mischief.MODID, "textures/entity/named/ratater.png"), new Identifier(Mischief.MODID, "textures/entity/named/ratater_elytrat.png")),
+        JORATO(new Identifier(Mischief.MODID, "textures/entity/named/jorato.png"), new Identifier(Mischief.MODID, "textures/entity/named/jorato_elytrat.png")),
+        JERMA(new Identifier(Mischief.MODID, "textures/entity/named/jerma.png"), new Identifier(Mischief.MODID, "textures/entity/named/jerma_elytrat.png")),
+        HOLLOW(new Identifier(Mischief.MODID, "textures/entity/named/hollow.png"), new Identifier(Mischief.MODID, "textures/entity/named/hollow_elytrat.png")),
+        RATELINE(new Identifier(Mischief.MODID, "textures/entity/named/rateline.png"), new Identifier(Mischief.MODID, "textures/entity/named/rateline_elytrat.png")),
+        BIGGIE_CHEESE(new Identifier(Mischief.MODID, "textures/entity/named/biggie_cheese.png"), new Identifier(Mischief.MODID, "textures/entity/named/biggie_cheese_elytrat.png")),
+        ARATHAIN(new Identifier(Mischief.MODID, "textures/entity/named/arathain.png"), new Identifier(Mischief.MODID, "textures/entity/named/arathain_elytrat.png")),
+        ASTRONYU(new Identifier(Mischief.MODID, "textures/entity/named/astronyu.png"), null);
+
+        public final Identifier ratTexture, elytratTexture;
+
+        Type(Identifier ratTexture, Identifier elytratTexture) {
+            this.ratTexture = ratTexture;
+            this.elytratTexture = elytratTexture;
+        }
     }
 
     public enum PartyHat {
