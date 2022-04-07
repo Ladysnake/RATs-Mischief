@@ -261,7 +261,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             }
 
             if (this.random.nextInt(bound) == 0) {
-                this.dataTracker.startTracking(TYPE, Type.GOLD.toString());
+                this.dataTracker.set(TYPE, Type.GOLD.toString());
             } else {
                 ratEntity.setRatType(getRandomNaturalType(random));
             }
