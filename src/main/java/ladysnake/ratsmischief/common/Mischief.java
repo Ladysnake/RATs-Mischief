@@ -91,12 +91,9 @@ public class Mischief implements ModInitializer {
 
         // rat custom spawner
         RatSpawner ratSpawner = new RatSpawner();
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
+        ServerTickEvents.END_WORLD_TICK.register(world -> {
             // spawn rats
-            server.getWorlds().forEach(world -> {
-                ratSpawner.spawn(world, server.getSaveProperties().getDifficulty() != Difficulty.PEACEFUL, server.shouldSpawnAnimals());
-            });
-
+            ratSpawner.spawn(world, world.getDifficulty() != Difficulty.PEACEFUL, world.getServer().shouldSpawnAnimals());
         });
 
         RAT_SPAWN_EGG = registerItem(new SpawnEggItem(RAT, 0x1A1A1A, 0xF2ADA1, (new Item.Settings()).group(ItemGroup.MISC)), "rat_spawn_egg");
