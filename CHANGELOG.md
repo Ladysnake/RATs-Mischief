@@ -1,5 +1,13 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.3.6 - 1.18.2
+- Updated to 1.18.2
+- Fixed a crash happening with Inspection and REI
+- Fixed a crash caused by breeding golden rats
+- Fixed the rat spawn egg texture
+- Fixed rats render distance being only 16 blocks
+- Fixed broken elytrat textures
+
 ### Rat's Mischief 1.3.5 - 1.18.1
 - Fixed rats not replanting crops in modded farmland blocks such as rich soil from farmer's delight
 
