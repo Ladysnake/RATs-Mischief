@@ -111,8 +111,6 @@ This item can be repaired in an anvil using phantom membranes.
 
 #### Will you be making a Forge version? Does a Forge version exist?
 
-**No:** I will not be making a Forge version of this mod. The code being GPL3 however, feel free to do a port if you feel like it.
-
 
 
 ## [**If you have questions, propositions or ideas, join us on Discord!**](https://ladysnake.glitch.me)
