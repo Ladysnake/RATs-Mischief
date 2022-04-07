@@ -73,7 +73,7 @@ public class Mischief implements ModInitializer {
     public void onInitialize() {
         GeckoLib.initialize();
 
-        RAT = registerEntity("rat", FabricEntityTypeBuilder.createMob().entityFactory(RatEntity::new).spawnGroup(SpawnGroup.AMBIENT).dimensions(EntityDimensions.changing(0.6F, 0.4F)).trackRangeBlocks(8).spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RatEntity::canMobSpawn).build());
+        RAT = registerEntity("rat", FabricEntityTypeBuilder.createMob().entityFactory(RatEntity::new).spawnGroup(SpawnGroup.AMBIENT).dimensions(EntityDimensions.fixed(0.6F, 0.4F)).spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RatEntity::canMobSpawn).build());
         FabricDefaultAttributeRegistry.register(RAT, RatEntity.createEntityAttributes());
 
         // ratify and untratify commands
