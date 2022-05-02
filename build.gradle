@@ -108,7 +108,7 @@ dependencies {
 //	modCompileOnly "dev.onyxstudios.cardinal-components-api:cardinal-components-base:4.+"
 //	modCompileOnly "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:4.+"
 //
-//	modCompileOnly "com.github.apace100:origins-fabric:${origins_version}"
+	modCompileOnly "com.github.apace100:origins-fabric:${origins_version}"
 //	modRuntimeOnly "com.github.apace100:origins-fabric:${origins_version}"
 
 	runtimeOnly "me.zeroeightsix:fiber:0.23.0-2"
