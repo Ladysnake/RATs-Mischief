@@ -1,5 +1,8 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.3.7 - 1.18.2
+- Fixed being unable to start a world with origins installed
+
 ### Rat's Mischief 1.3.6 - 1.18.2
 - Updated to 1.18.2
 - Fixed a crash happening with Inspection and REI
