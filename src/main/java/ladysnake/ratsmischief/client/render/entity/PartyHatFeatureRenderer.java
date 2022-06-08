@@ -34,7 +34,7 @@ public class PartyHatFeatureRenderer extends GeoLayerRenderer<RatEntity> {
                 }
             }
             Identifier hatTexture = TEXTURES[ratEntity.getPartyHat().ordinal()];
-            partyHatEntityRenderer.render(getEntityModel().getModel(getEntityModel().getModelLocation(ratEntity)),
+            partyHatEntityRenderer.render(getEntityModel().getModel(getEntityModel().getModelResource(ratEntity)),
                     ratEntity,
                     partialTicks,
                     RenderLayer.getEntityCutout(hatTexture),

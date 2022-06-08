@@ -1,23 +1,18 @@
 package ladysnake.ratsmischief.common;
 
 import ladysnake.ratsmischief.common.armormaterials.RatMaskArmorMaterial;
-import ladysnake.ratsmischief.common.command.PlayerRatifyCommand;
-import ladysnake.ratsmischief.common.command.PlayerUnratifyCommand;
-import ladysnake.ratsmischief.common.compat.MischiefOriginsCompat;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
 import ladysnake.ratsmischief.common.item.RatStaffItem;
 import ladysnake.ratsmischief.common.village.MischiefTradeOffers;
 import ladysnake.ratsmischief.common.world.RatSpawner;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.*;
-import net.minecraft.entity.decoration.painting.PaintingMotive;
+import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -76,19 +71,6 @@ public class Mischief implements ModInitializer {
         RAT = registerEntity("rat", FabricEntityTypeBuilder.createMob().entityFactory(RatEntity::new).spawnGroup(SpawnGroup.AMBIENT).dimensions(EntityDimensions.fixed(0.6F, 0.4F)).spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, RatEntity::canMobSpawn).build());
         FabricDefaultAttributeRegistry.register(RAT, RatEntity.createEntityAttributes());
 
-        // ratify and untratify commands
-        CommandRegistrationCallback.EVENT.register((commandDispatcher, b) ->
-                PlayerRatifyCommand.register(commandDispatcher)
-        );
-        CommandRegistrationCallback.EVENT.register((commandDispatcher, b) ->
-                PlayerUnratifyCommand.register(commandDispatcher)
-        );
-
-        // origins compat hack
-        if (FabricLoader.getInstance().isModLoaded("origins")) {
-            MischiefOriginsCompat.init();
-        }
-
         // rat custom spawner
         RatSpawner ratSpawner = new RatSpawner();
         ServerTickEvents.END_WORLD_TICK.register(world -> {
@@ -116,7 +98,7 @@ public class Mischief implements ModInitializer {
         ENTITY_RAT_BITE = Registry.register(Registry.SOUND_EVENT, ENTITY_RAT_BITE.getId(), ENTITY_RAT_BITE);
 
         // rat kid painting
-        Registry.register(Registry.PAINTING_MOTIVE, new Identifier(MODID, "a_rat_in_time"), new PaintingMotive(64, 48));
+        Registry.register(Registry.PAINTING_VARIANT, new Identifier(MODID, "a_rat_in_time"), new PaintingVariant(64, 48));
 
         TradeOfferHelper.registerWanderingTraderOffers(1, factories -> factories.add(new MischiefTradeOffers.SellItemFactory(Mischief.RAT_MASK, 40, 1, 3, 40)));
     }

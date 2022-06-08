@@ -2,25 +2,22 @@ package ladysnake.ratsmischief.common.world;
 
 import ladysnake.ratsmischief.common.Mischief;
 import ladysnake.ratsmischief.common.entity.RatEntity;
-import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.tag.ConfiguredStructureFeatureTags;
+import net.minecraft.tag.StructureTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.SpawnHelper;
-import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.poi.PointOfInterestStorage;
-import net.minecraft.world.poi.PointOfInterestType;
+import net.minecraft.world.poi.PointOfInterestTypes;
 import net.minecraft.world.spawner.Spawner;
 
 import java.util.List;
-import java.util.Random;
 
 public class RatSpawner implements Spawner {
     public static final int SPAWN_RADIUS = 100;
@@ -41,7 +38,7 @@ public class RatSpawner implements Spawner {
 
                     // test early if the rat can spawn
                     if (RatEntity.canMobSpawn(Mischief.RAT, world, SpawnReason.NATURAL, blockPos, world.getRandom())) {
-                        BlockPos villagePos = world.locateStructure(ConfiguredStructureFeatureTags.VILLAGE, blockPos, 5, false);
+                        BlockPos villagePos = world.locateStructure(StructureTags.VILLAGE, blockPos, 5, false);
                         // if a village was found and it's close enough
                         if (villagePos != null && blockPos.getManhattanDistance(villagePos) <= 300) {
                             List<VillagerEntity> villagersNearby = world.getEntitiesByType(EntityType.VILLAGER, new Box(blockPos.getX() - SPAWN_RADIUS, blockPos.getY() - SPAWN_RADIUS, blockPos.getZ() - SPAWN_RADIUS, blockPos.getX() + SPAWN_RADIUS, blockPos.getY() + SPAWN_RADIUS, blockPos.getZ() + SPAWN_RADIUS), villagerEntity -> true);
@@ -62,21 +59,29 @@ public class RatSpawner implements Spawner {
         return 0;
     }
 
-    private void spawnInHouse(ServerWorld world, BlockPos pos) {
-        long bedCount = world.getPointOfInterestStorage().count(PointOfInterestType.HOME.getCompletionCondition(), pos, 48, PointOfInterestStorage.OccupationStatus.HAS_SPACE);
-        List<RatEntity> list = world.getNonSpectatingEntities(RatEntity.class, (new Box(pos)).expand(96.0, 16.0D, 96.0D));
-
-        if (list.size() < bedCount * 3 && list.size() < 20) {
-            this.spawn(world, pos);
+    private int spawnInHouse(ServerWorld world, BlockPos pos) {
+        boolean i = true;
+        if (world.getPointOfInterestStorage().count((registryEntry) -> {
+            return registryEntry.matchesKey(PointOfInterestTypes.HOME);
+        }, pos, 48, PointOfInterestStorage.OccupationStatus.HAS_SPACE) > 4L) {
+            List<RatEntity> list = world.getNonSpectatingEntities(RatEntity.class, (new Box(pos)).expand(48.0D, 8.0D, 48.0D));
+            if (list.size() < 10) {
+                return this.spawn(pos, world);
+            }
         }
+
+        return 0;
     }
 
-    private void spawn(ServerWorld world, BlockPos pos) {
-        RatEntity ratEntity = Mischief.RAT.create(world);
-        if (ratEntity != null) {
-            ratEntity.initialize(world, world.getLocalDifficulty(pos), SpawnReason.NATURAL, (EntityData) null, (NbtCompound) null);
-            ratEntity.refreshPositionAndAngles(pos, 0.0F, 0.0F);
-            world.spawnEntityAndPassengers(ratEntity);
+    private int spawn(BlockPos pos, ServerWorld world) {
+        RatEntity catEntity = Mischief.RAT.create(world);
+        if (catEntity == null) {
+            return 0;
+        } else {
+            catEntity.initialize(world, world.getLocalDifficulty(pos), SpawnReason.NATURAL, null, null);
+            catEntity.refreshPositionAndAngles(pos, 0.0F, 0.0F);
+            world.spawnEntityAndPassengers(catEntity);
+            return 1;
         }
     }
 }

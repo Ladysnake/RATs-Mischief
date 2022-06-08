@@ -19,7 +19,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
@@ -41,7 +40,7 @@ public class StaffCommandSelectionScreen extends Screen {
     private static final Text SELECT_NEXT_TEXT;
 
     static {
-        SELECT_NEXT_TEXT = new TranslatableText("debug.gamemodes.select_next", new Object[]{(new TranslatableText("debug.gamemodes.press_f4")).formatted(Formatting.AQUA)});
+        SELECT_NEXT_TEXT = Text.translatable("debug.gamemodes.select_next", new Object[]{(Text.translatable("debug.gamemodes.press_f4")).formatted(Formatting.AQUA)});
     }
 
     private final Optional<StaffCommandSelectionScreen.GameMode> currentGameMode = StaffCommandSelectionScreen.GameMode.of(this.getPreviousGameMode());
@@ -155,10 +154,10 @@ public class StaffCommandSelectionScreen extends Screen {
 
     @Environment(EnvType.CLIENT)
     private static enum GameMode {
-        CREATIVE(new TranslatableText("gameMode.creative"), "/gamemode creative", new ItemStack(Mischief.HARVEST_STAFF)),
-        SURVIVAL(new TranslatableText("gameMode.survival"), "/gamemode survival", new ItemStack(Mischief.COLLECTION_STAFF)),
-        ADVENTURE(new TranslatableText("gameMode.adventure"), "/gamemode adventure", new ItemStack(Mischief.LOVE_STAFF)),
-        SPECTATOR(new TranslatableText("gameMode.spectator"), "/gamemode spectator", new ItemStack(Items.BARRIER));
+        CREATIVE(Text.translatable("gameMode.creative"), "/gamemode creative", new ItemStack(Mischief.HARVEST_STAFF)),
+        SURVIVAL(Text.translatable("gameMode.survival"), "/gamemode survival", new ItemStack(Mischief.COLLECTION_STAFF)),
+        ADVENTURE(Text.translatable("gameMode.adventure"), "/gamemode adventure", new ItemStack(Mischief.LOVE_STAFF)),
+        SPECTATOR(Text.translatable("gameMode.spectator"), "/gamemode spectator", new ItemStack(Items.BARRIER));
 
         protected static final StaffCommandSelectionScreen.GameMode[] VALUES = values();
         protected static final int field_32316 = 5;

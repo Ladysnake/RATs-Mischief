@@ -1,5 +1,9 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.3.8 - 1.19
+- Updated to Minecraft 1.19
+- Removed Ratify command, as well as Requiem and Origins compatibility
+
 ### Rat's Mischief 1.3.7 - 1.18.2
 - Fixed being unable to start a world with origins installed
 

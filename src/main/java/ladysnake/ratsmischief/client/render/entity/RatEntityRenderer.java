@@ -36,7 +36,7 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
     public void renderEarly(RatEntity ratEntity, MatrixStack stackIn, float ticks, VertexConsumerProvider vertexConsumerProvider, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
         this.itemStack = ratEntity.getEquippedStack(EquipmentSlot.MAINHAND);
         this.vertexConsumerProvider = vertexConsumerProvider;
-        this.ratTexture = this.getTextureLocation(ratEntity);
+        this.ratTexture = this.getTexture(ratEntity);
 
         super.renderEarly(ratEntity, stackIn, ticks, vertexConsumerProvider, vertexBuilder, packedLightIn, packedOverlayIn, red,
                 green, blue, partialTicks);

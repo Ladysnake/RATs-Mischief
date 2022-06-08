@@ -14,9 +14,8 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import java.util.Locale;
 
 public class ElytratFeatureRenderer extends GeoLayerRenderer<RatEntity> {
-    private static Identifier[] RAT_KID_TEXTURES;
     private static final Identifier DEFAULT_ELYTRAT = new Identifier(Mischief.MODID, "textures/entity/elytrat.png");
-
+    private static Identifier[] RAT_KID_TEXTURES;
     private final ElytratEntityRenderer elytratEntityRenderer;
 
     public ElytratFeatureRenderer(IGeoRenderer<RatEntity> entityRendererIn, ElytratEntityRenderer elytratEntityRenderer) {
@@ -35,13 +34,12 @@ public class ElytratFeatureRenderer extends GeoLayerRenderer<RatEntity> {
         Identifier textureToUse = rat.getRatType().elytratTexture;
         if (rat.getRatType() == RatEntity.Type.RAT_KID) {
             textureToUse = RAT_KID_TEXTURES[rat.getRatColor().getId()];
-        }
-        else if (textureToUse == null) {
+        } else if (textureToUse == null) {
             textureToUse = DEFAULT_ELYTRAT;
         }
 
         if (rat.isElytrat()) {
-            elytratEntityRenderer.render(getEntityModel().getModel(getEntityModel().getModelLocation(rat)),
+            elytratEntityRenderer.render(getEntityModel().getModel(getEntityModel().getModelResource(rat)),
                     rat,
                     partialTicks,
                     RenderLayer.getEntityCutout(textureToUse),

@@ -14,17 +14,16 @@ import java.util.Locale;
 public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
     private static final Identifier MODEL_LOCATION = new Identifier(Mischief.MODID, "geo/entity/rat.geo.json");
     private static final Identifier ANIMATION_LOCATION = new Identifier(Mischief.MODID, "animations/entity/rat.animation.json");
-
-    private static Identifier[] RAT_KID_TEXTURES;
     private static final Identifier REMY_TEXTURE = new Identifier(Mischief.MODID, "textures/entity/named/remy.png");
+    private static Identifier[] RAT_KID_TEXTURES;
 
     @Override
-    public Identifier getModelLocation(RatEntity rat) {
+    public Identifier getModelResource(RatEntity rat) {
         return MODEL_LOCATION;
     }
 
     @Override
-    public Identifier getTextureLocation(RatEntity rat) {
+    public Identifier getTextureResource(RatEntity rat) {
         if (RAT_KID_TEXTURES == null) {
             RAT_KID_TEXTURES = new Identifier[16];
             for (DyeColor color : DyeColor.values()) {
@@ -33,8 +32,7 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
         }
         if (rat.getRatType() == RatEntity.Type.RUSSIAN_BLUE && rat.hasCustomName() && rat.getCustomName().getString().equalsIgnoreCase("remy")) {
             return REMY_TEXTURE;
-        }
-        else if (rat.getRatType() == RatEntity.Type.RAT_KID) {
+        } else if (rat.getRatType() == RatEntity.Type.RAT_KID) {
             return RAT_KID_TEXTURES[rat.getRatColor().getId()];
         } else {
             return rat.getRatType().ratTexture;
@@ -42,7 +40,7 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
     }
 
     @Override
-    public Identifier getAnimationFileLocation(RatEntity rat) {
+    public Identifier getAnimationResource(RatEntity rat) {
         return ANIMATION_LOCATION;
     }
 

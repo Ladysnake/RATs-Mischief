@@ -3,14 +3,14 @@ package ladysnake.ratsmischief.client;
 import ladysnake.ratsmischief.client.render.entity.RatEntityRenderer;
 import ladysnake.ratsmischief.common.Mischief;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.minecraft.util.Identifier;
 
 public class MischiefClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        EntityRendererRegistry.INSTANCE.register(Mischief.RAT, RatEntityRenderer::new);
+        EntityRendererRegistry.register(Mischief.RAT, RatEntityRenderer::new);
 
         // model predicates
         FabricModelPredicateProviderRegistry.register(new Identifier(Mischief.MODID + ":filled"), (itemStack, world, livingEntity, seed) -> itemStack.getOrCreateSubNbt(Mischief.MODID).getFloat("filled"));

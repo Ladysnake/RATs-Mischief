@@ -12,10 +12,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -110,10 +109,10 @@ public class RatPouchItem extends Item {
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         NbtList NbtList = stack.getOrCreateSubNbt(Mischief.MODID).getList("rats", NbtType.COMPOUND);
 
-        tooltip.add(new TranslatableText("item.ratsmischief.rat_pouch.tooltip.capacity", NbtList.size(), this.size).setStyle(EMPTY.withColor(Formatting.GRAY)));
+        tooltip.add(Text.translatable("item.ratsmischief.rat_pouch.tooltip.capacity", NbtList.size(), this.size).setStyle(EMPTY.withColor(Formatting.GRAY)));
 
         for (NbtElement ratTag : NbtList) {
-            TranslatableText ratType = new TranslatableText("type.ratsmischief." + ((NbtCompound) ratTag).getString("RatType").toLowerCase());
+            MutableText ratType = Text.translatable("type.ratsmischief." + ((NbtCompound) ratTag).getString("RatType").toLowerCase());
 
             Style style = EMPTY.withColor(Formatting.DARK_GRAY);
             if (((NbtCompound) ratTag).getString("RatType").equals(RatEntity.Type.GOLD.name())) {
@@ -123,7 +122,7 @@ public class RatPouchItem extends Item {
                 Matcher matcher = Pattern.compile("\\{\"text\":\"(.+)\"\\}").matcher(((NbtCompound) ratTag).getString("CustomName"));
                 if (matcher.find()) {
                     String name = matcher.group(1);
-                    tooltip.add(new LiteralText(name).append(" (").append(ratType).append(")").setStyle(style));
+                    tooltip.add(Text.literal(name).append(" (").append(ratType).append(")").setStyle(style));
                 }
             } else {
                 tooltip.add(ratType.setStyle(style));

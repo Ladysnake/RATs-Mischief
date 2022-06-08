@@ -29,7 +29,7 @@ import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.entity.passive.HorseBaseEntity;
+import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -46,6 +46,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
@@ -60,7 +61,10 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class RatEntity extends TameableEntity implements IAnimatable, Angerable {
@@ -107,7 +111,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
     }
 
     @Override
-    protected void initEquipment(LocalDifficulty difficulty) {
+    protected void initEquipment(net.minecraft.util.math.random.Random random, LocalDifficulty localDifficulty) {
         // try spawning a mask of rat
         if (this.isBaby() && this.getRandom().nextInt(200) == 0) {
             this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Mischief.RAT_MASK));
@@ -134,7 +138,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
     @Override
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityTag) {
-        this.initEquipment(difficulty);
+        this.initEquipment(this.random, difficulty);
 
         // init doctor4t type or random type on birthday
         if (Mischief.IS_RAT_BIRTHDAY && this.getRandom().nextInt(10) == 0) {
@@ -265,7 +269,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
             ratEntity.setOwnerUuid(ownerUuid);
             ratEntity.setTamed(true);
             ratEntity.setBaby(true);
-            ratEntity.initEquipment(world.getLocalDifficulty(this.getBlockPos()));
+            ratEntity.initEquipment(this.random, world.getLocalDifficulty(this.getBlockPos()));
         }
 
         return ratEntity;
@@ -370,7 +374,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
 
         if (this.hasCustomName()) {
-            switch (getCustomName().asString().toLowerCase(Locale.ROOT)) {
+            switch (getCustomName().toString().toLowerCase(Locale.ROOT)) {
                 case "doctor4t" -> setRatType(Type.DOCTOR4T);
                 case "ratater" -> setRatType(Type.RATATER);
                 case "rat kid", "hat kid" -> setRatType(Type.RAT_KID);
@@ -539,7 +543,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 return !rat.isTamed() || rat.getOwner() != owner;
             } else if (target instanceof PlayerEntity && owner instanceof PlayerEntity && !((PlayerEntity) owner).shouldDamagePlayer((PlayerEntity) target)) {
                 return false;
-            } else if (target instanceof HorseBaseEntity && ((HorseBaseEntity) target).isTame()) {
+            } else if (target instanceof HorseEntity && ((HorseEntity) target).isTame()) {
                 return false;
             } else {
                 return !(target instanceof TameableEntity) || !((TameableEntity) target).isTamed();
@@ -798,6 +802,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         BLUE, BRAND, BROWN, CYAN, GREEN, LIGHT_BLUE, LIGHT_GREEN, MAGENTA, ORANGE, PINK, PURPLE, RAINBOW, RED, YELLOW
     }
 
+    abstract static class MovementGoal extends Goal {
+        public MovementGoal() {
+            this.setControls(EnumSet.of(Control.MOVE));
+        }
+    }
+
     class PickupItemGoal extends Goal {
         public PickupItemGoal() {
             this.setControls(EnumSet.of(Goal.Control.MOVE));
@@ -959,12 +969,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
                 RatEntity.this.setFlying(true);
                 RatEntity.this.targetPosition = new Vec3d(owner.getX(), owner.getBodyY(0.5D), owner.getZ());
             }
-        }
-    }
-
-    abstract static class MovementGoal extends Goal {
-        public MovementGoal() {
-            this.setControls(EnumSet.of(Control.MOVE));
         }
     }
 

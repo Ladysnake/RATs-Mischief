@@ -98,19 +98,6 @@ dependencies {
 	// Geckolib
 	modImplementation "software.bernie.geckolib:geckolib-fabric-${project.geckolib_version}"
 
-//	modCompileOnly "io.github.ladysnake:requiem-api:${requiem_version}"
-//	modCompileOnly "io.github.ladysnake:requiem-core:${requiem_version}"
-//	modCompileOnly "io.github.ladysnake:requiem:${requiem_version}"
-//	modCompileOnly "io.github.ladysnake:requiem:${requiem_version}"
-//
-//	// Made available when Requiem is present
-//	modCompileOnly "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
-//	modCompileOnly "dev.onyxstudios.cardinal-components-api:cardinal-components-base:4.+"
-//	modCompileOnly "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:4.+"
-//
-	modCompileOnly "com.github.apace100:origins-fabric:${origins_version}"
-//	modRuntimeOnly "com.github.apace100:origins-fabric:${origins_version}"
-
 	runtimeOnly "me.zeroeightsix:fiber:0.23.0-2"
 
 	testmodImplementation sourceSets.main.output
