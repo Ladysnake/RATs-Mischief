@@ -374,7 +374,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
         }
 
         if (this.hasCustomName()) {
-            switch (getCustomName().toString().toLowerCase(Locale.ROOT)) {
+            switch (getCustomName().getString().toLowerCase(Locale.ROOT)) {
                 case "doctor4t" -> setRatType(Type.DOCTOR4T);
                 case "ratater" -> setRatType(Type.RATATER);
                 case "rat kid", "hat kid" -> setRatType(Type.RAT_KID);
