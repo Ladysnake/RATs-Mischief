@@ -1,5 +1,8 @@
 # Rat's Mischief - Changelog:
 
+### Rat's Mischief 1.3.9 - 1.19
+- Fixed name skins not working
+
 ### Rat's Mischief 1.3.8 - 1.19
 - Updated to Minecraft 1.19
 - Removed Ratify command, as well as Requiem and Origins compatibility
