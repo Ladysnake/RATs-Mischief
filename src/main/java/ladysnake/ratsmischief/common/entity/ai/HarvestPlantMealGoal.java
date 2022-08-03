@@ -107,7 +107,7 @@ public class HarvestPlantMealGoal extends Goal {
             if (this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ()) <= 5) {
                 BoneMealItem.useOnFertilizable(itemStack, this.rat.world, targetBlockPos);
 
-                ServerWorld serverWorld = (ServerWorld) this.rat.getEntityWorld();
+                ServerWorld serverWorld = (ServerWorld) this.rat.getWorld();
 
                 serverWorld.playSound(null, targetBlockPos, SoundEvents.ITEM_BONE_MEAL_USE, SoundCategory.NEUTRAL, 1.0f, 1.0f);
 

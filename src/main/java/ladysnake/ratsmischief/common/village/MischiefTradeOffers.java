@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import org.jetbrains.annotations.Nullable;
@@ -45,7 +46,7 @@ public abstract class MischiefTradeOffers {
 
         @Nullable
         @Override
-        public TradeOffer create(Entity entity, net.minecraft.util.math.random.Random random) {
+        public TradeOffer create(Entity entity, RandomGenerator random) {
             return new TradeOffer(new ItemStack(Items.EMERALD, this.price), new ItemStack(this.sell.getItem(), this.count), this.maxUses, this.experience, this.multiplier);
         }
     }

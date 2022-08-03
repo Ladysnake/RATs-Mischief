@@ -1,6 +1,7 @@
 package ladysnake.ratsmischief.client.gui.screen;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.platform.InputUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.ratsmischief.common.Mischief;
 import net.fabricmc.api.EnvType;
@@ -13,8 +14,6 @@ import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.texture.TextureManager;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -51,7 +50,7 @@ public class StaffCommandSelectionScreen extends Screen {
     private boolean mouseUsedForSelection;
 
     public StaffCommandSelectionScreen() {
-        super(NarratorManager.EMPTY);
+        super(Text.empty());
     }
 
     private static void apply(MinecraftClient client, Optional<StaffCommandSelectionScreen.GameMode> gameMode) {
@@ -59,7 +58,7 @@ public class StaffCommandSelectionScreen extends Screen {
             Optional<StaffCommandSelectionScreen.GameMode> optional = StaffCommandSelectionScreen.GameMode.of(client.interactionManager.getCurrentGameMode());
             StaffCommandSelectionScreen.GameMode gameMode2 = (StaffCommandSelectionScreen.GameMode) gameMode.get();
             if (optional.isPresent() && client.player.hasPermissionLevel(2) && gameMode2 != optional.get()) {
-                client.player.sendChatMessage(gameMode2.getCommand());
+                client.player.sendCommand(gameMode2.getCommand());
             }
 
         }
@@ -114,9 +113,9 @@ public class StaffCommandSelectionScreen extends Screen {
                 StaffCommandSelectionScreen.ButtonWidget buttonWidget = (StaffCommandSelectionScreen.ButtonWidget) var8.next();
                 buttonWidget.render(matrices, mouseX, mouseY, delta);
                 this.gameMode.ifPresent((gameMode) -> {
-                    buttonWidget.setSelected(gameMode == buttonWidget.gameMode);
+                    buttonWidget.setFocused(gameMode == buttonWidget.gameMode);
                 });
-                if (!bl && buttonWidget.isHovered()) {
+                if (!bl && buttonWidget.isHoveredOrFocused()) {
                     this.gameMode = Optional.of(buttonWidget.gameMode);
                 }
             }
@@ -223,6 +222,7 @@ public class StaffCommandSelectionScreen extends Screen {
             this.gameMode = gameMode;
         }
 
+        @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             MinecraftClient minecraftClient = MinecraftClient.getInstance();
             this.drawBackground(matrices, minecraftClient.getTextureManager());
@@ -233,15 +233,18 @@ public class StaffCommandSelectionScreen extends Screen {
 
         }
 
+        @Override
         public void appendNarrations(NarrationMessageBuilder builder) {
             this.appendDefaultNarrations(builder);
         }
 
-        public boolean isHovered() {
-            return super.isHovered() || this.selected;
+        @Override
+        public boolean isHoveredOrFocused() {
+            return super.isHoveredOrFocused() || this.selected;
         }
 
-        public void setSelected(boolean selected) {
+        @Override
+        public void setFocused(boolean selected) {
             this.selected = selected;
         }
 

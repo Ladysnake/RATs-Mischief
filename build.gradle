@@ -1,52 +1,22 @@
 plugins {
-	id 'fabric-loom' version '0.11-SNAPSHOT'
-	id 'maven-publish'
-	id 'com.matthewprenger.cursegradle' version '1.4.0'
-	id 'org.ajoberstar.grgit' version '3.1.1'
-	id 'com.github.breadmoirai.github-release' version '2.2.12'
+	id 'io.github.ladysnake.chenille' version '0.9.0'
 }
-
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-// Adds a few utility methods like getProjectProperty
-apply from: 'https://raw.githubusercontent.com/NerdHubMC/Gradle-Scripts/master/scripts/utilities.gradle'
-apply from: 'https://raw.githubusercontent.com/NerdHubMC/Gradle-Scripts/master/scripts/fabric/publish/changelog.gradle'
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
-sourceSets {
-	testmod {
-		compileClasspath += main.compileClasspath
-		runtimeClasspath += main.runtimeClasspath
+chenille {
+	configurePublishing {
+		withCurseforgeRelease()
+		withGithubRelease()
 	}
-}
-
-loom {
-	runs {
-		gametest {
-			server()
-			source sourceSets.testmod
-
-			name "Game Test"
-
-			// Enable the gametest runner
-			vmArg "-Dfabric-api.gametest"
-			vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
-			runDir "build/gametest"
-		}
-		autoTestServer {
-			server()
-			source sourceSets.testmod
-
-			name "Auto Test Server"
-
-			vmArg "-Dfabric.autoTest"
-		}
+	configureTestmod {
+		withDependencyConfiguration()
 	}
+
+	javaVersion = 17
 }
-check.dependsOn runGametest
 
 repositories {
 	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
@@ -79,6 +49,13 @@ repositories {
 		url "https://maven.terraformersmc.com/"
 	}
 	maven {
+		name "modrinth"
+		url "https://api.modrinth.com/maven"
+		content {
+			includeGroup "maven.modrinth"
+		}
+	}
+	maven {
 		url = 'https://jitpack.io'
 		content {
 			includeGroupByRegex '(com|io)\\.github\\..*'
@@ -89,18 +66,26 @@ repositories {
 dependencies {
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	mappings(loom.layered {
+		mappings("net.fabricmc:yarn:${minecraft_version}+build.1:v2")
+		addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:v2"))
+	})
+	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
+	modImplementation "org.quiltmc:qsl:${qsl_version}+${minecraft_version}"
+	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}-${minecraft_version}"
 
 	// Geckolib
 	modImplementation "software.bernie.geckolib:geckolib-fabric-${project.geckolib_version}"
 
-	runtimeOnly "me.zeroeightsix:fiber:0.23.0-2"
+	// Origins + Requiem (no need to remove these every update)
+	modCompileOnly ("com.github.apace100:apoli:${project.apoli_version}") { transitive = false }
+	modCompileOnly ("com.github.apace100:calio:${project.calio_version}") { transitive = false }
+	modCompileOnly ("maven.modrinth:origins:${project.origins_version}") { transitive = false }
+	modCompileOnly ("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
+	modCompileOnly ("io.github.ladysnake:requiem-api:${project.requiem_version}")
+	modCompileOnly ("io.github.ladysnake:requiem:${project.requiem_version}") { transitive = false }
 
-	testmodImplementation sourceSets.main.output
+	runtimeOnly "me.zeroeightsix:fiber:0.23.0-2"
 }
 
 processResources {
@@ -111,23 +96,10 @@ processResources {
 	}
 }
 
-// ensure that the encoding is set to UTF-8, no matter what the system default is
-// this fixes some edge cases with special characters not displaying correctly
-// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-tasks.withType(JavaCompile) {
-	options.encoding = "UTF-8"
-}
-
-// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-// if it is present.
-// If you remove this task, sources will not be generated.
-task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
-	from sourceSets.main.allSource
+java {
+	withSourcesJar()
 }
 
 jar {
 	from "LICENSE"
 }
-
-apply from: 'release.gradle'
