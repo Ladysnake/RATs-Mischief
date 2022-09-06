@@ -84,6 +84,7 @@ dependencies {
 	modCompileOnly ("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
 	modCompileOnly ("io.github.ladysnake:requiem-api:${project.requiem_version}")
 	modCompileOnly ("io.github.ladysnake:requiem:${project.requiem_version}") { transitive = false }
+	modCompileOnly modLocalRuntime ("io.github.ladysnake:elmendorf:0.8.0")
 
 	runtimeOnly "me.zeroeightsix:fiber:0.23.0-2"
 }
