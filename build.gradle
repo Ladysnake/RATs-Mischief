@@ -67,7 +67,6 @@ dependencies {
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings(loom.layered {
-		mappings("net.fabricmc:yarn:${minecraft_version}+build.1:v2")
 		addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:v2"))
 	})
 	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"

@@ -58,7 +58,7 @@ public class StaffCommandSelectionScreen extends Screen {
             Optional<StaffCommandSelectionScreen.GameMode> optional = StaffCommandSelectionScreen.GameMode.of(client.interactionManager.getCurrentGameMode());
             StaffCommandSelectionScreen.GameMode gameMode2 = (StaffCommandSelectionScreen.GameMode) gameMode.get();
             if (optional.isPresent() && client.player.hasPermissionLevel(2) && gameMode2 != optional.get()) {
-                client.player.sendCommand(gameMode2.getCommand());
+                client.player.method_44099(gameMode2.getCommand());
             }
 
         }
