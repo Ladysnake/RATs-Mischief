@@ -21,6 +21,9 @@
     ],
     "client": [
       "ladysnake.ratsmischief.client.MischiefClient"
+    ],
+    "requiem:plugin": [
+      "ladysnake.ratsmischief.common.MischiefRequiemPlugin"
     ]
   },
   "mixins": [
