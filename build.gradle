@@ -7,6 +7,7 @@ version = project.mod_version
 group = project.maven_group
 
 chenille {
+	github = new URL(project.github_url)
 	configurePublishing {
 		withArtifactory()
 		withCurseforgeRelease()
