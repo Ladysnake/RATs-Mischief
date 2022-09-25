@@ -8,8 +8,10 @@ group = project.maven_group
 
 chenille {
 	configurePublishing {
+		withArtifactory()
 		withCurseforgeRelease()
 		withGithubRelease()
+		withModrinthRelease()
 	}
 	configureTestmod {
 		withDependencyConfiguration()
