@@ -1,6 +1,7 @@
 package ladysnake.ratsmischief.common;
 
 import ladysnake.ratsmischief.common.armormaterials.RatMaskArmorMaterial;
+import ladysnake.ratsmischief.common.compat.MischiefOriginsCompat;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
 import ladysnake.ratsmischief.common.item.RatStaffItem;
@@ -11,7 +12,13 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
-import net.minecraft.entity.*;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
@@ -96,6 +103,11 @@ public class Mischief implements ModInitializer {
         ENTITY_RAT_HURT = Registry.register(Registry.SOUND_EVENT, ENTITY_RAT_HURT.getId(), ENTITY_RAT_HURT);
         ENTITY_RAT_DEATH = Registry.register(Registry.SOUND_EVENT, ENTITY_RAT_DEATH.getId(), ENTITY_RAT_DEATH);
         ENTITY_RAT_BITE = Registry.register(Registry.SOUND_EVENT, ENTITY_RAT_BITE.getId(), ENTITY_RAT_BITE);
+
+        // origins compat hack
+        if (FabricLoader.getInstance().isModLoaded("origins")) {
+            MischiefOriginsCompat.init();
+        }
 
         // rat kid painting
         Registry.register(Registry.PAINTING_VARIANT, new Identifier(MODID, "a_rat_in_time"), new PaintingVariant(64, 48));

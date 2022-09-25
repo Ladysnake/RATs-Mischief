@@ -2,20 +2,20 @@ package ladysnake.ratsmischief.common.world;
 
 import ladysnake.ratsmischief.common.Mischief;
 import ladysnake.ratsmischief.common.entity.RatEntity;
+import net.minecraft.data.server.tag.StructureTags;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.tag.StructureTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.SpawnHelper;
+import net.minecraft.world.gen.Spawner;
 import net.minecraft.world.poi.PointOfInterestStorage;
 import net.minecraft.world.poi.PointOfInterestTypes;
-import net.minecraft.world.spawner.Spawner;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class RatSpawner implements Spawner {
             --this.ticksUntilNextSpawn;
             if (this.ticksUntilNextSpawn <= 0) {
                 this.ticksUntilNextSpawn = 100;
-                Random random = world.random;
+                RandomGenerator random = world.random;
                 world.getPlayers().forEach(serverPlayerEntity -> {
                     int x = (8 + random.nextInt(32)) * (random.nextBoolean() ? -1 : 1);
                     int y = (random.nextInt(4)) * (random.nextBoolean() ? -1 : 1);
@@ -38,7 +38,7 @@ public class RatSpawner implements Spawner {
 
                     // test early if the rat can spawn
                     if (RatEntity.canMobSpawn(Mischief.RAT, world, SpawnReason.NATURAL, blockPos, world.getRandom())) {
-                        BlockPos villagePos = world.locateStructure(StructureTags.VILLAGE, blockPos, 5, false);
+                        BlockPos villagePos = world.findFirstPos(StructureTags.VILLAGE, blockPos, 5, false);
                         // if a village was found and it's close enough
                         if (villagePos != null && blockPos.getManhattanDistance(villagePos) <= 300) {
                             List<VillagerEntity> villagersNearby = world.getEntitiesByType(EntityType.VILLAGER, new Box(blockPos.getX() - SPAWN_RADIUS, blockPos.getY() - SPAWN_RADIUS, blockPos.getZ() - SPAWN_RADIUS, blockPos.getX() + SPAWN_RADIUS, blockPos.getY() + SPAWN_RADIUS, blockPos.getZ() + SPAWN_RADIUS), villagerEntity -> true);
@@ -62,7 +62,7 @@ public class RatSpawner implements Spawner {
     private int spawnInHouse(ServerWorld world, BlockPos pos) {
         boolean i = true;
         if (world.getPointOfInterestStorage().count((registryEntry) -> {
-            return registryEntry.matchesKey(PointOfInterestTypes.HOME);
+            return registryEntry.isRegistryKey(PointOfInterestTypes.HOME);
         }, pos, 48, PointOfInterestStorage.OccupationStatus.HAS_SPACE) > 4L) {
             List<RatEntity> list = world.getNonSpectatingEntities(RatEntity.class, (new Box(pos)).expand(48.0D, 8.0D, 48.0D));
             if (list.size() < 10) {

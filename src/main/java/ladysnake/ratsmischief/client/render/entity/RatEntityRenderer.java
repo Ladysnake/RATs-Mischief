@@ -1,10 +1,10 @@
 package ladysnake.ratsmischief.client.render.entity;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import ladysnake.ratsmischief.client.model.RatEntityModel;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.model.json.ModelTransformation;

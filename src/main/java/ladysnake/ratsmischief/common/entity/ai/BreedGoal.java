@@ -19,13 +19,13 @@ public class BreedGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        return !this.rat.getMainHandStack().isEmpty() && !this.rat.getEntityWorld().getEntitiesByClass(AnimalEntity.class, this.rat.getBoundingBox().expand(16, 4, 16), animalEntity -> animalEntity.getBreedingAge() == 0 && animalEntity.canEat() && animalEntity.isBreedingItem(this.rat.getMainHandStack())).isEmpty();
+        return !this.rat.getMainHandStack().isEmpty() && !this.rat.getWorld().getEntitiesByClass(AnimalEntity.class, this.rat.getBoundingBox().expand(16, 4, 16), animalEntity -> animalEntity.getBreedingAge() == 0 && animalEntity.canEat() && animalEntity.isBreedingItem(this.rat.getMainHandStack())).isEmpty();
     }
 
     @Override
     public void start() {
-        if (!this.rat.getMainHandStack().isEmpty() && !this.rat.getEntityWorld().getEntitiesByClass(AnimalEntity.class, this.rat.getBoundingBox().expand(16, 4, 16), animalEntity -> !this.rat.world.isClient() && animalEntity.getBreedingAge() == 0 && animalEntity.canEat() && animalEntity.isBreedingItem(this.rat.getMainHandStack())).isEmpty()) {
-            List<AnimalEntity> animalList = this.rat.getEntityWorld().getEntitiesByClass(AnimalEntity.class, this.rat.getBoundingBox().expand(16, 4, 16), animalEntity -> animalEntity.getBreedingAge() == 0 && animalEntity.canEat() && animalEntity.isBreedingItem(this.rat.getMainHandStack()));
+        if (!this.rat.getMainHandStack().isEmpty() && !this.rat.getWorld().getEntitiesByClass(AnimalEntity.class, this.rat.getBoundingBox().expand(16, 4, 16), animalEntity -> !this.rat.world.isClient() && animalEntity.getBreedingAge() == 0 && animalEntity.canEat() && animalEntity.isBreedingItem(this.rat.getMainHandStack())).isEmpty()) {
+            List<AnimalEntity> animalList = this.rat.getWorld().getEntitiesByClass(AnimalEntity.class, this.rat.getBoundingBox().expand(16, 4, 16), animalEntity -> animalEntity.getBreedingAge() == 0 && animalEntity.canEat() && animalEntity.isBreedingItem(this.rat.getMainHandStack()));
             AnimalEntity closestAnimal = animalList.get(0);
             for (AnimalEntity animalEntity : animalList) {
                 if (animalEntity.squaredDistanceTo(rat) < closestAnimal.squaredDistanceTo(this.rat)) {
