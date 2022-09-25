@@ -1,4 +1,9 @@
 ------------------------------------------------------
+Rat's Mischief 1.4.0 - 1.19.2
+------------------------------------------------------
+- Updated Requiem and Origins compatibility, bringing back the ratify command
+
+------------------------------------------------------
 Rat's Mischief 1.3.9 - 1.19
 ------------------------------------------------------
 - Fixed name skins not working
