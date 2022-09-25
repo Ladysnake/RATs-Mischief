@@ -38,7 +38,7 @@ public class RatSpawner implements Spawner {
 
                     // test early if the rat can spawn
                     if (RatEntity.canMobSpawn(Mischief.RAT, world, SpawnReason.NATURAL, blockPos, world.getRandom())) {
-                        BlockPos villagePos = world.m_yovtvsud(StructureTags.VILLAGE, blockPos, 5, false);
+                        BlockPos villagePos = world.findFirstPos(StructureTags.VILLAGE, blockPos, 5, false);
                         // if a village was found and it's close enough
                         if (villagePos != null && blockPos.getManhattanDistance(villagePos) <= 300) {
                             List<VillagerEntity> villagersNearby = world.getEntitiesByType(EntityType.VILLAGER, new Box(blockPos.getX() - SPAWN_RADIUS, blockPos.getY() - SPAWN_RADIUS, blockPos.getZ() - SPAWN_RADIUS, blockPos.getX() + SPAWN_RADIUS, blockPos.getY() + SPAWN_RADIUS, blockPos.getZ() + SPAWN_RADIUS), villagerEntity -> true);

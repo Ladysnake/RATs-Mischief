@@ -19,6 +19,7 @@ chenille {
 }
 
 repositories {
+	mavenLocal()
 	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 	maven {
 		name = 'Ladysnake Mods'
@@ -82,6 +83,7 @@ dependencies {
 	modCompileOnly ("maven.modrinth:origins:${project.origins_version}") { transitive = false }
 	modCompileOnly ("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
 	modCompileOnly ("io.github.ladysnake:requiem-api:${project.requiem_version}")
+	modCompileOnly ("io.github.ladysnake:requiem-core:${project.requiem_version}") { transitive = false }
 	modCompileOnly ("io.github.ladysnake:requiem:${project.requiem_version}") { transitive = false }
 	modCompileOnly modLocalRuntime ("io.github.ladysnake:elmendorf:0.8.0")
 

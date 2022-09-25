@@ -8,6 +8,7 @@ import ladysnake.requiem.api.v1.possession.PossessionComponent;
 import ladysnake.requiem.api.v1.remnant.MobResurrectable;
 import ladysnake.requiem.api.v1.remnant.RemnantState;
 import ladysnake.requiem.api.v1.remnant.RemnantType;
+import ladysnake.requiem.core.entity.SoulHolderComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,6 +39,7 @@ public class RatifiedRemnantType implements RemnantType {
         public static final AbilitySource SOUL_STATE = Pal.getAbilitySource(new Identifier("mischief", "soul_state"));
 
         private final PlayerEntity player;
+        private boolean removed;
 
         public RatifiedRemnantState(PlayerEntity player) {
             this.player = player;
@@ -50,6 +52,7 @@ public class RatifiedRemnantType implements RemnantType {
                 if (this.isInWorld()) {
                     PossessionComponent.get(this.player).stopPossessing(false);
                     RatEntity rat = new RatEntity(Mischief.RAT, this.player.world);
+                    SoulHolderComponent.get(rat).removeSoul();
                     rat.copyPositionAndRotation(this.player);
                     this.player.world.spawnEntity(rat);
                     PossessionComponent.get(this.player).startPossessing(rat);
@@ -72,6 +75,7 @@ public class RatifiedRemnantType implements RemnantType {
                     if (rat != null) {
                         rat.remove(Entity.RemovalReason.DISCARDED);
                         possessionComponent.stopPossessing(false);
+                        this.removed = true;
                     }
                 }
             }
@@ -84,7 +88,7 @@ public class RatifiedRemnantType implements RemnantType {
 
         @Override
         public boolean isVagrant() {
-            return true;
+            return !this.removed;
         }
 
         @Override

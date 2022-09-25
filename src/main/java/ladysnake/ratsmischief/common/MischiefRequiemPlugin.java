@@ -8,6 +8,7 @@ import ladysnake.requiem.api.v1.event.requiem.HumanityCheckCallback;
 import ladysnake.requiem.api.v1.event.requiem.PossessionStartCallback;
 import ladysnake.requiem.api.v1.remnant.RemnantComponent;
 import ladysnake.requiem.api.v1.remnant.RemnantType;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -19,7 +20,7 @@ public class MischiefRequiemPlugin implements RequiemPlugin {
 
     @Override
     public void onRequiemInitialize() {
-        // allow rat possession for rat players
+        // always allow rat possession for rat players
         PossessionStartCallback.EVENT.register(new Identifier("ratsmischief:possession"), (mobEntity, playerEntity, b) -> {
             if (mobEntity instanceof RatEntity && RemnantComponent.get(playerEntity).getRemnantType() == RATIFIED_REMNANT_TYPE) {
                 return PossessionStartCallback.Result.ALLOW;
@@ -32,6 +33,11 @@ public class MischiefRequiemPlugin implements RequiemPlugin {
                 return 9999;
             }
             return 0;
+        });
+
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            PlayerRatifyCommand.register(dispatcher);
+            PlayerUnratifyCommand.register(dispatcher);
         });
     }
 
