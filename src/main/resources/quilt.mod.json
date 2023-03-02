@@ -1,0 +1,24 @@
+{
+	"schema_version": 1,
+	"quilt_loader": {
+		"group": "doctor4t",
+		"id": "ratsmischief",
+		"version": "${version}",
+		"metadata": {
+			"name": "RAT's Mischief",
+			"description": "rats",
+			"contributors": {
+				"doctor4t": "Owner",
+				"Arathain": "Artist",
+				"Luxintrus": "Artist"
+			},
+			"icon": "assets/ratsmischief/icon.png"
+		},
+		"intermediate_mappings": "net.fabricmc:intermediary",
+		"entrypoints": {
+			"init": "doctor4t.ratsmischief.common.RatsMischief",
+			"client_init": "doctor4t.ratsmischief.client.RatsMischiefClient"
+		}
+	},
+	"mixin": "ratsmischief.mixins.json"
+}
