@@ -7,7 +7,8 @@
     "CatEntityMixin"
   ],
   "client": [
-    "HeldItemRendererMixin"
+    "HeldItemRendererMixin",
+    "PlayerEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
