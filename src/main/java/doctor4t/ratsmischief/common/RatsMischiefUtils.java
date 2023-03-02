@@ -28,12 +28,14 @@ public class RatsMischiefUtils {
 	public static Identifier[] RAT_KID_TEXTURES;
 
 	public static Identifier getRatTexture(RatEntity.Type ratType, String ratName, DyeColor ratColor) {
+		// initializing
 		if (RAT_KID_TEXTURES == null) {
 			RAT_KID_TEXTURES = new Identifier[16];
 			for (DyeColor color : DyeColor.values()) {
 				RAT_KID_TEXTURES[color.getId()] = new Identifier(RatsMischief.MOD_ID, "textures/entity/rat_kid/rat_kid_" + color.getName().toLowerCase(Locale.ROOT) + ".png");
 			}
 		}
+
 		if (ratType == RatEntity.Type.RUSSIAN_BLUE && ratName != null && ratName.equalsIgnoreCase("remy")) {
 			return REMY_TEXTURE;
 		} else if (ratType == RatEntity.Type.RAT_KID) {

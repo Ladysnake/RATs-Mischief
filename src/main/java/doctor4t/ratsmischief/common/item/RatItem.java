@@ -79,6 +79,7 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 			rat.updatePosition(user.getX(), user.getY(), user.getZ());
 			rat.setPos(user.getX(), user.getY(), user.getZ());
 			world.spawnEntity(rat);
+			user.getStackInHand(hand).decrement(1);
 
 			return TypedActionResult.success(user.getStackInHand(hand));
 		}

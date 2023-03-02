@@ -11,9 +11,10 @@ import java.util.Map;
 public interface ModSoundEvents {
 	Map<SoundEvent, Identifier> SOUND_EVENTS = new LinkedHashMap<>();
 
-	//	public static final SoundEvent SOUND_EVENT = createSoundEvent("sound.event.name");
-	public static SoundEvent ENTITY_RAT_HURT = createSoundEvent("entity.rat.hurt");
-	public static SoundEvent ENTITY_RAT_DEATH = createSoundEvent("entity.rat.death");
+	//	final SoundEvent SOUND_EVENT = createSoundEvent("sound.event.name");
+	SoundEvent ENTITY_RAT_HURT = createSoundEvent("entity.rat.hurt");
+	SoundEvent ENTITY_RAT_DEATH = createSoundEvent("entity.rat.death");
+	SoundEvent ENTITY_RAT_CLAP = createSoundEvent("entity.rat.clap");
 
 	static void initialize() {
 		SOUND_EVENTS.keySet().forEach(soundEvent -> {

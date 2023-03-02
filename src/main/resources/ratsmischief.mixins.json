@@ -6,7 +6,9 @@
   "mixins": [
     "CatEntityMixin"
   ],
-  "client": [],
+  "client": [
+    "HeldItemRendererMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

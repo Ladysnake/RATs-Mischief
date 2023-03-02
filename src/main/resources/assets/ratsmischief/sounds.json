@@ -14,5 +14,14 @@
       "ratsmischief:rat_death_3"
     ],
     "subtitle": "ratsmischief.subtitles.entity.rat.death"
+  },
+  "entity.rat.clap": {
+    "sounds": [
+      "ratsmischief:rat_clap_1",
+      "ratsmischief:rat_clap_2",
+      "ratsmischief:rat_clap_3",
+      "ratsmischief:rat_clap_4"
+    ],
+    "subtitle": "ratsmischief.subtitles.entity.rat.clap"
   }
 }

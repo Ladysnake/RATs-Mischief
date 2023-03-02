@@ -45,6 +45,7 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.random.RandomGenerator;
@@ -382,6 +383,13 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		}
 	}
 
+	@Override
+	public void pushAwayFrom(Entity entity) {
+		if (entity instanceof RatEntity) {
+			super.pushAwayFrom(entity);
+		}
+	}
+
 	public ActionResult interactMob(PlayerEntity player, Hand hand) {
 		ItemStack itemStack = player.getStackInHand(hand);
 		Item item = itemStack.getItem();
@@ -419,6 +427,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 						ItemStack ratItemStack = new ItemStack(ModItems.RAT);
 						NbtCompound nbt = new NbtCompound();
 						this.saveNbt(nbt);
+						nbt.remove("UUID");
 						ratItemStack.getOrCreateSubNbt(RatsMischief.MOD_ID).put("rat", nbt);
 						player.giveItemStack(ratItemStack);
 						this.discard();
@@ -549,7 +558,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 	@Override
 	public boolean isInvulnerableTo(DamageSource damageSource) {
-		if (damageSource == DamageSource.CACTUS || damageSource == DamageSource.SWEET_BERRY_BUSH || damageSource.getAttacker() instanceof EnderDragonEntity) {
+		if (damageSource == DamageSource.CACTUS || damageSource == DamageSource.SWEET_BERRY_BUSH || damageSource.getAttacker() instanceof EnderDragonEntity || damageSource == DamageSource.CRAMMING) {
 			return true;
 		} else {
 			return super.isInvulnerableTo(damageSource);
@@ -564,7 +573,35 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	@Override
 	protected void pushAway(Entity entity) {
 		if (!(entity instanceof PlayerEntity && this.isTamed() && entity.getUuid().equals(this.getOwnerUuid()))) {
-			super.pushAway(entity);
+			if (!this.isConnectedThroughVehicle(entity)) {
+				if (!entity.noClip && !this.noClip) {
+					double d = entity.getX() - this.getX();
+					double e = entity.getZ() - this.getZ();
+					double f = MathHelper.absMax(d, e);
+					if (f >= 0.01F) {
+						f = Math.sqrt(f);
+						d /= f;
+						e /= f;
+						double g = 1.0 / f;
+						if (g > 1.0) {
+							g = 1.0;
+						}
+
+						d *= g;
+						e *= g;
+						d *= 0.05F;
+						e *= 0.05F;
+						if (!this.hasPassengers() && this.isPushable()) {
+							this.addVelocity(-d, 0.0, -e);
+						}
+
+						if (!entity.hasPassengers() && entity.isPushable()) {
+							entity.addVelocity(d, 0.0, e);
+						}
+					}
+
+				}
+			}
 		}
 	}
 
@@ -603,6 +640,14 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			BlockSoundGroup blockSoundGroup = blockState.isOf(Blocks.SNOW) ? blockState.getSoundGroup() : state.getSoundGroup();
 			this.playSound(blockSoundGroup.getStepSound(), blockSoundGroup.getVolume() * 0.01F, blockSoundGroup.getPitch());
 		}
+	}
+
+	@Override
+	public boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
+		if (fallDistance > 20) {
+			this.playSound(ModSoundEvents.ENTITY_RAT_CLAP, 1.0f, (float) (1.0f + random.nextGaussian() / 10f));
+		}
+		return false;
 	}
 
 	@Override
