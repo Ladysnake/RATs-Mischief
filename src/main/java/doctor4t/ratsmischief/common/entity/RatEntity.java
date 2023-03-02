@@ -86,7 +86,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.INTEGER);
 	private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(20, 39);
 	private static final TrackedData<Boolean> SNIFFING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-	private static final TrackedData<Integer> ROCKET_TIME = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.INTEGER);
+	private static final TrackedData<Boolean> AROUSED = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	public Goal action;
 	public int actionTimer = 0;
@@ -153,7 +153,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		this.dataTracker.startTracking(SNIFFING, false);
 		this.dataTracker.startTracking(COLOR, DyeColor.values()[(this.random.nextInt(DyeColor.values().length))].getName());
 		this.dataTracker.startTracking(FLYING, false);
-		this.dataTracker.startTracking(ROCKET_TIME, 0);
+		this.dataTracker.startTracking(AROUSED, false);
 
 		this.dataTracker.startTracking(PARTY_HAT, PARTY_HATS.get(random.nextInt(PARTY_HATS.size())).toString());
 	}
@@ -285,6 +285,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		if (tag.contains("Color")) {
 			this.setRatColor(DyeColor.byName(tag.getString("Color"), DyeColor.WHITE));
 		}
+
+		if (tag.contains("Aroused")) {
+			this.setAroused(tag.getBoolean("Aroused"));
+		}
 	}
 
 	@Override
@@ -294,6 +298,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		tag.putString("RatType", this.getRatType().toString());
 		tag.putString("Color", this.getRatColor().getName());
 		this.writeAngerToNbt(tag);
+		tag.putBoolean("Aroused", this.isAroused());
 
 		tag.putBoolean("Sitting", this.isSitting());
 	}
@@ -306,6 +311,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		if (this.hasStatusEffect(StatusEffects.SATURATION)) {
 			StatusEffectInstance saturation = this.getStatusEffect(StatusEffects.SATURATION);
 			this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, saturation.getDuration(), saturation.getAmplifier(), saturation.isAmbient(), saturation.shouldShowParticles(), saturation.shouldShowIcon()));
+		}
+
+		// sexually aroused rat
+		if (!this.world.isClient) {
+			this.setAroused(getLoveTicks() > 0);
 		}
 	}
 
@@ -417,11 +427,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 				}
 
 				if (this.isOwner(player)) {
-					// sitting
-					if (!(item instanceof RatPouchItem) && !(item instanceof RatStaffItem) && (!this.isBreedingItem(itemStack)) && !(itemStack.getItem() instanceof DyeItem && this.getRatType() == Type.RAT_KID)) {
-						this.setSitting(!this.isSitting());
-					}
-
 					// picking up
 					if (itemStack.isEmpty() && player.isSneaking()) {
 						ItemStack ratItemStack = new ItemStack(ModItems.RAT);
@@ -432,6 +437,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 						player.giveItemStack(ratItemStack);
 						this.discard();
 
+						return ActionResult.SUCCESS;
+					}
+
+					// sitting
+					if (!(item instanceof RatPouchItem) && !(item instanceof RatStaffItem) && (!this.isBreedingItem(itemStack)) && !(itemStack.getItem() instanceof DyeItem && this.getRatType() == Type.RAT_KID)) {
+						this.setSitting(!this.isSitting());
 						return ActionResult.SUCCESS;
 					}
 				}
@@ -466,6 +477,15 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	@Override
 	public void setAngerTime(int ticks) {
 		this.dataTracker.set(ANGER_TIME, ticks);
+	}
+
+
+	public boolean isAroused() {
+		return this.dataTracker.get(AROUSED);
+	}
+
+	public void setAroused(boolean aroused) {
+		this.dataTracker.set(AROUSED, aroused);
 	}
 
 	@Override

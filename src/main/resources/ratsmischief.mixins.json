@@ -4,10 +4,12 @@
   "package": "doctor4t.ratsmischief.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "CatEntityMixin"
+    "CatEntityMixin",
+    "ItemEntityMixin"
   ],
   "client": [
-    "HeldItemRendererMixin"
+    "client.HeldItemRendererMixin",
+    "client.ItemEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

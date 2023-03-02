@@ -1,5 +1,6 @@
 {
   "entity.ratsmischief.rat": "Rat",
+  "item.ratsmischief.rat": "Rat",
   "item.ratsmischief.leather_rat_pouch": "Leather Rat Pouch",
   "item.ratsmischief.twisted_rat_pouch": "Twisted Rat Pouch",
   "item.ratsmischief.purpur_rat_pouch": "Purpur Rat Pouch",
@@ -9,8 +10,6 @@
   "item.ratsmischief.collection_staff": "Collection Staff",
   "item.ratsmischief.skirmish_staff": "Skirmish Staff",
   "item.ratsmischief.love_staff": "Love Staff",
-  "item.ratsmischief.rat_mask": "Mask of Rat",
-  "item.ratsmischief.elytrat": "Elytrat",
   "ratsmischief.subtitles.entity.rat.hurt": "Rat hurts",
   "ratsmischief.subtitles.entity.rat.death": "Rat dies",
   "ratsmischief.subtitles.entity.rat.clap": "Rat lands",

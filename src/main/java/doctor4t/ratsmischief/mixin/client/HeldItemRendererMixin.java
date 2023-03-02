@@ -1,4 +1,4 @@
-package doctor4t.ratsmischief.mixin;
+package doctor4t.ratsmischief.mixin.client;
 
 import doctor4t.ratsmischief.common.item.RatItem;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
