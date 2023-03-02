@@ -7,6 +7,7 @@ import doctor4t.ratsmischief.common.entity.ai.ChaseForFunGoal;
 import doctor4t.ratsmischief.common.entity.ai.EatToHealGoal;
 import doctor4t.ratsmischief.common.entity.ai.FollowOwnerRatGoal;
 import doctor4t.ratsmischief.common.init.ModEntities;
+import doctor4t.ratsmischief.common.init.ModItems;
 import doctor4t.ratsmischief.common.init.ModSoundEvents;
 import doctor4t.ratsmischief.common.item.RatPouchItem;
 import doctor4t.ratsmischief.common.item.RatStaffItem;
@@ -388,6 +389,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			boolean bl = this.isOwner(player) || this.isTamed() && !this.isTamed() && !this.hasAngerTime();
 			return bl ? ActionResult.CONSUME : ActionResult.PASS;
 		} else {
+			// dye rat kids
 			if (itemStack.getItem() instanceof DyeItem && this.getRatType() == Type.RAT_KID) {
 				this.setRatColor(((DyeItem) itemStack.getItem()).getColor());
 				if (!player.isCreative()) {
@@ -397,6 +399,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			}
 
 			if (this.isTamed()) {
+				// healing
 				if (this.isBreedingItem(itemStack) && this.getHealth() < this.getMaxHealth()) {
 					if (!player.getAbilities().creativeMode) {
 						itemStack.decrement(1);
@@ -406,11 +409,24 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 				}
 
 				if (this.isOwner(player)) {
+					// sitting
 					if (!(item instanceof RatPouchItem) && !(item instanceof RatStaffItem) && (!this.isBreedingItem(itemStack)) && !(itemStack.getItem() instanceof DyeItem && this.getRatType() == Type.RAT_KID)) {
 						this.setSitting(!this.isSitting());
 					}
+
+					// picking up
+					if (itemStack.isEmpty() && player.isSneaking()) {
+						ItemStack ratItemStack = new ItemStack(ModItems.RAT);
+						NbtCompound nbt = new NbtCompound();
+						this.saveNbt(nbt);
+						ratItemStack.getOrCreateSubNbt(RatsMischief.MOD_ID).put("rat", nbt);
+						player.giveItemStack(ratItemStack);
+						this.discard();
+
+						return ActionResult.SUCCESS;
+					}
 				}
-			} else if (item.isFood() && !this.hasAngerTime()) {
+			} else if (item.isFood() && !this.hasAngerTime()) { // taming
 				player.getStackInHand(hand).decrement(1);
 				if (this.random.nextInt(Math.max(1, 6 - item.getFoodComponent().getHunger())) == 0) {
 					this.setOwner(player);
