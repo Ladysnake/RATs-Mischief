@@ -91,6 +91,7 @@ public class FollowOwnerRatGoal extends Goal {
 	}
 
 	private void tryTeleport() {
+		this.rat.fallDistance = 0f;
 		BlockPos blockPos = this.owner.getBlockPos();
 
 		for (int i = 0; i < 10; ++i) {
