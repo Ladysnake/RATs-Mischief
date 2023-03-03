@@ -117,6 +117,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(20, 39);
 	private static final TrackedData<Boolean> SNIFFING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 	private static final TrackedData<Boolean> AROUSED = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+	private static final TrackedData<Boolean> SPY = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 	private static final TrackedData<Integer> ATTACK_RIDING_TIME = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.INTEGER);
 	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	public Goal action;
@@ -679,6 +680,14 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 	public void setAroused(boolean aroused) {
 		this.dataTracker.set(AROUSED, aroused);
+	}
+
+	public boolean isSpy() {
+		return this.dataTracker.get(SPY);
+	}
+
+	public void setSpy(boolean spy) {
+		this.dataTracker.set(SPY, spy);
 	}
 
 	public boolean isFlying() {

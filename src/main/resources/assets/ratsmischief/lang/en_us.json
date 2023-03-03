@@ -1,16 +1,19 @@
 {
   "entity.ratsmischief.rat": "Rat",
+
   "item.ratsmischief.rat": "Rat",
   "item.ratsmischief.leather_rat_pouch": "Leather Rat Pouch",
   "item.ratsmischief.twisted_rat_pouch": "Twisted Rat Pouch",
   "item.ratsmischief.purpur_rat_pouch": "Purpur Rat Pouch",
   "item.ratsmischief.rat_pouch.tooltip.capacity": "Capacity: %s/%s",
   "item.ratsmischief.rat_spawn_egg": "Rat Spawn Egg",
+
   "ratsmischief.subtitles.entity.rat.hurt": "Rat hurts",
   "ratsmischief.subtitles.entity.rat.death": "Rat dies",
   "ratsmischief.subtitles.entity.rat.clap": "Rat lands",
   "ratsmischief.subtitles.item.armor_toggle": "Ratty armor toggles",
   "ratsmischief.subtitles.item.rat_toggle": "Rat toggles",
+
   "type.ratsmischief.wild": "Wild",
   "type.ratsmischief.albino": "Albino",
   "type.ratsmischief.black": "Black",
@@ -45,10 +48,10 @@
   "item.ratsmischief.rat_staff.love.tooltip": "Right Click to tame nearby mobs.",
 
   "item.ratsmischief.clothed_ingot": "Clothed Ingot",
-  "item.ratsmischief.master_rat_hood": "Master Rat Hood",
-  "item.ratsmischief.master_rat_chestplate": "Master Rat Chestplate",
-  "item.ratsmischief.master_rat_leggings": "Master Rat Leggings",
-  "item.ratsmischief.master_rat_boots": "Master Rat Boots",
+  "item.ratsmischief.rat_master_hood": "Rat Master Hood",
+  "item.ratsmischief.rat_master_cloak": "Rat Master Cloak",
+  "item.ratsmischief.rat_master_breeches": "Rat Master Breeches",
+  "item.ratsmischief.rat_master_greaves": "Rat Master Greaves",
   "item.ratsmischief.master_rat_armor.tooltip.none" : "Select bonus with Right Click",
   "item.ratsmischief.master_rat_armor.tooltip.resistance" : "Rats are 15% tougher to attacks.",
   "item.ratsmischief.master_rat_armor.tooltip.damage" : "Rats deal 25% more damage.",
