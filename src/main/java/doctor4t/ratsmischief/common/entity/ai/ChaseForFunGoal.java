@@ -1,10 +1,10 @@
 package doctor4t.ratsmischief.common.entity.ai;
 
+import doctor4t.ratsmischief.common.entity.RatEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.TrackTargetGoal;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.util.math.Box;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 
 public class ChaseForFunGoal<T extends LivingEntity> extends TrackTargetGoal {
 	protected final Class<T> targetClass;
-	protected final TameableEntity tameable;
+	protected final RatEntity rat;
 	protected LivingEntity targetEntity;
 	protected TargetPredicate targetPredicate;
 
@@ -30,7 +30,7 @@ public class ChaseForFunGoal<T extends LivingEntity> extends TrackTargetGoal {
 		this.targetClass = targetClass;
 		this.setControls(EnumSet.of(Control.TARGET));
 		this.targetPredicate = (TargetPredicate.createNonAttackable()).setBaseMaxDistance(this.getFollowRange()).setPredicate(targetPredicate);
-		this.tameable = (TameableEntity) mob;
+		this.rat = (RatEntity) mob;
 	}
 
 	@Override
@@ -39,13 +39,21 @@ public class ChaseForFunGoal<T extends LivingEntity> extends TrackTargetGoal {
 	}
 
 	public boolean canStart() {
+		if (this.rat.canReturnToOwnerInventory()) {
+			return false;
+		}
+
 		this.findClosestTarget();
-		return this.targetEntity != null && !this.tameable.isSitting();
+		return this.targetEntity != null && !this.rat.isSitting();
 	}
 
 	@Override
 	public boolean shouldContinue() {
-		return this.targetEntity != null && !this.targetEntity.isDead() && this.mob.getRandom().nextInt(10) != 0 && !this.tameable.isSitting();
+		if (this.rat.canReturnToOwnerInventory()) {
+			return false;
+		}
+
+		return this.targetEntity != null && !this.targetEntity.isDead() && this.mob.getRandom().nextInt(10) != 0 && !this.rat.isSitting();
 	}
 
 	protected Box getSearchBox(double distance) {

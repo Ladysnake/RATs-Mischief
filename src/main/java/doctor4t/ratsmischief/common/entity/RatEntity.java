@@ -169,7 +169,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 	public boolean canReturnToOwnerInventory() {
-		return shouldReturnToOwnerInventory() && this.getOwner() instanceof PlayerEntity player && player.getInventory().getEmptySlot() != -1;
+		return shouldReturnToOwnerInventory() && !this.hasVehicle() && this.getOwner() instanceof PlayerEntity player && player.getInventory().getEmptySlot() != -1;
 	}
 
 	protected void initDataTracker() {
@@ -362,11 +362,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 	@Override
-	public double getMountedHeightOffset() {
-		return this.getDimensions(this.getPose()).height;
-	}
-
-	@Override
 	public void tick() {
 		super.tick();
 
@@ -386,15 +381,23 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			if (this.getTarget() != null && this.getTarget().getFirstPassenger() == this && this.getAttackRidingTime() > 0) {
 				if (this.getAttackRidingTime() > 200) {
 					this.dismountVehicle();
+					this.setTarget(null);
+					this.setAttackRidingTime(0);
 				}
 
 				this.setAttackRidingTime(this.getAttackRidingTime() + 1);
+			}
+
+			// keep targeting the ridden entity
+			if (this.hasVehicle() && this.getVehicle() instanceof LivingEntity livingEntity && this.getAttackRidingTime() > 0) {
+				this.setTarget(livingEntity);
 			}
 
 			// return to owner
 			if (this.getOwner() != null && this.canReturnToOwnerInventory() && this.getOwner().squaredDistanceTo(this.getPos()) <= 1.5f) {
 				turnRatIntoItemAndGive((PlayerEntity) this.getOwner());
 			}
+
 		} else {
 			HitResult hitResult = ProjectileUtil.getCollision(this, this::canHit);
 			boolean bl = false;
@@ -665,7 +668,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		return this.dataTracker.get(ATTACK_RIDING_TIME);
 	}
 
-
 	public void setAttackRidingTime(int ticks) {
 		this.dataTracker.set(ATTACK_RIDING_TIME, ticks);
 	}
@@ -797,6 +799,15 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	@Override
 	public void onPlayerCollision(PlayerEntity player) {
 		super.onPlayerCollision(player);
+	}
+
+	@Override
+	public double getHeightOffset() {
+		if (this.getVehicle() != null) {
+			return this.getVehicle().getHeight()*0.3f;
+		} else {
+			return super.getHeightOffset();
+		}
 	}
 
 	@Override

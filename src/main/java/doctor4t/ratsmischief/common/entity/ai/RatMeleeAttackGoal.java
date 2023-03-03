@@ -1,16 +1,17 @@
 package doctor4t.ratsmischief.common.entity.ai;
 
 import java.util.EnumSet;
+
+import doctor4t.ratsmischief.common.entity.RatEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.pathing.Path;
-import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.util.Hand;
 
 public class RatMeleeAttackGoal extends Goal {
-	protected final PathAwareEntity rat;
+	protected final RatEntity rat;
 	private final double speed;
 	private final boolean pauseWhenMobIdle;
 	private Path path;
@@ -23,7 +24,7 @@ public class RatMeleeAttackGoal extends Goal {
 	private long lastUpdateTime;
 	private static final long MAX_ATTACK_TIME = 20L;
 
-	public RatMeleeAttackGoal(PathAwareEntity rat, double speed, boolean pauseWhenMobIdle) {
+	public RatMeleeAttackGoal(RatEntity rat, double speed, boolean pauseWhenMobIdle) {
 		this.rat = rat;
 		this.speed = speed;
 		this.pauseWhenMobIdle = pauseWhenMobIdle;
@@ -32,6 +33,10 @@ public class RatMeleeAttackGoal extends Goal {
 
 	@Override
 	public boolean canStart() {
+		if (this.rat.canReturnToOwnerInventory()) {
+			return false;
+		}
+
 		long l = this.rat.world.getTime();
 		if (l - this.lastUpdateTime < 20L) {
 			return false;
@@ -55,6 +60,10 @@ public class RatMeleeAttackGoal extends Goal {
 
 	@Override
 	public boolean shouldContinue() {
+		if (this.rat.canReturnToOwnerInventory()) {
+			return false;
+		}
+
 		LivingEntity livingEntity = this.rat.getTarget();
 		if (livingEntity == null) {
 			return false;
@@ -65,7 +74,7 @@ public class RatMeleeAttackGoal extends Goal {
 		} else if (!this.rat.isInWalkTargetRange(livingEntity.getBlockPos())) {
 			return false;
 		} else {
-			return !(livingEntity instanceof PlayerEntity) || !livingEntity.isSpectator() && !((PlayerEntity)livingEntity).isCreative();
+			return !(livingEntity instanceof PlayerEntity) || !livingEntity.isSpectator() && !((PlayerEntity) livingEntity).isCreative();
 		}
 	}
 
@@ -101,12 +110,12 @@ public class RatMeleeAttackGoal extends Goal {
 			double d = this.rat.squaredDistanceTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
 			this.updateCountdownTicks = Math.max(this.updateCountdownTicks - 1, 0);
 			if ((this.pauseWhenMobIdle || this.rat.getVisibilityCache().canSee(livingEntity))
-				&& this.updateCountdownTicks <= 0
-				&& (
+					&& this.updateCountdownTicks <= 0
+					&& (
 					this.targetX == 0.0 && this.targetY == 0.0 && this.targetZ == 0.0
-						|| livingEntity.squaredDistanceTo(this.targetX, this.targetY, this.targetZ) >= 1.0
-						|| this.rat.getRandom().nextFloat() < 0.05F
-				)) {
+							|| livingEntity.squaredDistanceTo(this.targetX, this.targetY, this.targetZ) >= 1.0
+							|| this.rat.getRandom().nextFloat() < 0.05F
+			)) {
 				this.targetX = livingEntity.getX();
 				this.targetY = livingEntity.getY();
 				this.targetZ = livingEntity.getZ();
@@ -156,6 +165,6 @@ public class RatMeleeAttackGoal extends Goal {
 	}
 
 	protected double getSquaredMaxAttackDistance(LivingEntity entity) {
-		return (double)(this.rat.getWidth() * 2.0F * this.rat.getWidth() * 2.0F + entity.getWidth());
+		return (double) (this.rat.getWidth() * 2.0F * this.rat.getWidth() * 2.0F + entity.getWidth());
 	}
 }

@@ -42,6 +42,20 @@ repositories {
 
 	// mialee misc
 	maven { url "https://maven.willbl.dev/releases" }
+
+	maven {
+		url = 'https://maven.jamieswhiteshirt.com/libs-release/'
+		content {
+			includeGroup 'com.jamieswhiteshirt'
+		}
+	}
+
+	maven {
+		url = 'https://oss.sonatype.org/content/repositories/snapshots'
+		content {
+			includeGroup 'me.lucko'
+		}
+	}
 }
 
 // All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
@@ -69,6 +83,13 @@ dependencies {
 
 	// mialee misc
 	modImplementation include ("xyz.amymialee:mialeemisc:${project.mialeemisc_version}")
+
+	// requiem core
+	modCompileOnly ("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
+	modCompileOnly ("io.github.ladysnake:requiem-api:${project.requiem_version}")
+	modCompileOnly ("io.github.ladysnake:requiem-core:${project.requiem_version}") { transitive = false }
+	modCompileOnly ("io.github.ladysnake:requiem:${project.requiem_version}") { transitive = false }
+	modCompileOnly modLocalRuntime ("io.github.ladysnake:elmendorf:0.8.0")
 }
 
 processResources {
