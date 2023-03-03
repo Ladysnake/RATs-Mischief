@@ -969,7 +969,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 	@Override
 	public boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
-		if (fallDistance > 20) {
+		if (fallDistance > 20 && !this.isBaby()) {
 			this.playSound(ModSoundEvents.ENTITY_RAT_CLAP, 1.0f, (float) (1.0f + random.nextGaussian() / 10f));
 		}
 		return false;
