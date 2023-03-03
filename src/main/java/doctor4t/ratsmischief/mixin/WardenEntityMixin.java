@@ -1,7 +1,6 @@
 package doctor4t.ratsmischief.mixin;
 
 import doctor4t.ratsmischief.common.entity.RatEntity;
-import net.minecraft.block.entity.SculkSensorBlockEntity;
 import net.minecraft.entity.mob.warden.WardenEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;

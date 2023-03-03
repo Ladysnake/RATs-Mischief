@@ -402,6 +402,27 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 	@Override
+	public void setYaw(float yaw) {
+		if (!this.isFlying()) {
+			super.setYaw(yaw);
+		}
+	}
+
+	@Override
+	public void setBodyYaw(float bodyYaw) {
+		if (!this.isFlying()) {
+			super.setBodyYaw(bodyYaw);
+		}
+	}
+
+	@Override
+	public void setHeadYaw(float headYaw) {
+		if (!this.isFlying()) {
+			super.setHeadYaw(headYaw);
+		}
+	}
+
+	@Override
 	public void tick() {
 		super.tick();
 
@@ -439,6 +460,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 				turnRatIntoItemAndGive((PlayerEntity) this.getOwner());
 			}
 		} else {
+			this.jumping = true;
 			HitResult hitResult = ProjectileUtil.getCollision(this, this::canHit);
 			boolean bl = false;
 			if (hitResult.getType() == HitResult.Type.BLOCK) {
@@ -492,6 +514,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		Vec3d vec3d = user.getVelocity();
 		this.setVelocity(this.getVelocity().add(vec3d.x, user.isOnGround() ? 0.0 : vec3d.y, vec3d.z));
 		this.setPitch(pitch);
+		this.setHeadYaw(yaw);
 		this.setYaw(yaw);
 		this.setFlying(true);
 	}

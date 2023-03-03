@@ -22,11 +22,14 @@ import software.bernie.geckolib3.GeckoLib;
 
 public class RatsMischief implements ModInitializer {
 	public static final String MOD_ID = "ratsmischief";
-	private static final Identifier ANCIENT_CITY_CHESTS = new Identifier("minecraft", "chests/ancient_city");
-
 	public static final SpecialRecipeSerializer<SpyRatCraftingRecipe> SPY_RAT_RECIPE = RecipeSerializer.register(
 			"ratsmischief:crafting_special_spy_rat", new SpecialRecipeSerializer<>(SpyRatCraftingRecipe::new)
 	);
+	private static final Identifier ANCIENT_CITY_CHESTS = new Identifier("minecraft", "chests/ancient_city");
+
+	public static Identifier id(String path) {
+		return new Identifier(MOD_ID, path);
+	}
 
 	@Override
 	public void onInitialize(ModContainer mod) {
@@ -54,9 +57,5 @@ public class RatsMischief implements ModInitializer {
 				supplier.pool(lootPool);
 			}
 		});
-	}
-
-	public static Identifier id(String path) {
-		return new Identifier(MOD_ID, path);
 	}
 }
