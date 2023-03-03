@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "ratsmischief:item/master_rat_boots"
+    "layer0": "ratsmischief:item/rat_master_boots"
   }
 }

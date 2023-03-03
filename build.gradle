@@ -90,6 +90,8 @@ dependencies {
 	modCompileOnly ("io.github.ladysnake:requiem-core:${project.requiem_version}") { transitive = false }
 	modCompileOnly ("io.github.ladysnake:requiem:${project.requiem_version}") { transitive = false }
 	modCompileOnly modLocalRuntime ("io.github.ladysnake:elmendorf:0.8.0")
+	// ok zoomer
+	runtimeOnly("com.github.EnnuiL:OkZoomer:1.19.2-SNAPSHOT")
 }
 
 processResources {

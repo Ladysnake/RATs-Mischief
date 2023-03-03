@@ -40,7 +40,7 @@ public class MasterRatArmorItem extends ArmorItem {
 
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(Text.translatable("item.ratsmischief.master_rat_armor.tooltip." + getType(stack).name().toLowerCase()).formatted(Formatting.GRAY));
+		tooltip.add(Text.translatable("item.ratsmischief.rat_master_armor.tooltip." + getType(stack).name().toLowerCase()).formatted(Formatting.GRAY));
 		super.appendTooltip(stack, world, tooltip, context);
 	}
 
