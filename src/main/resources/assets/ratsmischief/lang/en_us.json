@@ -1,16 +1,19 @@
 {
   "entity.ratsmischief.rat": "Rat",
+
   "item.ratsmischief.rat": "Rat",
   "item.ratsmischief.leather_rat_pouch": "Leather Rat Pouch",
   "item.ratsmischief.twisted_rat_pouch": "Twisted Rat Pouch",
   "item.ratsmischief.purpur_rat_pouch": "Purpur Rat Pouch",
   "item.ratsmischief.rat_pouch.tooltip.capacity": "Capacity: %s/%s",
   "item.ratsmischief.rat_spawn_egg": "Rat Spawn Egg",
+
   "ratsmischief.subtitles.entity.rat.hurt": "Rat hurts",
   "ratsmischief.subtitles.entity.rat.death": "Rat dies",
   "ratsmischief.subtitles.entity.rat.clap": "Rat lands",
   "ratsmischief.subtitles.item.armor_toggle": "Ratty armor toggles",
   "ratsmischief.subtitles.item.rat_toggle": "Rat toggles",
+
   "type.ratsmischief.wild": "Wild",
   "type.ratsmischief.albino": "Albino",
   "type.ratsmischief.black": "Black",

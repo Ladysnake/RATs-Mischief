@@ -33,9 +33,9 @@ public interface ModItems {
 
 	Item CLOTHED_INGOT = createItem("clothed_ingot", new Item(new QuiltItemSettings().group(ItemGroup.MISC)));
 	Item RAT_MASTER_HOOD = createItem("rat_master_hood", new MasterRatHoodItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.HEAD, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item RAT_MASTER_CHESTPLATE = createItem("rat_master_chestplate", new MasterRatArmorItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.CHEST, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item RAT_MASTER_LEGGINGS = createItem("rat_master_leggings", new MasterRatArmorItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.LEGS, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item RAT_MASTER_BOOTS = createItem("rat_master_boots", new MasterRatArmorItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.FEET, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_MASTER_CLOAK = createItem("rat_master_cloak", new MasterRatArmorItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.CHEST, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_MASTER_BREECHES = createItem("rat_master_breeches", new MasterRatArmorItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.LEGS, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_MASTER_GREAVES = createItem("rat_master_greaves", new MasterRatArmorItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.FEET, new QuiltItemSettings().group(ItemGroup.COMBAT)));
 
 	private static <T extends Item> T createItem(String name, T item) {
 		ITEMS.put(item, new Identifier(RatsMischief.MOD_ID, name));
