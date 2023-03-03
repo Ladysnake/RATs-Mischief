@@ -32,11 +32,11 @@ public class ScreenHandlerMixin {
 				if (stack.getItem() instanceof MasterRatArmorItem armorItem) {
 					boolean quickMove = actionType == SlotActionType.QUICK_MOVE;
 					armorItem.incrementType(stack, quickMove);
-					player.playSound(ModSoundEvents.RAT_ITEM_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
+					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
 					ci.cancel();
 				} else if (stack.getItem() instanceof RatItem) {
 					RatItem.cycleRatReturn(stack);
-					player.playSound(ModSoundEvents.RAT_ITEM_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
+					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
 					ci.cancel();
 				}
 			}
