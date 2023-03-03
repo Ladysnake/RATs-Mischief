@@ -4,6 +4,7 @@ import doctor4t.ratsmischief.common.entity.RatEntity;
 import doctor4t.ratsmischief.common.entity.ai.BreedGoal;
 import doctor4t.ratsmischief.common.entity.ai.DigGoal;
 import doctor4t.ratsmischief.common.entity.ai.HarvestPlantMealGoal;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.TargetGoal;
@@ -19,6 +20,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import xyz.amymialee.mialeemisc.items.IClickConsumingItem;
@@ -68,6 +70,11 @@ public class RatStaffItem extends Item implements IClickConsumingItem {
 		} else {
 			return ActionResult.PASS;
 		}
+	}
+
+	@Override
+	public boolean canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
+		return false;
 	}
 
 	@Override

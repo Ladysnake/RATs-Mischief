@@ -20,9 +20,9 @@ import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 public class RatsMischiefClient implements ClientModInitializer {
-	public static final EntityModelLayer MASTER_RAT_ARMOR_INNER_LAYER = new EntityModelLayer(RatsMischief.id("master_rat_inner_layer"), "main");
-	public static final EntityModelLayer MASTER_RAT_ARMOR_OUTER_LAYER = new EntityModelLayer(RatsMischief.id("master_rat_outer_layer"), "main");
-	public static final EntityModelLayer MASTER_RAT_ARMOR_OUTER_LAYER_SLIM = new EntityModelLayer(RatsMischief.id("master_rat_outer_layer_slim"), "main");
+	public static final EntityModelLayer RAT_MASTER_ARMOR_INNER_LAYER = new EntityModelLayer(RatsMischief.id("rat_master_inner_layer"), "main");
+	public static final EntityModelLayer RAT_MASTER_ARMOR_OUTER_LAYER = new EntityModelLayer(RatsMischief.id("rat_master_outer_layer"), "main");
+	public static final EntityModelLayer RAT_MASTER_ARMOR_OUTER_LAYER_SLIM = new EntityModelLayer(RatsMischief.id("rat_master_outer_layer_slim"), "main");
 
 	static {
 		ModelPredicateProviderRegistry.register(ModItems.RAT_STAFF, new Identifier("action"), (stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("action") / 4f);
@@ -30,9 +30,9 @@ public class RatsMischiefClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient(ModContainer mod) {
-		EntityModelLayerRegistry.registerModelLayer(MASTER_RAT_ARMOR_INNER_LAYER, () -> TexturedModelData.of(PlayerEntityModel.getTexturedModelData(new Dilation(0.28f), false), 64, 64));
-		EntityModelLayerRegistry.registerModelLayer(MASTER_RAT_ARMOR_OUTER_LAYER, () -> TexturedModelData.of(PlayerEntityModel.getTexturedModelData(new Dilation(0.29f), false), 64, 64));
-		EntityModelLayerRegistry.registerModelLayer(MASTER_RAT_ARMOR_OUTER_LAYER_SLIM, () -> TexturedModelData.of(PlayerEntityModel.getTexturedModelData(new Dilation(0.29f), true), 64, 64));
+		EntityModelLayerRegistry.registerModelLayer(RAT_MASTER_ARMOR_INNER_LAYER, () -> TexturedModelData.of(PlayerEntityModel.getTexturedModelData(new Dilation(0.28f), false), 64, 64));
+		EntityModelLayerRegistry.registerModelLayer(RAT_MASTER_ARMOR_OUTER_LAYER, () -> TexturedModelData.of(PlayerEntityModel.getTexturedModelData(new Dilation(0.29f), false), 64, 64));
+		EntityModelLayerRegistry.registerModelLayer(RAT_MASTER_ARMOR_OUTER_LAYER_SLIM, () -> TexturedModelData.of(PlayerEntityModel.getTexturedModelData(new Dilation(0.29f), true), 64, 64));
 
 		ModParticles.registerFactories();
 		ModParticles.init();

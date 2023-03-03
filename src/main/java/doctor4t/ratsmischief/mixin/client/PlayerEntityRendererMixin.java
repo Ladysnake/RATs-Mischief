@@ -37,8 +37,8 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 	private void mischief$masterArmor(EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci) {
 		this.addFeature(
 				new MasterRatArmorFeatureRenderer<>(this,
-						new PlayerEntityModel<>(ctx.getPart(RatsMischiefClient.MASTER_RAT_ARMOR_INNER_LAYER), false),
-						new PlayerEntityModel<>(ctx.getPart(slim ? RatsMischiefClient.MASTER_RAT_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.MASTER_RAT_ARMOR_OUTER_LAYER),
+						new PlayerEntityModel<>(ctx.getPart(RatsMischiefClient.RAT_MASTER_ARMOR_INNER_LAYER), false),
+						new PlayerEntityModel<>(ctx.getPart(slim ? RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER),
 								slim), slim));
 	}
 

@@ -488,10 +488,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	protected void onCollision(HitResult hitResult) {
 		if (hitResult instanceof EntityHitResult entityHitResult) {
 			this.onEntityHit(entityHitResult);
-			this.world.emitGameEvent(GameEvent.PROJECTILE_LAND, hitResult.getPos(), GameEvent.Context.create(this, null));
+			this.emitGameEvent(GameEvent.PROJECTILE_LAND, hitResult.getPos(), GameEvent.Context.create(this, null));
 		} else if (hitResult instanceof BlockHitResult blockHitResult) {
 			BlockPos blockPos = blockHitResult.getBlockPos();
-			this.world.emitGameEvent(GameEvent.PROJECTILE_LAND, blockPos, GameEvent.Context.create(this, this.world.getBlockState(blockPos)));
+			this.emitGameEvent(GameEvent.PROJECTILE_LAND, blockPos, GameEvent.Context.create(this, this.world.getBlockState(blockPos)));
 		}
 
 		this.setFlying(false);
@@ -786,9 +786,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	public void setEating(boolean eating) {
 		this.dataTracker.set(EATING, eating);
 	}
-
-	@Override
-	public void emitGameEvent(GameEvent event, @Nullable Entity entity) {}
 
 	@Override
 	public boolean damage(DamageSource source, float amount) {
