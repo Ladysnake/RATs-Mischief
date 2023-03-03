@@ -4,6 +4,7 @@ import doctor4t.ratsmischief.common.entity.RatEntity;
 import doctor4t.ratsmischief.common.entity.ai.BreedGoal;
 import doctor4t.ratsmischief.common.entity.ai.DigGoal;
 import doctor4t.ratsmischief.common.entity.ai.HarvestPlantMealGoal;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.mob.HostileEntity;
@@ -13,10 +14,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import xyz.amymialee.mialeemisc.items.IClickConsumingItem;
 import xyz.amymialee.mialeemisc.util.MialeeMath;
 
@@ -70,6 +74,18 @@ public class RatStaffItem extends Item implements IClickConsumingItem {
 	public static Action getAction(ItemStack stack) {
 		NbtCompound compound = stack.getOrCreateNbt();
 		return Action.values()[MialeeMath.clampLoop(compound.getInt("action"), 0, Action.values().length)];
+	}
+
+	@Override
+	public Text getName(ItemStack stack) {
+		return super.getName(stack).copy().append(" (" + getAction(stack).name() + ")");
+	}
+
+	@Override
+	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+		tooltip.add(Text.translatable("item.ratsmischief.rat_staff.tooltip").formatted(Formatting.GRAY));
+		tooltip.add(Text.translatable("item.ratsmischief.rat_staff.%s.tooltip".formatted(getAction(stack).name().toLowerCase())).formatted(Formatting.GRAY));
+		super.appendTooltip(stack, world, tooltip, context);
 	}
 
 	public enum Action {

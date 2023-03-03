@@ -378,7 +378,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			// turn saturation into regeneration
 			if (this.hasStatusEffect(StatusEffects.SATURATION)) {
 				StatusEffectInstance saturation = this.getStatusEffect(StatusEffects.SATURATION);
-				this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, saturation.getDuration(), saturation.getAmplifier(), saturation.isAmbient(), saturation.shouldShowParticles(), saturation.shouldShowIcon()));
+				if (saturation != null) this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, saturation.getDuration(), saturation.getAmplifier(), saturation.isAmbient(), saturation.shouldShowParticles(), saturation.shouldShowIcon()));
 			}
 
 			// sexually aroused rat
@@ -396,7 +396,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			}
 
 			// return to owner
-			if (canReturnToOwnerInventory() && this.getOwner().squaredDistanceTo(this.getPos()) <= 1.5f) {
+			if (this.getOwner() != null && this.canReturnToOwnerInventory() && this.getOwner().squaredDistanceTo(this.getPos()) <= 1.5f) {
 				turnRatIntoItemAndGive((PlayerEntity) this.getOwner());
 			}
 		} else {
@@ -457,6 +457,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		this.setFlying(true);
 	}
 
+	@SuppressWarnings("SuspiciousNameCombination")
 	public void setVelocity(double x, double y, double z, float speed, float divergence) {
 		Vec3d vec3d = new Vec3d(x, y, z)
 				.normalize()
@@ -475,13 +476,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 	protected void onCollision(HitResult hitResult) {
-		HitResult.Type type = hitResult.getType();
-		if (type == HitResult.Type.ENTITY) {
-			this.onEntityHit((EntityHitResult) hitResult);
+		if (hitResult instanceof EntityHitResult entityHitResult) {
+			this.onEntityHit(entityHitResult);
 			this.world.emitGameEvent(GameEvent.PROJECTILE_LAND, hitResult.getPos(), GameEvent.Context.create(this, null));
-		} else if (type == HitResult.Type.BLOCK) {
-			BlockHitResult blockHitResult = (BlockHitResult) hitResult;
-			this.onBlockHit(blockHitResult);
+		} else if (hitResult instanceof BlockHitResult blockHitResult) {
 			BlockPos blockPos = blockHitResult.getBlockPos();
 			this.world.emitGameEvent(GameEvent.PROJECTILE_LAND, blockPos, GameEvent.Context.create(this, this.world.getBlockState(blockPos)));
 		}
@@ -497,9 +495,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		}
 	}
 
-	protected void onBlockHit(BlockHitResult blockHitResult) {
-	}
-
 	@Override
 	public void mobTick() {
 		if (!this.isFlying()) {
@@ -513,8 +508,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 				this.setSniffing(false);
 			}
 
-			if (this.hasCustomName()) {
-				switch (getCustomName().getString().toLowerCase(Locale.ROOT)) {
+			if (this.getCustomName() != null) {
+				switch (this.getCustomName().getString().toLowerCase(Locale.ROOT)) {
 					case "doctor4t" -> setRatType(Type.DOCTOR4T);
 					case "ratater" -> setRatType(Type.RATATER);
 					case "rat kid", "hat kid" -> setRatType(Type.RAT_KID);
@@ -605,7 +600,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 					if (!player.getAbilities().creativeMode) {
 						itemStack.decrement(1);
 					}
-					this.heal((float) item.getFoodComponent().getHunger());
+					if (item.getFoodComponent() != null) {
+						this.heal(item.getFoodComponent().getHunger());
+					}
 					return ActionResult.SUCCESS;
 				}
 
@@ -623,8 +620,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 						return ActionResult.SUCCESS;
 					}
 				}
-			} else if (item.isFood() && !this.hasAngerTime()) { // taming
+			} else if (item.getFoodComponent() != null && !this.hasAngerTime()) { // taming
 				player.getStackInHand(hand).decrement(1);
+
 				if (this.random.nextInt(Math.max(1, 6 - item.getFoodComponent().getHunger())) == 0) {
 					this.setOwner(player);
 					this.navigation.stop();
@@ -646,7 +644,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		return super.interactMob(player, hand);
 	}
 
-	public ItemStack turnRatIntoItemAndGive(PlayerEntity player) {
+	public void turnRatIntoItemAndGive(PlayerEntity player) {
 		ItemStack ratItemStack = new ItemStack(ModItems.RAT);
 		NbtCompound nbt = new NbtCompound();
 		this.saveNbt(nbt);
@@ -654,10 +652,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		ratItemStack.getOrCreateSubNbt(RatsMischief.MOD_ID).put("rat", nbt);
 		player.giveItemStack(ratItemStack);
 		this.discard();
-
-		System.out.println(nbt);
-
-		return ratItemStack;
 	}
 
 	@Override
@@ -776,6 +770,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	public void setEating(boolean eating) {
 		this.dataTracker.set(EATING, eating);
 	}
+
+	@Override
+	public void emitGameEvent(GameEvent event, @Nullable Entity entity) {}
 
 	@Override
 	public boolean damage(DamageSource source, float amount) {

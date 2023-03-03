@@ -9,6 +9,7 @@ import doctor4t.ratsmischief.common.init.ModParticles;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
+import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.model.Dilation;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
@@ -44,5 +45,9 @@ public class RatsMischiefClient implements ClientModInitializer {
 
 //		// entity renderer registration
 //		EntityRendererRegistry.register(ModEntities.MOD_ENTITY, ModEntityRenderer::new);
+	}
+
+	static {
+		ModelPredicateProviderRegistry.register(ModItems.RAT_STAFF, new Identifier("action"), (stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("action") / 4f);
 	}
 }
