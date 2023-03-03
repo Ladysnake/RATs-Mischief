@@ -15,6 +15,7 @@ public interface ModSoundEvents {
 	SoundEvent ENTITY_RAT_HURT = createSoundEvent("entity.rat.hurt");
 	SoundEvent ENTITY_RAT_DEATH = createSoundEvent("entity.rat.death");
 	SoundEvent ENTITY_RAT_CLAP = createSoundEvent("entity.rat.clap");
+	SoundEvent ITEM_RATTY_ARMOR_TOGGLE = createSoundEvent("item.ratty_armor.toggle");
 
 	static void initialize() {
 		SOUND_EVENTS.keySet().forEach(soundEvent -> {

@@ -59,6 +59,10 @@ dependencies {
 	// mod menu
 	modCompileOnly "com.terraformersmc:modmenu:${mod_menu_version}"
 	modRuntimeOnly "com.terraformersmc:modmenu:${mod_menu_version}"
+
+	//Included
+	implementation include ("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
+	annotationProcessor ("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
 }
 
 processResources {

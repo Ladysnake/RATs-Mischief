@@ -1,15 +1,14 @@
 package doctor4t.ratsmischief.mixin;
 
-import doctor4t.ratsmischief.common.RatsMischief;
 import doctor4t.ratsmischief.common.entity.RatEntity;
 import doctor4t.ratsmischief.common.init.ModEntities;
 import doctor4t.ratsmischief.common.init.ModItems;
+import doctor4t.ratsmischief.common.item.RatItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,16 +32,17 @@ public abstract class ItemEntityMixin extends Entity {
 
 		if (stack.isOf(ModItems.RAT)) {
 			if (!world.isClient()) {
-				NbtElement ratTag = stack.getOrCreateSubNbt(RatsMischief.MOD_ID).get("rat");
+				NbtCompound ratTag = RatItem.getRatTag(stack, world);
 				RatEntity rat = ModEntities.RAT.create(world);
-				rat.readNbt((NbtCompound) ratTag);
-				rat.updatePosition(this.getX(), this.getY(), this.getZ());
-				rat.setPos(this.getX(), this.getY(), this.getZ());
-				world.spawnEntity(rat);
-				rat.setSitting(false);
-				stack.decrement(1);
-
-				ci.cancel();
+				if (rat != null) {
+					rat.readNbt(ratTag);
+					rat.updatePosition(this.getX(), this.getY(), this.getZ());
+					rat.setPos(this.getX(), this.getY(), this.getZ());
+					world.spawnEntity(rat);
+					rat.setSitting(false);
+					stack.decrement(1);
+					ci.cancel();
+				}
 			}
 		}
 	}

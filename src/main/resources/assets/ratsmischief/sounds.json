@@ -23,5 +23,11 @@
       "ratsmischief:rat_clap_4"
     ],
     "subtitle": "ratsmischief.subtitles.entity.rat.clap"
+  },
+  "item.ratty_armor.toggle": {
+    "sounds": [
+      "random/click"
+    ],
+    "subtitle": "ratsmischief.subtitles.item.armor_toggle"
   }
 }
