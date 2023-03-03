@@ -6,16 +6,29 @@ import doctor4t.ratsmischief.common.RatsMischief;
 import doctor4t.ratsmischief.common.init.ModEntities;
 import doctor4t.ratsmischief.common.init.ModItems;
 import doctor4t.ratsmischief.common.init.ModParticles;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
+import net.minecraft.client.model.Dilation;
+import net.minecraft.client.model.TexturedModelData;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 public class RatsMischiefClient implements ClientModInitializer {
+	public static final EntityModelLayer MASTER_RAT_ARMOR_INNER_LAYER = new EntityModelLayer(RatsMischief.id("master_rat_inner_layer"), "main");
+	public static final EntityModelLayer MASTER_RAT_ARMOR_OUTER_LAYER = new EntityModelLayer(RatsMischief.id("master_rat_outer_layer"), "main");
+	public static final EntityModelLayer MASTER_RAT_ARMOR_OUTER_LAYER_SLIM = new EntityModelLayer(RatsMischief.id("master_rat_outer_layer_slim"), "main");
+
 	@Override
 	public void onInitializeClient(ModContainer mod) {
+		EntityModelLayerRegistry.registerModelLayer(MASTER_RAT_ARMOR_INNER_LAYER, () -> TexturedModelData.of(PlayerEntityModel.getTexturedModelData(new Dilation(0.28f), false), 64, 64));
+		EntityModelLayerRegistry.registerModelLayer(MASTER_RAT_ARMOR_OUTER_LAYER, () -> TexturedModelData.of(PlayerEntityModel.getTexturedModelData(new Dilation(0.29f), false), 64, 64));
+		EntityModelLayerRegistry.registerModelLayer(MASTER_RAT_ARMOR_OUTER_LAYER_SLIM, () -> TexturedModelData.of(PlayerEntityModel.getTexturedModelData(new Dilation(0.29f), true), 64, 64));
+
 		ModParticles.registerFactories();
 		ModParticles.init();
 

@@ -39,6 +39,9 @@ repositories {
 	maven { url 'https://masa.dy.fi/maven' }
 
 	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+
+	// mialee misc
+	maven { url "https://maven.willbl.dev/releases" }
 }
 
 // All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
@@ -63,6 +66,9 @@ dependencies {
 	// mixin extras
 	implementation include ("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
 	annotationProcessor ("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
+
+	// mialee misc
+	modImplementation include ("xyz.amymialee:mialeemisc:${project.mialeemisc_version}")
 }
 
 processResources {

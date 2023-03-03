@@ -10,6 +10,7 @@
     "ScreenHandlerMixin"
   ],
   "client": [
+    "client.ArmorFeatureRendererMixin",
     "client.BipedEntityModelMixin",
     "client.HeldItemRendererMixin",
     "client.ItemEntityRendererMixin",

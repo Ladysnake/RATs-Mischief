@@ -9,6 +9,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import xyz.amymialee.mialeemisc.util.MialeeMath;
 
 public class MasterRatArmorItem extends ArmorItem {
 	public MasterRatArmorItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
@@ -17,24 +18,12 @@ public class MasterRatArmorItem extends ArmorItem {
 
 	public static RattyArmorType getType(ItemStack stack) {
 		NbtCompound compound = stack.getOrCreateNbt();
-		return RattyArmorType.values()[clampLoop(compound.getInt("type"), 0, RattyArmorType.values().length - 1)];
+		return RattyArmorType.values()[MialeeMath.clampLoop(compound.getInt("type"), 0, RattyArmorType.values().length - 1)];
 	}
 
 	public static void incrementType(ItemStack stack) {
 		NbtCompound compound = stack.getOrCreateNbt();
-		compound.putInt("offset", clampLoop(compound.getInt("type") + 1, 0, RattyArmorType.values().length - 1));
-	}
-
-	public static int clampLoop(int input, int start, int end) {
-		if (start - end == 0) {
-			return start;
-		}
-		if (end < start) {
-			int temp = start;
-			start = end;
-			end = temp;
-		}
-		return input < start ? end - (start - input) % (end - start) : start + (input - start) % (end - start);
+		compound.putInt("offset", MialeeMath.clampLoop(compound.getInt("type") + 1, 0, RattyArmorType.values().length - 1));
 	}
 
 	enum RattyArmorType {
