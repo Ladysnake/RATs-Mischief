@@ -5,6 +5,7 @@ import doctor4t.ratsmischief.common.entity.RatEntity;
 import doctor4t.ratsmischief.common.init.ModEntities;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
@@ -27,8 +28,6 @@ import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static net.minecraft.text.Style.EMPTY;
 
@@ -114,7 +113,8 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		if (!world.isClient()) {
-			RatEntity rat = getRatFromItem(world, user.getStackInHand(hand), new Vec3d(user.getX(), user.getEyeY() - 0.10000000149011612D, user.getZ()));
+			RatEntity rat = getRatFromItem(world, user.getStackInHand(hand), new Vec3d(user.getX(), user.getEyeY() - 0.10000000149011612D, user.getZ()),
+					hand == Hand.OFF_HAND ? PlayerInventory.OFF_HAND_SLOT : user.getInventory().getSlotWithStack(user.getStackInHand(hand)));
 			if (rat == null) {
 				return TypedActionResult.fail(user.getStackInHand(hand));
 			}
@@ -134,7 +134,8 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 		Hand hand = context.getHand();
 		World world = context.getWorld();
 
-		world.spawnEntity(getRatFromItem(world, owner.getStackInHand(hand), context.getHitPos()));
+		world.spawnEntity(getRatFromItem(world, owner.getStackInHand(hand), context.getHitPos(),
+				hand == Hand.OFF_HAND ? PlayerInventory.OFF_HAND_SLOT : owner.getInventory().getSlotWithStack(owner.getStackInHand(hand))));
 		if (!owner.getAbilities().creativeMode) {
 			owner.getStackInHand(hand).decrement(1);
 		}
@@ -142,7 +143,7 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 		return ActionResult.SUCCESS;
 	}
 
-	public RatEntity getRatFromItem(World world, ItemStack ratItemStack, Vec3d spawnPos) {
+	public RatEntity getRatFromItem(World world, ItemStack ratItemStack, Vec3d spawnPos, int slot) {
 		NbtCompound ratTag = getRatTag(ratItemStack, world);
 		RatEntity rat = ModEntities.RAT.create(world);
 		if (rat != null) {
@@ -150,6 +151,14 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 			rat.updatePosition(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
 			rat.setPos(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
 			rat.setSitting(false);
+
+			// custom name
+			if (ratItemStack.hasCustomName()) {
+				rat.setCustomName(ratItemStack.getName());
+			}
+
+			// set slot to come back to
+			rat.setSlot(slot);
 		}
 		return rat;
 	}
@@ -164,15 +173,7 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 			style = EMPTY.withColor(Formatting.GOLD);
 		}
 
-		if (ratTag.contains("CustomName")) {
-			Matcher matcher = Pattern.compile("\\{\"text\":\"(.+)\"}").matcher(ratTag.getString("CustomName"));
-			if (matcher.find()) {
-				String name = matcher.group(1);
-				tooltip.add(Text.literal(name).append(" (").append(ratType).append(")").setStyle(style));
-			}
-		} else {
-			tooltip.add(ratType.setStyle(style));
-		}
+		tooltip.add(ratType.setStyle(style));
 
 		// set to return
 		if (ratTag.getBoolean("ShouldReturnToOwnerInventory")) {

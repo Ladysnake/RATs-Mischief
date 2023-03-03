@@ -17,27 +17,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.EndGatewayBlockEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.AnimalMateGoal;
-import net.minecraft.entity.ai.goal.AttackWithOwnerGoal;
-import net.minecraft.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.LookAroundGoal;
-import net.minecraft.entity.ai.goal.LookAtEntityGoal;
-import net.minecraft.entity.ai.goal.PounceAtTargetGoal;
-import net.minecraft.entity.ai.goal.RevengeGoal;
-import net.minecraft.entity.ai.goal.SitGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.ai.goal.TrackOwnerAttackerGoal;
-import net.minecraft.entity.ai.goal.UniversalAngerGoal;
-import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
@@ -65,16 +46,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.TimeHelper;
+import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -99,14 +74,8 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class RatEntity extends TameableEntity implements IAnimatable, Angerable {
 	public static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (itemEntity) -> !itemEntity.cannotPickup() && itemEntity.isAlive();
@@ -127,6 +96,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	private static final TrackedData<Boolean> SPY = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 	private static final TrackedData<Integer> ATTACK_RIDING_TIME = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.INTEGER);
 	private static final TrackedData<Integer> POTION_GENE = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.INTEGER);
+	private static final TrackedData<Integer> SLOT = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.INTEGER);
 	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	public Goal action;
 	public int actionTimer = 0;
@@ -205,6 +175,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		this.dataTracker.startTracking(AROUSED, false);
 		this.dataTracker.startTracking(ATTACK_RIDING_TIME, 0);
 		this.dataTracker.startTracking(POTION_GENE, -1);
+		this.dataTracker.startTracking(SLOT, 0);
 
 		this.dataTracker.startTracking(PARTY_HAT, PARTY_HATS.get(random.nextInt(PARTY_HATS.size())).toString());
 	}
@@ -349,6 +320,14 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		this.dataTracker.set(POTION_GENE, Registry.STATUS_EFFECT.getRawId(potion));
 	}
 
+	public int getSlot() {
+		return this.dataTracker.get(SLOT);
+	}
+
+	public void setSlot(int slot) {
+		this.dataTracker.set(SLOT, slot);
+	}
+
 	@Override
 	public void readCustomDataFromNbt(NbtCompound tag) {
 		super.readCustomDataFromNbt(tag);
@@ -376,6 +355,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 		if (tag.contains("AttackRidingTime")) {
 			this.setAttackRidingTime(tag.getInt("AttackRidingTime"));
+		}
+
+		if (tag.contains("Slot")) {
+			this.setSlot(tag.getInt("Slot"));
 		}
 
 		if (tag.contains("ShouldReturnToOwnerInventory")) {
@@ -407,6 +390,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 		tag.putBoolean("Sitting", this.isSitting());
 		tag.putInt("AttackRidingTime", this.getAttackRidingTime());
+		tag.putInt("Slot", this.getSlot());
 		if (this.getPotionGene() != null) {
 			tag.putString("PotionGene", String.valueOf(Registry.STATUS_EFFECT.getId(this.getPotionGene())));
 		}
@@ -425,7 +409,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			// turn saturation into regeneration
 			if (this.hasStatusEffect(StatusEffects.SATURATION)) {
 				StatusEffectInstance saturation = this.getStatusEffect(StatusEffects.SATURATION);
-				if (saturation != null) this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, saturation.getDuration(), saturation.getAmplifier(), saturation.isAmbient(), saturation.shouldShowParticles(), saturation.shouldShowIcon()));
+				if (saturation != null)
+					this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, saturation.getDuration(), saturation.getAmplifier(), saturation.isAmbient(), saturation.shouldShowParticles(), saturation.shouldShowIcon()));
 			}
 
 			// sexually aroused rat
@@ -703,7 +688,18 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		this.saveNbt(nbt);
 		nbt.remove("UUID");
 		ratItemStack.getOrCreateSubNbt(RatsMischief.MOD_ID).put("rat", nbt);
-		player.giveItemStack(ratItemStack);
+
+		// custom name
+		if (this.hasCustomName()) {
+			ratItemStack.setCustomName(this.getCustomName());
+		}
+
+		if (this.getSlot() >= 0 && player.getInventory().getStack(this.getSlot()).isEmpty()) {
+			player.getInventory().setStack(this.getSlot(), ratItemStack);
+		} else {
+			player.giveItemStack(ratItemStack);
+		}
+
 		this.discard();
 	}
 
@@ -793,7 +789,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 	@Override
 	public boolean tryAttack(Entity target) {
-		float damage = (float)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+		float damage = (float) this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
 		damage *= MasterRatArmorItem.getDamageMultiplier(this.getOwner());
 		target.timeUntilRegen = 0;
 		if (target.damage(DamageSource.mob(this), damage)) {
@@ -870,7 +866,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	@Override
 	public double getHeightOffset() {
 		if (this.getVehicle() != null) {
-			return this.getVehicle().getHeight()*0.3f;
+			return this.getVehicle().getHeight() * 0.3f;
 		} else {
 			return super.getHeightOffset();
 		}

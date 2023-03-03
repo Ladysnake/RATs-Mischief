@@ -32,17 +32,6 @@ public class MasterRatArmorItem extends ArmorItem {
 		return MasterArmorBoost.values()[MialeeMath.clampLoop(compound.getInt("type"), 0, MasterArmorBoost.values().length)];
 	}
 
-	public void incrementType(ItemStack stack, boolean sneaking) {
-		NbtCompound compound = stack.getOrCreateNbt();
-		compound.putInt("type", MialeeMath.clampLoop(compound.getInt("type") + 1, 1, MasterArmorBoost.values().length));
-	}
-
-	@Override
-	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(Text.translatable("item.ratsmischief.rat_master_armor.tooltip." + getType(stack).name().toLowerCase()).formatted(Formatting.GRAY));
-		super.appendTooltip(stack, world, tooltip, context);
-	}
-
 	public static float getResistanceMultiplier(LivingEntity owner) {
 		if (owner != null) {
 			float bonus = 0.0f;
@@ -89,7 +78,7 @@ public class MasterRatArmorItem extends ArmorItem {
 
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(Text.translatable("item.ratsmischief.master_rat_armor.tooltip." + getType(stack).name().toLowerCase()).formatted(Formatting.GRAY));
+		tooltip.add(Text.translatable("item.ratsmischief.rat_master_armor.tooltip." + getType(stack).name().toLowerCase()).formatted(Formatting.GRAY));
 		super.appendTooltip(stack, world, tooltip, context);
 	}
 
