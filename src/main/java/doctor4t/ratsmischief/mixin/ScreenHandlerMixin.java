@@ -2,6 +2,7 @@ package doctor4t.ratsmischief.mixin;
 
 import doctor4t.ratsmischief.common.init.ModSoundEvents;
 import doctor4t.ratsmischief.common.item.MasterRatArmorItem;
+import doctor4t.ratsmischief.common.item.RatItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
@@ -21,7 +22,7 @@ public class ScreenHandlerMixin {
     @Shadow @Final public DefaultedList<Slot> slots;
 
     @Inject(method = "internalOnSlotClick", at = @At("HEAD"), cancellable = true)
-    private void amarite$preventStacking(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
+    private void ratsmischief$toggleMode(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
         if (actionType == SlotActionType.PICKUP && button == 1 && slotIndex >= 0 && slotIndex < this.slots.size()) {
             Slot slot = this.slots.get(slotIndex);
             ItemStack stack = slot.getStack();
@@ -29,7 +30,11 @@ public class ScreenHandlerMixin {
                 MasterRatArmorItem.incrementType(stack);
                 player.playSound(ModSoundEvents.ITEM_RATTY_ARMOR_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
                 ci.cancel();
-            }
+            } else if (stack.getItem() instanceof RatItem) {
+				RatItem.cycleRatReturn(stack);
+				player.playSound(ModSoundEvents.ITEM_RATTY_ARMOR_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
+				ci.cancel();
+			}
         }
     }
 }

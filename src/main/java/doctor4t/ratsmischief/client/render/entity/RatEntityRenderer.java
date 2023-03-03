@@ -33,7 +33,7 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 
 	@Override
 	public void render(RatEntity ratEntity, float entityYaw, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight) {
-		if (ratEntity.isFlying() && ratEntity.age < 3) {
+		if (ratEntity.isFlying() && ratEntity.age < 5) {
 			return;
 		}
 

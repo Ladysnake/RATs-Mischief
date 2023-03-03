@@ -50,7 +50,7 @@ public class FollowOwnerRatGoal extends Goal {
 			return false;
 		} else if (this.rat.isSitting()) {
 			return false;
-		} else if (this.rat.squaredDistanceTo(livingEntity) < (double) (this.minDistance * this.minDistance) && !this.rat.canComeBackToOwnerInventory()) {
+		} else if (this.rat.squaredDistanceTo(livingEntity) < (double) (this.minDistance * this.minDistance) && !this.rat.canReturnToOwnerInventory()) {
 			return false;
 		} else {
 			this.owner = livingEntity;
@@ -64,7 +64,7 @@ public class FollowOwnerRatGoal extends Goal {
 		} else if (this.rat.isSitting()) {
 			return false;
 		} else {
-			return this.rat.squaredDistanceTo(this.owner) > (double) (this.maxDistance * this.maxDistance) && !this.rat.canComeBackToOwnerInventory();
+			return this.rat.squaredDistanceTo(this.owner) > (double) (this.maxDistance * this.maxDistance) && !this.rat.canReturnToOwnerInventory();
 		}
 	}
 
@@ -90,7 +90,6 @@ public class FollowOwnerRatGoal extends Goal {
 				} else {
 					this.navigation.startMovingTo(this.owner, this.speed);
 				}
-
 			}
 		}
 	}
