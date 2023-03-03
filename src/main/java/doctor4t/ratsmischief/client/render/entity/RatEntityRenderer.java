@@ -32,6 +32,15 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 	}
 
 	@Override
+	public void render(RatEntity ratEntity, float entityYaw, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight) {
+		if (ratEntity.isFlying() && ratEntity.age < 3) {
+			return;
+		}
+
+		super.render(ratEntity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
+	}
+
+	@Override
 	public void renderEarly(RatEntity ratEntity, MatrixStack stackIn, float ticks, VertexConsumerProvider vertexConsumerProvider, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
 		this.itemStack = ratEntity.getEquippedStack(EquipmentSlot.MAINHAND);
 		this.vertexConsumerProvider = vertexConsumerProvider;

@@ -6,6 +6,7 @@ import doctor4t.ratsmischief.common.RatsMischiefUtils;
 import doctor4t.ratsmischief.common.entity.ai.ChaseForFunGoal;
 import doctor4t.ratsmischief.common.entity.ai.EatToHealGoal;
 import doctor4t.ratsmischief.common.entity.ai.FollowOwnerRatGoal;
+import doctor4t.ratsmischief.common.entity.ai.RatMeleeAttackGoal;
 import doctor4t.ratsmischief.common.init.ModEntities;
 import doctor4t.ratsmischief.common.init.ModItems;
 import doctor4t.ratsmischief.common.init.ModSoundEvents;
@@ -13,6 +14,8 @@ import doctor4t.ratsmischief.common.item.RatPouchItem;
 import doctor4t.ratsmischief.common.item.RatStaffItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.EndGatewayBlockEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -34,6 +37,7 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -44,6 +48,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.*;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -52,6 +59,7 @@ import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -87,14 +95,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(20, 39);
 	private static final TrackedData<Boolean> SNIFFING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 	private static final TrackedData<Boolean> AROUSED = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+	private static final TrackedData<Integer> ATTACK_RIDING_TIME = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.INTEGER);
 	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	public Goal action;
 	public int actionTimer = 0;
-
-	// ELYTRAT
-	public BlockPos circlingCenter = BlockPos.ORIGIN;
-	public Vec3d targetPosition;
 	private UUID targetUuid;
+	private boolean shouldComeBackToPlayerInventory = false;
 
 	public RatEntity(EntityType<? extends TameableEntity> type, World worldIn) {
 		super(type, worldIn);
@@ -103,7 +109,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 	public static DefaultAttributeContainer.Builder createRatAttributes() {
-		return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32);
+		return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 0.0D).add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32);
 	}
 
 	public static Type getRandomNaturalType(RandomGenerator random) {
@@ -118,7 +124,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		}
 	}
 
-
 	@Override
 	public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityTag) {
 		this.initEquipment(this.random, difficulty);
@@ -131,6 +136,18 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		}
 
 		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
+	}
+
+	public void setShouldComeBackToOwnerInventory(boolean shouldComeBackToPlayerInventory) {
+		this.shouldComeBackToPlayerInventory = shouldComeBackToPlayerInventory;
+	}
+
+	public boolean shouldComeBackToOwnerInventory() {
+		return shouldComeBackToPlayerInventory;
+	}
+
+	public boolean canComeBackToOwnerInventory() {
+		return shouldComeBackToOwnerInventory() && this.getOwner() instanceof PlayerEntity player && player.getInventory().getEmptySlot() != -1;
 	}
 
 	protected void initDataTracker() {
@@ -154,6 +171,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		this.dataTracker.startTracking(COLOR, DyeColor.values()[(this.random.nextInt(DyeColor.values().length))].getName());
 		this.dataTracker.startTracking(FLYING, false);
 		this.dataTracker.startTracking(AROUSED, false);
+		this.dataTracker.startTracking(ATTACK_RIDING_TIME, 0);
 
 		this.dataTracker.startTracking(PARTY_HAT, PARTY_HATS.get(random.nextInt(PARTY_HATS.size())).toString());
 	}
@@ -163,7 +181,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		this.goalSelector.add(2, new SitGoal(this));
 		this.goalSelector.add(3, new EatToHealGoal(this));
 		this.goalSelector.add(3, new PounceAtTargetGoal(this, 0.3F));
-		this.goalSelector.add(4, new MeleeAttackGoal(this, 1.0D, true));
+		this.goalSelector.add(4, new RatMeleeAttackGoal(this, 1.0D, true));
 		this.goalSelector.add(5, new PickupItemGoal());
 		this.goalSelector.add(5, new BringItemToOwnerGoal(this, 1.0D, false));
 		this.goalSelector.add(6, new FollowOwnerRatGoal(this, 1.0D, 20.0F, 2.0F, false));
@@ -180,7 +198,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		if (this.isEating()) {
+		if (this.isFlying()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.fly", ILoopType.EDefaultLoopTypes.LOOP));
+			return PlayState.CONTINUE;
+		} else if (this.isEating()) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.eat", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		} else if (this.isSitting()) {
@@ -289,6 +310,18 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		if (tag.contains("Aroused")) {
 			this.setAroused(tag.getBoolean("Aroused"));
 		}
+
+		if (tag.contains("Flying")) {
+			this.setFlying(tag.getBoolean("Flying"));
+		}
+
+		if (tag.contains("AttackRidingTime")) {
+			this.setAttackRidingTime(tag.getInt("AttackRidingTime"));
+		}
+
+		if (tag.contains("ShouldComeBackToOwnerInventory")) {
+			this.setShouldComeBackToOwnerInventory(tag.getBoolean("ShouldComeBackToOwnerInventory"));
+		}
 	}
 
 	@Override
@@ -299,65 +332,178 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		tag.putString("Color", this.getRatColor().getName());
 		this.writeAngerToNbt(tag);
 		tag.putBoolean("Aroused", this.isAroused());
+		tag.putBoolean("Flying", this.isFlying());
 
 		tag.putBoolean("Sitting", this.isSitting());
+		tag.putInt("AttackRidingTime", this.getAttackRidingTime());
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
 
-		// turn saturation into regeneration
-		if (this.hasStatusEffect(StatusEffects.SATURATION)) {
-			StatusEffectInstance saturation = this.getStatusEffect(StatusEffects.SATURATION);
-			this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, saturation.getDuration(), saturation.getAmplifier(), saturation.isAmbient(), saturation.shouldShowParticles(), saturation.shouldShowIcon()));
+		if (!this.isFlying()) {
+			// turn saturation into regeneration
+			if (this.hasStatusEffect(StatusEffects.SATURATION)) {
+				StatusEffectInstance saturation = this.getStatusEffect(StatusEffects.SATURATION);
+				this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, saturation.getDuration(), saturation.getAmplifier(), saturation.isAmbient(), saturation.shouldShowParticles(), saturation.shouldShowIcon()));
+			}
+
+			// sexually aroused rat
+			if (!this.world.isClient) {
+				this.setAroused(getLoveTicks() > 0);
+			}
+
+			// attack riding
+			if (this.getTarget() != null && this.getTarget().getFirstPassenger() == this && this.getAttackRidingTime() > 0) {
+				if (this.getAttackRidingTime() > 200) {
+					this.dismountVehicle();
+				}
+
+				this.setAttackRidingTime(this.getAttackRidingTime() + 1);
+			}
+		} else {
+			HitResult hitResult = ProjectileUtil.getCollision(this, this::canHit);
+			boolean bl = false;
+			if (hitResult.getType() == HitResult.Type.BLOCK) {
+				BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
+				BlockState blockState = this.world.getBlockState(blockPos);
+				if (blockState.isOf(Blocks.NETHER_PORTAL)) {
+					this.setInNetherPortal(blockPos);
+					bl = true;
+				} else if (blockState.isOf(Blocks.END_GATEWAY)) {
+					BlockEntity blockEntity = this.world.getBlockEntity(blockPos);
+					if (blockEntity instanceof EndGatewayBlockEntity && EndGatewayBlockEntity.canTeleport(this)) {
+						EndGatewayBlockEntity.tryTeleportingEntity(this.world, blockPos, blockState, this, (EndGatewayBlockEntity) blockEntity);
+					}
+
+					bl = true;
+				}
+			}
+
+			if (hitResult.getType() != HitResult.Type.MISS && !bl) {
+				this.onCollision(hitResult);
+			}
+
+			this.checkBlockCollision();
+			Vec3d vec3d = this.getVelocity();
+			double d = this.getX() + vec3d.x;
+			double e = this.getY() + vec3d.y;
+			double f = this.getZ() + vec3d.z;
+//			this.updateRotation();
+			if (this.isTouchingWater()) {
+				for (int i = 0; i < 4; ++i) {
+					this.world.addParticle(ParticleTypes.BUBBLE, d - vec3d.x * 0.25, e - vec3d.y * 0.25, f - vec3d.z * 0.25, vec3d.x, vec3d.y, vec3d.z);
+				}
+			}
+		}
+	}
+
+	protected boolean canHit(Entity entity) {
+		if (!entity.isSpectator() && entity.isAlive() && entity.collides()) {
+			Entity entity2 = this.getOwner();
+			return entity2 == null || entity != entity2 || !entity2.isConnectedThroughVehicle(entity);
+		} else {
+			return false;
+		}
+	}
+
+	public void sendFlying(Entity user, float pitch, float yaw, float roll, float modifierZ, float modifierXYZ) {
+		float f = -MathHelper.sin(yaw * (float) (Math.PI / 180.0)) * MathHelper.cos(pitch * (float) (Math.PI / 180.0));
+		float g = -MathHelper.sin((pitch + roll) * (float) (Math.PI / 180.0));
+		float h = MathHelper.cos(yaw * (float) (Math.PI / 180.0)) * MathHelper.cos(pitch * (float) (Math.PI / 180.0));
+		this.setVelocity(f, g, h, modifierZ, modifierXYZ);
+		Vec3d vec3d = user.getVelocity();
+		this.setVelocity(this.getVelocity().add(vec3d.x, user.isOnGround() ? 0.0 : vec3d.y, vec3d.z));
+		this.setPitch(pitch);
+		this.setYaw(yaw);
+		this.setFlying(true);
+	}
+
+	public void setVelocity(double x, double y, double z, float speed, float divergence) {
+		Vec3d vec3d = new Vec3d(x, y, z)
+				.normalize()
+				.add(
+						this.random.nextTriangular(0.0, 0.0172275 * (double) divergence),
+						this.random.nextTriangular(0.0, 0.0172275 * (double) divergence),
+						this.random.nextTriangular(0.0, 0.0172275 * (double) divergence)
+				)
+				.multiply(speed);
+		this.setVelocity(vec3d);
+		double d = vec3d.horizontalLength();
+		this.setYaw((float) (MathHelper.atan2(vec3d.x, vec3d.z) * 180.0F / (float) Math.PI));
+		this.setPitch((float) (MathHelper.atan2(vec3d.y, d) * 180.0F / (float) Math.PI));
+		this.prevYaw = this.getYaw();
+		this.prevPitch = this.getPitch();
+	}
+
+	protected void onCollision(HitResult hitResult) {
+		HitResult.Type type = hitResult.getType();
+		if (type == HitResult.Type.ENTITY) {
+			this.onEntityHit((EntityHitResult) hitResult);
+			this.world.emitGameEvent(GameEvent.PROJECTILE_LAND, hitResult.getPos(), GameEvent.Context.create(this, null));
+		} else if (type == HitResult.Type.BLOCK) {
+			BlockHitResult blockHitResult = (BlockHitResult) hitResult;
+			this.onBlockHit(blockHitResult);
+			BlockPos blockPos = blockHitResult.getBlockPos();
+			this.world.emitGameEvent(GameEvent.PROJECTILE_LAND, blockPos, GameEvent.Context.create(this, this.world.getBlockState(blockPos)));
 		}
 
-		// sexually aroused rat
-		if (!this.world.isClient) {
-			this.setAroused(getLoveTicks() > 0);
+		this.setFlying(false);
+	}
+
+	protected void onEntityHit(EntityHitResult entityHitResult) {
+		if (entityHitResult.getEntity() instanceof LivingEntity livingEntity && !(entityHitResult.getEntity() instanceof TameableEntity tameable && tameable.getOwner() == this.getOwner())) {
+			this.setTarget(livingEntity);
+			this.startRiding(livingEntity);
+			this.setAttackRidingTime(1);
 		}
+	}
+
+	protected void onBlockHit(BlockHitResult blockHitResult) {
 	}
 
 	@Override
 	public void mobTick() {
-		if (this.isSitting() && !this.isEating() && !this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
-			this.dropStack(this.getEquippedStack(EquipmentSlot.MAINHAND));
-			this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-		}
-
-		if (this.isTouchingWater()) {
-			this.setSitting(false);
-			this.setSniffing(false);
-		}
-
-		if (this.hasCustomName()) {
-			switch (getCustomName().getString().toLowerCase(Locale.ROOT)) {
-				case "doctor4t" -> setRatType(Type.DOCTOR4T);
-				case "ratater" -> setRatType(Type.RATATER);
-				case "rat kid", "hat kid" -> setRatType(Type.RAT_KID);
-				case "jotaro", "jorato" -> setRatType(Type.JORATO);
-				case "jerma", "jerma985" -> setRatType(Type.JERMA);
-				case "hollow rat", "hollow knight" -> setRatType(Type.HOLLOW);
-				case "rateline", "madeline" -> setRatType(Type.RATELINE);
-				case "biggie cheese" -> setRatType(Type.BIGGIE_CHEESE);
-				case "arathain" -> setRatType(Type.ARATHAIN);
-				case "astron", "astronyu" -> setRatType(Type.ASTRONYU);
+		if (!this.isFlying()) {
+			if (this.isSitting() && !this.isEating() && !this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
+				this.dropStack(this.getEquippedStack(EquipmentSlot.MAINHAND));
+				this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 			}
-		}
 
-		if (!this.hasAngerTime() && !this.moveControl.isMoving() && random.nextInt(100) == 0) {
-			this.setSniffing(false);
-			this.setSniffing(true);
-		}
+			if (this.isTouchingWater()) {
+				this.setSitting(false);
+				this.setSniffing(false);
+			}
 
-		// reset
-		if (this.actionTimer <= 0 && this.action != null) {
-			this.removeCurrentActionGoal();
-		}
+			if (this.hasCustomName()) {
+				switch (getCustomName().getString().toLowerCase(Locale.ROOT)) {
+					case "doctor4t" -> setRatType(Type.DOCTOR4T);
+					case "ratater" -> setRatType(Type.RATATER);
+					case "rat kid", "hat kid" -> setRatType(Type.RAT_KID);
+					case "jotaro", "jorato" -> setRatType(Type.JORATO);
+					case "jerma", "jerma985" -> setRatType(Type.JERMA);
+					case "hollow rat", "hollow knight" -> setRatType(Type.HOLLOW);
+					case "rateline", "madeline" -> setRatType(Type.RATELINE);
+					case "biggie cheese" -> setRatType(Type.BIGGIE_CHEESE);
+					case "arathain" -> setRatType(Type.ARATHAIN);
+					case "astron", "astronyu" -> setRatType(Type.ASTRONYU);
+				}
+			}
 
-		if (this.action != null && this.actionTimer > 0) {
-			this.actionTimer--;
+			if (!this.hasAngerTime() && !this.moveControl.isMoving() && random.nextInt(100) == 0) {
+				this.setSniffing(false);
+				this.setSniffing(true);
+			}
+
+			// reset
+			if (this.actionTimer <= 0 && this.action != null) {
+				this.removeCurrentActionGoal();
+			}
+
+			if (this.action != null && this.actionTimer > 0) {
+				this.actionTimer--;
+			}
 		}
 	}
 
@@ -397,6 +543,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	public void pushAwayFrom(Entity entity) {
 		if (entity instanceof RatEntity) {
 			super.pushAwayFrom(entity);
+		} else if (canComeBackToOwnerInventory() && this.getOwner() == entity) {
+			turnRatIntoItemAndGive((PlayerEntity) entity);
 		}
 	}
 
@@ -429,13 +577,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 				if (this.isOwner(player)) {
 					// picking up
 					if (itemStack.isEmpty() && player.isSneaking()) {
-						ItemStack ratItemStack = new ItemStack(ModItems.RAT);
-						NbtCompound nbt = new NbtCompound();
-						this.saveNbt(nbt);
-						nbt.remove("UUID");
-						ratItemStack.getOrCreateSubNbt(RatsMischief.MOD_ID).put("rat", nbt);
-						player.giveItemStack(ratItemStack);
-						this.discard();
+						turnRatIntoItemAndGive(player);
 
 						return ActionResult.SUCCESS;
 					}
@@ -469,6 +611,18 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		return super.interactMob(player, hand);
 	}
 
+	public ItemStack turnRatIntoItemAndGive(PlayerEntity player) {
+		ItemStack ratItemStack = new ItemStack(ModItems.RAT);
+		NbtCompound nbt = new NbtCompound();
+		this.saveNbt(nbt);
+		nbt.remove("UUID");
+		ratItemStack.getOrCreateSubNbt(RatsMischief.MOD_ID).put("rat", nbt);
+		player.giveItemStack(ratItemStack);
+		this.discard();
+
+		return ratItemStack;
+	}
+
 	@Override
 	public int getAngerTime() {
 		return this.dataTracker.get(ANGER_TIME);
@@ -480,12 +634,30 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 
+	public int getAttackRidingTime() {
+		return this.dataTracker.get(ATTACK_RIDING_TIME);
+	}
+
+
+	public void setAttackRidingTime(int ticks) {
+		this.dataTracker.set(ATTACK_RIDING_TIME, ticks);
+	}
+
+
 	public boolean isAroused() {
 		return this.dataTracker.get(AROUSED);
 	}
 
 	public void setAroused(boolean aroused) {
 		this.dataTracker.set(AROUSED, aroused);
+	}
+
+	public boolean isFlying() {
+		return this.dataTracker.get(FLYING);
+	}
+
+	public void setFlying(boolean flying) {
+		this.dataTracker.set(FLYING, flying);
 	}
 
 	@Override

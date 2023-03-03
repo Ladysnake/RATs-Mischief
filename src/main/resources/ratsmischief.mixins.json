@@ -8,6 +8,7 @@
     "ItemEntityMixin"
   ],
   "client": [
+    "PlayerEntityRendererMixin",
     "client.HeldItemRendererMixin",
     "client.ItemEntityRendererMixin"
   ],

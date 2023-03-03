@@ -35,7 +35,7 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
 		IBone leftEar = this.getAnimationProcessor().getBone("leftear");
 		IBone rightEar = this.getAnimationProcessor().getBone("rightear");
 
-		if (head != null && !ratEntity.isSniffing() && !ratEntity.isEating()) {
+		if (head != null && !ratEntity.isSniffing() && !ratEntity.isEating() && !ratEntity.isFlying()) {
 			head.setRotationX(-ratEntity.getPitch() * ((float) Math.PI / 180F));
 			leftEar.setRotationX(ratEntity.getPitch() * 1.4f * ((float) Math.PI / 180F));
 			rightEar.setRotationX(ratEntity.getPitch() * 1.4f * ((float) Math.PI / 180F));
