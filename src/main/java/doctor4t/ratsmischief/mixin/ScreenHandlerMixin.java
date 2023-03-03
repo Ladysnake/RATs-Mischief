@@ -19,22 +19,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ScreenHandler.class)
 public class ScreenHandlerMixin {
-    @Shadow @Final public DefaultedList<Slot> slots;
+	@Shadow @Final public DefaultedList<Slot> slots;
 
-    @Inject(method = "internalOnSlotClick", at = @At("HEAD"), cancellable = true)
-    private void ratsmischief$toggleMode(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
-        if (actionType == SlotActionType.PICKUP && button == 1 && slotIndex >= 0 && slotIndex < this.slots.size()) {
-            Slot slot = this.slots.get(slotIndex);
-            ItemStack stack = slot.getStack();
-            if (stack.getItem() instanceof MasterRatArmorItem) {
-                MasterRatArmorItem.incrementType(stack);
-                player.playSound(ModSoundEvents.ITEM_RATTY_ARMOR_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
-                ci.cancel();
-            } else if (stack.getItem() instanceof RatItem) {
-				RatItem.cycleRatReturn(stack);
-				player.playSound(ModSoundEvents.ITEM_RATTY_ARMOR_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
-				ci.cancel();
+	@Inject(method = "internalOnSlotClick", at = @At("HEAD"), cancellable = true)
+	private void ratsmischief$toggleMode(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
+		if (slotIndex >= 0 && slotIndex < this.slots.size()) {
+			if (button == 1) {
+				Slot slot = this.slots.get(slotIndex);
+				ItemStack stack = slot.getStack();
+				if (stack.getItem() instanceof MasterRatArmorItem armorItem) {
+					boolean quickMove = actionType == SlotActionType.QUICK_MOVE;
+					armorItem.incrementType(stack, quickMove);
+					player.playSound(ModSoundEvents.ITEM_MASTER_RAT_ARMOR_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
+					ci.cancel();
+				} else if (stack.getItem() instanceof RatItem) {
+					RatItem.cycleRatReturn(stack);
+					player.playSound(ModSoundEvents.ITEM_MASTER_RAT_ARMOR_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
+					ci.cancel();
+				}
 			}
-        }
-    }
+		}
+	}
 }

@@ -16,7 +16,6 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"pre_launch": "doctor4t.ratsmischief.common.RatsMischiefPreLaunch",
 			"init": "doctor4t.ratsmischief.common.RatsMischief",
 			"client_init": "doctor4t.ratsmischief.client.RatsMischiefClient"
 		}

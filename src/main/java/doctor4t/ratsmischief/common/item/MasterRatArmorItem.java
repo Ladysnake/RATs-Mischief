@@ -1,6 +1,9 @@
 package doctor4t.ratsmischief.common.item;
 
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
@@ -9,24 +12,78 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import xyz.amymialee.mialeemisc.util.MialeeMath;
 
+import java.util.List;
+import java.util.Set;
+
 public class MasterRatArmorItem extends ArmorItem {
+	public static final Set<EquipmentSlot> SLOTS = Set.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
+
 	public MasterRatArmorItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
 		super(material, slot, settings);
 	}
 
-	public static RattyArmorType getType(ItemStack stack) {
+	public static MasterArmorBoost getType(ItemStack stack) {
 		NbtCompound compound = stack.getOrCreateNbt();
-		return RattyArmorType.values()[MialeeMath.clampLoop(compound.getInt("type"), 0, RattyArmorType.values().length - 1)];
+		return MasterArmorBoost.values()[MialeeMath.clampLoop(compound.getInt("type"), 0, MasterArmorBoost.values().length)];
 	}
 
-	public static void incrementType(ItemStack stack) {
+	public void incrementType(ItemStack stack, boolean sneaking) {
 		NbtCompound compound = stack.getOrCreateNbt();
-		compound.putInt("offset", MialeeMath.clampLoop(compound.getInt("type") + 1, 0, RattyArmorType.values().length - 1));
+		compound.putInt("type", MialeeMath.clampLoop(compound.getInt("type") + 1, 1, MasterArmorBoost.values().length));
 	}
 
-	enum RattyArmorType {
+	@Override
+	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+		tooltip.add(Text.translatable("item.ratsmischief.master_rat_armor.tooltip." + getType(stack).name().toLowerCase()).formatted(Formatting.GRAY));
+		super.appendTooltip(stack, world, tooltip, context);
+	}
+
+	public static float getResistanceMultiplier(LivingEntity owner) {
+		if (owner != null) {
+			float bonus = 0.0f;
+			for (EquipmentSlot slot : MasterRatArmorItem.SLOTS) {
+				if (MasterRatArmorItem.getType(owner.getEquippedStack(slot)) == MasterArmorBoost.RESISTANCE) {
+					bonus += 0.15f;
+				}
+			}
+			return 1.0f - bonus;
+		}
+		return 1f;
+	}
+
+	public static float getDamageMultiplier(LivingEntity owner) {
+		if (owner != null) {
+			float bonus = 0.0f;
+			for (EquipmentSlot slot : MasterRatArmorItem.SLOTS) {
+				if (MasterRatArmorItem.getType(owner.getEquippedStack(slot)) == MasterArmorBoost.DAMAGE) {
+					bonus += 0.25f;
+				}
+			}
+			return 1.0f + bonus;
+		}
+		return 1f;
+	}
+
+	public static float getMiningSpeedMultiplier(LivingEntity owner) {
+		if (owner != null) {
+			float bonus = 0.0f;
+			for (EquipmentSlot slot : MasterRatArmorItem.SLOTS) {
+				if (MasterRatArmorItem.getType(owner.getEquippedStack(slot)) == MasterArmorBoost.MINING_SPEED) {
+					bonus += 0.25f;
+				}
+			}
+			return 1.0f + bonus;
+		}
+		return 1f;
+	}
+
+	public enum MasterArmorBoost {
 		NONE,
 		RESISTANCE,
 		DAMAGE,

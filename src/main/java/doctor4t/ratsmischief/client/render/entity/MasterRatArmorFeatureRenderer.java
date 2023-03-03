@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import doctor4t.ratsmischief.common.RatsMischief;
 import doctor4t.ratsmischief.common.item.MasterRatArmorItem;
+import doctor4t.ratsmischief.common.item.MasterRatHoodItem;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -43,6 +44,7 @@ public class MasterRatArmorFeatureRenderer<T extends PlayerEntity, A extends Pla
 	private void renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light) {
 		ItemStack itemStack = entity.getEquippedStack(armorSlot);
 		if (itemStack.getItem() instanceof MasterRatArmorItem armorItem) {
+			if (armorSlot == EquipmentSlot.HEAD && MasterRatHoodItem.isHidden(itemStack)) return;
 			A model = this.getModel(armorSlot);
 			if (armorItem.getSlotType() == armorSlot) {
 				this.getContextModel().setAttributes(model);

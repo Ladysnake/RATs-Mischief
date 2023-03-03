@@ -1,0 +1,13 @@
+
+{
+  "type": "minecraft:smithing",
+  "addition": {
+    "item": "ratsmischief:clothed_ingot"
+  },
+  "base": {
+    "item": "minecraft:diamond_boots"
+  },
+  "result": {
+    "item": "ratsmischief:master_rat_boots"
+  }
+}

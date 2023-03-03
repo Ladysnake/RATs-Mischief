@@ -1,10 +1,12 @@
 package doctor4t.ratsmischief.common.entity.ai;
 
 import doctor4t.ratsmischief.common.entity.RatEntity;
+import doctor4t.ratsmischief.common.item.MasterRatArmorItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -26,7 +28,6 @@ public class DigGoal extends Goal {
 	public boolean canStart() {
 		targetBlockPos = null;
 		breakProgress = 0;
-
 		if (this.rat.getTarget() == null && this.rat.getAttacker() == null && !this.rat.isSitting() && this.rat.isTamed() && this.rat.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
 			ItemStack itemStack = this.rat.getEquippedStack(EquipmentSlot.MAINHAND);
 			if (itemStack.isEmpty()) {
@@ -34,8 +35,9 @@ public class DigGoal extends Goal {
 					BlockState blockState = this.rat.world.getBlockState(blockPos);
 					if (blockState.getBlock() == targetBlock) {
 						int strength = 0;
-						if (this.rat.hasStatusEffect(StatusEffects.STRENGTH)) {
-							strength = this.rat.getStatusEffect(StatusEffects.STRENGTH).getAmplifier() + 1;
+						StatusEffectInstance effect = this.rat.getStatusEffect(StatusEffects.STRENGTH);
+						if (effect != null) {
+							strength = effect.getAmplifier() + 1;
 						}
 						if (blockState.getHardness(this.rat.world, blockPos) >= 0 && blockState.getHardness(this.rat.world, blockPos) <= 1f + strength) {
 							if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
@@ -46,11 +48,8 @@ public class DigGoal extends Goal {
 					}
 				}
 			}
-
-			return false;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	public void tick() {
@@ -64,12 +63,15 @@ public class DigGoal extends Goal {
 			}
 
 			int haste = 0;
-			if (this.rat.hasStatusEffect(StatusEffects.HASTE)) {
-				haste = this.rat.getStatusEffect(StatusEffects.HASTE).getAmplifier() + 1;
+			StatusEffectInstance effect = this.rat.getStatusEffect(StatusEffects.HASTE);
+			if (effect != null) {
+				haste = effect.getAmplifier() + 1;
 			}
 
 			if (this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ()) <= 5) {
-				breakProgress += 0.015 + 0.003 * haste;
+				float progressIncrease = 0.015f + 0.003f * haste;
+				progressIncrease *= MasterRatArmorItem.getMiningSpeedMultiplier(this.rat.getOwner());
+				breakProgress += progressIncrease;
 				this.rat.world.setBlockBreakingInfo(this.rat.getId(), targetBlockPos, (int) (breakProgress / this.rat.world.getBlockState(targetBlockPos).getHardness(this.rat.world, targetBlockPos) * 9));
 				if (breakProgress >= this.rat.world.getBlockState(targetBlockPos).getHardness(this.rat.world, targetBlockPos)) {
 					this.rat.world.setBlockBreakingInfo(this.rat.getId(), targetBlockPos, -1);

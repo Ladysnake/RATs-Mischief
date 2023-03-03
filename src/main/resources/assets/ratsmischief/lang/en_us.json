@@ -34,5 +34,17 @@
   "type.ratsmischief.biggie_cheese": "Biggie Cheese",
   "type.ratsmischief.arathain": "Arathain",
   "type.ratsmischief.astronyu": "astronyu",
-  "tooltip.ratsmischief.return": "Will return on throw"
+  "tooltip.ratsmischief.return": "Will return on throw",
+
+  "item.ratsmischief.clothed_ingot": "Clothed Ingot",
+  "item.ratsmischief.master_rat_hood": "Master Rat Hood",
+  "item.ratsmischief.master_rat_chestplate": "Master Rat Chestplate",
+  "item.ratsmischief.master_rat_leggings": "Master Rat Leggings",
+  "item.ratsmischief.master_rat_boots": "Master Rat Boots",
+  "item.ratsmischief.master_rat_armor.tooltip.none" : "Select bonus with Right Click",
+  "item.ratsmischief.master_rat_armor.tooltip.resistance" : "Rats are 15% tougher to attacks.",
+  "item.ratsmischief.master_rat_armor.tooltip.damage" : "Rats deal 25% more damage.",
+  "item.ratsmischief.master_rat_armor.tooltip.mining_speed" : "Rats dig 25% faster.",
+  "item.ratsmischief.master_rat_hood.tooltip.false" : "Hide Hood with Shift Right Click.",
+  "item.ratsmischief.master_rat_hood.tooltip.true" : "Show Hood with Shift Right Click."
 }

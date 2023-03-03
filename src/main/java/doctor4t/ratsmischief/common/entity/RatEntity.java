@@ -10,14 +10,34 @@ import doctor4t.ratsmischief.common.entity.ai.RatMeleeAttackGoal;
 import doctor4t.ratsmischief.common.init.ModEntities;
 import doctor4t.ratsmischief.common.init.ModItems;
 import doctor4t.ratsmischief.common.init.ModSoundEvents;
+import doctor4t.ratsmischief.common.item.MasterRatArmorItem;
 import doctor4t.ratsmischief.common.item.RatPouchItem;
 import doctor4t.ratsmischief.common.item.RatStaffItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.EndGatewayBlockEntity;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityData;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.goal.AnimalMateGoal;
+import net.minecraft.entity.ai.goal.AttackWithOwnerGoal;
+import net.minecraft.entity.ai.goal.FollowOwnerGoal;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.LookAroundGoal;
+import net.minecraft.entity.ai.goal.LookAtEntityGoal;
+import net.minecraft.entity.ai.goal.PounceAtTargetGoal;
+import net.minecraft.entity.ai.goal.RevengeGoal;
+import net.minecraft.entity.ai.goal.SitGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.TargetGoal;
+import net.minecraft.entity.ai.goal.TrackOwnerAttackerGoal;
+import net.minecraft.entity.ai.goal.UniversalAngerGoal;
+import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
@@ -47,7 +67,11 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.DyeColor;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.TimeHelper;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -716,8 +740,15 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 	@Override
 	public boolean tryAttack(Entity target) {
+		float damage = (float)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+		damage *= MasterRatArmorItem.getDamageMultiplier(this.getOwner());
 		target.timeUntilRegen = 0;
-		return super.tryAttack(target);
+		if (target.damage(DamageSource.mob(this), damage)) {
+			this.applyDamageEffects(this, target);
+			this.onAttacking(target);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -756,7 +787,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			if (entity != null && !(entity instanceof PlayerEntity) && !(entity instanceof PersistentProjectileEntity)) {
 				amount = (amount + 1.0F) / 2.0F;
 			}
-
+			amount *= MasterRatArmorItem.getResistanceMultiplier(this.getOwner());
 			return super.damage(source, amount);
 		}
 	}
