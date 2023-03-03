@@ -1,6 +1,7 @@
 package doctor4t.ratsmischief.client.render.item;
 
 import doctor4t.ratsmischief.client.model.RatItemModel;
+import doctor4t.ratsmischief.common.RatsMischief;
 import doctor4t.ratsmischief.common.RatsMischiefUtils;
 import doctor4t.ratsmischief.common.entity.RatEntity;
 import doctor4t.ratsmischief.common.item.RatItem;
@@ -27,6 +28,11 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 		GeoModel model = this.modelProvider.getModel(this.modelProvider.getModelResource(animatable));
 		matrices.push();
 		matrices.translate(0.5f, 0.51f, 0.5f);
+
+		if (stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getInt("Age") < 0) {
+			matrices.translate(0, 0, -0.1f);
+			matrices.scale(0.5f, 0.5f, 0.5f);
+		}
 
 		RatEntity.Type ratType = RatItem.getRatType(stack);
 		String ratName = RatItem.getRatName(stack);
