@@ -7,15 +7,18 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import static net.minecraft.text.Style.EMPTY;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.example.item.JackInTheBoxItem;
@@ -47,7 +50,7 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 
 	@Override
 	public void registerControllers(AnimationData data) {
-		AnimationController<JackInTheBoxItem> controller = new AnimationController(this, "idle", 20, this::predicate);
+		AnimationController<RatItem> controller = new AnimationController<>(this, "idle", 20, this::predicate);
 		data.addAnimationController(controller);
 	}
 
@@ -62,20 +65,48 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		if (!world.isClient()) {
-			NbtCompound ratTag = getRatTag(user.getStackInHand(hand), world);
-			RatEntity rat = ModEntities.RAT.create(world);
+			RatEntity rat = getRatFromItem(world, user.getStackInHand(hand), new Vec3d(user.getX(), user.getEyeY() - 0.10000000149011612D, user.getZ()));
 			if (rat == null) {
 				return TypedActionResult.fail(user.getStackInHand(hand));
 			}
-			rat.readNbt(ratTag);
-			rat.updatePosition(user.getX(), user.getY(), user.getZ());
-			rat.setPos(user.getX(), user.getY(), user.getZ());
+			rat.sendFlying(user, user.getPitch(), user.getYaw(), user.getRoll(), 3f, 1f);
 			world.spawnEntity(rat);
-			rat.setSitting(false);
-			user.getStackInHand(hand).decrement(1);
+			if (!user.getAbilities().creativeMode) {
+				user.getStackInHand(hand).decrement(1);
+			}
 			return TypedActionResult.success(user.getStackInHand(hand));
 		}
 		return super.use(world, user, hand);
+	}
+
+	@Override
+	public ActionResult useOnBlock(ItemUsageContext context) {
+		PlayerEntity owner = context.getPlayer();
+		Hand hand = context.getHand();
+		World world = context.getWorld();
+
+		if (!world.isClient() && owner != null) {
+			world.spawnEntity(getRatFromItem(world, owner.getStackInHand(hand), context.getHitPos()));
+			if (!owner.getAbilities().creativeMode) {
+				owner.getStackInHand(hand).decrement(1);
+			}
+
+			return ActionResult.SUCCESS;
+		}
+
+		return super.useOnBlock(context);
+	}
+
+	public RatEntity getRatFromItem(World world, ItemStack ratItemStack, Vec3d spawnPos) {
+		NbtCompound ratTag = getRatTag(ratItemStack, world);
+		RatEntity rat = ModEntities.RAT.create(world);
+		if (rat != null) {
+			rat.readNbt(ratTag);
+			rat.updatePosition(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
+			rat.setPos(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
+			rat.setSitting(false);
+		}
+		return rat;
 	}
 
 	@Override

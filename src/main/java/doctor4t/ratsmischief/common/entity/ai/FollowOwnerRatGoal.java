@@ -43,13 +43,14 @@ public class FollowOwnerRatGoal extends Goal {
 
 	public boolean canStart() {
 		LivingEntity livingEntity = this.rat.getOwner();
+
 		if (livingEntity == null) {
 			return false;
 		} else if (livingEntity.isSpectator()) {
 			return false;
 		} else if (this.rat.isSitting()) {
 			return false;
-		} else if (this.rat.squaredDistanceTo(livingEntity) < (double) (this.minDistance * this.minDistance)) {
+		} else if (this.rat.squaredDistanceTo(livingEntity) < (double) (this.minDistance * this.minDistance) && !this.rat.canComeBackToOwnerInventory()) {
 			return false;
 		} else {
 			this.owner = livingEntity;
@@ -63,7 +64,7 @@ public class FollowOwnerRatGoal extends Goal {
 		} else if (this.rat.isSitting()) {
 			return false;
 		} else {
-			return this.rat.squaredDistanceTo(this.owner) > (double) (this.maxDistance * this.maxDistance);
+			return this.rat.squaredDistanceTo(this.owner) > (double) (this.maxDistance * this.maxDistance) && !this.rat.canComeBackToOwnerInventory();
 		}
 	}
 
