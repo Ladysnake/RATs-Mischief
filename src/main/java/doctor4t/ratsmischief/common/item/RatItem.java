@@ -11,17 +11,11 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
-import static net.minecraft.text.Style.EMPTY;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.*;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.example.item.JackInTheBoxItem;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -36,12 +30,23 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static net.minecraft.text.Style.EMPTY;
+
 public class RatItem extends Item implements IAnimatable, ISyncable {
 	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
 	public RatItem(Settings settings) {
 		super(settings);
 		GeckoLibNetwork.registerSyncable(this);
+	}
+
+	public static void cycleRatReturn(ItemStack stack) {
+		NbtCompound ratTag = getRatTag(stack);
+		if (ratTag == null) {
+			return;
+		}
+
+		ratTag.putBoolean("ShouldReturnToOwnerInventory", !ratTag.getBoolean("ShouldReturnToOwnerInventory"));
 	}
 
 	private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
@@ -60,7 +65,8 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 	}
 
 	@Override
-	public void onAnimationSync(int id, int state) {}
+	public void onAnimationSync(int id, int state) {
+	}
 
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
@@ -85,16 +91,12 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 		Hand hand = context.getHand();
 		World world = context.getWorld();
 
-		if (!world.isClient() && owner != null) {
-			world.spawnEntity(getRatFromItem(world, owner.getStackInHand(hand), context.getHitPos()));
-			if (!owner.getAbilities().creativeMode) {
-				owner.getStackInHand(hand).decrement(1);
-			}
-
-			return ActionResult.SUCCESS;
+		world.spawnEntity(getRatFromItem(world, owner.getStackInHand(hand), context.getHitPos()));
+		if (!owner.getAbilities().creativeMode) {
+			owner.getStackInHand(hand).decrement(1);
 		}
 
-		return super.useOnBlock(context);
+		return ActionResult.SUCCESS;
 	}
 
 	public RatEntity getRatFromItem(World world, ItemStack ratItemStack, Vec3d spawnPos) {
@@ -118,6 +120,7 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 		if (ratTag.getString("RatType").equals(RatEntity.Type.GOLD.name())) {
 			style = EMPTY.withColor(Formatting.GOLD);
 		}
+
 		if (ratTag.contains("CustomName")) {
 			Matcher matcher = Pattern.compile("\\{\"text\":\"(.+)\"}").matcher(ratTag.getString("CustomName"));
 			if (matcher.find()) {
@@ -127,6 +130,12 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 		} else {
 			tooltip.add(ratType.setStyle(style));
 		}
+
+		// set to return
+		if (ratTag.getBoolean("ShouldReturnToOwnerInventory")) {
+			tooltip.add(Text.translatable("tooltip.ratsmischief.return").setStyle(EMPTY.withItalic(true).withColor(Formatting.GRAY)));
+		}
+
 		super.appendTooltip(stack, world, tooltip, context);
 	}
 
@@ -136,7 +145,7 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 
 	@Nullable
 	public static NbtCompound getRatTag(ItemStack stack) {
-		NbtCompound subNbt = stack.getOrCreateSubNbt(RatsMischief.MOD_ID).getCompound("rat");
+		NbtCompound subNbt = stack.getOrCreateSubNbt(RatsMischief.MOD_ID);
 		if (subNbt.contains("rat")) {
 			return subNbt.getCompound("rat");
 		}

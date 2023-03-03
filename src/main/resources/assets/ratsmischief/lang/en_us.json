@@ -14,6 +14,7 @@
   "ratsmischief.subtitles.entity.rat.death": "Rat dies",
   "ratsmischief.subtitles.entity.rat.clap": "Rat lands",
   "ratsmischief.subtitles.item.armor_toggle": "Ratty armor toggles",
+  "ratsmischief.subtitles.item.rat_toggle": "Rat toggles",
   "type.ratsmischief.wild": "Wild",
   "type.ratsmischief.albino": "Albino",
   "type.ratsmischief.black": "Black",
@@ -33,8 +34,5 @@
   "type.ratsmischief.biggie_cheese": "Biggie Cheese",
   "type.ratsmischief.arathain": "Arathain",
   "type.ratsmischief.astronyu": "astronyu",
-  "origins:origin.ratsmischief.rat.name": "Rat",
-  "origins:origin.ratsmischief.rat.description": "You're a rat.",
-  "origins:power.ratsmischief.ratified.name": "Ratified",
-  "origins:power.ratsmischief.ratified.description": "Yes really, you're a rat!"
+  "tooltip.ratsmischief.return": "Will return on throw"
 }
