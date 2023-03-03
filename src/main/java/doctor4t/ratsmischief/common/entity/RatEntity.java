@@ -107,11 +107,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
 	);
 	private static final List<PartyHat> PARTY_HATS = List.of(PartyHat.values());
-
 	private static final TrackedData<String> TYPE = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
 	private static final TrackedData<String> COLOR = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
 	private static final TrackedData<String> PARTY_HAT = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
-
 	private static final TrackedData<Boolean> SITTING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 	private static final TrackedData<Boolean> EATING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 	private static final TrackedData<Boolean> FLYING = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
@@ -267,32 +265,30 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	@Override
 	public RatEntity createChild(ServerWorld world, PassiveEntity entity) {
 		RatEntity ratEntity = ModEntities.RAT.create(world);
-
-		if (this.getRatType() == Type.RAT_KID && entity instanceof RatEntity && ((RatEntity) entity).getRatType() == Type.RAT_KID) {
-			ratEntity.setRatType(Type.WILD);
-//			ratEntity.setRatType(Type.RAT_KID);
-		} else {
-			int bound = 150;
-			if (RatsMischiefUtils.IS_WORLD_RAT_DAY) {
-				bound = 30;
-			}
-
-			if (this.random.nextInt(bound) == 0) {
-				this.dataTracker.set(TYPE, Type.GOLD.toString());
-			} else {
+		if (ratEntity != null) {
+			if (this.getRatType() == Type.RAT_KID && entity instanceof RatEntity && ((RatEntity) entity).getRatType() == Type.RAT_KID) {
 				ratEntity.setRatType(Type.WILD);
+//			ratEntity.setRatType(Type.RAT_KID);
+			} else {
+				int bound = 150;
+				if (RatsMischiefUtils.IS_WORLD_RAT_DAY) {
+					bound = 30;
+				}
+				if (this.random.nextInt(bound) == 0) {
+					this.dataTracker.set(TYPE, Type.GOLD.toString());
+				} else {
+					ratEntity.setRatType(Type.WILD);
 //				ratEntity.setRatType(getRandomNaturalType(random));
+				}
+			}
+			UUID ownerUuid = this.getOwnerUuid();
+			if (ownerUuid != null) {
+				ratEntity.setOwnerUuid(ownerUuid);
+				ratEntity.setTamed(true);
+				ratEntity.setBaby(true);
+				ratEntity.initEquipment(this.random, world.getLocalDifficulty(this.getBlockPos()));
 			}
 		}
-
-		UUID ownerUuid = this.getOwnerUuid();
-		if (ownerUuid != null) {
-			ratEntity.setOwnerUuid(ownerUuid);
-			ratEntity.setTamed(true);
-			ratEntity.setBaby(true);
-			ratEntity.initEquipment(this.random, world.getLocalDifficulty(this.getBlockPos()));
-		}
-
 		return ratEntity;
 	}
 
