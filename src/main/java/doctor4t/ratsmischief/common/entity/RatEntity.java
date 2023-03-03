@@ -245,7 +245,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		RatEntity ratEntity = ModEntities.RAT.create(world);
 
 		if (this.getRatType() == Type.RAT_KID && entity instanceof RatEntity && ((RatEntity) entity).getRatType() == Type.RAT_KID) {
-			ratEntity.setRatType(Type.RAT_KID);
+			ratEntity.setRatType(Type.WILD);
+//			ratEntity.setRatType(Type.RAT_KID);
 		} else {
 			int bound = 150;
 			if (RatsMischiefUtils.IS_WORLD_RAT_DAY) {
@@ -255,7 +256,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			if (this.random.nextInt(bound) == 0) {
 				this.dataTracker.set(TYPE, Type.GOLD.toString());
 			} else {
-				ratEntity.setRatType(getRandomNaturalType(random));
+				ratEntity.setRatType(Type.WILD);
+//				ratEntity.setRatType(getRandomNaturalType(random));
 			}
 		}
 
@@ -337,6 +339,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 		tag.putBoolean("Sitting", this.isSitting());
 		tag.putInt("AttackRidingTime", this.getAttackRidingTime());
+	}
+
+	@Override
+	public double getMountedHeightOffset() {
+		return this.getDimensions(this.getPose()).height;
 	}
 
 	@Override

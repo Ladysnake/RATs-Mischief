@@ -85,7 +85,7 @@ public class FollowOwnerRatGoal extends Goal {
 		if (--this.updateCountdownTicks <= 0) {
 			this.updateCountdownTicks = 10;
 			if (!this.rat.isLeashed() && !this.rat.hasVehicle()) {
-				if (this.rat.squaredDistanceTo(this.owner) >= 500D) {
+				if (this.rat.squaredDistanceTo(this.owner) >= 500D && !this.rat.isFlying()) {
 					this.tryTeleport();
 				} else {
 					this.navigation.startMovingTo(this.owner, this.speed);
