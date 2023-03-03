@@ -6,6 +6,7 @@
   "mixins": [
     "CatEntityMixin",
     "ItemEntityMixin",
+    "LivingEntityMixin",
     "ScreenHandlerMixin"
   ],
   "client": [

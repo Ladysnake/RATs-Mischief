@@ -10,8 +10,8 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 
-public class RattyArmorItem extends ArmorItem {
-	public RattyArmorItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
+public class MasterRatArmorItem extends ArmorItem {
+	public MasterRatArmorItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
 		super(material, slot, settings);
 	}
 
@@ -44,14 +44,14 @@ public class RattyArmorItem extends ArmorItem {
 		MINING_SPEED
 	}
 
-	public static class RattyArmorMaterial implements ArmorMaterial {
-		public static final RattyArmorMaterial INSTANCE = new RattyArmorMaterial();
+	public static class MasterRatArmorMaterial implements ArmorMaterial {
+		public static final MasterRatArmorMaterial INSTANCE = new MasterRatArmorMaterial();
 		private static final int[] BASE_DURABILITY = new int[]{13, 15, 16, 11};
-		private static final int[] PROTECTION_AMOUNTS = new int[]{1, 4, 5, 2};
+		private static final int[] PROTECTION_AMOUNTS = new int[]{3, 6, 8, 3};
 
 		@Override
 		public int getDurability(EquipmentSlot slot) {
-			return BASE_DURABILITY[slot.getEntitySlotId()] * 22;
+			return BASE_DURABILITY[slot.getEntitySlotId()] * 38;
 		}
 
 		@Override
@@ -76,17 +76,17 @@ public class RattyArmorItem extends ArmorItem {
 
 		@Override
 		public String getName() {
-			return "ratty";
+			return "masterrat";
 		}
 
 		@Override
 		public float getToughness() {
-			return 0;
+			return 2.0f;
 		}
 
 		@Override
 		public float getKnockbackResistance() {
-			return 0;
+			return 0.0f;
 		}
 	}
 }

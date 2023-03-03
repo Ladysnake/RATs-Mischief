@@ -1,7 +1,7 @@
 package doctor4t.ratsmischief.mixin;
 
 import doctor4t.ratsmischief.common.init.ModSoundEvents;
-import doctor4t.ratsmischief.common.item.RattyArmorItem;
+import doctor4t.ratsmischief.common.item.MasterRatArmorItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
@@ -25,8 +25,8 @@ public class ScreenHandlerMixin {
         if (actionType == SlotActionType.PICKUP && button == 1 && slotIndex >= 0 && slotIndex < this.slots.size()) {
             Slot slot = this.slots.get(slotIndex);
             ItemStack stack = slot.getStack();
-            if (stack.getItem() instanceof RattyArmorItem) {
-                RattyArmorItem.incrementType(stack);
+            if (stack.getItem() instanceof MasterRatArmorItem) {
+                MasterRatArmorItem.incrementType(stack);
                 player.playSound(ModSoundEvents.ITEM_RATTY_ARMOR_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
                 ci.cancel();
             }

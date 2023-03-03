@@ -4,7 +4,7 @@ import doctor4t.ratsmischief.common.RatsMischief;
 import doctor4t.ratsmischief.common.item.RatItem;
 import doctor4t.ratsmischief.common.item.RatPouchItem;
 import doctor4t.ratsmischief.common.item.RatStaffItem;
-import doctor4t.ratsmischief.common.item.RattyArmorItem;
+import doctor4t.ratsmischief.common.item.MasterRatArmorItem;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -31,10 +31,10 @@ public interface ModItems {
 	Item LOVE_STAFF = createItem("love_staff", new RatStaffItem((new QuiltItemSettings()).group(ItemGroup.TOOLS).maxCount(1), RatStaffItem.Action.LOVE));
 	Item RAT = createItem("rat", new RatItem((new QuiltItemSettings()).maxCount(1)));
 
-	Item RATTY_HOOD = createItem("ratty_hood", new RattyArmorItem(RattyArmorItem.RattyArmorMaterial.INSTANCE, EquipmentSlot.HEAD, (new QuiltItemSettings()).group(ItemGroup.COMBAT)));
-	Item RATTY_CHESTPLATE = createItem("ratty_chestplate", new RattyArmorItem(RattyArmorItem.RattyArmorMaterial.INSTANCE, EquipmentSlot.CHEST, (new QuiltItemSettings()).group(ItemGroup.COMBAT)));
-	Item RATTY_LEGGINGS = createItem("ratty_leggings", new RattyArmorItem(RattyArmorItem.RattyArmorMaterial.INSTANCE, EquipmentSlot.LEGS, (new QuiltItemSettings()).group(ItemGroup.COMBAT)));
-	Item RATTY_BOOTS = createItem("ratty_boots", new RattyArmorItem(RattyArmorItem.RattyArmorMaterial.INSTANCE, EquipmentSlot.FEET, (new QuiltItemSettings()).group(ItemGroup.COMBAT)));
+	Item MASTER_RAT_HOOD = createItem("ratty_hood", new MasterRatArmorItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.HEAD, (new QuiltItemSettings()).group(ItemGroup.COMBAT)));
+	Item MASTER_RAT_CHESTPLATE = createItem("ratty_chestplate", new MasterRatArmorItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.CHEST, (new QuiltItemSettings()).group(ItemGroup.COMBAT)));
+	Item MASTER_RAT_LEGGINGS = createItem("ratty_leggings", new MasterRatArmorItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.LEGS, (new QuiltItemSettings()).group(ItemGroup.COMBAT)));
+	Item MASTER_RAT_BOOTS = createItem("ratty_boots", new MasterRatArmorItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.FEET, (new QuiltItemSettings()).group(ItemGroup.COMBAT)));
 
 	private static <T extends Item> T createItem(String name, T item) {
 		ITEMS.put(item, new Identifier(RatsMischief.MOD_ID, name));
