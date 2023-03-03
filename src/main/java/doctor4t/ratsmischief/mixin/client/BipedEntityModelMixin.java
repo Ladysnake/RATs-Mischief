@@ -16,11 +16,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BipedEntityModel.class)
 public class BipedEntityModelMixin<T extends LivingEntity> {
-	@Shadow public BipedEntityModel.ArmPose leftArmPose;
-	@Shadow public BipedEntityModel.ArmPose rightArmPose;
-	@Shadow @Final public ModelPart rightArm;
-	@Shadow @Final public ModelPart head;
-	@Shadow @Final public ModelPart leftArm;
+	@Shadow
+	public BipedEntityModel.ArmPose leftArmPose;
+	@Shadow
+	public BipedEntityModel.ArmPose rightArmPose;
+	@Shadow
+	@Final
+	public ModelPart rightArm;
+	@Shadow
+	@Final
+	public ModelPart head;
+	@Shadow
+	@Final
+	public ModelPart leftArm;
 
 	@Inject(method = "positionLeftArm", at = @At("HEAD"), cancellable = true)
 	private void positionLeftArm(T entity, CallbackInfo ci) {

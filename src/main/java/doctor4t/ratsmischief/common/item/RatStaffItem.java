@@ -31,6 +31,11 @@ public class RatStaffItem extends Item implements IClickConsumingItem {
 		super(settings);
 	}
 
+	public static Action getAction(ItemStack stack) {
+		NbtCompound compound = stack.getOrCreateNbt();
+		return Action.values()[MialeeMath.clampLoop(compound.getInt("action"), 0, Action.values().length)];
+	}
+
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		final List<RatEntity> ratEntityList = world.getEntitiesByClass(RatEntity.class, user.getBoundingBox().expand(16f), ratEntity -> ratEntity.isTamed() && ratEntity.getOwner() != null && ratEntity.getOwner().equals(user));
@@ -39,7 +44,8 @@ public class RatStaffItem extends Item implements IClickConsumingItem {
 			switch (getAction(user.getStackInHand(hand))) {
 				case HARVEST -> goal = new HarvestPlantMealGoal(ratEntity);
 				case COLLECT -> ratEntity.removeCurrentActionGoal();
-				case SKIRMISH -> goal = new TargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
+				case SKIRMISH ->
+						goal = new TargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
 				case LOVE -> goal = new BreedGoal(ratEntity);
 			}
 			if (goal != null) {
@@ -69,11 +75,6 @@ public class RatStaffItem extends Item implements IClickConsumingItem {
 		ItemStack stack = serverPlayerEntity.getMainHandStack();
 		NbtCompound compound = stack.getOrCreateNbt();
 		compound.putInt("action", MialeeMath.clampLoop(compound.getInt("action") + (serverPlayerEntity.isSneaking() ? -1 : 1), 0, Action.values().length));
-	}
-
-	public static Action getAction(ItemStack stack) {
-		NbtCompound compound = stack.getOrCreateNbt();
-		return Action.values()[MialeeMath.clampLoop(compound.getInt("action"), 0, Action.values().length)];
 	}
 
 	@Override

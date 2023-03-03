@@ -27,12 +27,12 @@ public class MasterRatArmorFeatureRenderer<T extends PlayerEntity, A extends Pla
 	private final A bodyModel;
 	private final boolean slim;
 
-    public MasterRatArmorFeatureRenderer(FeatureRendererContext<T, A> context, A leggingsModel, A bodyModel, boolean slim) {
-        super(context);
+	public MasterRatArmorFeatureRenderer(FeatureRendererContext<T, A> context, A leggingsModel, A bodyModel, boolean slim) {
+		super(context);
 		this.leggingsModel = leggingsModel;
 		this.bodyModel = bodyModel;
 		this.slim = slim;
-    }
+	}
 
 	public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, float f, float g, float h, float j, float k, float l) {
 		this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.CHEST, i);

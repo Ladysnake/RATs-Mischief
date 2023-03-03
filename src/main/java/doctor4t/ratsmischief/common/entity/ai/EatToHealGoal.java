@@ -39,10 +39,10 @@ public class EatToHealGoal extends Goal {
 
 				if (this.eatingTicks % 4 == 0 && this.eatingTicks > 0) {
 					if (this.rat.getMainHandStack().getItem().getUseAction(this.rat.getMainHandStack()) == UseAction.DRINK) {
-						((ServerWorld) this.rat.world).playSoundFromEntity(null, this.rat, this.rat.getMainHandStack().getItem().getDrinkSound(), SoundCategory.NEUTRAL, 0.01F, this.rat.getRandom().nextFloat() * 0.4F + 0.8F);
+						this.rat.world.playSoundFromEntity(null, this.rat, this.rat.getMainHandStack().getItem().getDrinkSound(), SoundCategory.NEUTRAL, 0.01F, this.rat.getRandom().nextFloat() * 0.4F + 0.8F);
 					} else if (this.rat.getMainHandStack().getItem().getUseAction(this.rat.getMainHandStack()) == UseAction.EAT) {
 						((ServerWorld) this.rat.world).spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, this.rat.getMainHandStack()), this.rat.getX() + this.rat.getRandom().nextGaussian() / 20f, this.rat.getY() + this.rat.getRandom().nextGaussian() / 20f, this.rat.getZ() + this.rat.getRandom().nextGaussian() / 20f, 5, this.rat.getRandom().nextGaussian() / 20f, 0.2D + this.rat.getRandom().nextGaussian() / 20f, this.rat.getRandom().nextGaussian() / 20f, 0.025f);
-						((ServerWorld) this.rat.world).playSoundFromEntity(null, this.rat, this.rat.getMainHandStack().getItem().getEatSound(), SoundCategory.NEUTRAL, 0.01F, this.rat.getRandom().nextFloat() * 0.4F + 0.8F);
+						this.rat.world.playSoundFromEntity(null, this.rat, this.rat.getMainHandStack().getItem().getEatSound(), SoundCategory.NEUTRAL, 0.01F, this.rat.getRandom().nextFloat() * 0.4F + 0.8F);
 					}
 				}
 

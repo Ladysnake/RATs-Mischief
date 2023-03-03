@@ -17,6 +17,10 @@ public class MasterRatHoodItem extends MasterRatArmorItem {
 		super(material, slot, settings);
 	}
 
+	public static boolean isHidden(ItemStack stack) {
+		return stack.getOrCreateNbt().getBoolean("hidden");
+	}
+
 	@Override
 	public void incrementType(ItemStack stack, boolean sneaking) {
 		if (sneaking) {
@@ -25,10 +29,6 @@ public class MasterRatHoodItem extends MasterRatArmorItem {
 			return;
 		}
 		super.incrementType(stack, false);
-	}
-
-	public static boolean isHidden(ItemStack stack) {
-		return stack.getOrCreateNbt().getBoolean("hidden");
 	}
 
 	@Override

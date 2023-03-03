@@ -25,6 +25,14 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 		super(ctx, model, shadowRadius);
 	}
 
+	@Inject(method = "getArmPose", at = @At("HEAD"), cancellable = true)
+	private static void ratsmischief$holdRat(AbstractClientPlayerEntity player, Hand hand, CallbackInfoReturnable<BipedEntityModel.ArmPose> cir) {
+		ItemStack stack = player.getStackInHand(hand);
+		if (stack.isOf(ModItems.RAT)) {
+			cir.setReturnValue(BipedEntityModel.ArmPose.BOW_AND_ARROW);
+		}
+	}
+
 	@Inject(method = "<init>", at = @At("TAIL"))
 	private void mischief$masterArmor(EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci) {
 		this.addFeature(
@@ -33,14 +41,6 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 						new PlayerEntityModel<>(ctx.getPart(slim ? RatsMischiefClient.MASTER_RAT_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.MASTER_RAT_ARMOR_OUTER_LAYER),
 								slim), slim));
 	}
-
-	@Inject(method = "getArmPose", at = @At("HEAD"), cancellable = true)
-    private static void ratsmischief$holdRat(AbstractClientPlayerEntity player, Hand hand, CallbackInfoReturnable<BipedEntityModel.ArmPose> cir) {
-        ItemStack stack = player.getStackInHand(hand);
-        if (stack.isOf(ModItems.RAT)) {
-			cir.setReturnValue(BipedEntityModel.ArmPose.BOW_AND_ARROW);
-        }
-    }
 
 	@Inject(method = "setModelPose", at = @At(value = "TAIL"))
 	private void ratsmischief$setModelPose(AbstractClientPlayerEntity player, CallbackInfo ci, @Local(ordinal = 0) PlayerEntityModel<AbstractClientPlayerEntity> playerEntityModel) {

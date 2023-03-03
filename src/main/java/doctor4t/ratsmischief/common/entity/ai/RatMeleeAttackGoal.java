@@ -1,7 +1,5 @@
 package doctor4t.ratsmischief.common.entity.ai;
 
-import java.util.EnumSet;
-
 import doctor4t.ratsmischief.common.entity.RatEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -10,19 +8,21 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.util.Hand;
 
+import java.util.EnumSet;
+
 public class RatMeleeAttackGoal extends Goal {
+	private static final long MAX_ATTACK_TIME = 20L;
 	protected final RatEntity rat;
 	private final double speed;
 	private final boolean pauseWhenMobIdle;
+	private final int attackIntervalTicks = 20;
 	private Path path;
 	private double targetX;
 	private double targetY;
 	private double targetZ;
 	private int updateCountdownTicks;
 	private int cooldown;
-	private final int attackIntervalTicks = 20;
 	private long lastUpdateTime;
-	private static final long MAX_ATTACK_TIME = 20L;
 
 	public RatMeleeAttackGoal(RatEntity rat, double speed, boolean pauseWhenMobIdle) {
 		this.rat = rat;
@@ -165,6 +165,6 @@ public class RatMeleeAttackGoal extends Goal {
 	}
 
 	protected double getSquaredMaxAttackDistance(LivingEntity entity) {
-		return (double) (this.rat.getWidth() * 2.0F * this.rat.getWidth() * 2.0F + entity.getWidth());
+		return this.rat.getWidth() * 2.0F * this.rat.getWidth() * 2.0F + entity.getWidth();
 	}
 }

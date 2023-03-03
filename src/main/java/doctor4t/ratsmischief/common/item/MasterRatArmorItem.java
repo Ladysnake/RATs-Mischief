@@ -3,7 +3,6 @@ package doctor4t.ratsmischief.common.item;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
@@ -31,17 +30,6 @@ public class MasterRatArmorItem extends ArmorItem {
 	public static MasterArmorBoost getType(ItemStack stack) {
 		NbtCompound compound = stack.getOrCreateNbt();
 		return MasterArmorBoost.values()[MialeeMath.clampLoop(compound.getInt("type"), 0, MasterArmorBoost.values().length)];
-	}
-
-	public void incrementType(ItemStack stack, boolean sneaking) {
-		NbtCompound compound = stack.getOrCreateNbt();
-		compound.putInt("type", MialeeMath.clampLoop(compound.getInt("type") + 1, 1, MasterArmorBoost.values().length));
-	}
-
-	@Override
-	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(Text.translatable("item.ratsmischief.master_rat_armor.tooltip." + getType(stack).name().toLowerCase()).formatted(Formatting.GRAY));
-		super.appendTooltip(stack, world, tooltip, context);
 	}
 
 	public static float getResistanceMultiplier(LivingEntity owner) {
@@ -81,6 +69,17 @@ public class MasterRatArmorItem extends ArmorItem {
 			return 1.0f + bonus;
 		}
 		return 1f;
+	}
+
+	public void incrementType(ItemStack stack, boolean sneaking) {
+		NbtCompound compound = stack.getOrCreateNbt();
+		compound.putInt("type", MialeeMath.clampLoop(compound.getInt("type") + 1, 1, MasterArmorBoost.values().length));
+	}
+
+	@Override
+	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+		tooltip.add(Text.translatable("item.ratsmischief.master_rat_armor.tooltip." + getType(stack).name().toLowerCase()).formatted(Formatting.GRAY));
+		super.appendTooltip(stack, world, tooltip, context);
 	}
 
 	public enum MasterArmorBoost {

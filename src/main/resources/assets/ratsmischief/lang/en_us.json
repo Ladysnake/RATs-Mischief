@@ -1,12 +1,31 @@
 {
   "entity.ratsmischief.rat": "Rat",
 
+  "item.ratsmischief.rat_spawn_egg": "Rat Spawn Egg",
   "item.ratsmischief.rat": "Rat",
   "item.ratsmischief.leather_rat_pouch": "Leather Rat Pouch",
   "item.ratsmischief.twisted_rat_pouch": "Twisted Rat Pouch",
   "item.ratsmischief.purpur_rat_pouch": "Purpur Rat Pouch",
+  "item.ratsmischief.clothed_ingot": "Clothed Ingot",
+  "item.ratsmischief.rat_master_hood": "Rat Master Hood",
+  "item.ratsmischief.rat_master_cloak": "Rat Master Cloak",
+  "item.ratsmischief.rat_master_breeches": "Rat Master Breeches",
+  "item.ratsmischief.rat_master_greaves": "Rat Master Greaves",
+
+  "item.ratsmischief.rat_staff.tooltip": "Left Click to toggle use action.",
+  "item.ratsmischief.rat_staff.harvest.tooltip": "Right Click to harvest crops.",
+  "item.ratsmischief.rat_staff.collect.tooltip": "Right Click to collect items.",
+  "item.ratsmischief.rat_staff.skirmish.tooltip": "Right Click to attack nearby mobs.",
+  "item.ratsmischief.rat_staff.love.tooltip": "Right Click to tame nearby mobs.",
+  "item.ratsmischief.master_rat_armor.tooltip.none" : "Select bonus with Right Click",
+  "item.ratsmischief.master_rat_armor.tooltip.resistance" : "Rats are 15% tougher to attacks.",
+  "item.ratsmischief.master_rat_armor.tooltip.damage" : "Rats deal 25% more damage.",
+  "item.ratsmischief.master_rat_armor.tooltip.mining_speed" : "Rats dig 25% faster.",
+  "item.ratsmischief.master_rat_hood.tooltip.false" : "Hide Hood with Shift Right Click.",
+  "item.ratsmischief.master_rat_hood.tooltip.true" : "Show Hood with Shift Right Click.",
+  "item.ratsmischief.rat.tooltip.return": "Will return on throw",
   "item.ratsmischief.rat_pouch.tooltip.capacity": "Capacity: %s/%s",
-  "item.ratsmischief.rat_spawn_egg": "Rat Spawn Egg",
+
 
   "ratsmischief.subtitles.entity.rat.hurt": "Rat hurts",
   "ratsmischief.subtitles.entity.rat.death": "Rat dies",
@@ -32,30 +51,5 @@
   "type.ratsmischief.rateline": "Rateline",
   "type.ratsmischief.biggie_cheese": "Biggie Cheese",
   "type.ratsmischief.arathain": "Arathain",
-  "type.ratsmischief.astronyu": "astronyu",
-  "tooltip.ratsmischief.return": "Will return on throw",
-
-  "item.ratsmischief.rat_staff": "Rat Staff",
-  "item.ratsmischief.harvest_staff": "Harvest Staff",
-  "item.ratsmischief.collection_staff": "Collection Staff",
-  "item.ratsmischief.skirmish_staff": "Skirmish Staff",
-  "item.ratsmischief.love_staff": "Love Staff",
-
-  "item.ratsmischief.rat_staff.tooltip": "Left Click to toggle use action.",
-  "item.ratsmischief.rat_staff.harvest.tooltip": "Right Click to harvest crops.",
-  "item.ratsmischief.rat_staff.collect.tooltip": "Right Click to collect items.",
-  "item.ratsmischief.rat_staff.skirmish.tooltip": "Right Click to attack nearby mobs.",
-  "item.ratsmischief.rat_staff.love.tooltip": "Right Click to tame nearby mobs.",
-
-  "item.ratsmischief.clothed_ingot": "Clothed Ingot",
-  "item.ratsmischief.rat_master_hood": "Rat Master Hood",
-  "item.ratsmischief.rat_master_cloak": "Rat Master Cloak",
-  "item.ratsmischief.rat_master_breeches": "Rat Master Breeches",
-  "item.ratsmischief.rat_master_greaves": "Rat Master Greaves",
-  "item.ratsmischief.master_rat_armor.tooltip.none" : "Select bonus with Right Click",
-  "item.ratsmischief.master_rat_armor.tooltip.resistance" : "Rats are 15% tougher to attacks.",
-  "item.ratsmischief.master_rat_armor.tooltip.damage" : "Rats deal 25% more damage.",
-  "item.ratsmischief.master_rat_armor.tooltip.mining_speed" : "Rats dig 25% faster.",
-  "item.ratsmischief.master_rat_hood.tooltip.false" : "Hide Hood with Shift Right Click.",
-  "item.ratsmischief.master_rat_hood.tooltip.true" : "Show Hood with Shift Right Click."
+  "type.ratsmischief.astronyu": "astronyu"
 }

@@ -193,6 +193,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		this.dataTracker.startTracking(SNIFFING, false);
 		this.dataTracker.startTracking(COLOR, DyeColor.values()[(this.random.nextInt(DyeColor.values().length))].getName());
 		this.dataTracker.startTracking(FLYING, false);
+		this.dataTracker.startTracking(SPY, false);
 		this.dataTracker.startTracking(AROUSED, false);
 		this.dataTracker.startTracking(ATTACK_RIDING_TIME, 0);
 
@@ -345,6 +346,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		if (tag.contains("ShouldReturnToOwnerInventory")) {
 			this.setShouldReturnToOwnerInventory(tag.getBoolean("ShouldReturnToOwnerInventory"));
 		}
+
+		if (tag.contains("Spy")) {
+			this.setSpy(tag.getBoolean("Spy"));
+		}
 	}
 
 	@Override
@@ -357,9 +362,15 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		this.writeAngerToNbt(tag);
 		tag.putBoolean("Aroused", this.isAroused());
 		tag.putBoolean("Flying", this.isFlying());
+		tag.putBoolean("Spy", this.isSpy());
 
 		tag.putBoolean("Sitting", this.isSitting());
 		tag.putInt("AttackRidingTime", this.getAttackRidingTime());
+	}
+
+	@Override
+	public boolean canMoveVoluntarily() {
+		return super.canMoveVoluntarily();
 	}
 
 	@Override
@@ -398,7 +409,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			if (this.getOwner() != null && this.canReturnToOwnerInventory() && this.getOwner().squaredDistanceTo(this.getPos()) <= 1.5f) {
 				turnRatIntoItemAndGive((PlayerEntity) this.getOwner());
 			}
-
 		} else {
 			HitResult hitResult = ProjectileUtil.getCollision(this, this::canHit);
 			boolean bl = false;
@@ -663,7 +673,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	public void setAngerTime(int ticks) {
 		this.dataTracker.set(ANGER_TIME, ticks);
 	}
-
 
 	public int getAttackRidingTime() {
 		return this.dataTracker.get(ATTACK_RIDING_TIME);

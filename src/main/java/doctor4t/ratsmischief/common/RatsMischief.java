@@ -1,5 +1,6 @@
 package doctor4t.ratsmischief.common;
 
+import doctor4t.ratsmischief.client.render.item.recipe.SpyRatCraftingRecipe;
 import doctor4t.ratsmischief.common.init.ModBlocks;
 import doctor4t.ratsmischief.common.init.ModEntities;
 import doctor4t.ratsmischief.common.init.ModItems;
@@ -11,6 +12,8 @@ import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.condition.RandomChanceLootCondition;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.quiltmc.loader.api.ModContainer;
@@ -20,6 +23,10 @@ import software.bernie.geckolib3.GeckoLib;
 public class RatsMischief implements ModInitializer {
 	public static final String MOD_ID = "ratsmischief";
 	private static final Identifier ANCIENT_CITY_CHESTS = new Identifier("minecraft", "chests/ancient_city");
+
+	public static final SpecialRecipeSerializer<SpyRatCraftingRecipe> SPY_RAT_RECIPE = RecipeSerializer.register(
+			"ratsmischief:crafting_special_spy_rat", new SpecialRecipeSerializer<>(SpyRatCraftingRecipe::new)
+	);
 
 	@Override
 	public void onInitialize(ModContainer mod) {

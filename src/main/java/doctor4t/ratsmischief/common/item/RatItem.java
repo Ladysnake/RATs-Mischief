@@ -49,6 +49,49 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 		ratTag.putBoolean("ShouldReturnToOwnerInventory", !ratTag.getBoolean("ShouldReturnToOwnerInventory"));
 	}
 
+	public static String getRatName(ItemStack stack) {
+		return stack.hasCustomName() ? stack.getName().getString() : null;
+	}
+
+	@Nullable
+	public static NbtCompound getRatTag(ItemStack stack) {
+		NbtCompound subNbt = stack.getOrCreateSubNbt(RatsMischief.MOD_ID);
+		if (subNbt.contains("rat")) {
+			return subNbt.getCompound("rat");
+		}
+		return null;
+	}
+
+	public static NbtCompound getRatTag(ItemStack stack, World world) {
+		NbtCompound ratTag = getRatTag(stack);
+		if (ratTag == null) {
+			RatEntity rat = new RatEntity(ModEntities.RAT, world);
+			NbtCompound nbt = new NbtCompound();
+			rat.saveNbt(nbt);
+			stack.getOrCreateSubNbt(RatsMischief.MOD_ID).put("rat", nbt);
+			ratTag = stack.getOrCreateSubNbt(RatsMischief.MOD_ID).getCompound("rat");
+		}
+		return ratTag;
+	}
+
+	public static RatEntity.Type getRatType(ItemStack stack) {
+		NbtCompound ratTag = getRatTag(stack);
+		if (ratTag == null) {
+			return RatEntity.Type.WILD;
+		}
+		String ratType = ratTag.getString("RatType").toUpperCase();
+		return RatEntity.Type.byName(ratType, RatEntity.Type.WILD);
+	}
+
+	public static DyeColor getRatColor(ItemStack stack) {
+		NbtCompound ratTag = getRatTag(stack);
+		if (ratTag == null) {
+			return DyeColor.WHITE;
+		}
+		String ratColor = ratTag.getString("Color").toUpperCase();
+		return DyeColor.byName(ratColor, DyeColor.WHITE);
+	}
+
 	private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		return PlayState.CONTINUE;
 	}
@@ -133,52 +176,9 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 
 		// set to return
 		if (ratTag.getBoolean("ShouldReturnToOwnerInventory")) {
-			tooltip.add(Text.translatable("tooltip.ratsmischief.return").setStyle(EMPTY.withItalic(true).withColor(Formatting.GRAY)));
+			tooltip.add(Text.translatable("item.ratsmischief.rat.tooltip.return").setStyle(EMPTY.withItalic(true).withColor(Formatting.GRAY)));
 		}
 
 		super.appendTooltip(stack, world, tooltip, context);
-	}
-
-	public static String getRatName(ItemStack stack) {
-		return stack.hasCustomName() ? stack.getName().getString() : null;
-	}
-
-	@Nullable
-	public static NbtCompound getRatTag(ItemStack stack) {
-		NbtCompound subNbt = stack.getOrCreateSubNbt(RatsMischief.MOD_ID);
-		if (subNbt.contains("rat")) {
-			return subNbt.getCompound("rat");
-		}
-		return null;
-	}
-
-	public static NbtCompound getRatTag(ItemStack stack, World world) {
-		NbtCompound ratTag = getRatTag(stack);
-		if (ratTag == null) {
-			RatEntity rat = new RatEntity(ModEntities.RAT, world);
-			NbtCompound nbt = new NbtCompound();
-			rat.saveNbt(nbt);
-			stack.getOrCreateSubNbt(RatsMischief.MOD_ID).put("rat", nbt);
-			ratTag = stack.getOrCreateSubNbt(RatsMischief.MOD_ID).getCompound("rat");
-		}
-		return ratTag;
-	}
-
-	public static RatEntity.Type getRatType(ItemStack stack) {
-		NbtCompound ratTag = getRatTag(stack);
-		if (ratTag == null) {
-			return RatEntity.Type.WILD;
-		}
-		String ratType = ratTag.getString("RatType").toUpperCase();
-		return RatEntity.Type.byName(ratType, RatEntity.Type.WILD);
-	}
-
-	public static DyeColor getRatColor(ItemStack stack) {
-		NbtCompound ratTag = getRatTag(stack);
-		if (ratTag == null) {
-			return DyeColor.WHITE;
-		}
-		String ratColor = ratTag.getString("Color").toUpperCase();
-		return DyeColor.byName(ratColor, DyeColor.WHITE);
 	}
 }

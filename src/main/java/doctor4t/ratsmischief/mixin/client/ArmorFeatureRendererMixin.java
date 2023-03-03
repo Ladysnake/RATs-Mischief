@@ -15,11 +15,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ArmorFeatureRenderer.class)
 public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, A extends BipedEntityModel<T>> {
-    @Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
-    private void mischief$dontRender(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo ci) {
+	@Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
+	private void mischief$dontRender(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo ci) {
 		ItemStack itemStack = entity.getEquippedStack(armorSlot);
 		if (itemStack.getItem() instanceof MasterRatArmorItem) {
 			ci.cancel();
 		}
-    }
+	}
 }

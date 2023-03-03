@@ -1,8 +1,6 @@
 package doctor4t.ratsmischief.client.render.entity;
 
-import com.google.common.collect.Sets;
 import doctor4t.ratsmischief.common.RatsMischief;
-import doctor4t.ratsmischief.common.RatsMischiefUtils;
 import doctor4t.ratsmischief.common.entity.RatEntity;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -12,10 +10,8 @@ import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
-import java.util.Set;
-
 public class EnderEyeFeatureRenderer extends GeoLayerRenderer<RatEntity> {
-	private static Identifier TEXTURE = new Identifier(RatsMischief.MOD_ID, "");
+	private static final Identifier TEXTURE = new Identifier(RatsMischief.MOD_ID, "");
 
 	private final PartyHatEntityRenderer partyHatEntityRenderer;
 

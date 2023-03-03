@@ -1,11 +1,7 @@
 package doctor4t.ratsmischief.common.init;
 
 import doctor4t.ratsmischief.common.RatsMischief;
-import doctor4t.ratsmischief.common.item.MasterRatHoodItem;
-import doctor4t.ratsmischief.common.item.RatItem;
-import doctor4t.ratsmischief.common.item.RatPouchItem;
-import doctor4t.ratsmischief.common.item.RatStaffItem;
-import doctor4t.ratsmischief.common.item.MasterRatArmorItem;
+import doctor4t.ratsmischief.common.item.*;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -26,7 +22,8 @@ public interface ModItems {
 
 	Item LEATHER_RAT_POUCH = createItem("leather_rat_pouch", new RatPouchItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1), 5));
 	Item TWISTED_RAT_POUCH = createItem("twisted_rat_pouch", new RatPouchItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1), 10));
-	Item PURPUR_RAT_POUCH = createItem("purpur_rat_pouch", new RatPouchItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1), 20));
+	Item PURPUR_RAT_POUCH = createItem("purpur_rat_pouch", new RatPouchItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1), 15));
+	Item RAT_MASTER_POUCH = createItem("rat_master_pouch", new RatPouchItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1), 20));
 
 	Item RAT_STAFF = createItem("rat_staff", new RatStaffItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
 	Item RAT = createItem("rat", new RatItem(new QuiltItemSettings().maxCount(1)));
