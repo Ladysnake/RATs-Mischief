@@ -13,10 +13,10 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import xyz.amymialee.mialeemisc.util.MialeeMath;
+import xyz.amymialee.mialeemisc.util.MialeeText;
 
 import java.util.List;
 import java.util.Set;
@@ -95,7 +95,11 @@ public class RatMasterArmorItem extends ArmorItem {
 
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(Text.translatable("item.ratsmischief.rat_master_armor.tooltip." + getType(stack).name().toLowerCase()).formatted(Formatting.GRAY));
+		switch (getType(stack)) {
+			case RESISTANCE -> tooltip.add(MialeeText.withColor(Text.translatable("item.ratsmischief.rat_master_armor.tooltip.resistance"), 10044730));
+			case DAMAGE -> tooltip.add(MialeeText.withColor(Text.translatable("item.ratsmischief.rat_master_armor.tooltip.damage"), 9643043));
+			case MINING_SPEED -> tooltip.add(MialeeText.withColor(Text.translatable("item.ratsmischief.rat_master_armor.tooltip.mining_speed"), 14270531));
+		}
 		RatsMischiefClientHelper.addSetBonus(tooltip);
 		super.appendTooltip(stack, world, tooltip, context);
 	}
