@@ -32,6 +32,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import java.util.List;
 
 import static net.minecraft.text.Style.EMPTY;
+import xyz.amymialee.mialeemisc.util.MialeeText;
 
 public class RatItem extends Item implements IAnimatable, ISyncable {
 	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
@@ -188,7 +189,7 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 		Identifier potionId = new Identifier(ratTag.getString("PotionGene"));
 		StatusEffect statusEffect = Registry.STATUS_EFFECT.get(potionId);
 		if (statusEffect != null) {
-			tooltip.add(Text.translatable("item.ratsmischief.rat.tooltip.potion").setStyle(EMPTY.withColor(Formatting.GRAY)).append(Text.translatable(statusEffect.getTranslationKey()).setStyle(EMPTY.withColor(Formatting.BLUE))));
+			tooltip.add(Text.translatable("item.ratsmischief.rat.tooltip.potion").setStyle(EMPTY.withColor(Formatting.GRAY)).append(MialeeText.withColor(Text.translatable(statusEffect.getTranslationKey()).setStyle(EMPTY), statusEffect.getColor())));
 		}
 
 		// set to return
