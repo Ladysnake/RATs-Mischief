@@ -1073,7 +1073,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		}
 
 		public boolean canStart() {
-			if (!RatEntity.this.isTamed() || !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
+			if (RatEntity.this.isSpy()) {
+				return false;
+			} else if (!RatEntity.this.isTamed() || !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
 				return false;
 			} else if (RatEntity.this.getTarget() == null && RatEntity.this.getAttacker() == null) {
 				if (RatEntity.this.isSitting() && RatEntity.this.isEating()) {
@@ -1124,12 +1126,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 		@Override
 		public boolean canStart() {
-			return super.canStart() && !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && RatEntity.this.isTamed() && !RatEntity.this.isSitting() && !RatEntity.this.isEating() && RatEntity.this.getOwner() != null && RatEntity.this.getOwner().isAlive() && ((PlayerEntity) RatEntity.this.getOwner()).getInventory().getEmptySlot() >= 0;
+			return super.canStart() && !RatEntity.this.isSpy() && !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && RatEntity.this.isTamed() && !RatEntity.this.isSitting() && !RatEntity.this.isEating() && RatEntity.this.getOwner() != null && RatEntity.this.getOwner().isAlive() && ((PlayerEntity) RatEntity.this.getOwner()).getInventory().getEmptySlot() >= 0;
 		}
 
 		@Override
 		public boolean shouldContinue() {
-			return super.shouldContinue() && !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && RatEntity.this.isTamed() && !RatEntity.this.isSitting() && !RatEntity.this.isEating() && RatEntity.this.getOwner() != null && RatEntity.this.getOwner().isAlive() && ((PlayerEntity) RatEntity.this.getOwner()).getInventory().getEmptySlot() >= 0;
+			return super.shouldContinue() && !RatEntity.this.isSpy() && !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && RatEntity.this.isTamed() && !RatEntity.this.isSitting() && !RatEntity.this.isEating() && RatEntity.this.getOwner() != null && RatEntity.this.getOwner().isAlive() && ((PlayerEntity) RatEntity.this.getOwner()).getInventory().getEmptySlot() >= 0;
 		}
 	}
 }
