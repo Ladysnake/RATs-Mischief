@@ -11,7 +11,6 @@ import ladysnake.requiem.api.v1.remnant.RemnantState;
 import ladysnake.requiem.api.v1.remnant.RemnantType;
 import ladysnake.requiem.core.entity.SoulHolderComponent;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -130,7 +129,8 @@ public class RatifiedRemnantType implements RemnantType {
 		public static final AbilitySource SOUL_STATE = Pal.getAbilitySource(new Identifier("mischief", "soul_state"));
 
 		private final PlayerEntity player;
-		private boolean removed;
+		// vagrant until proven otherwise
+		private boolean vagrant = true;
 
 		public SpyingRatRemnantState(PlayerEntity player) {
 			this.player = player;
@@ -140,6 +140,7 @@ public class RatifiedRemnantType implements RemnantType {
 		public void setup(RemnantState oldHandler) {
 			if (!player.world.isClient) {
 				Pal.grantAbility(this.player, VanillaAbilities.INVULNERABLE, SOUL_STATE);
+				this.setVagrant(true);
 			}
 		}
 
@@ -147,7 +148,7 @@ public class RatifiedRemnantType implements RemnantType {
 		public void teardown(RemnantState newHandler) {
 			if (!player.world.isClient) {
 				Pal.revokeAbility(this.player, VanillaAbilities.INVULNERABLE, SOUL_STATE);
-				this.removed = true;
+				this.setVagrant(false);
 			}
 		}
 
@@ -158,12 +159,13 @@ public class RatifiedRemnantType implements RemnantType {
 
 		@Override
 		public boolean isVagrant() {
-			return !this.removed;
+			return this.vagrant;
 		}
 
 		@Override
 		public boolean setVagrant(boolean vagrant) {
-			return false;
+			this.vagrant = vagrant;
+			return true;
 		}
 
 		@Override
@@ -179,7 +181,8 @@ public class RatifiedRemnantType implements RemnantType {
 
 		@Override
 		public void prepareRespawn(ServerPlayerEntity original, boolean lossless) {
-			this.removed = false;
+			//
+			this.setVagrant(true);
 		}
 
 		@Override
@@ -187,6 +190,8 @@ public class RatifiedRemnantType implements RemnantType {
 			MobEntity possessedEntity = PossessionComponent.get(this.player).getHost();
 			if (possessedEntity instanceof RatEntity rat) {
 				rat.setEating(this.player.isUsingItem());
+			} else {
+				RatsMischiefRequiemPlugin.goBackToBody((ServerPlayerEntity) this.player);
 			}
 		}
 	}
