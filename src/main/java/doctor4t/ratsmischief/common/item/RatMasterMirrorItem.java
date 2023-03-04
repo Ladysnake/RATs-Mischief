@@ -35,7 +35,11 @@ public class RatMasterMirrorItem extends Item {
 				remnantComponent.become(RatsMischiefRequiemPlugin.SPYING_RAT_REMNANT_TYPE);
 				remnantComponent.setVagrant(false);	// temporarily set corporeal to allow split
 				remnantComponent.splitPlayer(false)
-						.ifPresent(res -> PossessionComponent.get(res.soul()).startPossessing(rat));
+						.ifPresent(res -> {
+							res.soul().getItemCooldownManager().set(this, 40);
+							res.soul().networkHandler.requestTeleport(rat.getX(), rat.getY(), rat.getZ(), rat.getYaw(), rat.getPitch());
+							PossessionComponent.get(res.soul()).startPossessing(rat);
+						});
 			}
 		}
 
