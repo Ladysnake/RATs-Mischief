@@ -11,9 +11,11 @@ import ladysnake.requiem.common.RequiemRecordTypes;
 import ladysnake.requiem.common.entity.PlayerShellEntity;
 import ladysnake.requiem.common.remnant.PlayerBodyTracker;
 import ladysnake.requiem.common.remnant.RemnantTypes;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import org.jetbrains.annotations.Nullable;
 
 public class RatsMischiefRequiemPlugin implements RequiemPlugin {
 	public static final RatifiedRemnantType RATIFIED_REMNANT_TYPE = new RatifiedRemnantType(RatifiedRemnantType.RatifiedRemnantState::new);
@@ -46,12 +48,19 @@ public class RatsMischiefRequiemPlugin implements RequiemPlugin {
 	}
 
 	public static boolean goBackToBody(ServerPlayerEntity player) {
-		if (PlayerBodyTracker.get(player).getAnchor().flatMap(a -> a.get(RequiemRecordTypes.ENTITY_REF)).flatMap(ptr -> ptr.resolve(player.server)).orElse(null) instanceof PlayerShellEntity body) {
+		if (getBody(player) instanceof PlayerShellEntity body) {
 			RemnantComponent.get(player).merge(body);
 			RemnantComponent.get(player).become(RemnantTypes.MORTAL);
 			return true;
 		}
 		return false;
+	}
+
+	@Nullable
+	private static Entity getBody(ServerPlayerEntity player) {
+		return PlayerBodyTracker.get(player).getAnchor()
+				.flatMap(a -> a.get(RequiemRecordTypes.ENTITY_REF))
+				.flatMap(ptr -> ptr.resolve(player.server)).orElse(null);
 	}
 
 	@Override

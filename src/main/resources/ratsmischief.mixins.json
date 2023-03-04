@@ -12,7 +12,8 @@
     "ScreenHandlerMixin",
     "SculkSensorBlockEntityMixin",
     "SculkShriekerBlockEntityMixin",
-    "WardenEntityMixin"
+    "WardenEntityMixin",
+    "compat.PlayerBodyTrackerMixin"
   ],
   "client": [
     "client.ArmorFeatureRendererMixin",
