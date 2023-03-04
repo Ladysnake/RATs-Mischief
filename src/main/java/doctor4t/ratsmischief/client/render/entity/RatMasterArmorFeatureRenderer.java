@@ -50,7 +50,7 @@ public class RatMasterArmorFeatureRenderer<T extends PlayerEntity, A extends Pla
 				this.getContextModel().setAttributes(model);
 				this.setVisible(model, armorSlot, itemStack);
 				this.setPoses(model, armorSlot);
-				this.renderArmorParts(matrices, vertexConsumers, light, armorItem, itemStack.hasGlint(), model, this.usesSecondLayer(armorSlot));
+				this.renderArmorParts(matrices, vertexConsumers, light, armorItem, model, this.usesSecondLayer(armorSlot));
 			}
 		}
 	}
@@ -114,8 +114,8 @@ public class RatMasterArmorFeatureRenderer<T extends PlayerEntity, A extends Pla
 		}
 	}
 
-	private void renderArmorParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItem item, boolean usesSecondLayer, A model, boolean legs) {
-		VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(this.getArmorTexture(item, legs)), false, usesSecondLayer);
+	private void renderArmorParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItem item, A model, boolean legs) {
+		VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(this.getArmorTexture(item, legs)), false, false);
 		model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0F);
 	}
 
