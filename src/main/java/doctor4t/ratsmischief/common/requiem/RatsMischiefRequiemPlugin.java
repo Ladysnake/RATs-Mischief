@@ -5,6 +5,7 @@ import ladysnake.requiem.api.v1.RequiemPlugin;
 import ladysnake.requiem.api.v1.event.requiem.HumanityCheckCallback;
 import ladysnake.requiem.api.v1.event.requiem.InitiateFractureCallback;
 import ladysnake.requiem.api.v1.event.requiem.PossessionStartCallback;
+import ladysnake.requiem.api.v1.possession.PossessionComponent;
 import ladysnake.requiem.api.v1.remnant.RemnantComponent;
 import ladysnake.requiem.api.v1.remnant.RemnantType;
 import ladysnake.requiem.common.RequiemRecordTypes;
@@ -49,6 +50,7 @@ public class RatsMischiefRequiemPlugin implements RequiemPlugin {
 
 	public static boolean goBackToBody(ServerPlayerEntity player) {
 		if (getBody(player) instanceof PlayerShellEntity body) {
+			PossessionComponent.get(player).stopPossessing(true);
 			RemnantComponent.get(player).merge(body);
 			RemnantComponent.get(player).become(RemnantTypes.MORTAL);
 			return true;
