@@ -4,9 +4,9 @@
     "item": "ratsmischief:clothed_ingot"
   },
   "base": {
-    "item": "minecraft:diamond_helmet"
+    "item": "minecraft:diamond_leggings"
   },
   "result": {
-    "item": "ratsmischief:master_rat_hood"
+    "item": "ratsmischief:rat_master_breeches"
   }
 }

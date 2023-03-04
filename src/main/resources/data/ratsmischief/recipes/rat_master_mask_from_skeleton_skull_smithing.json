@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "addition": {
+    "item": "ratsmischief:clothed_ingot"
+  },
+  "base": {
+    "item": "minecraft:skeleton_skull"
+  },
+  "result": {
+    "item": "ratsmischief:rat_master_mask"
+  }
+}

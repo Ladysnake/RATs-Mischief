@@ -18,7 +18,8 @@ public interface ModItems {
 	Map<Item, Identifier> ITEMS = new LinkedHashMap<>();
 
 	//	Item MOD_ITEM = createItem("mod_item", new ModItem(new QuiltItemSettings()));
-	Item RAT_SPAWN_EGG = createItem("rat_spawn_egg", new SpawnEggItem(ModEntities.RAT, 0x473935, 0x0F090B, new QuiltItemSettings().group(ItemGroup.MISC)));
+	Item RAT = createItem("rat", new RatItem(new QuiltItemSettings().maxCount(1)));
+	Item RAT_SPAWN_EGG = createItem("rat_spawn_egg", new SpawnEggItem(ModEntities.RAT, 0x2E1C1C, 0x241317, new QuiltItemSettings().group(ItemGroup.MISC)));
 
 	Item LEATHER_RAT_POUCH = createItem("leather_rat_pouch", new RatPouchItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1), 5));
 	Item TWISTED_RAT_POUCH = createItem("twisted_rat_pouch", new RatPouchItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1), 10));
@@ -26,7 +27,6 @@ public interface ModItems {
 	Item RAT_MASTER_POUCH = createItem("rat_master_pouch", new RatPouchItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1), 20));
 
 	Item RAT_STAFF = createItem("rat_staff", new RatStaffItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
-	Item RAT = createItem("rat", new RatItem(new QuiltItemSettings().maxCount(1)));
 
 	Item CLOTHED_INGOT = createItem("clothed_ingot", new Item(new QuiltItemSettings().group(ItemGroup.MISC)));
 	Item RAT_MASTER_HOOD = createItem("rat_master_hood", new MasterRatHoodItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.HEAD, new QuiltItemSettings().group(ItemGroup.COMBAT)));
