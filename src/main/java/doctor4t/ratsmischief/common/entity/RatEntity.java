@@ -23,6 +23,7 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.EntityDamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -272,7 +273,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			}
 			if (this.getPotionGene() != null && this.getPotionGene() == secondRat.getPotionGene()) {
 				ratEntity.setPotionGene(this.getPotionGene());
-			} else if (this.random.nextFloat() > 0.9f) {
+			} else if (this.random.nextFloat() <= 0.33f) {
 				List<StatusEffect> firstEffects = this.getActiveStatusEffects().keySet().stream().toList();
 				List<StatusEffect> secondEffects = secondRat.getActiveStatusEffects().keySet().stream().toList();
 				List<StatusEffect> sharedEffects = new ArrayList<>();
@@ -639,6 +640,17 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		if (!this.world.isClient) {
 			this.tickAngerLogic((ServerWorld) this.world, true);
 		}
+
+		if (this.world.isClient) {
+			if (this.getPotionGene() != null) {
+				StatusEffect effect = this.getPotionGene();
+				int k = effect.getColor();
+				double d = (float)((k >> 16 & 0xFF)) / 255.0F;
+				double e = (float)((k >> 8 & 0xFF)) / 255.0F;
+				double f = (float)((k & 0xFF)) / 255.0F;
+				this.world.addParticle(ParticleTypes.ENTITY_EFFECT, this.getParticleX(0.5), this.getRandomBodyY(), this.getParticleZ(0.5), d, e, f);
+			}
+		}
 	}
 
 	@Override
@@ -883,6 +895,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 	@Override
 	public boolean isInvulnerableTo(DamageSource damageSource) {
+		if (damageSource instanceof EntityDamageSource entityDamageSource) {
+			if (entityDamageSource.getAttacker() == this.getOwner() && RatMasterArmorItem.getEquippedPieces(this.getOwner()) >= 4) {
+				return true;
+			}
+		}
 		if (damageSource == DamageSource.CACTUS || damageSource == DamageSource.SWEET_BERRY_BUSH || damageSource.getAttacker() instanceof EnderDragonEntity || damageSource == DamageSource.CRAMMING) {
 			return true;
 		} else {

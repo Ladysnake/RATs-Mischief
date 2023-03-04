@@ -91,8 +91,8 @@ public class RatStaffItem extends Item implements IClickConsumingItem {
 
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(Text.translatable("item.ratsmischief.rat_staff.tooltip").formatted(Formatting.GRAY));
-		tooltip.add(Text.translatable("item.ratsmischief.rat_staff.%s.tooltip".formatted(getAction(stack).name().toLowerCase())).formatted(Formatting.GRAY));
+		tooltip.add(Text.translatable("item.ratsmischief.rat_master_ocarina.tooltip").formatted(Formatting.GRAY));
+		tooltip.add(Text.translatable("item.ratsmischief.rat_master_ocarina.%s.tooltip".formatted(getAction(stack).name().toLowerCase())).formatted(Formatting.GRAY));
 		super.appendTooltip(stack, world, tooltip, context);
 	}
 

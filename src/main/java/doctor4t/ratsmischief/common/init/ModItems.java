@@ -26,15 +26,14 @@ public interface ModItems {
 	Item PURPUR_RAT_POUCH = createItem("purpur_rat_pouch", new RatPouchItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1), 15));
 	Item RAT_MASTER_POUCH = createItem("rat_master_pouch", new RatPouchItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1), 20));
 
-	Item RAT_STAFF = createItem("rat_staff", new RatStaffItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
-
 	Item CLOTHED_INGOT = createItem("clothed_ingot", new Item(new QuiltItemSettings().group(ItemGroup.MISC)));
 	Item RAT_MASTER_HOOD = createItem("rat_master_hood", new RatMasterHoodItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.HEAD, new QuiltItemSettings().group(ItemGroup.COMBAT)));
 	Item RAT_MASTER_CLOAK = createItem("rat_master_cloak", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.CHEST, new QuiltItemSettings().group(ItemGroup.COMBAT)));
 	Item RAT_MASTER_BREECHES = createItem("rat_master_breeches", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.LEGS, new QuiltItemSettings().group(ItemGroup.COMBAT)));
 	Item RAT_MASTER_GREAVES = createItem("rat_master_greaves", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.FEET, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item RAT_MASTER_MIRROR = createItem("rat_master_mirror", new RatMasterMirrorItem(new QuiltItemSettings().group(ItemGroup.TOOLS)));
-
+	Item RAT_MASTER_MIRROR = createItem("rat_master_mirror", new RatMasterMirrorItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
+	Item RAT_MASTER_OCARINA = createItem("rat_master_ocarina", new RatStaffItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
+	Item RAT_MASTER_MASK = createItem("rat_master_mask", new RatMasterMaskItem(new QuiltItemSettings().group(ItemGroup.COMBAT)));
 
 	private static <T extends Item> T createItem(String name, T item) {
 		ITEMS.put(item, new Identifier(RatsMischief.MOD_ID, name));

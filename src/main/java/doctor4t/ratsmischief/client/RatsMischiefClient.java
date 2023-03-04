@@ -25,7 +25,7 @@ public class RatsMischiefClient implements ClientModInitializer {
 	public static final EntityModelLayer RAT_MASTER_ARMOR_OUTER_LAYER_SLIM = new EntityModelLayer(RatsMischief.id("rat_master_outer_layer_slim"), "main");
 
 	static {
-		ModelPredicateProviderRegistry.register(ModItems.RAT_STAFF, new Identifier("action"), (stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("action") / 4f);
+		ModelPredicateProviderRegistry.register(ModItems.RAT_MASTER_OCARINA, new Identifier("action"), (stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("action") / 4f);
 	}
 
 	@Override

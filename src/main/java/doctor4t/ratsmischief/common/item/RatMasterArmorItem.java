@@ -32,6 +32,22 @@ public class RatMasterArmorItem extends ArmorItem {
 		return MasterArmorBoost.values()[MialeeMath.clampLoop(compound.getInt("type"), 0, MasterArmorBoost.values().length)];
 	}
 
+	public static float getEquippedPieces(LivingEntity owner) {
+		if (owner != null) {
+			int equipped = 0;
+			for (EquipmentSlot slot : RatMasterArmorItem.SLOTS) {
+				if (owner.getEquippedStack(slot).getItem() instanceof RatMasterArmorItem) {
+					equipped++;
+				}
+			}
+			if (RatMasterMaskItem.isWearingMask(owner)) {
+				equipped += 4;
+			}
+			return equipped;
+		}
+		return 0;
+	}
+
 	public static float getResistanceMultiplier(LivingEntity owner) {
 		if (owner != null) {
 			float bonus = 0.0f;
