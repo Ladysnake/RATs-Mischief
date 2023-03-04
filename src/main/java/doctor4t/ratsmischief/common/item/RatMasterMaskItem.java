@@ -62,7 +62,7 @@ public class RatMasterMaskItem extends TrinketItem {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
 		tooltip.add(Text.translatable("item.ratsmischief.rat_master_mask.desc1").formatted(Formatting.GRAY));
-		RatsMischiefClientHelper.addSetBonus(tooltip);
+		tooltip.add(Text.translatable("item.ratsmischief.rat_master_friendly_fire").formatted(Formatting.GRAY));
 		tooltip.add(Text.translatable("item.ratsmischief.rat_master_mask.desc.offset1").formatted(Formatting.GRAY));
 		if (stack.getNbt() != null) {
 			tooltip.add(Text.translatable("item.ratsmischief.rat_master_mask.desc.offset2", stack.getNbt().getInt("offset")).formatted(Formatting.GRAY));

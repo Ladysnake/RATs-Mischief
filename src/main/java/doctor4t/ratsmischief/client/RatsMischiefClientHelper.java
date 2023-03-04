@@ -14,6 +14,7 @@ import java.util.List;
 public class RatsMischiefClientHelper {
 	public static void addSetBonus(List<Text> tooltip) {
 		if (RatMasterArmorItem.getEquippedPieces(MinecraftClient.getInstance().player) >= 4) {
+			tooltip.add(Text.translatable("item.ratsmischief.rat_master_set_bonus").formatted(Formatting.GRAY));
 			tooltip.add(Text.translatable("item.ratsmischief.rat_master_friendly_fire").formatted(Formatting.GRAY));
 		}
 	}
