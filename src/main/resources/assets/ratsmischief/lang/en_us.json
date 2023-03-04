@@ -22,6 +22,8 @@
   "item.ratsmischief.rat_master_ocarina.collect.tooltip": "Right Click to collect items",
   "item.ratsmischief.rat_master_ocarina.skirmish.tooltip": "Right Click to attack nearby mobs",
   "item.ratsmischief.rat_master_ocarina.love.tooltip": "Right Click to tame nearby mobs",
+  "item.ratsmischief.rat_master_ocarina.bring_items.true" : "Right Click to stop rats from bringing items to you",
+  "item.ratsmischief.rat_master_ocarina.bring_items.false" : "Right Click to make rats bring items to you",
   "item.ratsmischief.rat_master_armor.tooltip.none" : "Select bonus with Right Click",
   "item.ratsmischief.rat_master_armor.tooltip.resistance" : "15% increased Rat damage resistance",
   "item.ratsmischief.rat_master_armor.tooltip.damage" : "25% increased Rat attack damage",

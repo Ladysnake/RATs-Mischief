@@ -1,5 +1,6 @@
 package doctor4t.ratsmischief.common.item;
 
+import doctor4t.ratsmischief.client.RatsMischiefClientHelper;
 import doctor4t.ratsmischief.common.entity.RatEntity;
 import doctor4t.ratsmischief.common.entity.ai.BreedGoal;
 import doctor4t.ratsmischief.common.entity.ai.DigGoal;
@@ -95,6 +96,7 @@ public class RatMasterOcarinaItem extends Item implements IClickConsumingItem {
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
 		tooltip.add(Text.translatable("item.ratsmischief.rat_master_ocarina.tooltip").formatted(Formatting.GRAY));
 		tooltip.add(Text.translatable("item.ratsmischief.rat_master_ocarina.%s.tooltip".formatted(getAction(stack).name().toLowerCase())).formatted(Formatting.GRAY));
+		tooltip.add(Text.translatable("item.ratsmischief.rat_master_ocarina.bring_items.%s".formatted(RatsMischiefClientHelper.shouldRatsBringItems())).formatted(Formatting.GRAY));
 		super.appendTooltip(stack, world, tooltip, context);
 	}
 

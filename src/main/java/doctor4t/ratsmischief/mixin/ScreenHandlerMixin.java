@@ -4,6 +4,8 @@ import doctor4t.ratsmischief.common.init.ModSoundEvents;
 import doctor4t.ratsmischief.common.item.RatMasterArmorItem;
 import doctor4t.ratsmischief.common.item.RatItem;
 import doctor4t.ratsmischief.common.item.RatMasterMaskItem;
+import doctor4t.ratsmischief.common.item.RatMasterOcarinaItem;
+import doctor4t.ratsmischief.common.util.PlayerRatOwner;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -45,6 +47,12 @@ public class ScreenHandlerMixin {
 					RatMasterMaskItem.incrementOffset(stack);
 					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
 					ci.cancel();
+				} else if (stack.getItem() instanceof RatMasterOcarinaItem) {
+					if (player instanceof PlayerRatOwner playerRatOwner) {
+						playerRatOwner.setBringingItems(!playerRatOwner.shouldBringItems());
+						player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
+						ci.cancel();
+					}
 				}
 			}
 		}

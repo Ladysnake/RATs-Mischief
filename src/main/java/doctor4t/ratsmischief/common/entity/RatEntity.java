@@ -14,6 +14,7 @@ import doctor4t.ratsmischief.common.init.ModSoundEvents;
 import doctor4t.ratsmischief.common.item.RatMasterArmorItem;
 import doctor4t.ratsmischief.common.item.RatPouchItem;
 import doctor4t.ratsmischief.common.item.RatMasterOcarinaItem;
+import doctor4t.ratsmischief.common.util.PlayerRatOwner;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
@@ -1126,6 +1127,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 		@Override
 		public boolean canStart() {
+			if (RatEntity.this.getOwner() instanceof PlayerRatOwner playerRatOwner) {
+				if (!playerRatOwner.shouldBringItems()) {
+					return false;
+				}
+			}
 			return super.canStart() && !RatEntity.this.isSpy() && !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && RatEntity.this.isTamed() && !RatEntity.this.isSitting() && !RatEntity.this.isEating() && RatEntity.this.getOwner() != null && RatEntity.this.getOwner().isAlive() && ((PlayerEntity) RatEntity.this.getOwner()).getInventory().getEmptySlot() >= 0;
 		}
 
