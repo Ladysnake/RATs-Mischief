@@ -1,5 +1,6 @@
 package doctor4t.ratsmischief.common.item;
 
+import doctor4t.ratsmischief.client.RatsMischiefClientHelper;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -95,6 +96,7 @@ public class RatMasterArmorItem extends ArmorItem {
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
 		tooltip.add(Text.translatable("item.ratsmischief.rat_master_armor.tooltip." + getType(stack).name().toLowerCase()).formatted(Formatting.GRAY));
+		RatsMischiefClientHelper.addSetBonus(tooltip);
 		super.appendTooltip(stack, world, tooltip, context);
 	}
 
