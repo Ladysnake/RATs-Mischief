@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import doctor4t.ratsmischief.common.RatsMischief;
 import doctor4t.ratsmischief.common.item.RatMasterArmorItem;
+import doctor4t.ratsmischief.common.item.RatMasterCloakItem;
 import doctor4t.ratsmischief.common.item.RatMasterHoodItem;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -44,11 +45,10 @@ public class RatMasterArmorFeatureRenderer<T extends PlayerEntity, A extends Pla
 	private void renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light) {
 		ItemStack itemStack = entity.getEquippedStack(armorSlot);
 		if (itemStack.getItem() instanceof RatMasterArmorItem armorItem) {
-			if (armorSlot == EquipmentSlot.HEAD && RatMasterHoodItem.isHidden(itemStack)) return;
 			A model = this.getModel(armorSlot);
 			if (armorItem.getSlotType() == armorSlot) {
 				this.getContextModel().setAttributes(model);
-				this.setVisible(model, armorSlot);
+				this.setVisible(model, armorSlot, itemStack);
 				this.setPoses(model, armorSlot);
 				this.renderArmorParts(matrices, vertexConsumers, light, armorItem, itemStack.hasGlint(), model, this.usesSecondLayer(armorSlot));
 			}
@@ -59,20 +59,24 @@ public class RatMasterArmorFeatureRenderer<T extends PlayerEntity, A extends Pla
 		return this.usesSecondLayer(slot) ? this.leggingsModel : this.bodyModel;
 	}
 
-	protected void setVisible(A bipedModel, EquipmentSlot slot) {
+	protected void setVisible(A bipedModel, EquipmentSlot slot, ItemStack stack) {
 		bipedModel.setVisible(false);
 		switch (slot) {
 			case HEAD -> {
 				bipedModel.head.visible = true;
-				bipedModel.hat.visible = true;
+				if (!RatMasterHoodItem.isHidden(stack)) {
+					bipedModel.hat.visible = true;
+				}
 			}
 			case CHEST -> {
 				bipedModel.body.visible = true;
 				bipedModel.rightArm.visible = true;
 				bipedModel.leftArm.visible = true;
 				bipedModel.jacket.visible = true;
-				bipedModel.rightSleeve.visible = true;
-				bipedModel.leftSleeve.visible = true;
+				if (!RatMasterCloakItem.isStripped(stack)) {
+					bipedModel.rightSleeve.visible = true;
+					bipedModel.leftSleeve.visible = true;
+				}
 			}
 			case LEGS -> {
 				bipedModel.body.visible = true;

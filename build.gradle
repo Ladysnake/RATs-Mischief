@@ -95,11 +95,12 @@ dependencies {
 //	runtimeOnly("com.github.EnnuiL:OkZoomer:1.19.2-SNAPSHOT")
 
 	// requiem core
-	modCompileOnly ("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
-	modCompileOnly ("io.github.ladysnake:requiem-api:${project.requiem_version}")
-	modCompileOnly ("io.github.ladysnake:requiem-core:${project.requiem_version}")
-	modCompileOnly ("io.github.ladysnake:requiem:${project.requiem_version}") { transitive = false }
-	modCompileOnly modLocalRuntime ("io.github.ladysnake:elmendorf:0.8.0")
+	modImplementation ("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
+	modImplementation ("io.github.ladysnake:requiem-api:${project.requiem_version}")
+	modImplementation ("io.github.ladysnake:requiem-core:${project.requiem_version}")
+	modImplementation ("io.github.ladysnake:requiem:${project.requiem_version}") { transitive = false }
+	modImplementation modLocalRuntime ("io.github.ladysnake:elmendorf:0.8.0")
+//	modImplementation files ("files/requiem-2.0.0-beta.16.jar")
 
 	// automatone
 	modImplementation ("io.github.ladysnake:automatone:${project.automatone_version}")

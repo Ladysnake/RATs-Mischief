@@ -28,6 +28,8 @@
   "item.ratsmischief.rat_master_armor.tooltip.mining_speed" : "25% increased Rat mining speed",
   "item.ratsmischief.rat_master_hood.tooltip.false" : "Hide Hood with Shift Right Click",
   "item.ratsmischief.rat_master_hood.tooltip.true" : "Show Hood with Shift Right Click",
+  "item.ratsmischief.rat_master_cloak.tooltip.false" : "Hide Pauldrons with Shift Right Click",
+  "item.ratsmischief.rat_master_cloak.tooltip.true" : "Show Pauldrons with Shift Right Click",
   "item.ratsmischief.rat_master_mask.desc1" : "Hides your identity.",
   "item.ratsmischief.rat_master_friendly_fire" : "Prevents you from damaging your own rats.",
   "item.ratsmischief.rat_master_mask.desc.offset1" : "Model can be offset with right click.",
