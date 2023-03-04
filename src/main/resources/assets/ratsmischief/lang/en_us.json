@@ -60,5 +60,7 @@
   "type.ratsmischief.rateline": "Rateline",
   "type.ratsmischief.biggie_cheese": "Biggie Cheese",
   "type.ratsmischief.arathain": "Arathain",
-  "type.ratsmischief.astronyu": "astronyu"
+  "type.ratsmischief.astronyu": "astronyu",
+
+  "enchantment.ratsmischief.rat_curse" : "Curse of the Rat"
 }
