@@ -1,7 +1,7 @@
 package doctor4t.ratsmischief.common.init;
 
 import doctor4t.ratsmischief.common.RatsMischief;
-import doctor4t.ratsmischief.common.enchantments.MischiefCurseEnchantment;
+import doctor4t.ratsmischief.common.enchantments.RatCurseEnchantment;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.util.Identifier;
@@ -13,7 +13,7 @@ import java.util.Map;
 public interface ModEnchantments {
 	Map<Enchantment, Identifier> ENCHANTMENTS = new LinkedHashMap<>();
 
-	Enchantment MISCHIEF_CURSE = createEnchantment("mischief_curse", new MischiefCurseEnchantment(Enchantment.Rarity.VERY_RARE, EquipmentSlot.values()));
+	Enchantment RAT_CURSE = createEnchantment("rat_curse", new RatCurseEnchantment(Enchantment.Rarity.VERY_RARE, EquipmentSlot.values()));
 
 	@SuppressWarnings("SameParameterValue")
 	private static Enchantment createEnchantment(String name, Enchantment entity) {
