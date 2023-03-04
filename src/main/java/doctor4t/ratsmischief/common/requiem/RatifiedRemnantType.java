@@ -78,6 +78,8 @@ public class RatifiedRemnantType implements RemnantType {
 
 		@Override
 		public void teardown(RemnantState newHandler) {
+			this.removed = true;
+
 			if (!player.world.isClient) {
 				Pal.revokeAbility(this.player, VanillaAbilities.INVULNERABLE, SOUL_STATE);
 				if (this.isInWorld()) {
@@ -87,7 +89,6 @@ public class RatifiedRemnantType implements RemnantType {
 					if (rat != null) {
 						rat.remove(Entity.RemovalReason.DISCARDED);
 						possessionComponent.stopPossessing(false);
-						this.removed = true;
 					}
 				}
 			}
@@ -132,16 +133,6 @@ public class RatifiedRemnantType implements RemnantType {
 	public static class SpyingRatRemnantState extends MutableRemnantState {
 		public SpyingRatRemnantState(PlayerEntity player) {
 			super(player);
-		}
-
-		@Override
-		public void setup(RemnantState oldHandler) {
-			super.setup(oldHandler);
-		}
-
-		@Override
-		public void teardown(RemnantState newHandler) {
-			super.teardown(newHandler);
 		}
 
 		@Override
