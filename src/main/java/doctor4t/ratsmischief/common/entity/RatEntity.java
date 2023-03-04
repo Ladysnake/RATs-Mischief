@@ -1,6 +1,7 @@
 package doctor4t.ratsmischief.common.entity;
 
 import com.google.common.collect.ImmutableList;
+import dev.emi.stepheightentityattribute.StepHeightEntityAttributeMain;
 import doctor4t.ratsmischief.common.RatsMischief;
 import doctor4t.ratsmischief.common.RatsMischiefUtils;
 import doctor4t.ratsmischief.common.entity.ai.ChaseForFunGoal;
@@ -109,11 +110,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	public RatEntity(EntityType<? extends TameableEntity> type, World worldIn) {
 		super(type, worldIn);
 		this.ignoreCameraFrustum = false;
-		this.stepHeight = 2f;
 	}
 
 	public static DefaultAttributeContainer.Builder createRatAttributes() {
-		return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 0.0D).add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0.1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32);
+		return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 0.0D).add(StepHeightEntityAttributeMain.STEP_HEIGHT, 2.0D).add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0.1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32);
 	}
 
 	public static Type getRandomNaturalType(RandomGenerator random) {
