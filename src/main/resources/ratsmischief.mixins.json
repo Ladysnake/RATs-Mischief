@@ -13,7 +13,8 @@
     "SculkSensorBlockEntityMixin",
     "SculkShriekerBlockEntityMixin",
     "WardenEntityMixin",
-    "compat.PlayerBodyTrackerMixin"
+    "compat.PlayerBodyTrackerMixin",
+    "compat.VanillaRequiemPluginMixin"
   ],
   "client": [
     "client.ArmorFeatureRendererMixin",
@@ -23,7 +24,7 @@
     "client.HeldItemRendererMixin",
     "client.ItemEntityRendererMixin",
     "client.PlayerEntityRendererMixin",
-    "external.ElegantArmour$SlimArmorFeatureRendererMixin"
+    "compat.ElegantArmour$SlimArmorFeatureRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

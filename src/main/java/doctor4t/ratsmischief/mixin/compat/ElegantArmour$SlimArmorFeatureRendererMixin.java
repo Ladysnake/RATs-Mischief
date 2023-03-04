@@ -1,4 +1,4 @@
-package doctor4t.ratsmischief.mixin.external;
+package doctor4t.ratsmischief.mixin.compat;
 
 import doctor4t.ratsmischief.common.item.RatMasterMaskItem;
 import net.minecraft.client.render.VertexConsumerProvider;
