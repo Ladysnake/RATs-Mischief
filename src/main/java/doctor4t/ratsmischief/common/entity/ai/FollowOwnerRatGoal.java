@@ -40,7 +40,7 @@ public class FollowOwnerRatGoal extends Goal {
 	public boolean canStart() {
 		LivingEntity livingEntity = this.rat.getOwner();
 
-		if (livingEntity == null) {
+		if (livingEntity == null || this.rat.isSpy()) {
 			return false;
 		} else if (livingEntity.isSpectator()) {
 			return false;
@@ -55,7 +55,7 @@ public class FollowOwnerRatGoal extends Goal {
 	}
 
 	public boolean shouldContinue() {
-		if (this.navigation.isIdle()) {
+		if (this.navigation.isIdle() || this.rat.isSpy()) {
 			return false;
 		} else if (this.rat.isSitting()) {
 			return false;

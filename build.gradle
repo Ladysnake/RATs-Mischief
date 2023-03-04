@@ -85,17 +85,23 @@ dependencies {
 	modImplementation include ("xyz.amymialee:mialeemisc:${project.mialeemisc_version}")
 
 	// ok zoomer
-	runtimeOnly("com.github.EnnuiL:OkZoomer:1.19.2-SNAPSHOT")
+//	runtimeOnly("com.github.EnnuiL:OkZoomer:1.19.2-SNAPSHOT")
 
 	// requiem core
 	modCompileOnly ("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
 	modCompileOnly ("io.github.ladysnake:requiem-api:${project.requiem_version}")
-	modCompileOnly ("io.github.ladysnake:requiem-core:${project.requiem_version}") { transitive = false }
+	modCompileOnly ("io.github.ladysnake:requiem-core:${project.requiem_version}")
 	modCompileOnly ("io.github.ladysnake:requiem:${project.requiem_version}") { transitive = false }
 	modCompileOnly modLocalRuntime ("io.github.ladysnake:elmendorf:0.8.0")
 
 	// automatone
-	modCompileOnly ("io.github.ladysnake:automatone:${project.automatone_version}")
+	modImplementation ("io.github.ladysnake:automatone:${project.automatone_version}")
+
+	// impersonate
+	modImplementation ("io.github.ladysnake:impersonate:${project.impersonate_version}")
+
+	// satin
+	modImplementation ("io.github.ladysnake:satin:${project.satin_version}")
 }
 
 processResources {

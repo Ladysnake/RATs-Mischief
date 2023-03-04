@@ -4,6 +4,7 @@ import doctor4t.ratsmischief.common.RatsMischief;
 import doctor4t.ratsmischief.common.RatsMischiefUtils;
 import doctor4t.ratsmischief.common.entity.RatEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -36,9 +37,9 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
 		IBone rightEar = this.getAnimationProcessor().getBone("rightear");
 
 		if (head != null && !ratEntity.isSniffing() && !ratEntity.isEating() && !ratEntity.isFlying()) {
-			head.setRotationX(-ratEntity.getPitch() * ((float) Math.PI / 180F));
-			leftEar.setRotationX(ratEntity.getPitch() * 1.4f * ((float) Math.PI / 180F));
-			rightEar.setRotationX(ratEntity.getPitch() * 1.4f * ((float) Math.PI / 180F));
+			head.setRotationX(MathHelper.clamp(-ratEntity.getPitch(), 0 , 90) * ((float) Math.PI / 180F));
+			leftEar.setRotationX(MathHelper.clamp(ratEntity.getPitch(), -90 , 0) * 1.4f * ((float) Math.PI / 180F));
+			rightEar.setRotationX(MathHelper.clamp(ratEntity.getPitch(), -90 , 0) * 1.4f * ((float) Math.PI / 180F));
 
 //            head.setRotationY(ratEntity.getHeadYaw() * ((float) Math.PI / 180F));
 		}

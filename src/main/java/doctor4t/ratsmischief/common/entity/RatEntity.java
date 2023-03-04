@@ -110,7 +110,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 	public static DefaultAttributeContainer.Builder createRatAttributes() {
-		return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 0.0D).add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32);
+		return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 0.0D).add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0.1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32);
 	}
 
 	public static Type getRandomNaturalType(RandomGenerator random) {
@@ -208,7 +208,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		} else if (this.isEating()) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.eat", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
-		} else if (this.isSitting()) {
+		} else if (this.isSitting() || this.isSneaking()) {
 			this.setSniffing(false);
 			this.setEating(false);
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.rat.flat", ILoopType.EDefaultLoopTypes.LOOP));
@@ -465,7 +465,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			}
 
 			// return to owner
-			if (this.getOwner() != null && this.canReturnToOwnerInventory() && this.getOwner().squaredDistanceTo(this.getPos()) <= 1.5f) {
+			if (this.getOwner() != null && this.canReturnToOwnerInventory() && this.getOwner().squaredDistanceTo(this.getPos()) <= 2f) {
 				turnRatIntoItemAndGive((PlayerEntity) this.getOwner());
 			}
 		} else {
@@ -906,37 +906,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 	@Override
 	protected void pushAway(Entity entity) {
-		if (!(entity instanceof PlayerEntity && this.isTamed() && entity.getUuid().equals(this.getOwnerUuid()))) {
-			if (!this.isConnectedThroughVehicle(entity)) {
-				if (!entity.noClip && !this.noClip) {
-					double d = entity.getX() - this.getX();
-					double e = entity.getZ() - this.getZ();
-					double f = MathHelper.absMax(d, e);
-					if (f >= 0.01F) {
-						f = Math.sqrt(f);
-						d /= f;
-						e /= f;
-						double g = 1.0 / f;
-						if (g > 1.0) {
-							g = 1.0;
-						}
-
-						d *= g;
-						e *= g;
-						d *= 0.05F;
-						e *= 0.05F;
-						if (!this.hasPassengers() && this.isPushable()) {
-							this.addVelocity(-d, 0.0, -e);
-						}
-
-						if (!entity.hasPassengers() && entity.isPushable()) {
-							entity.addVelocity(d, 0.0, e);
-						}
-					}
-
-				}
-			}
-		}
+		this.pushAwayFrom(entity);
 	}
 
 	@Override

@@ -15,6 +15,7 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -33,6 +34,15 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 	}
 
 	@Override
+	public Vec3d getPositionOffset(RatEntity rat, float tickDelta) {
+		if (rat.isSneaking()) {
+			return new Vec3d(0, 0.15, 0);
+		}
+
+		return super.getPositionOffset(rat, tickDelta);
+	}
+
+	@Override
 	public void render(RatEntity ratEntity, float entityYaw, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight) {
 		if (ratEntity.isFlying() && ratEntity.age < 5) {
 			return;
@@ -43,7 +53,7 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 
 	@Override
 	public void renderEarly(RatEntity ratEntity, MatrixStack stackIn, float ticks, VertexConsumerProvider vertexConsumerProvider, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-		this.itemStack = ratEntity.getEquippedStack(EquipmentSlot.MAINHAND);
+		this.itemStack = ratEntity.isSitting() || ratEntity.isSneaking() ? ItemStack.EMPTY : ratEntity.getEquippedStack(EquipmentSlot.MAINHAND);
 		this.vertexConsumerProvider = vertexConsumerProvider;
 		this.ratTexture = this.getTexture(ratEntity);
 

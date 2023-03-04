@@ -17,7 +17,8 @@
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
 			"init": "doctor4t.ratsmischief.common.RatsMischief",
-			"client_init": "doctor4t.ratsmischief.client.RatsMischiefClient"
+			"client_init": "doctor4t.ratsmischief.client.RatsMischiefClient",
+			"requiem:plugin": "doctor4t.ratsmischief.common.requiem.RatsMischiefRequiemPlugin"
 		}
 	},
 	"mixin": "ratsmischief.mixins.json"
