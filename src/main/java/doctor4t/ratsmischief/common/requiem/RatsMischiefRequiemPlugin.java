@@ -1,6 +1,5 @@
 package doctor4t.ratsmischief.common.requiem;
 
-import baritone.api.fakeplayer.FakeServerPlayerEntity;
 import doctor4t.ratsmischief.common.entity.RatEntity;
 import ladysnake.requiem.api.v1.RequiemPlugin;
 import ladysnake.requiem.api.v1.event.requiem.HumanityCheckCallback;
@@ -11,7 +10,8 @@ import ladysnake.requiem.api.v1.remnant.RemnantType;
 import ladysnake.requiem.common.RequiemRecordTypes;
 import ladysnake.requiem.common.entity.PlayerShellEntity;
 import ladysnake.requiem.common.remnant.PlayerBodyTracker;
-import net.minecraft.entity.LivingEntity;
+import ladysnake.requiem.common.remnant.RemnantTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -32,10 +32,7 @@ public class RatsMischiefRequiemPlugin implements RequiemPlugin {
 
 		InitiateFractureCallback.EVENT.register(player -> {
 			if (RemnantComponent.get(player).getRemnantType() == SPYING_RAT_REMNANT_TYPE) {
-				if (PlayerBodyTracker.get(player).getAnchor().flatMap(a -> a.get(RequiemRecordTypes.ENTITY_REF)).flatMap(ptr -> ptr.resolve(player.server)).orElse(null) instanceof PlayerShellEntity body) {
-					RemnantComponent.get(player).merge(body);
-					return true;
-				}
+				return goBackToBody(player);
 			}
 			return false;
 		});
@@ -46,6 +43,15 @@ public class RatsMischiefRequiemPlugin implements RequiemPlugin {
 			}
 			return 0;
 		});
+	}
+
+	public static boolean goBackToBody(ServerPlayerEntity player) {
+		if (PlayerBodyTracker.get(player).getAnchor().flatMap(a -> a.get(RequiemRecordTypes.ENTITY_REF)).flatMap(ptr -> ptr.resolve(player.server)).orElse(null) instanceof PlayerShellEntity body) {
+			RemnantComponent.get(player).merge(body);
+			RemnantComponent.get(player).become(RemnantTypes.MORTAL);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
