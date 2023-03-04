@@ -1,11 +1,7 @@
 package doctor4t.ratsmischief.common;
 
 import doctor4t.ratsmischief.client.render.item.recipe.SpyRatCraftingRecipe;
-import doctor4t.ratsmischief.common.init.ModBlocks;
-import doctor4t.ratsmischief.common.init.ModEnchantments;
-import doctor4t.ratsmischief.common.init.ModEntities;
-import doctor4t.ratsmischief.common.init.ModItems;
-import doctor4t.ratsmischief.common.init.ModSoundEvents;
+import doctor4t.ratsmischief.common.init.*;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
@@ -13,7 +9,6 @@ import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
-import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.condition.RandomChanceLootCondition;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
@@ -24,14 +19,13 @@ import net.minecraft.util.registry.Registry;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import software.bernie.geckolib3.GeckoLib;
-import xyz.amymialee.mialeemisc.MialeeMisc;
 
 public class RatsMischief implements ModInitializer {
 	public static final String MOD_ID = "ratsmischief";
 	public static final SpecialRecipeSerializer<SpyRatCraftingRecipe> SPY_RAT_RECIPE = RecipeSerializer.register(
 			"ratsmischief:crafting_special_spy_rat", new SpecialRecipeSerializer<>(SpyRatCraftingRecipe::new)
 	);
-	private static final Identifier ANCIENT_CITY_CHESTS = new Identifier("minecraft", "chests/ancient_city");
+	public static final Identifier ANCIENT_CITY_CHESTS = new Identifier("minecraft", "chests/ancient_city");
 
 	public static Identifier id(String path) {
 		return new Identifier(MOD_ID, path);
@@ -48,6 +42,7 @@ public class RatsMischief implements ModInitializer {
 		ModItems.initialize();
 		ModSoundEvents.initialize();
 		ModEnchantments.initialize();
+		ModLootTables.initialize();
 
 		// rat kid painting
 		Registry.register(Registry.PAINTING_VARIANT, new Identifier(MOD_ID, "a_rat_in_time"), new PaintingVariant(64, 48));
@@ -65,7 +60,7 @@ public class RatsMischief implements ModInitializer {
 				}
 				{ //Mischief Curse
 					ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
-					EnchantedBookItem.addEnchantment(book, new EnchantmentLevelEntry(ModEnchantments.MISCHIEF_CURSE, 1));
+					EnchantedBookItem.addEnchantment(book, new EnchantmentLevelEntry(ModEnchantments.RAT_CURSE, 1));
 					LootPool lootPool = LootPool.builder()
 							.rolls(lootTableRange)
 							.conditionally(RandomChanceLootCondition.builder(0.3f).build())
