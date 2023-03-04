@@ -10,7 +10,7 @@ import doctor4t.ratsmischief.common.entity.ai.RatMeleeAttackGoal;
 import doctor4t.ratsmischief.common.init.ModEntities;
 import doctor4t.ratsmischief.common.init.ModItems;
 import doctor4t.ratsmischief.common.init.ModSoundEvents;
-import doctor4t.ratsmischief.common.item.MasterRatArmorItem;
+import doctor4t.ratsmischief.common.item.RatMasterArmorItem;
 import doctor4t.ratsmischief.common.item.RatPouchItem;
 import doctor4t.ratsmischief.common.item.RatStaffItem;
 import net.minecraft.block.BlockState;
@@ -822,7 +822,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	@Override
 	public boolean tryAttack(Entity target) {
 		float damage = (float) this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-		damage *= MasterRatArmorItem.getDamageMultiplier(this.getOwner());
+		damage *= RatMasterArmorItem.getDamageMultiplier(this.getOwner());
 		target.timeUntilRegen = 0;
 		if (target.damage(DamageSource.mob(this), damage)) {
 			if (this.getPotionGene() != null && target instanceof LivingEntity livingEntity) {
@@ -876,7 +876,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			if (entity != null && !(entity instanceof PlayerEntity) && !(entity instanceof PersistentProjectileEntity)) {
 				amount = (amount + 1.0F) / 2.0F;
 			}
-			amount *= MasterRatArmorItem.getResistanceMultiplier(this.getOwner());
+			amount *= RatMasterArmorItem.getResistanceMultiplier(this.getOwner());
 			return super.damage(source, amount);
 		}
 	}

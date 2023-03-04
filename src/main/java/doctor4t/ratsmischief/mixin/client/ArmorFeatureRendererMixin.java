@@ -1,6 +1,6 @@
 package doctor4t.ratsmischief.mixin.client;
 
-import doctor4t.ratsmischief.common.item.MasterRatArmorItem;
+import doctor4t.ratsmischief.common.item.RatMasterArmorItem;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
@@ -18,7 +18,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, A extend
 	@Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
 	private void mischief$dontRender(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo ci) {
 		ItemStack itemStack = entity.getEquippedStack(armorSlot);
-		if (itemStack.getItem() instanceof MasterRatArmorItem) {
+		if (itemStack.getItem() instanceof RatMasterArmorItem) {
 			ci.cancel();
 		}
 	}

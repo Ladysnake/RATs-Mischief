@@ -29,10 +29,12 @@ public interface ModItems {
 	Item RAT_STAFF = createItem("rat_staff", new RatStaffItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
 
 	Item CLOTHED_INGOT = createItem("clothed_ingot", new Item(new QuiltItemSettings().group(ItemGroup.MISC)));
-	Item RAT_MASTER_HOOD = createItem("rat_master_hood", new MasterRatHoodItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.HEAD, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item RAT_MASTER_CLOAK = createItem("rat_master_cloak", new MasterRatArmorItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.CHEST, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item RAT_MASTER_BREECHES = createItem("rat_master_breeches", new MasterRatArmorItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.LEGS, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item RAT_MASTER_GREAVES = createItem("rat_master_greaves", new MasterRatArmorItem(MasterRatArmorItem.MasterRatArmorMaterial.INSTANCE, EquipmentSlot.FEET, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_MASTER_HOOD = createItem("rat_master_hood", new RatMasterHoodItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.HEAD, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_MASTER_CLOAK = createItem("rat_master_cloak", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.CHEST, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_MASTER_BREECHES = createItem("rat_master_breeches", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.LEGS, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_MASTER_GREAVES = createItem("rat_master_greaves", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.FEET, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_MASTER_MIRROR = createItem("rat_master_mirror", new RatMasterMirror(new QuiltItemSettings().group(ItemGroup.TOOLS)));
+
 
 	private static <T extends Item> T createItem(String name, T item) {
 		ITEMS.put(item, new Identifier(RatsMischief.MOD_ID, name));

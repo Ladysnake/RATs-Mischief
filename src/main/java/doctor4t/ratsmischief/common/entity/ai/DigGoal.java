@@ -1,7 +1,7 @@
 package doctor4t.ratsmischief.common.entity.ai;
 
 import doctor4t.ratsmischief.common.entity.RatEntity;
-import doctor4t.ratsmischief.common.item.MasterRatArmorItem;
+import doctor4t.ratsmischief.common.item.RatMasterArmorItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
@@ -70,7 +70,7 @@ public class DigGoal extends Goal {
 
 			if (this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ()) <= 5) {
 				float progressIncrease = 0.015f + 0.003f * haste;
-				progressIncrease *= MasterRatArmorItem.getMiningSpeedMultiplier(this.rat.getOwner());
+				progressIncrease *= RatMasterArmorItem.getMiningSpeedMultiplier(this.rat.getOwner());
 				breakProgress += progressIncrease;
 				this.rat.world.setBlockBreakingInfo(this.rat.getId(), targetBlockPos, (int) (breakProgress / this.rat.world.getBlockState(targetBlockPos).getHardness(this.rat.world, targetBlockPos) * 9));
 				if (breakProgress >= this.rat.world.getBlockState(targetBlockPos).getHardness(this.rat.world, targetBlockPos)) {

@@ -2,7 +2,7 @@ package doctor4t.ratsmischief.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import doctor4t.ratsmischief.client.RatsMischiefClient;
-import doctor4t.ratsmischief.client.render.entity.MasterRatArmorFeatureRenderer;
+import doctor4t.ratsmischief.client.render.entity.RatMasterArmorFeatureRenderer;
 import doctor4t.ratsmischief.common.init.ModItems;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -36,7 +36,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 	@Inject(method = "<init>", at = @At("TAIL"))
 	private void mischief$masterArmor(EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci) {
 		this.addFeature(
-				new MasterRatArmorFeatureRenderer<>(this,
+				new RatMasterArmorFeatureRenderer<>(this,
 						new PlayerEntityModel<>(ctx.getPart(RatsMischiefClient.RAT_MASTER_ARMOR_INNER_LAYER), false),
 						new PlayerEntityModel<>(ctx.getPart(slim ? RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER),
 								slim), slim));

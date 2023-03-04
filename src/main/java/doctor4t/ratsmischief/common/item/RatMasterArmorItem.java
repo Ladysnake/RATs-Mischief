@@ -20,10 +20,10 @@ import xyz.amymialee.mialeemisc.util.MialeeMath;
 import java.util.List;
 import java.util.Set;
 
-public class MasterRatArmorItem extends ArmorItem {
+public class RatMasterArmorItem extends ArmorItem {
 	public static final Set<EquipmentSlot> SLOTS = Set.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
 
-	public MasterRatArmorItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
+	public RatMasterArmorItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
 		super(material, slot, settings);
 	}
 
@@ -35,8 +35,8 @@ public class MasterRatArmorItem extends ArmorItem {
 	public static float getResistanceMultiplier(LivingEntity owner) {
 		if (owner != null) {
 			float bonus = 0.0f;
-			for (EquipmentSlot slot : MasterRatArmorItem.SLOTS) {
-				if (MasterRatArmorItem.getType(owner.getEquippedStack(slot)) == MasterArmorBoost.RESISTANCE) {
+			for (EquipmentSlot slot : RatMasterArmorItem.SLOTS) {
+				if (RatMasterArmorItem.getType(owner.getEquippedStack(slot)) == MasterArmorBoost.RESISTANCE) {
 					bonus += 0.15f;
 				}
 			}
@@ -48,8 +48,8 @@ public class MasterRatArmorItem extends ArmorItem {
 	public static float getDamageMultiplier(LivingEntity owner) {
 		if (owner != null) {
 			float bonus = 0.0f;
-			for (EquipmentSlot slot : MasterRatArmorItem.SLOTS) {
-				if (MasterRatArmorItem.getType(owner.getEquippedStack(slot)) == MasterArmorBoost.DAMAGE) {
+			for (EquipmentSlot slot : RatMasterArmorItem.SLOTS) {
+				if (RatMasterArmorItem.getType(owner.getEquippedStack(slot)) == MasterArmorBoost.DAMAGE) {
 					bonus += 0.25f;
 				}
 			}
@@ -61,8 +61,8 @@ public class MasterRatArmorItem extends ArmorItem {
 	public static float getMiningSpeedMultiplier(LivingEntity owner) {
 		if (owner != null) {
 			float bonus = 0.0f;
-			for (EquipmentSlot slot : MasterRatArmorItem.SLOTS) {
-				if (MasterRatArmorItem.getType(owner.getEquippedStack(slot)) == MasterArmorBoost.MINING_SPEED) {
+			for (EquipmentSlot slot : RatMasterArmorItem.SLOTS) {
+				if (RatMasterArmorItem.getType(owner.getEquippedStack(slot)) == MasterArmorBoost.MINING_SPEED) {
 					bonus += 0.25f;
 				}
 			}
@@ -89,8 +89,8 @@ public class MasterRatArmorItem extends ArmorItem {
 		MINING_SPEED
 	}
 
-	public static class MasterRatArmorMaterial implements ArmorMaterial {
-		public static final MasterRatArmorMaterial INSTANCE = new MasterRatArmorMaterial();
+	public static class RatMasterArmorMaterial implements ArmorMaterial {
+		public static final RatMasterArmorMaterial INSTANCE = new RatMasterArmorMaterial();
 		private static final int[] BASE_DURABILITY = new int[]{13, 15, 16, 11};
 		private static final int[] PROTECTION_AMOUNTS = new int[]{3, 6, 8, 3};
 
@@ -121,7 +121,7 @@ public class MasterRatArmorItem extends ArmorItem {
 
 		@Override
 		public String getName() {
-			return "masterrat";
+			return "rat_master";
 		}
 
 		@Override

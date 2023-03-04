@@ -11,7 +11,7 @@ import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 public class EnderEyeFeatureRenderer extends GeoLayerRenderer<RatEntity> {
-	public static final Identifier TEXTURE = new Identifier(RatsMischief.MOD_ID, "textures/entity/ender_eye");
+	public static final Identifier TEXTURE = new Identifier(RatsMischief.MOD_ID, "textures/entity/ender_eye.png");
 
 	private final EnderEyeEntityRenderer enderEyeEntityRenderer;
 
