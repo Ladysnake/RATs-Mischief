@@ -7,10 +7,14 @@ import io.github.ladysnake.pal.Pal;
 import io.github.ladysnake.pal.VanillaAbilities;
 import ladysnake.requiem.api.v1.possession.PossessionComponent;
 import ladysnake.requiem.api.v1.remnant.MobResurrectable;
+import ladysnake.requiem.api.v1.remnant.RemnantComponent;
 import ladysnake.requiem.api.v1.remnant.RemnantState;
 import ladysnake.requiem.api.v1.remnant.RemnantType;
+import ladysnake.requiem.common.remnant.RemnantTypes;
 import ladysnake.requiem.core.entity.SoulHolderComponent;
+import ladysnake.requiem.core.remnant.MutableRemnantState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -125,47 +129,19 @@ public class RatifiedRemnantType implements RemnantType {
 		}
 	}
 
-	public static class SpyingRatRemnantState implements RemnantState {
-		public static final AbilitySource SOUL_STATE = Pal.getAbilitySource(new Identifier("mischief", "soul_state"));
-
-		private final PlayerEntity player;
-		// vagrant until proven otherwise
-		private boolean vagrant = true;
-
+	public static class SpyingRatRemnantState extends MutableRemnantState {
 		public SpyingRatRemnantState(PlayerEntity player) {
-			this.player = player;
+			super(player);
 		}
 
 		@Override
 		public void setup(RemnantState oldHandler) {
-			if (!player.world.isClient) {
-				Pal.grantAbility(this.player, VanillaAbilities.INVULNERABLE, SOUL_STATE);
-				this.setVagrant(true);
-			}
+			super.setup(oldHandler);
 		}
 
 		@Override
 		public void teardown(RemnantState newHandler) {
-			if (!player.world.isClient) {
-				Pal.revokeAbility(this.player, VanillaAbilities.INVULNERABLE, SOUL_STATE);
-				this.setVagrant(false);
-			}
-		}
-
-		@Override
-		public boolean isIncorporeal() {
-			return !PossessionComponent.get(this.player).isPossessionOngoing();
-		}
-
-		@Override
-		public boolean isVagrant() {
-			return this.vagrant;
-		}
-
-		@Override
-		public boolean setVagrant(boolean vagrant) {
-			this.vagrant = vagrant;
-			return true;
+			super.teardown(newHandler);
 		}
 
 		@Override
@@ -181,8 +157,17 @@ public class RatifiedRemnantType implements RemnantType {
 
 		@Override
 		public void prepareRespawn(ServerPlayerEntity original, boolean lossless) {
-			//
 			this.setVagrant(true);
+		}
+
+		@Override
+		protected void regenerateBody(LivingEntity body) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		protected void onRespawnAfterDeath() {
+			// NO-OP
 		}
 
 		@Override
@@ -190,6 +175,8 @@ public class RatifiedRemnantType implements RemnantType {
 			MobEntity possessedEntity = PossessionComponent.get(this.player).getHost();
 			if (possessedEntity instanceof RatEntity rat) {
 				rat.setEating(this.player.isUsingItem());
+			} else if (!this.isVagrant()) {
+				RemnantComponent.get(this.player).become(RemnantTypes.MORTAL);
 			} else {
 				RatsMischiefRequiemPlugin.goBackToBody((ServerPlayerEntity) this.player);
 			}
