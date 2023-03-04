@@ -76,6 +76,10 @@ dependencies {
 
 	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}-${minecraft_version}"
 
+	// reach attributes
+	modImplementation "com.github.emilyploszaj:step-height-entity-attribute:v1.0.1"
+	include "com.github.emilyploszaj:step-height-entity-attribute:v1.0.1"
+
 	// mod menu
 	modCompileOnly "com.terraformersmc:modmenu:${mod_menu_version}"
 	modRuntimeOnly "com.terraformersmc:modmenu:${mod_menu_version}"
