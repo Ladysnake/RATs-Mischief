@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "addition": {
+    "item": "ratsmischief:clothed_ingot"
+  },
+  "base": {
+    "item": "ratsmischief:purpur_rat_pouch"
+  },
+  "result": {
+    "item": "ratsmischief:rat_master_pouch"
+  }
+}

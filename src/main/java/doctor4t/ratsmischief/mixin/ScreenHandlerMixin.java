@@ -3,6 +3,7 @@ package doctor4t.ratsmischief.mixin;
 import doctor4t.ratsmischief.common.init.ModSoundEvents;
 import doctor4t.ratsmischief.common.item.RatMasterArmorItem;
 import doctor4t.ratsmischief.common.item.RatItem;
+import doctor4t.ratsmischief.common.item.RatMasterMaskItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
@@ -19,9 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ScreenHandler.class)
 public class ScreenHandlerMixin {
-	@Shadow
-	@Final
-	public DefaultedList<Slot> slots;
+	@Shadow @Final public DefaultedList<Slot> slots;
 
 	@Inject(method = "internalOnSlotClick", at = @At("HEAD"), cancellable = true)
 	private void ratsmischief$toggleMode(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
@@ -36,6 +35,10 @@ public class ScreenHandlerMixin {
 					ci.cancel();
 				} else if (stack.getItem() instanceof RatItem) {
 					RatItem.cycleRatReturn(stack);
+					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
+					ci.cancel();
+				} else if (stack.getItem() instanceof RatMasterMaskItem) {
+					RatMasterMaskItem.incrementOffset(stack);
 					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
 					ci.cancel();
 				}

@@ -56,6 +56,9 @@ repositories {
 			includeGroup 'me.lucko'
 		}
 	}
+
+	// ears
+	maven { url "https://repo.unascribed.com" }
 }
 
 // All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
@@ -84,6 +87,10 @@ dependencies {
 	// mialee misc
 	modImplementation include ("xyz.amymialee:mialeemisc:${project.mialeemisc_version}")
 
+	// elegant armor
+    modCompileOnly ("xyz.amymialee:elegantarmour:${project.elegantarmour_version}")
+    modRuntimeOnly ("xyz.amymialee:elegantarmour:${project.elegantarmour_version}")
+
 	// ok zoomer
 //	runtimeOnly("com.github.EnnuiL:OkZoomer:1.19.2-SNAPSHOT")
 
@@ -102,6 +109,10 @@ dependencies {
 
 	// satin
 	modImplementation ("io.github.ladysnake:satin:${project.satin_version}")
+	modCompileOnly ("io.github.ladysnake:automatone:${project.automatone_version}")
+
+	// trinkets
+	modImplementation ("dev.emi:trinkets:${project.trinkets_version}")
 }
 
 processResources {

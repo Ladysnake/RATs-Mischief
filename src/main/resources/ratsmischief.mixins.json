@@ -16,9 +16,12 @@
   "client": [
     "client.ArmorFeatureRendererMixin",
     "client.BipedEntityModelMixin",
+    "client.EntityRendererMixin",
+    "client.HeadFeatureRendererMixin",
     "client.HeldItemRendererMixin",
     "client.ItemEntityRendererMixin",
-    "client.PlayerEntityRendererMixin"
+    "client.PlayerEntityRendererMixin",
+    "external.ElegantArmour$SlimArmorFeatureRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
