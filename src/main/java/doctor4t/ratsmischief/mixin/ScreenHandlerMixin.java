@@ -34,9 +34,11 @@ public class ScreenHandlerMixin {
 					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
 					ci.cancel();
 				} else if (stack.getItem() instanceof RatItem) {
-					RatItem.cycleRatReturn(stack);
-					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
-					ci.cancel();
+					if (!RatItem.getRatTag(stack).getBoolean("Spy")) {
+						RatItem.cycleRatReturn(stack);
+						player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
+						ci.cancel();
+					}
 				} else if (stack.getItem() instanceof RatMasterMaskItem) {
 					RatMasterMaskItem.incrementOffset(stack);
 					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);

@@ -7,6 +7,7 @@ import doctor4t.ratsmischief.common.entity.ai.ChaseForFunGoal;
 import doctor4t.ratsmischief.common.entity.ai.EatToHealGoal;
 import doctor4t.ratsmischief.common.entity.ai.FollowOwnerRatGoal;
 import doctor4t.ratsmischief.common.entity.ai.RatMeleeAttackGoal;
+import doctor4t.ratsmischief.common.init.ModDamageSources;
 import doctor4t.ratsmischief.common.init.ModEntities;
 import doctor4t.ratsmischief.common.init.ModItems;
 import doctor4t.ratsmischief.common.init.ModSoundEvents;
@@ -836,7 +837,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		float damage = (float) this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
 		damage *= RatMasterArmorItem.getDamageMultiplier(this.getOwner());
 		target.timeUntilRegen = 0;
-		if (target.damage(DamageSource.mob(this), damage)) {
+		if (target.damage(ModDamageSources.RAT, damage)) {
 			if (this.getPotionGene() != null && target instanceof LivingEntity livingEntity) {
 				livingEntity.addStatusEffect(new StatusEffectInstance(this.getPotionGene(), 5 * 20));
 			}

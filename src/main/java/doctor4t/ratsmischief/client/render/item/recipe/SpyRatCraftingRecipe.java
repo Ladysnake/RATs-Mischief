@@ -51,6 +51,7 @@ public class SpyRatCraftingRecipe extends SpecialCraftingRecipe {
 					if (inventory.getStack(i - 3).isOf(Items.RABBIT_HIDE) && inventory.getStack(i - 6).isOf(Items.ENDER_EYE)) {
 						spyRatStack = ratStack.copy();
 						RatItem.getRatTag(spyRatStack).putBoolean("Spy", true);
+						RatItem.getRatTag(spyRatStack).putBoolean("ShouldReturnToOwnerInventory", false);
 					}
 				}
 			}

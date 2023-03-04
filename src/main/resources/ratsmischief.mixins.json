@@ -8,6 +8,7 @@
     "EntityMixin",
     "ItemEntityMixin",
     "LivingEntityMixin",
+    "PlayerEntityMixin",
     "ScreenHandlerMixin",
     "SculkSensorBlockEntityMixin",
     "SculkShriekerBlockEntityMixin",
