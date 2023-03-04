@@ -11,19 +11,19 @@ import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 public class EnderEyeFeatureRenderer extends GeoLayerRenderer<RatEntity> {
-	private static final Identifier TEXTURE = new Identifier(RatsMischief.MOD_ID, "");
+	public static final Identifier TEXTURE = new Identifier(RatsMischief.MOD_ID, "textures/entity/ender_eye");
 
-	private final PartyHatEntityRenderer partyHatEntityRenderer;
+	private final EnderEyeEntityRenderer enderEyeEntityRenderer;
 
-	public EnderEyeFeatureRenderer(IGeoRenderer<RatEntity> entityRendererIn, PartyHatEntityRenderer partyHatEntityRenderer) {
+	public EnderEyeFeatureRenderer(IGeoRenderer<RatEntity> entityRendererIn, EnderEyeEntityRenderer enderEyeEntityRenderer) {
 		super(entityRendererIn);
-		this.partyHatEntityRenderer = partyHatEntityRenderer;
+		this.enderEyeEntityRenderer = enderEyeEntityRenderer;
 	}
 
 	@Override
 	public void render(MatrixStack matrixStackIn, VertexConsumerProvider bufferIn, int packedLightIn, RatEntity ratEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		if (ratEntity.isSpy()) {
-			partyHatEntityRenderer.render(getEntityModel().getModel(getEntityModel().getModelResource(ratEntity)),
+			enderEyeEntityRenderer.render(getEntityModel().getModel(getEntityModel().getModelResource(ratEntity)),
 					ratEntity,
 					partialTicks,
 					RenderLayer.getEntityCutout(TEXTURE),

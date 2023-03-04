@@ -1,6 +1,8 @@
 package doctor4t.ratsmischief.client.render.item;
 
 import doctor4t.ratsmischief.client.model.RatItemModel;
+import doctor4t.ratsmischief.client.render.entity.EnderEyeFeatureRenderer;
+import doctor4t.ratsmischief.client.render.entity.PartyHatFeatureRenderer;
 import doctor4t.ratsmischief.common.RatsMischief;
 import doctor4t.ratsmischief.common.RatsMischiefUtils;
 import doctor4t.ratsmischief.common.entity.RatEntity;
@@ -47,6 +49,31 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 		RenderLayer renderLayer = RenderLayer.getEntityCutout(ratTexture);
 
 		this.render(model, animatable, 0.0F, renderLayer, matrices, bufferSource, null, packedLight, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+
+		// ender eye
+		if (stack.getNbt() != null
+				&& stack.getNbt().contains(RatsMischief.MOD_ID)
+				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
+				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("Spy")
+				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getBoolean("Spy")) {
+			MinecraftClient.getInstance().getTextureManager().bindTexture(EnderEyeFeatureRenderer.TEXTURE);
+			this.render(model, animatable, 0.0F, RenderLayer.getEntityCutout(EnderEyeFeatureRenderer.TEXTURE), matrices, bufferSource, null, packedLight, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+		}
+
+		// party hat
+		if (RatsMischiefUtils.IS_BIRTHDAY && !PartyHatFeatureRenderer.DISALLOWED_TYPES.contains(ratType) && !(ratName != null && ratName.equalsIgnoreCase("remy"))) {
+			if (stack.getNbt() != null
+					&& stack.getNbt().contains(RatsMischief.MOD_ID)
+					&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
+					&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("PartyHat")) {
+				String hat = stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getString("PartyHat");
+				Identifier hatTexture = PartyHatFeatureRenderer.TEXTURES[RatEntity.PartyHat.valueOf(hat).ordinal()];
+
+				MinecraftClient.getInstance().getTextureManager().bindTexture(hatTexture);
+				this.render(model, animatable, 0.0F, RenderLayer.getEntityCutout(hatTexture), matrices, bufferSource, null, packedLight, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+			}
+		}
+
 		matrices.pop();
 	}
 }

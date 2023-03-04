@@ -13,6 +13,8 @@
   "item.ratsmischief.rat_master_breeches": "Rat Master Breeches",
   "item.ratsmischief.rat_master_greaves": "Rat Master Greaves",
 
+  "item.ratsmischief.rat.tooltip.return": "Will return on throw",
+  "item.ratsmischief.rat.tooltip.spy": "Spy",
   "item.ratsmischief.rat_staff.tooltip": "Left Click to toggle use action",
   "item.ratsmischief.rat_staff.harvest.tooltip": "Right Click to harvest crops",
   "item.ratsmischief.rat_staff.collect.tooltip": "Right Click to collect items",
@@ -24,7 +26,6 @@
   "item.ratsmischief.rat_master_armor.tooltip.mining_speed" : "25% increased Rat mining speed",
   "item.ratsmischief.rat_master_hood.tooltip.false" : "Hide Hood with Shift Right Click",
   "item.ratsmischief.rat_master_hood.tooltip.true" : "Show Hood with Shift Right Click",
-  "item.ratsmischief.rat.tooltip.return": "Will return on throw",
   "item.ratsmischief.rat_pouch.tooltip.capacity": "Capacity: %s/%s",
 
   "ratsmischief.subtitles.entity.rat.hurt": "Rat hurts",

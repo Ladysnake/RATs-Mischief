@@ -15,8 +15,8 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import java.util.Set;
 
 public class PartyHatFeatureRenderer extends GeoLayerRenderer<RatEntity> {
-	private static final Set<RatEntity.Type> DISALLOWED_TYPES = Sets.immutableEnumSet(RatEntity.Type.RAT_KID, RatEntity.Type.BIGGIE_CHEESE, RatEntity.Type.JORATO);
-	private static Identifier[] TEXTURES;
+	public static final Set<RatEntity.Type> DISALLOWED_TYPES = Sets.immutableEnumSet(RatEntity.Type.RAT_KID, RatEntity.Type.BIGGIE_CHEESE, RatEntity.Type.JORATO);
+	public static Identifier[] TEXTURES;
 
 	private final PartyHatEntityRenderer partyHatEntityRenderer;
 

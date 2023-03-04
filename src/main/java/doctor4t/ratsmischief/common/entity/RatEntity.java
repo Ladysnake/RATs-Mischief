@@ -301,6 +301,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		return PartyHat.valueOf(this.dataTracker.get(PARTY_HAT));
 	}
 
+	public void setPartyHat(String partyHat) {
+		this.dataTracker.set(PARTY_HAT, partyHat.toUpperCase());
+	}
+
 	public DyeColor getRatColor() {
 		return DyeColor.byName(this.dataTracker.get(COLOR), DyeColor.WHITE);
 	}
@@ -369,6 +373,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			this.setSpy(tag.getBoolean("Spy"));
 		}
 
+		if (tag.contains("PartyHat")) {
+			this.setPartyHat(tag.getString("PartyHat"));
+		}
+
 		if (tag.contains("PotionGene")) {
 			Identifier id = new Identifier(tag.getString("PotionGene"));
 			StatusEffect potion = Registry.STATUS_EFFECT.get(id);
@@ -387,6 +395,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		tag.putBoolean("Aroused", this.isAroused());
 		tag.putBoolean("Flying", this.isFlying());
 		tag.putBoolean("Spy", this.isSpy());
+		tag.putString("PartyHat", this.dataTracker.get(PARTY_HAT));
 
 		tag.putBoolean("Sitting", this.isSitting());
 		tag.putInt("AttackRidingTime", this.getAttackRidingTime());

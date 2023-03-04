@@ -175,6 +175,11 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 
 		tooltip.add(ratType.setStyle(style));
 
+		// spy
+		if (ratTag.getBoolean("Spy")) {
+			tooltip.add(Text.translatable("item.ratsmischief.rat.tooltip.spy").setStyle(EMPTY.withColor(Formatting.DARK_GREEN)));
+		}
+
 		// set to return
 		if (ratTag.getBoolean("ShouldReturnToOwnerInventory")) {
 			tooltip.add(Text.translatable("item.ratsmischief.rat.tooltip.return").setStyle(EMPTY.withItalic(true).withColor(Formatting.GRAY)));

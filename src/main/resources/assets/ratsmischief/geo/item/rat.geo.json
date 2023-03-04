@@ -29,10 +29,19 @@
 					]
 				},
 				{
+					"name": "spy",
+					"parent": "bodybone",
+					"pivot": [0, 3, 2],
+					"cubes": [
+						{"origin": [-2.5, 5, -1], "size": [5, 1, 6], "uv": [0, 37]},
+						{"origin": [-3, 1, -2], "size": [6, 4, 8], "inflate": 0.01, "uv": [0, 44]}
+					]
+				},
+				{
 					"name": "tail",
 					"parent": "body",
 					"pivot": [0, 1, 6],
-					"rotation": [57.5, 0, 0],
+					"rotation": [5, 0, 0],
 					"cubes": [
 						{"origin": [-0.5, 1, 6], "size": [1, 1, 5], "uv": [0, 26]}
 					]

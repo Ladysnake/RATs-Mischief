@@ -29,6 +29,7 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 		super(context, new RatEntityModel());
 		this.shadowRadius = 0.35f;
 		this.addLayer(new PartyHatFeatureRenderer(this, new PartyHatEntityRenderer(context, new RatEntityModel())));
+		this.addLayer(new EnderEyeFeatureRenderer(this, new EnderEyeEntityRenderer(context, new RatEntityModel())));
 	}
 
 	@Override
