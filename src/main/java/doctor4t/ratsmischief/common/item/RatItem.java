@@ -44,7 +44,6 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 		if (ratTag == null) {
 			return;
 		}
-
 		if (ratTag.getBoolean("Spy")) {
 			ratTag.putBoolean("ShouldReturnToOwnerInventory", false);
 		}

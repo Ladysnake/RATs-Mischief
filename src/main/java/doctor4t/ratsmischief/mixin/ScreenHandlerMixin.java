@@ -6,6 +6,7 @@ import doctor4t.ratsmischief.common.item.RatItem;
 import doctor4t.ratsmischief.common.item.RatMasterMaskItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
@@ -34,7 +35,8 @@ public class ScreenHandlerMixin {
 					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
 					ci.cancel();
 				} else if (stack.getItem() instanceof RatItem) {
-					if (!RatItem.getRatTag(stack).getBoolean("Spy")) {
+					NbtCompound ratTag = RatItem.getRatTag(stack);
+					if (ratTag == null || !ratTag.getBoolean("Spy")) {
 						RatItem.cycleRatReturn(stack);
 						player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
 						ci.cancel();
