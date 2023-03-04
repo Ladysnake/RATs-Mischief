@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
@@ -28,8 +29,8 @@ import xyz.amymialee.mialeemisc.util.MialeeMath;
 
 import java.util.List;
 
-public class RatStaffItem extends Item implements IClickConsumingItem {
-	public RatStaffItem(Settings settings) {
+public class RatMasterOcarinaItem extends Item implements IClickConsumingItem {
+	public RatMasterOcarinaItem(Settings settings) {
 		super(settings);
 	}
 
@@ -46,14 +47,15 @@ public class RatStaffItem extends Item implements IClickConsumingItem {
 			switch (getAction(user.getStackInHand(hand))) {
 				case HARVEST -> goal = new HarvestPlantMealGoal(ratEntity);
 				case COLLECT -> ratEntity.removeCurrentActionGoal();
-				case SKIRMISH ->
-						goal = new TargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
+				case SKIRMISH -> goal = new TargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
 				case LOVE -> goal = new BreedGoal(ratEntity);
 			}
 			if (goal != null) {
 				ratEntity.setAction(goal);
 			}
 		});
+		ItemStack stack = user.getStackInHand(hand);
+		world.playSoundFromEntity(null, user, SoundEvents.BLOCK_NOTE_BLOCK_FLUTE, user.getSoundCategory(), 1f, 0.5f + (stack.getOrCreateNbt().getInt("action") / 4f));
 		return TypedActionResult.success(user.getStackInHand(hand));
 	}
 

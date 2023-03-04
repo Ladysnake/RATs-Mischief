@@ -32,7 +32,7 @@ public interface ModItems {
 	Item RAT_MASTER_BREECHES = createItem("rat_master_breeches", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.LEGS, new QuiltItemSettings().group(ItemGroup.COMBAT)));
 	Item RAT_MASTER_GREAVES = createItem("rat_master_greaves", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.FEET, new QuiltItemSettings().group(ItemGroup.COMBAT)));
 	Item RAT_MASTER_MIRROR = createItem("rat_master_mirror", new RatMasterMirrorItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
-	Item RAT_MASTER_OCARINA = createItem("rat_master_ocarina", new RatStaffItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
+	Item RAT_MASTER_OCARINA = createItem("rat_master_ocarina", new RatMasterOcarinaItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
 	Item RAT_MASTER_MASK = createItem("rat_master_mask", new RatMasterMaskItem(new QuiltItemSettings().group(ItemGroup.COMBAT)));
 
 	private static <T extends Item> T createItem(String name, T item) {

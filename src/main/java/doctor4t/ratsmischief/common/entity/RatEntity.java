@@ -13,7 +13,7 @@ import doctor4t.ratsmischief.common.init.ModItems;
 import doctor4t.ratsmischief.common.init.ModSoundEvents;
 import doctor4t.ratsmischief.common.item.RatMasterArmorItem;
 import doctor4t.ratsmischief.common.item.RatPouchItem;
-import doctor4t.ratsmischief.common.item.RatStaffItem;
+import doctor4t.ratsmischief.common.item.RatMasterOcarinaItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
@@ -698,7 +698,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 					}
 
 					// sitting
-					if (!(item instanceof RatPouchItem) && !(item instanceof RatStaffItem) && (!this.isBreedingItem(itemStack)) && !(itemStack.getItem() instanceof DyeItem && this.getRatType() == Type.RAT_KID)) {
+					if (!(item instanceof RatPouchItem) && !(item instanceof RatMasterOcarinaItem) && (!this.isBreedingItem(itemStack)) && !(itemStack.getItem() instanceof DyeItem && this.getRatType() == Type.RAT_KID)) {
 						this.setSitting(!this.isSitting());
 						return ActionResult.SUCCESS;
 					}
