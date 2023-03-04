@@ -3,6 +3,7 @@ package doctor4t.ratsmischief.client.render.entity;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import doctor4t.ratsmischief.common.RatsMischief;
+import doctor4t.ratsmischief.common.compat.CompatManager;
 import doctor4t.ratsmischief.common.item.RatMasterArmorItem;
 import doctor4t.ratsmischief.common.item.RatMasterCloakItem;
 import doctor4t.ratsmischief.common.item.RatMasterHoodItem;
@@ -19,6 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import xyz.amymialee.elegantarmour.ElegantArmour;
 
 import java.util.Map;
 
@@ -36,10 +38,10 @@ public class RatMasterArmorFeatureRenderer<T extends PlayerEntity, A extends Pla
 	}
 
 	public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, float f, float g, float h, float j, float k, float l) {
-		this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.CHEST, i);
-		this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.LEGS, i);
-		this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.FEET, i);
-		this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.HEAD, i);
+		if (CompatManager.shouldRenderArmour(EquipmentSlot.CHEST, livingEntity)) this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.CHEST, i);
+		if (CompatManager.shouldRenderArmour(EquipmentSlot.LEGS, livingEntity)) this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.LEGS, i);
+		if (CompatManager.shouldRenderArmour(EquipmentSlot.FEET, livingEntity)) this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.FEET, i);
+		if (CompatManager.shouldRenderArmour(EquipmentSlot.HEAD, livingEntity)) this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.HEAD, i);
 	}
 
 	private void renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light) {
