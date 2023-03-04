@@ -4,6 +4,7 @@ import doctor4t.ratsmischief.common.RatsMischief;
 import doctor4t.ratsmischief.common.entity.RatEntity;
 import doctor4t.ratsmischief.common.init.ModEntities;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
@@ -15,6 +16,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -182,9 +184,11 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 			tooltip.add(Text.translatable("item.ratsmischief.rat.tooltip.spy").setStyle(EMPTY.withColor(Formatting.DARK_GREEN)));
 		}
 
-		// plague genes
-		if (ratTag.getBoolean("Spy")) {
-			tooltip.add(Text.translatable("item.ratsmischief.rat.tooltip.spy").setStyle(EMPTY.withColor(Formatting.DARK_GREEN)));
+		// potion genes
+		Identifier potionId = new Identifier(ratTag.getString("PotionGene"));
+		StatusEffect statusEffect = Registry.STATUS_EFFECT.get(potionId);
+		if (statusEffect != null) {
+			tooltip.add(Text.translatable("item.ratsmischief.rat.tooltip.potion").setStyle(EMPTY.withColor(Formatting.GRAY)).append(Text.translatable(statusEffect.getTranslationKey()).setStyle(EMPTY.withColor(Formatting.BLUE))));
 		}
 
 		// set to return
