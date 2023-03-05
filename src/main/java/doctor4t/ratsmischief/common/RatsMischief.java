@@ -1,7 +1,13 @@
 package doctor4t.ratsmischief.common;
 
 import doctor4t.ratsmischief.client.render.item.recipe.SpyRatCraftingRecipe;
-import doctor4t.ratsmischief.common.init.*;
+import doctor4t.ratsmischief.common.init.ModBlocks;
+import doctor4t.ratsmischief.common.init.ModEnchantments;
+import doctor4t.ratsmischief.common.init.ModEntities;
+import doctor4t.ratsmischief.common.init.ModItems;
+import doctor4t.ratsmischief.common.init.ModLootTables;
+import doctor4t.ratsmischief.common.init.ModSoundEvents;
+import doctor4t.ratsmischief.common.init.ModStatusEffects;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.entity.decoration.painting.PaintingVariant;

@@ -1,7 +1,14 @@
 package doctor4t.ratsmischief.common.init;
 
 import doctor4t.ratsmischief.common.RatsMischief;
-import doctor4t.ratsmischief.common.item.*;
+import doctor4t.ratsmischief.common.item.RatItem;
+import doctor4t.ratsmischief.common.item.RatMasterArmorItem;
+import doctor4t.ratsmischief.common.item.RatMasterCloakItem;
+import doctor4t.ratsmischief.common.item.RatMasterHoodItem;
+import doctor4t.ratsmischief.common.item.RatMasterMaskItem;
+import doctor4t.ratsmischief.common.item.RatMasterMirrorItem;
+import doctor4t.ratsmischief.common.item.RatMasterOcarinaItem;
+import doctor4t.ratsmischief.common.item.RatPouchItem;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
