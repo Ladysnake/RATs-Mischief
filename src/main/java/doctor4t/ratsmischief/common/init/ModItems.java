@@ -40,7 +40,7 @@ public interface ModItems {
 	Item RAT_MASTER_GREAVES = createItem("rat_master_greaves", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.FEET, new QuiltItemSettings().group(ItemGroup.COMBAT)));
 	Item RAT_MASTER_MIRROR = createItem("rat_master_mirror", new RatMasterMirrorItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
 	Item RAT_MASTER_OCARINA = createItem("rat_master_ocarina", new RatMasterOcarinaItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
-	Item RAT_MASTER_MASK = createItem("rat_master_mask", new RatMasterMaskItem(new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_MASTER_MASK = createItem("rat_master_mask", new RatMasterMaskItem(new QuiltItemSettings().group(ItemGroup.COMBAT).maxCount(1)));
 
 	private static <T extends Item> T createItem(String name, T item) {
 		ITEMS.put(item, new Identifier(RatsMischief.MOD_ID, name));

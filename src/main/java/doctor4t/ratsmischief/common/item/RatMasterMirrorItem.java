@@ -28,7 +28,7 @@ public class RatMasterMirrorItem extends Item {
 					user.getX(),
 					user.getY(),
 					user.getZ(),
-					new Box(user.getBlockPos()).expand(256) // 16 chunks
+					new Box(user.getBlockPos()).expand(160) // 16 chunks
 			);
 			if (rat != null) {
 				RemnantComponent remnantComponent = RemnantComponent.get(user);

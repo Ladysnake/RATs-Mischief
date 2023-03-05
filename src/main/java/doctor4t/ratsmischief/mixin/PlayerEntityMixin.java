@@ -10,7 +10,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -64,7 +63,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerRa
 
 	@Inject(method = "damage", at = @At("TAIL"))
 	public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-		if (this.getHealth() > 8f && (this.getHealth() - amount) < 8f && !this.hasStatusEffect(ModStatusEffects.RAT_CURSE)) {
+		if (this.getHealth() <= 6f && !this.hasStatusEffect(ModStatusEffects.RAT_CURSE) && !this.hasStatusEffect(ModStatusEffects.RAT_CURSE_COOLDOWN)) {
 			AtomicInteger ratCurseDuration = new AtomicInteger();
 
 			this.getArmorItems().forEach(itemStack -> {
