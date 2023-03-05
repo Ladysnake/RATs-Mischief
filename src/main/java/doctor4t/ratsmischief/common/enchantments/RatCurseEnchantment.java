@@ -2,11 +2,13 @@ package doctor4t.ratsmischief.common.enchantments;
 
 import doctor4t.ratsmischief.common.init.ModEnchantments;
 import doctor4t.ratsmischief.common.item.RatMasterArmorItem;
+import doctor4t.ratsmischief.common.item.RatMasterMaskItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 
 public class RatCurseEnchantment extends Enchantment {
 	public RatCurseEnchantment(Enchantment.Rarity weight, EquipmentSlot... slotTypes) {
@@ -37,6 +39,11 @@ public class RatCurseEnchantment extends Enchantment {
 	@Override
 	public int getMaxLevel() {
 		return 1;
+	}
+
+	@Override
+	public boolean isAcceptableItem(ItemStack stack) {
+		return stack.getItem() instanceof RatMasterArmorItem || stack.getItem() instanceof RatMasterMaskItem;
 	}
 
 	@Override

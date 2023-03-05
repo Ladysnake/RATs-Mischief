@@ -2,15 +2,10 @@ package doctor4t.ratsmischief.client;
 
 import doctor4t.ratsmischief.common.item.RatMasterArmorItem;
 import doctor4t.ratsmischief.common.util.PlayerRatOwner;
-import doctor4t.ratsmischief.mixin.PlayerEntityMixin;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 

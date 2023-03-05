@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "CatEntityMixin",
+    "EnchantmentHelperMixin",
     "EntityMixin",
     "ItemEntityMixin",
     "LivingEntityMixin",

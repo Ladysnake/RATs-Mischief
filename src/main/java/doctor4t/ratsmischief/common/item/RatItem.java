@@ -13,8 +13,14 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
+import static net.minecraft.text.Style.EMPTY;
 import net.minecraft.text.Text;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.DyeColor;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -28,11 +34,9 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
+import xyz.amymialee.mialeemisc.util.MialeeText;
 
 import java.util.List;
-
-import static net.minecraft.text.Style.EMPTY;
-import xyz.amymialee.mialeemisc.util.MialeeText;
 
 public class RatItem extends Item implements IAnimatable, ISyncable {
 	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);

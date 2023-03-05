@@ -1,8 +1,8 @@
 package doctor4t.ratsmischief.mixin;
 
 import doctor4t.ratsmischief.common.init.ModSoundEvents;
-import doctor4t.ratsmischief.common.item.RatMasterArmorItem;
 import doctor4t.ratsmischief.common.item.RatItem;
+import doctor4t.ratsmischief.common.item.RatMasterArmorItem;
 import doctor4t.ratsmischief.common.item.RatMasterMaskItem;
 import doctor4t.ratsmischief.common.item.RatMasterOcarinaItem;
 import doctor4t.ratsmischief.common.util.PlayerRatOwner;
