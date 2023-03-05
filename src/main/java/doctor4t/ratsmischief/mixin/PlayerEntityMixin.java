@@ -69,7 +69,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerRa
 
 			this.getArmorItems().forEach(itemStack -> {
 				if (EnchantmentHelper.getLevel(ModEnchantments.RAT_CURSE, itemStack) > 0) {
-					ratCurseDuration.addAndGet(100);
+					ratCurseDuration.addAndGet(200);
 				}
 			});
 
