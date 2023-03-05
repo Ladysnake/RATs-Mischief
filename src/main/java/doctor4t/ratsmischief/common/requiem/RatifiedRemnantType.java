@@ -10,8 +10,10 @@ import ladysnake.requiem.api.v1.remnant.MobResurrectable;
 import ladysnake.requiem.api.v1.remnant.RemnantComponent;
 import ladysnake.requiem.api.v1.remnant.RemnantState;
 import ladysnake.requiem.api.v1.remnant.RemnantType;
+import ladysnake.requiem.common.remnant.PlayerBodyTracker;
 import ladysnake.requiem.common.remnant.RemnantTypes;
 import ladysnake.requiem.core.entity.SoulHolderComponent;
+import ladysnake.requiem.core.record.GlobalRecordImpl;
 import ladysnake.requiem.core.remnant.MutableRemnantState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -133,6 +135,14 @@ public class RatifiedRemnantType implements RemnantType {
 	public static class SpyingRatRemnantState extends MutableRemnantState {
 		public SpyingRatRemnantState(PlayerEntity player) {
 			super(player);
+		}
+
+		@Override
+		public void teardown(RemnantState newHandler) {
+			super.teardown(newHandler);
+			// Absolutely massive brain fix for the requiem bug where damage effects display after the player merged with their shell
+			// FIXME Must be removed after it's been properly fixed upstream
+			PlayerBodyTracker.get(player).setAnchor(new GlobalRecordImpl(null, null));
 		}
 
 		@Override
