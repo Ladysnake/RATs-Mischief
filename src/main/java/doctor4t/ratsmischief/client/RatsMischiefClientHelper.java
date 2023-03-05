@@ -27,6 +27,6 @@ public class RatsMischiefClientHelper {
 		if (player instanceof PlayerRatOwner playerRatOwner) {
 			return playerRatOwner.shouldBringItems();
 		}
-		return true;
+		return false;
 	}
 }

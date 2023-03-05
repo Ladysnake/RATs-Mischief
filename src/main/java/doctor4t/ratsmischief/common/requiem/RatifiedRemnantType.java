@@ -91,6 +91,7 @@ public class RatifiedRemnantType implements RemnantType {
 					if (rat != null) {
 						rat.remove(Entity.RemovalReason.DISCARDED);
 						possessionComponent.stopPossessing(false);
+						player.setHealth(player.getHealth());
 					}
 				}
 			}
