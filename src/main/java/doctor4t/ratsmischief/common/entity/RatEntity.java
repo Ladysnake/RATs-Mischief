@@ -865,7 +865,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		float damage = (float) this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
 		damage *= RatMasterArmorItem.getDamageMultiplier(this.getOwner());
 		target.timeUntilRegen = 0;
-		if (target.damage(ModDamageSources.RAT, damage)) {
+		if (target.damage(ModDamageSources.ratDamage(this), damage)) {
 			if (this.getPotionGene() != null && target instanceof LivingEntity livingEntity) {
 				livingEntity.addStatusEffect(new StatusEffectInstance(this.getPotionGene(), 5 * 20));
 			}
