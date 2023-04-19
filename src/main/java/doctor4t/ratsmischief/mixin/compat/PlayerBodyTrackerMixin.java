@@ -30,8 +30,8 @@ public class PlayerBodyTrackerMixin {
 	@Inject(method = "onBodyDisappeared", at = @At(value = "FIELD", target = "Lladysnake/requiem/common/remnant/PlayerBodyTracker;previousAnchorHealth:F", shift = At.Shift.AFTER), remap = false)
 	private void reset(CallbackInfo ci) {
 		if (RemnantComponent.get(this.player).getRemnantType() == RatsMischiefRequiemPlugin.SPYING_RAT_REMNANT_TYPE) {
-			RemnantComponent.get(player).become(RemnantTypes.MORTAL);
-			player.kill();
+			RemnantComponent.get(this.player).become(RemnantTypes.MORTAL);
+			this.player.kill();
 		}
 	}
 }

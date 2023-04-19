@@ -36,7 +36,7 @@ public class RatifiedRemnantType implements RemnantType {
 
 	@Override
 	public @NotNull RemnantState create(PlayerEntity player) {
-		return stateFactory.apply(player);
+		return this.stateFactory.apply(player);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class RatifiedRemnantType implements RemnantType {
 
 		@Override
 		public void setup(RemnantState oldHandler) {
-			if (!player.world.isClient) {
+			if (!this.player.world.isClient) {
 				Pal.grantAbility(this.player, VanillaAbilities.INVULNERABLE, SOUL_STATE);
 				if (this.isInWorld()) {
 					PossessionComponent.get(this.player).stopPossessing(false);
@@ -82,7 +82,7 @@ public class RatifiedRemnantType implements RemnantType {
 		public void teardown(RemnantState newHandler) {
 			this.removed = true;
 
-			if (!player.world.isClient) {
+			if (!this.player.world.isClient) {
 				Pal.revokeAbility(this.player, VanillaAbilities.INVULNERABLE, SOUL_STATE);
 				if (this.isInWorld()) {
 					PossessionComponent possessionComponent = PossessionComponent.get(this.player);
@@ -91,7 +91,7 @@ public class RatifiedRemnantType implements RemnantType {
 					if (rat != null) {
 						rat.remove(Entity.RemovalReason.DISCARDED);
 						possessionComponent.stopPossessing(false);
-						player.setHealth(player.getHealth());
+						this.player.setHealth(this.player.getHealth());
 					}
 				}
 			}
@@ -119,7 +119,7 @@ public class RatifiedRemnantType implements RemnantType {
 
 		@Override
 		public void prepareRespawn(ServerPlayerEntity original, boolean lossless) {
-			((MobResurrectable) player).setResurrectionEntity(new RatEntity(ModEntities.RAT, player.world));
+			((MobResurrectable) this.player).setResurrectionEntity(new RatEntity(ModEntities.RAT, this.player.world));
 		}
 
 		@Override
@@ -143,7 +143,7 @@ public class RatifiedRemnantType implements RemnantType {
 			super.teardown(newHandler);
 			// Absolutely massive brain fix for the requiem bug where damage effects display after the player merged with their shell
 			// FIXME Must be removed after it's been properly fixed upstream
-			PlayerBodyTracker.get(player).setAnchor(new GlobalRecordImpl(null, null));
+			PlayerBodyTracker.get(this.player).setAnchor(new GlobalRecordImpl(null, null));
 		}
 
 		@Override

@@ -28,7 +28,7 @@ public class BreedGoal extends Goal {
 			List<AnimalEntity> animalList = this.rat.getWorld().getEntitiesByClass(AnimalEntity.class, this.rat.getBoundingBox().expand(16, 4, 16), animalEntity -> animalEntity.getBreedingAge() == 0 && animalEntity.canEat() && animalEntity.isBreedingItem(this.rat.getMainHandStack()));
 			AnimalEntity closestAnimal = animalList.get(0);
 			for (AnimalEntity animalEntity : animalList) {
-				if (animalEntity.squaredDistanceTo(rat) < closestAnimal.squaredDistanceTo(this.rat)) {
+				if (animalEntity.squaredDistanceTo(this.rat) < closestAnimal.squaredDistanceTo(this.rat)) {
 					closestAnimal = animalEntity;
 				}
 			}
@@ -41,20 +41,20 @@ public class BreedGoal extends Goal {
 	public void tick() {
 		ItemStack itemStack = this.rat.getEquippedStack(EquipmentSlot.MAINHAND);
 
-		if (this.rat.squaredDistanceTo(target.getX(), target.getY(), target.getZ()) <= 5) {
+		if (this.rat.squaredDistanceTo(this.target.getX(), this.target.getY(), this.target.getZ()) <= 5) {
 			if (this.rat.getOwner() instanceof PlayerEntity) {
 				itemStack.decrement(1);
-				target.lovePlayer((PlayerEntity) this.rat.getOwner());
+				this.target.lovePlayer((PlayerEntity) this.rat.getOwner());
 			}
 
-			target = null;
+			this.target = null;
 		} else {
-			this.rat.getNavigation().startMovingTo(target, 1D);
+			this.rat.getNavigation().startMovingTo(this.target, 1D);
 		}
 	}
 
 	@Override
 	public boolean shouldContinue() {
-		return target != null && !this.rat.getMainHandStack().isEmpty() && target.getBreedingAge() == 0 && target.canEat() && target.isBreedingItem(this.rat.getMainHandStack());
+		return this.target != null && !this.rat.getMainHandStack().isEmpty() && this.target.getBreedingAge() == 0 && this.target.canEat() && this.target.isBreedingItem(this.rat.getMainHandStack());
 	}
 }

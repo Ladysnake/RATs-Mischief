@@ -41,6 +41,7 @@ public class FollowOwnerRatGoal extends Goal {
 		}
 	}
 
+	@Override
 	public boolean canStart() {
 		LivingEntity livingEntity = this.rat.getOwner();
 
@@ -58,6 +59,7 @@ public class FollowOwnerRatGoal extends Goal {
 		}
 	}
 
+	@Override
 	public boolean shouldContinue() {
 		if (this.navigation.isIdle() || this.rat.isSpy()) {
 			return false;
@@ -68,18 +70,21 @@ public class FollowOwnerRatGoal extends Goal {
 		}
 	}
 
+	@Override
 	public void start() {
 		this.updateCountdownTicks = 0;
 		this.oldWaterPathfindingPenalty = this.rat.getPathfindingPenalty(PathNodeType.WATER);
 		this.rat.setPathfindingPenalty(PathNodeType.WATER, 0.0F);
 	}
 
+	@Override
 	public void stop() {
 		this.owner = null;
 		this.navigation.stop();
 		this.rat.setPathfindingPenalty(PathNodeType.WATER, this.oldWaterPathfindingPenalty);
 	}
 
+	@Override
 	public void tick() {
 		this.rat.getLookControl().lookAt(this.owner, 10.0F, (float) this.rat.getLookPitchSpeed());
 		if (--this.updateCountdownTicks <= 0) {

@@ -35,7 +35,7 @@ public class EatToHealGoal extends Goal {
 			if (!this.rat.getMoveControl().isMoving()) {
 				super.tick();
 
-				eatingTicks--;
+				this.eatingTicks--;
 
 				if (this.eatingTicks % 4 == 0 && this.eatingTicks > 0) {
 					if (this.rat.getMainHandStack().getItem().getUseAction(this.rat.getMainHandStack()) == UseAction.DRINK) {

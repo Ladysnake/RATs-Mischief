@@ -19,6 +19,6 @@ public abstract class CatEntityMixin extends TameableEntity {
 
 	@Inject(method = "initGoals", at = @At(value = "TAIL"))
 	private void ratsmischief$fleeFromRats(CallbackInfo ci) {
-		goalSelector.add(3, new FleeEntityGoal<>(this, RatEntity.class, 10, 2, 2.2));
+		this.goalSelector.add(3, new FleeEntityGoal<>(this, RatEntity.class, 10, 2, 2.2));
 	}
 }

@@ -38,6 +38,7 @@ public class ChaseForFunGoal<T extends LivingEntity> extends TrackTargetGoal {
 		this.mob.getNavigation().startMovingTo(this.targetEntity, 1f);
 	}
 
+	@Override
 	public boolean canStart() {
 		if (this.rat.canReturnToOwnerInventory()) {
 			return false;

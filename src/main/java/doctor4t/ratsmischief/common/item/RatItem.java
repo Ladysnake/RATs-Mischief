@@ -122,7 +122,7 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		if (!world.isClient()) {
-			RatEntity rat = getRatFromItem(world, user.getStackInHand(hand), new Vec3d(user.getX(), user.getEyeY() - 0.10000000149011612D, user.getZ()),
+			RatEntity rat = this.getRatFromItem(world, user.getStackInHand(hand), new Vec3d(user.getX(), user.getEyeY() - 0.10000000149011612D, user.getZ()),
 					hand == Hand.OFF_HAND ? PlayerInventory.OFF_HAND_SLOT : user.getInventory().getSlotWithStack(user.getStackInHand(hand)));
 			if (rat == null) {
 				return TypedActionResult.fail(user.getStackInHand(hand));
@@ -143,7 +143,7 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 		Hand hand = context.getHand();
 		World world = context.getWorld();
 
-		world.spawnEntity(getRatFromItem(world, owner.getStackInHand(hand), context.getHitPos(),
+		world.spawnEntity(this.getRatFromItem(world, owner.getStackInHand(hand), context.getHitPos(),
 				hand == Hand.OFF_HAND ? PlayerInventory.OFF_HAND_SLOT : owner.getInventory().getSlotWithStack(owner.getStackInHand(hand))));
 		if (!owner.getAbilities().creativeMode) {
 			owner.getStackInHand(hand).decrement(1);

@@ -174,13 +174,14 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 	public boolean shouldReturnToOwnerInventory() {
-		return shouldReturnToPlayerInventory;
+		return this.shouldReturnToPlayerInventory;
 	}
 
 	public boolean canReturnToOwnerInventory() {
-		return shouldReturnToOwnerInventory() && !this.hasVehicle() && this.getOwner() instanceof PlayerEntity player && player.getInventory().getEmptySlot() != -1;
+		return this.shouldReturnToOwnerInventory() && !this.hasVehicle() && this.getOwner() instanceof PlayerEntity player && player.getInventory().getEmptySlot() != -1;
 	}
 
+	@Override
 	protected void initDataTracker() {
 		super.initDataTracker();
 
@@ -207,9 +208,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		this.dataTracker.startTracking(POTION_GENE, -1);
 		this.dataTracker.startTracking(SLOT, 0);
 
-		this.dataTracker.startTracking(PARTY_HAT, PARTY_HATS.get(random.nextInt(PARTY_HATS.size())).toString());
+		this.dataTracker.startTracking(PARTY_HAT, PARTY_HATS.get(this.random.nextInt(PARTY_HATS.size())).toString());
 	}
 
+	@Override
 	protected void initGoals() {
 		this.goalSelector.add(1, new SwimGoal(this));
 		this.goalSelector.add(2, new SitGoal(this));
@@ -475,7 +477,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 			// sexually aroused rat
 			if (!this.world.isClient) {
-				this.setAroused(getLoveTicks() > 0);
+				this.setAroused(this.getLoveTicks() > 0);
 			}
 
 			// attack riding
@@ -496,7 +498,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 			// return to owner
 			if (this.getOwner() != null && this.canReturnToOwnerInventory() && this.getOwner().squaredDistanceTo(this.getPos()) <= 2f) {
-				turnRatIntoItemAndGive((PlayerEntity) this.getOwner());
+				this.turnRatIntoItemAndGive((PlayerEntity) this.getOwner());
 			}
 		} else {
 			this.jumping = true;
@@ -610,20 +612,20 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 			if (this.getCustomName() != null) {
 				switch (this.getCustomName().getString().toLowerCase(Locale.ROOT)) {
-					case "doctor4t" -> setRatType(Type.DOCTOR4T);
-					case "ratater" -> setRatType(Type.RATATER);
-					case "rat kid", "hat kid" -> setRatType(Type.RAT_KID);
-					case "jotaro", "jorato" -> setRatType(Type.JORATO);
-					case "jerma", "jerma985" -> setRatType(Type.JERMA);
-					case "hollow rat", "hollow knight" -> setRatType(Type.HOLLOW);
-					case "rateline", "madeline" -> setRatType(Type.RATELINE);
-					case "biggie cheese" -> setRatType(Type.BIGGIE_CHEESE);
-					case "arathain" -> setRatType(Type.ARATHAIN);
-					case "astron", "astronyu" -> setRatType(Type.ASTRONYU);
+					case "doctor4t" -> this.setRatType(Type.DOCTOR4T);
+					case "ratater" -> this.setRatType(Type.RATATER);
+					case "rat kid", "hat kid" -> this.setRatType(Type.RAT_KID);
+					case "jotaro", "jorato" -> this.setRatType(Type.JORATO);
+					case "jerma", "jerma985" -> this.setRatType(Type.JERMA);
+					case "hollow rat", "hollow knight" -> this.setRatType(Type.HOLLOW);
+					case "rateline", "madeline" -> this.setRatType(Type.RATELINE);
+					case "biggie cheese" -> this.setRatType(Type.BIGGIE_CHEESE);
+					case "arathain" -> this.setRatType(Type.ARATHAIN);
+					case "astron", "astronyu" -> this.setRatType(Type.ASTRONYU);
 				}
 			}
 
-			if (!this.hasAngerTime() && !this.moveControl.isMoving() && random.nextInt(100) == 0) {
+			if (!this.hasAngerTime() && !this.moveControl.isMoving() && this.random.nextInt(100) == 0) {
 				this.setSniffing(false);
 				this.setSniffing(true);
 			}
@@ -649,17 +651,18 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		super.tickStatusEffects();
 	}
 
+	@Override
 	public void tickMovement() {
 		super.tickMovement();
 
 		if (this.isEating()) {
-			setMovementSpeed(0.0f);
+			this.setMovementSpeed(0.0f);
 		} else {
-			setMovementSpeed(0.5f);
+			this.setMovementSpeed(0.5f);
 		}
 
 		if (!this.world.isClient && this.canPickUpLoot() && this.isAlive() && !this.dead && !this.isEating()) {
-			for (ItemEntity itemEntity : world.getNonSpectatingEntities(ItemEntity.class, this.getBoundingBox().expand(1, 0, 1))) {
+			for (ItemEntity itemEntity : this.world.getNonSpectatingEntities(ItemEntity.class, this.getBoundingBox().expand(1, 0, 1))) {
 				if (!itemEntity.isRemoved() && !itemEntity.getStack().isEmpty() && !itemEntity.cannotPickup() && this.canGather(itemEntity.getStack())) {
 					this.loot(itemEntity);
 				}
@@ -689,6 +692,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		}
 	}
 
+	@Override
 	public ActionResult interactMob(PlayerEntity player, Hand hand) {
 		ItemStack itemStack = player.getStackInHand(hand);
 		Item item = itemStack.getItem();
@@ -720,7 +724,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 				if (this.isOwner(player)) {
 					// picking up
 					if (itemStack.isEmpty() && player.isSneaking()) {
-						turnRatIntoItemAndGive(player);
+						this.turnRatIntoItemAndGive(player);
 
 						return ActionResult.SUCCESS;
 					}
@@ -834,6 +838,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		this.targetUuid = uuid;
 	}
 
+	@Override
 	public boolean canBeLeashedBy(PlayerEntity player) {
 		return !this.hasAngerTime() && super.canBeLeashedBy(player);
 	}
@@ -995,7 +1000,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	@Override
 	public boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
 		if (fallDistance > 20 && !this.isBaby()) {
-			this.playSound(ModSoundEvents.ENTITY_RAT_CLAP, 1.0f, (float) (1.0f + random.nextGaussian() / 10f));
+			this.playSound(ModSoundEvents.ENTITY_RAT_CLAP, 1.0f, (float) (1.0f + this.random.nextGaussian() / 10f));
 		}
 		return false;
 	}
@@ -1044,7 +1049,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 	public void removeCurrentActionGoal() {
-		this.goalSelector.remove(action);
+		this.goalSelector.remove(this.action);
 		this.action = null;
 	}
 
@@ -1100,6 +1105,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			this.setControls(EnumSet.of(Control.MOVE));
 		}
 
+		@Override
 		public boolean canStart() {
 			if (RatEntity.this.isSpy()) {
 				return false;
@@ -1119,6 +1125,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			}
 		}
 
+		@Override
 		public void tick() {
 			List<ItemEntity> list = RatEntity.this.world.getEntitiesByClass(ItemEntity.class, RatEntity.this.getBoundingBox().expand(10.0D, 10.0D, 10.0D), RatEntity.PICKABLE_DROP_FILTER);
 			ItemStack itemStack = RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND);
@@ -1127,6 +1134,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			}
 		}
 
+		@Override
 		public void start() {
 			List<ItemEntity> list = RatEntity.this.world.getEntitiesByClass(ItemEntity.class, RatEntity.this.getBoundingBox().expand(10.0D, 10.0D, 10.0D), RatEntity.PICKABLE_DROP_FILTER);
 			if (!list.isEmpty()) {

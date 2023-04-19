@@ -23,7 +23,7 @@ public class EnderEyeFeatureRenderer extends GeoLayerRenderer<RatEntity> {
 	@Override
 	public void render(MatrixStack matrixStackIn, VertexConsumerProvider bufferIn, int packedLightIn, RatEntity ratEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		if (ratEntity.isSpy()) {
-			enderEyeEntityRenderer.render(getEntityModel().getModel(getEntityModel().getModelResource(ratEntity)),
+			this.enderEyeEntityRenderer.render(this.getEntityModel().getModel(this.getEntityModel().getModelResource(ratEntity)),
 					ratEntity,
 					partialTicks,
 					RenderLayer.getEntityCutout(TEXTURE),

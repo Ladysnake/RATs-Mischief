@@ -25,7 +25,7 @@ public abstract class HeldItemRendererMixin {
 			boolean bl = hand == Hand.MAIN_HAND;
 			Arm arm = bl ? player.getMainArm() : player.getMainArm().getOpposite();
 			matrices.push();
-			renderArmHoldingItem(matrices, vertexConsumers, light, equipProgress, swingProgress, arm);
+			this.renderArmHoldingItem(matrices, vertexConsumers, light, equipProgress, swingProgress, arm);
 			matrices.pop();
 		}
 	}

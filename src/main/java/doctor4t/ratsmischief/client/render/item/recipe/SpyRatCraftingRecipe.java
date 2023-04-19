@@ -60,6 +60,7 @@ public class SpyRatCraftingRecipe extends SpecialCraftingRecipe {
 		return !spyRatStack.isEmpty() ? spyRatStack : ItemStack.EMPTY;
 	}
 
+	@Override
 	public ItemStack getOutput() {
 		return new ItemStack(ModItems.RAT);
 	}

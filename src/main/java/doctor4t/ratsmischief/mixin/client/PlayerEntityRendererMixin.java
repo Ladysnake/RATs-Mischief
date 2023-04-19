@@ -1,9 +1,8 @@
 package doctor4t.ratsmischief.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import doctor4t.ratsmischief.client.RatsMischiefClient;
-import doctor4t.ratsmischief.client.render.entity.RatMasterArmorFeatureRenderer;
 import doctor4t.ratsmischief.common.init.ModItems;
+import doctor4t.ratsmischief.common.util.PlayerEntityRendererWrapper;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
@@ -14,13 +13,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerEntityRenderer.class)
-public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
+public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> implements PlayerEntityRendererWrapper {
+	@Unique private boolean isSlim = false;
+
 	public PlayerEntityRendererMixin(EntityRendererFactory.Context ctx, PlayerEntityModel<AbstractClientPlayerEntity> model, float shadowRadius) {
 		super(ctx, model, shadowRadius);
 	}
@@ -35,11 +37,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 
 	@Inject(method = "<init>", at = @At("TAIL"))
 	private void mischief$masterArmor(EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci) {
-		this.addFeature(
-				new RatMasterArmorFeatureRenderer<>(this,
-						new PlayerEntityModel<>(ctx.getPart(RatsMischiefClient.RAT_MASTER_ARMOR_INNER_LAYER), false),
-						new PlayerEntityModel<>(ctx.getPart(slim ? RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER),
-								slim), slim));
+		this.isSlim = slim;
 	}
 
 	@Inject(method = "setModelPose", at = @At(value = "TAIL"))
@@ -55,5 +53,10 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 				if (offHandRat) playerEntityModel.rightArmPose = BipedEntityModel.ArmPose.BOW_AND_ARROW;
 			}
 		}
+	}
+
+	@Override
+	public boolean isSlim() {
+		return this.isSlim;
 	}
 }

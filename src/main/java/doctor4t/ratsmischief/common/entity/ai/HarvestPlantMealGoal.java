@@ -26,8 +26,9 @@ public class HarvestPlantMealGoal extends Goal {
 		this.rat = rat;
 	}
 
+	@Override
 	public boolean canStart() {
-		targetBlockPos = null;
+		this.targetBlockPos = null;
 
 		if (this.rat.getTarget() == null && this.rat.getAttacker() == null && !this.rat.isSitting() && this.rat.isTamed() && (this.rat.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() || (this.rat.getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof AliasedBlockItem && ((AliasedBlockItem) this.rat.getEquippedStack(EquipmentSlot.MAINHAND).getItem()).getBlock() instanceof CropBlock) || this.rat.getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof BoneMealItem)) {
 			ItemStack itemStack = this.rat.getEquippedStack(EquipmentSlot.MAINHAND);
@@ -38,7 +39,7 @@ public class HarvestPlantMealGoal extends Goal {
 					BlockState blockState = this.rat.world.getBlockState(blockPos);
 					if (blockState.getBlock() instanceof CropBlock && ((CropBlock) blockState.getBlock()).isMature(blockState)) {
 						if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
-							targetBlockPos = blockPos;
+							this.targetBlockPos = blockPos;
 							return true;
 						}
 					}
@@ -47,7 +48,7 @@ public class HarvestPlantMealGoal extends Goal {
 					BlockState blockState = this.rat.world.getBlockState(blockPos.add(0, -1, 0));
 					if (blockState.getBlock() instanceof FarmlandBlock && this.rat.world.getBlockState(blockPos).isAir()) {
 						if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
-							targetBlockPos = blockPos;
+							this.targetBlockPos = blockPos;
 							return true;
 						}
 					}
@@ -56,7 +57,7 @@ public class HarvestPlantMealGoal extends Goal {
 					BlockState blockState = this.rat.world.getBlockState(blockPos);
 					if (blockState.getBlock() instanceof CropBlock && ((CropBlock) blockState.getBlock()).isFertilizable(this.rat.world, blockPos, this.rat.world.getBlockState(blockPos), this.rat.world.isClient())) {
 						if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
-							targetBlockPos = blockPos;
+							this.targetBlockPos = blockPos;
 							return true;
 						}
 					}
@@ -67,55 +68,56 @@ public class HarvestPlantMealGoal extends Goal {
 		return false;
 	}
 
+	@Override
 	public void tick() {
 		ItemStack itemStack = this.rat.getEquippedStack(EquipmentSlot.MAINHAND);
 
 		if (itemStack.isEmpty()) {
 			// harvest
-			BlockState blockState = this.rat.world.getBlockState(targetBlockPos);
+			BlockState blockState = this.rat.world.getBlockState(this.targetBlockPos);
 			if (!(blockState.getBlock() instanceof CropBlock && ((CropBlock) blockState.getBlock()).isMature(blockState))) {
 				this.canStart();
 			}
 
-			if (this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ()) <= 5) {
-				this.rat.world.breakBlock(targetBlockPos, true, this.rat);
-				targetBlockPos = null;
+			if (this.rat.squaredDistanceTo(this.targetBlockPos.getX(), this.targetBlockPos.getY(), this.targetBlockPos.getZ()) <= 5) {
+				this.rat.world.breakBlock(this.targetBlockPos, true, this.rat);
+				this.targetBlockPos = null;
 			} else {
-				this.rat.getNavigation().startMovingTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ(), 1D);
+				this.rat.getNavigation().startMovingTo(this.targetBlockPos.getX(), this.targetBlockPos.getY(), this.targetBlockPos.getZ(), 1D);
 			}
 		} else if (itemStack.getItem() instanceof AliasedBlockItem && ((AliasedBlockItem) itemStack.getItem()).getBlock() instanceof CropBlock) {
 			// plant
-			BlockState blockState = this.rat.world.getBlockState(targetBlockPos.add(0, -1, 0));
-			if (!(blockState.getBlock() instanceof FarmlandBlock && this.rat.world.getBlockState(targetBlockPos).isAir())) {
+			BlockState blockState = this.rat.world.getBlockState(this.targetBlockPos.add(0, -1, 0));
+			if (!(blockState.getBlock() instanceof FarmlandBlock && this.rat.world.getBlockState(this.targetBlockPos).isAir())) {
 				this.canStart();
 			}
 
-			if (this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ()) <= 5) {
-				this.rat.world.setBlockState(targetBlockPos, ((AliasedBlockItem) itemStack.getItem()).getBlock().getDefaultState());
+			if (this.rat.squaredDistanceTo(this.targetBlockPos.getX(), this.targetBlockPos.getY(), this.targetBlockPos.getZ()) <= 5) {
+				this.rat.world.setBlockState(this.targetBlockPos, ((AliasedBlockItem) itemStack.getItem()).getBlock().getDefaultState());
 				this.rat.getEquippedStack(EquipmentSlot.MAINHAND).decrement(1);
-				targetBlockPos = null;
+				this.targetBlockPos = null;
 			} else {
-				this.rat.getNavigation().startMovingTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ(), 1D);
+				this.rat.getNavigation().startMovingTo(this.targetBlockPos.getX(), this.targetBlockPos.getY(), this.targetBlockPos.getZ(), 1D);
 			}
 		} else if (itemStack.getItem() instanceof BoneMealItem) {
 			// bonemeal
-			BlockState blockState = this.rat.world.getBlockState(targetBlockPos);
-			if (blockState.getBlock() instanceof CropBlock && ((CropBlock) blockState.getBlock()).isFertilizable(this.rat.world, targetBlockPos, this.rat.world.getBlockState(targetBlockPos), this.rat.world.isClient())) {
+			BlockState blockState = this.rat.world.getBlockState(this.targetBlockPos);
+			if (blockState.getBlock() instanceof CropBlock && ((CropBlock) blockState.getBlock()).isFertilizable(this.rat.world, this.targetBlockPos, this.rat.world.getBlockState(this.targetBlockPos), this.rat.world.isClient())) {
 				this.canStart();
 			}
 
-			if (this.rat.squaredDistanceTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ()) <= 5) {
-				BoneMealItem.useOnFertilizable(itemStack, this.rat.world, targetBlockPos);
+			if (this.rat.squaredDistanceTo(this.targetBlockPos.getX(), this.targetBlockPos.getY(), this.targetBlockPos.getZ()) <= 5) {
+				BoneMealItem.useOnFertilizable(itemStack, this.rat.world, this.targetBlockPos);
 
 				ServerWorld serverWorld = (ServerWorld) this.rat.getWorld();
 
-				serverWorld.playSound(null, targetBlockPos, SoundEvents.ITEM_BONE_MEAL_USE, SoundCategory.NEUTRAL, 1.0f, 1.0f);
+				serverWorld.playSound(null, this.targetBlockPos, SoundEvents.ITEM_BONE_MEAL_USE, SoundCategory.NEUTRAL, 1.0f, 1.0f);
 
-				serverWorld.spawnParticles(ParticleTypes.HAPPY_VILLAGER, targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ(), 15, 0.5f, 0.2f, 0.5f, 0);
+				serverWorld.spawnParticles(ParticleTypes.HAPPY_VILLAGER, this.targetBlockPos.getX(), this.targetBlockPos.getY(), this.targetBlockPos.getZ(), 15, 0.5f, 0.2f, 0.5f, 0);
 
-				targetBlockPos = null;
+				this.targetBlockPos = null;
 			} else {
-				this.rat.getNavigation().startMovingTo(targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ(), 1D);
+				this.rat.getNavigation().startMovingTo(this.targetBlockPos.getX(), this.targetBlockPos.getY(), this.targetBlockPos.getZ(), 1D);
 			}
 		}
 	}

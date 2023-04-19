@@ -70,11 +70,11 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 			stack.scale(0.7f, 0.7f, 0.7f);
 			stack.multiply(new Quaternion(bone.getRotationX(), bone.getRotationZ(), bone.getRotationY(), false));
 
-			MinecraftClient.getInstance().getItemRenderer().renderItem(itemStack, ModelTransformation.Mode.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.vertexConsumerProvider, 0);
+			MinecraftClient.getInstance().getItemRenderer().renderItem(this.itemStack, ModelTransformation.Mode.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.vertexConsumerProvider, 0);
 			stack.pop();
 
 			// restore the render buffer - GeckoLib expects this state otherwise you'll have weird texture issues
-			bufferIn = vertexConsumerProvider.getBuffer(RenderLayer.getEntityCutout(ratTexture));
+			bufferIn = this.vertexConsumerProvider.getBuffer(RenderLayer.getEntityCutout(this.ratTexture));
 		}
 
 		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
