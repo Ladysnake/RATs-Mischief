@@ -1,7 +1,7 @@
 package doctor4t.ratsmischief.client;
 
 import doctor4t.ratsmischief.client.render.entity.RatEntityRenderer;
-import doctor4t.ratsmischief.client.render.entity.RatMasterMaskItemRenderer;
+import doctor4t.ratsmischief.client.render.item.RatMasterMaskItemRenderer;
 import doctor4t.ratsmischief.client.render.item.RatItemRenderer;
 import doctor4t.ratsmischief.common.RatsMischief;
 import doctor4t.ratsmischief.common.init.ModEntities;

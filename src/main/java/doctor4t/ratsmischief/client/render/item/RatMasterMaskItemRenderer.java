@@ -1,4 +1,4 @@
-package doctor4t.ratsmischief.client.render.entity;
+package doctor4t.ratsmischief.client.render.item;
 
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
