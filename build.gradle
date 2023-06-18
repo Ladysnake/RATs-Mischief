@@ -1,5 +1,5 @@
 plugins {
-	id 'org.quiltmc.loom' version '0.12.+'
+	id 'io.github.ladysnake.chenille' version '0.10.2'
 	id 'maven-publish'
 }
 
@@ -108,6 +108,17 @@ dependencies {
 	modImplementation ("dev.emi:trinkets:${project.trinkets_version}")
 }
 
+chenille {
+	javaVersion = 17
+	configurePublishing {
+		mainArtifact = remapJar.archiveFile
+		withArtifactory()
+		withCurseforgeRelease()
+		withGithubRelease()
+		withModrinthRelease()
+	}
+}
+
 processResources {
 	inputs.property 'version', version
 
@@ -116,46 +127,13 @@ processResources {
 	}
 }
 
-tasks.withType(JavaCompile).configureEach {
-	it.options.encoding = 'UTF-8'
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-	it.options.release = 17
-}
-
 java {
-	// Still required by IDEs such as Eclipse and Visual Studio Code
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
-
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task if it is present.
-	// If you remove this line, sources will not be generated.
 	withSourcesJar()
-
-	// If this mod is going to be a library, then it should also generate Javadocs in order to aid with development.
-	// Uncomment this line to generate them.
-	// withJavadocJar()
 }
 
 // If you plan to use a different file for the license, don't forget to change the file name here!
 jar {
 	from('LICENSE') {
 		rename { "${it}_${archivesBaseName}" }
-	}
-}
-
-// Configure the maven publication
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
-
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
 	}
 }
