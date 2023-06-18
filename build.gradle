@@ -99,6 +99,9 @@ dependencies {
 	// ok zoomer
 //	runtimeOnly("com.github.EnnuiL:OkZoomer:1.19.2-SNAPSHOT")
 
+	modCompileOnly ("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
+	modImplementation "io.github.ladysnake:requiem-api:${project.requiem_version}"
+	modImplementation "io.github.ladysnake:requiem-core:${project.requiem_version}"
 	modImplementation include("io.github.ladysnake:requiem-lite:${project.requiem_version}")
 
 	// trinkets
