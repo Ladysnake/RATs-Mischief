@@ -23,7 +23,7 @@
 		},
 		"depends": [
 			{
-				"id": "qsl"
+				"id": "quilted_fabric_api"
 			},
 			{
 				"id": "geckolib3"
