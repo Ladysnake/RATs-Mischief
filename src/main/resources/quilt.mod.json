@@ -10,7 +10,8 @@
 			"contributors": {
 				"doctor4t": "Owner",
 				"Arathain": "Artist",
-				"Luxintrus": "Artist"
+				"Luxintrus": "Artist",
+				"Pyrofab": "Contributor"
 			},
 			"icon": "assets/ratsmischief/icon.png"
 		},
@@ -19,7 +20,28 @@
 			"init": "doctor4t.ratsmischief.common.RatsMischief",
 			"client_init": "doctor4t.ratsmischief.client.RatsMischiefClient",
 			"requiem:plugin": "doctor4t.ratsmischief.common.requiem.RatsMischiefRequiemPlugin"
-		}
+		},
+		"depends": [
+			{
+				"id": "quilted_fabric_api"
+			},
+			{
+				"id": "geckolib3"
+			},
+			{
+				"id": "trinkets"
+			},
+			{
+				"id": "mialeemisc"
+			},
+			{
+				"id": "step-height-entity-attribute"
+			},
+			{
+				"id": "requiem",
+				"unless": "requiem-lite"
+			}
+		]
 	},
 	"mixin": "ratsmischief.mixins.json"
 }
