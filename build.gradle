@@ -1,5 +1,5 @@
 plugins {
-	id 'io.github.ladysnake.chenille' version '0.10.2'
+	id 'io.github.ladysnake.chenille' version '0.11.3'
 	id 'maven-publish'
 }
 
@@ -18,11 +18,8 @@ repositories {
 	// cloth config
 	maven { url "https://maven.shedaniel.me/" }
 
-	// CCA
-	maven {
-		name = 'Ladysnake Mods'
-		url = 'https://ladysnake.jfrog.io/artifactory/mods'
-	}
+	// CCA, Requiem
+	chenille.repositories.ladysnake()
 
 	// mod menu
 	maven {
@@ -112,7 +109,7 @@ chenille {
 	javaVersion = 17
 	configurePublishing {
 		mainArtifact = remapJar.archiveFile
-		withArtifactory()
+		withLadysnakeMaven()
 		withCurseforgeRelease()
 		withGithubRelease()
 		withModrinthRelease()
