@@ -44,6 +44,7 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 		String ratName = RatItem.getRatName(stack);
 		DyeColor ratColor = RatItem.getRatColor(stack);
 		Identifier ratTexture = RatsMischiefUtils.getRatTexture(ratType, ratName, ratColor);
+		System.out.println(ratType);
 
 		MinecraftClient.getInstance().getTextureManager().bindTexture(ratTexture);
 		RenderLayer renderLayer = RenderLayer.getEntityCutout(ratTexture);

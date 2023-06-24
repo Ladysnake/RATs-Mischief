@@ -1061,7 +1061,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		BLACK(new Identifier(RatsMischief.MOD_ID, "textures/entity/black.png")),
 		GREY(new Identifier(RatsMischief.MOD_ID, "textures/entity/grey.png")),
 		HUSKY(new Identifier(RatsMischief.MOD_ID, "textures/entity/husky.png")),
-		CHOCOLATE(new Identifier(RatsMischief.MOD_ID, "textures/entity/chocolate.png")),
 		LIGHT_BROWN(new Identifier(RatsMischief.MOD_ID, "textures/entity/light_brown.png")),
 		RUSSIAN_BLUE(new Identifier(RatsMischief.MOD_ID, "textures/entity/russian_blue.png")),
 		GOLD(new Identifier(RatsMischief.MOD_ID, "textures/entity/gold.png")),
