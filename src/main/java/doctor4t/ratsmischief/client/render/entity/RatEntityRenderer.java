@@ -88,6 +88,6 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 
 	@Override
 	public boolean shouldShowName(RatEntity animatable) {
-		return !animatable.isInvisible();
+		return super.shouldShowName(animatable) && !animatable.isInvisible();
 	}
 }
