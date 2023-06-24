@@ -66,7 +66,7 @@ public class RatPouchItem extends Item {
 						if (i < closestOwnedRats.size()) {
 							NbtCompound nbt = new NbtCompound();
 							closestOwnedRats.get(i).saveNbt(nbt);
-							nbt.remove("UUID");
+//							nbt.remove("UUID");
 							NbtList.add(nbt);
 							closestOwnedRats.get(i).playSpawnEffects();
 							closestOwnedRats.get(i).remove(Entity.RemovalReason.DISCARDED);
