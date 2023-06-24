@@ -47,7 +47,12 @@ public class SpyRatCraftingRecipe extends SpecialCraftingRecipe {
 		for (int i = 6; i < 9; ++i) {
 			ItemStack ratStack = inventory.getStack(i);
 			if (!ratStack.isEmpty()) {
-				if (ratStack.getItem() instanceof RatItem) {
+				if (ratStack.getItem() instanceof RatItem
+					&& ratStack.getNbt() != null
+					&& ratStack.getNbt().contains(RatsMischief.MOD_ID)
+					&& ratStack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
+					&& ratStack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("Age")
+					&& ratStack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getInt("Age") >= 0) {
 					if (inventory.getStack(i - 3).isOf(Items.RABBIT_HIDE) && inventory.getStack(i - 6).isOf(Items.ENDER_EYE)) {
 						spyRatStack = ratStack.copy();
 						RatItem.getRatTag(spyRatStack).putBoolean("Spy", true);
