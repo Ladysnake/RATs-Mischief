@@ -622,6 +622,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 					case "biggie cheese" -> this.setRatType(Type.BIGGIE_CHEESE);
 					case "arathain" -> this.setRatType(Type.ARATHAIN);
 					case "astron", "astronyu" -> this.setRatType(Type.ASTRONYU);
+					case "splinter", "gin", "tonic" -> this.setRatType(Type.HUSKY);
+					case "sai-sai", "shiro" -> this.setRatType(Type.WILD);
 				}
 			}
 
