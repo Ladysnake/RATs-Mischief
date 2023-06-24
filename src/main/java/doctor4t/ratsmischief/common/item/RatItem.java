@@ -93,7 +93,7 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 			return DyeColor.WHITE;
 		}
 		String ratColor = ratTag.getString("Color").toUpperCase();
-		return DyeColor.byName(ratColor, DyeColor.WHITE);
+		return DyeColor.byName(ratColor.toLowerCase(), DyeColor.WHITE);
 	}
 
 	private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
