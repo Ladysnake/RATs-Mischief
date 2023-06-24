@@ -13,14 +13,8 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
-import static net.minecraft.text.Style.EMPTY;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.*;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -37,6 +31,8 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import xyz.amymialee.mialeemisc.util.MialeeText;
 
 import java.util.List;
+
+import static net.minecraft.text.Style.EMPTY;
 
 public class RatItem extends Item implements IAnimatable, ISyncable {
 	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
@@ -123,15 +119,13 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		if (!world.isClient()) {
 			RatEntity rat = this.getRatFromItem(world, user.getStackInHand(hand), new Vec3d(user.getX(), user.getEyeY() - 0.10000000149011612D, user.getZ()),
-					hand == Hand.OFF_HAND ? PlayerInventory.OFF_HAND_SLOT : user.getInventory().getSlotWithStack(user.getStackInHand(hand)));
+				hand == Hand.OFF_HAND ? PlayerInventory.OFF_HAND_SLOT : user.getInventory().getSlotWithStack(user.getStackInHand(hand)));
 			if (rat == null) {
 				return TypedActionResult.fail(user.getStackInHand(hand));
 			}
 			rat.sendFlying(user, user.getPitch(), user.getYaw(), user.getRoll(), 3f, 1f);
 			world.spawnEntity(rat);
-			if (!user.getAbilities().creativeMode) {
-				user.getStackInHand(hand).decrement(1);
-			}
+			user.setStackInHand(hand, ItemStack.EMPTY);
 			return TypedActionResult.success(user.getStackInHand(hand));
 		}
 		return super.use(world, user, hand);
@@ -144,10 +138,8 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 		World world = context.getWorld();
 
 		world.spawnEntity(this.getRatFromItem(world, owner.getStackInHand(hand), context.getHitPos(),
-				hand == Hand.OFF_HAND ? PlayerInventory.OFF_HAND_SLOT : owner.getInventory().getSlotWithStack(owner.getStackInHand(hand))));
-		if (!owner.getAbilities().creativeMode) {
-			owner.getStackInHand(hand).decrement(1);
-		}
+			hand == Hand.OFF_HAND ? PlayerInventory.OFF_HAND_SLOT : owner.getInventory().getSlotWithStack(owner.getStackInHand(hand))));
+		owner.setStackInHand(hand, ItemStack.EMPTY);
 
 		return ActionResult.SUCCESS;
 	}

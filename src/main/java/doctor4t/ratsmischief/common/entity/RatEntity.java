@@ -727,7 +727,6 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		ItemStack ratItemStack = new ItemStack(ModItems.RAT);
 		NbtCompound nbt = new NbtCompound();
 		this.saveNbt(nbt);
-		nbt.remove("UUID");
 		ratItemStack.getOrCreateSubNbt(RatsMischief.MOD_ID).put("rat", nbt);
 
 		// custom name
