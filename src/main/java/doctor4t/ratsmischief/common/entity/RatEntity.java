@@ -20,27 +20,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.EndGatewayBlockEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.AnimalMateGoal;
-import net.minecraft.entity.ai.goal.AttackWithOwnerGoal;
-import net.minecraft.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.LookAroundGoal;
-import net.minecraft.entity.ai.goal.LookAtEntityGoal;
-import net.minecraft.entity.ai.goal.PounceAtTargetGoal;
-import net.minecraft.entity.ai.goal.RevengeGoal;
-import net.minecraft.entity.ai.goal.SitGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.ai.goal.TrackOwnerAttackerGoal;
-import net.minecraft.entity.ai.goal.UniversalAngerGoal;
-import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
@@ -72,11 +53,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.TimeHelper;
+import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -101,18 +78,12 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class RatEntity extends TameableEntity implements IAnimatable, Angerable {
 	public static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (itemEntity) -> !itemEntity.cannotPickup() && itemEntity.isAlive();
-	public static final List<Type> NATURAL_TYPES = ImmutableList.of(
-			Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE
-	);
+	public static final List<Type> NATURAL_TYPES = ImmutableList.of(Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.CHOCOLATE, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE);
 	private static final List<PartyHat> PARTY_HATS = List.of(PartyHat.values());
 	private static final TrackedData<String> TYPE = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
 	private static final TrackedData<String> COLOR = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
@@ -281,8 +252,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		RatEntity ratEntity = ModEntities.RAT.create(world);
 		if (ratEntity != null && entity instanceof RatEntity secondRat) {
 			if (this.getRatType() == Type.RAT_KID && secondRat.getRatType() == Type.RAT_KID) {
-				ratEntity.setRatType(Type.WILD);
-//			ratEntity.setRatType(Type.RAT_KID);/
+				ratEntity.setRatType(Type.RAT_KID);
 			} else {
 				int bound = 150;
 				if (RatsMischiefUtils.IS_WORLD_RAT_DAY) {
@@ -291,8 +261,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 				if (this.random.nextInt(bound) == 0) {
 					this.dataTracker.set(TYPE, Type.GOLD.toString());
 				} else {
-					ratEntity.setRatType(Type.WILD);
-//				ratEntity.setRatType(getRandomNaturalType(random));
+					ratEntity.setRatType(getRandomNaturalType(random));
 				}
 			}
 			UUID ownerUuid = this.getOwnerUuid();
@@ -562,14 +531,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 	@SuppressWarnings("SuspiciousNameCombination")
 	public void setVelocity(double x, double y, double z, float speed, float divergence) {
-		Vec3d vec3d = new Vec3d(x, y, z)
-				.normalize()
-				.add(
-						this.random.nextTriangular(0.0, 0.0172275 * (double) divergence),
-						this.random.nextTriangular(0.0, 0.0172275 * (double) divergence),
-						this.random.nextTriangular(0.0, 0.0172275 * (double) divergence)
-				)
-				.multiply(speed);
+		Vec3d vec3d = new Vec3d(x, y, z).normalize().add(this.random.nextTriangular(0.0, 0.0172275 * (double) divergence), this.random.nextTriangular(0.0, 0.0172275 * (double) divergence), this.random.nextTriangular(0.0, 0.0172275 * (double) divergence)).multiply(speed);
 		this.setVelocity(vec3d);
 		double d = vec3d.horizontalLength();
 		this.setYaw((float) (MathHelper.atan2(vec3d.x, vec3d.z) * 180.0F / (float) Math.PI));
@@ -679,9 +641,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			if (this.getPotionGene() != null) {
 				StatusEffect effect = this.getPotionGene();
 				int k = effect.getColor();
-				double d = (float)((k >> 16 & 0xFF)) / 255.0F;
-				double e = (float)((k >> 8 & 0xFF)) / 255.0F;
-				double f = (float)((k & 0xFF)) / 255.0F;
+				double d = (float) ((k >> 16 & 0xFF)) / 255.0F;
+				double e = (float) ((k >> 8 & 0xFF)) / 255.0F;
+				double f = (float) ((k & 0xFF)) / 255.0F;
 				this.world.addParticle(ParticleTypes.ENTITY_EFFECT, this.getParticleX(0.5), this.getRandomBodyY(), this.getParticleZ(0.5), d, e, f);
 			}
 		}
@@ -979,14 +941,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 	@Override
-	protected @Nullable
-	SoundEvent getDeathSound() {
+	protected @Nullable SoundEvent getDeathSound() {
 		return ModSoundEvents.ENTITY_RAT_DEATH;
 	}
 
 	@Override
-	protected @Nullable
-	SoundEvent getHurtSound(DamageSource source) {
+	protected @Nullable SoundEvent getHurtSound(DamageSource source) {
 		return ModSoundEvents.ENTITY_RAT_HURT;
 	}
 
@@ -1056,24 +1016,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 	public enum Type {
-		WILD(new Identifier(RatsMischief.MOD_ID, "textures/entity/wild.png")),
-		ALBINO(new Identifier(RatsMischief.MOD_ID, "textures/entity/albino.png")),
-		BLACK(new Identifier(RatsMischief.MOD_ID, "textures/entity/black.png")),
-		GREY(new Identifier(RatsMischief.MOD_ID, "textures/entity/grey.png")),
-		HUSKY(new Identifier(RatsMischief.MOD_ID, "textures/entity/husky.png")),
-		LIGHT_BROWN(new Identifier(RatsMischief.MOD_ID, "textures/entity/light_brown.png")),
-		RUSSIAN_BLUE(new Identifier(RatsMischief.MOD_ID, "textures/entity/russian_blue.png")),
-		GOLD(new Identifier(RatsMischief.MOD_ID, "textures/entity/gold.png")),
-		DOCTOR4T(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/doctor4t.png")),
-		RAT_KID(null),
-		RATATER(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/ratater.png")),
-		JORATO(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/jorato.png")),
-		JERMA(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/jerma.png")),
-		HOLLOW(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/hollow.png")),
-		RATELINE(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/rateline.png")),
-		BIGGIE_CHEESE(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/biggie_cheese.png")),
-		ARATHAIN(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/arathain.png")),
-		ASTRONYU(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/astronyu.png"));
+		WILD(new Identifier(RatsMischief.MOD_ID, "textures/entity/wild.png")), ALBINO(new Identifier(RatsMischief.MOD_ID, "textures/entity/albino.png")), BLACK(new Identifier(RatsMischief.MOD_ID, "textures/entity/black.png")), GREY(new Identifier(RatsMischief.MOD_ID, "textures/entity/grey.png")), HUSKY(new Identifier(RatsMischief.MOD_ID, "textures/entity/husky.png")), LIGHT_BROWN(new Identifier(RatsMischief.MOD_ID, "textures/entity/light_brown.png")), RUSSIAN_BLUE(new Identifier(RatsMischief.MOD_ID, "textures/entity/russian_blue.png")), GOLD(new Identifier(RatsMischief.MOD_ID, "textures/entity/gold.png")), DOCTOR4T(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/doctor4t.png")), RAT_KID(null), RATATER(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/ratater.png")), JORATO(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/jorato.png")), JERMA(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/jerma.png")), HOLLOW(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/hollow.png")), RATELINE(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/rateline.png")), BIGGIE_CHEESE(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/biggie_cheese.png")), ARATHAIN(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/arathain.png")), ASTRONYU(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/astronyu.png"));
 
 		public final Identifier ratTexture;
 
