@@ -23,6 +23,8 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 		super(new RatItemModel());
 	}
 
+	private ThreadLocal<Identifier> currentTexture = new ThreadLocal<>();
+
 	@Override
 	public void render(RatItem animatable, MatrixStack matrices, VertexConsumerProvider bufferSource, int packedLight, ItemStack stack) {
 //		super.render(animatable, matrices, bufferSource, packedLight, stack);
@@ -45,10 +47,12 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 		DyeColor ratColor = RatItem.getRatColor(stack);
 		Identifier ratTexture = RatsMischiefUtils.getRatTexture(ratType, ratName, ratColor);
 
+		currentTexture.set(ratTexture);
+
 		MinecraftClient.getInstance().getTextureManager().bindTexture(ratTexture);
 		RenderLayer renderLayer = RenderLayer.getEntityCutout(ratTexture);
 
-		this.render(model, animatable, 0.0F, renderLayer, matrices, bufferSource, null, packedLight, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+		this.render(model, animatable, 0.0F, renderLayer, matrices, bufferSource, bufferSource.getBuffer(renderLayer), packedLight, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
 
 		// ender eye
 		if (stack.getNbt() != null
@@ -75,5 +79,16 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 		}
 
 		matrices.pop();
+		currentTexture.remove();
+	}
+
+	@Override
+	public Identifier getTextureLocation(RatItem instance) {
+		return currentTexture.get() != null ? currentTexture.get() : super.getTextureLocation(instance);
+	}
+
+	@Override
+	public Identifier getTextureResource(RatItem entity) {
+		return currentTexture.get() != null ? currentTexture.get() : super.getTextureResource(entity);
 	}
 }
