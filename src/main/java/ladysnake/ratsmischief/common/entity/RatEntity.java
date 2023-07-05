@@ -580,8 +580,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 					case "jerma", "jerma985" -> this.setRatType(Type.JERMA);
 					case "biggie cheese" -> this.setRatType(Type.BIGGIE_CHEESE);
 					case "astron", "astronyu" -> this.setRatType(Type.ASTRONYU);
-					case "splinter", "gin", "tonic" -> this.setRatType(Type.HUSKY);
-					case "sai-sai", "shiro" -> this.setRatType(Type.WILD);
+					
+					case "gin" -> this.setRatType(Type.HUSKY);
+					case "splinter", "tonic" -> this.setRatType(Type.HUSKY_GHOST);
+					case "sai-sai", "shiro" -> this.setRatType(Type.WILD_GHOST);
 				}
 			}
 
@@ -1012,10 +1014,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 	public enum Type {
 		WILD(new Identifier(RatsMischief.MOD_ID, "textures/entity/wild.png")),
+		WILD_GHOST(new Identifier(RatsMischief.MOD_ID, "textures/entity/wild_ghost.png")),
 		ALBINO(new Identifier(RatsMischief.MOD_ID, "textures/entity/albino.png")),
 		BLACK(new Identifier(RatsMischief.MOD_ID, "textures/entity/black.png")),
 		GREY(new Identifier(RatsMischief.MOD_ID, "textures/entity/grey.png")),
 		HUSKY(new Identifier(RatsMischief.MOD_ID, "textures/entity/husky.png")),
+		HUSKY_GHOST(new Identifier(RatsMischief.MOD_ID, "textures/entity/husky_ghost.png")),
 		LIGHT_BROWN(new Identifier(RatsMischief.MOD_ID, "textures/entity/light_brown.png")),
 		BLUE(new Identifier(RatsMischief.MOD_ID, "textures/entity/blue.png")),
 		GOLD(new Identifier(RatsMischief.MOD_ID, "textures/entity/gold.png")),
