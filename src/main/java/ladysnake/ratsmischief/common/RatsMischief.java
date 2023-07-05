@@ -54,30 +54,27 @@ public class RatsMischief implements ModInitializer {
 		// rat kid painting
 		Registry.register(Registry.PAINTING_VARIANT, new Identifier(MOD_ID, "a_rat_in_time"), new PaintingVariant(64, 48));
 
-		// clothed ingot spawning in ancient city chests
+		// clothed ingots and rat curse books spawning in ancient city chests
 		UniformLootNumberProvider lootTableRange = UniformLootNumberProvider.create(1, 1);
 		LootTableEvents.MODIFY.register((resourceManager, lootManager, id, supplier, setter) -> {
 			if (ANCIENT_CITY_CHESTS.equals(id)) {
-				{ //Clothed Ingots
+				{ // clothed ingot
 					LootPool lootPool = LootPool.builder()
 							.rolls(lootTableRange)
 							.conditionally(RandomChanceLootCondition.builder(0.3f).build())
 							.with(ItemEntry.builder(ModItems.CLOTHED_INGOT).build()).build();
 					supplier.pool(lootPool);
 				}
-				{ //Mischief Curse
+				{ // rat curse book
 					ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
 					EnchantedBookItem.addEnchantment(book, new EnchantmentLevelEntry(ModEnchantments.RAT_CURSE, 1));
 					LootPool lootPool = LootPool.builder()
 							.rolls(lootTableRange)
 							.conditionally(RandomChanceLootCondition.builder(0.3f).build())
-							.with(ItemEntry.builder(ModItems.CLOTHED_INGOT).build()).build(); //TODO: Mischief Curse Book
+							.with(ItemEntry.builder(ModItems.CLOTHED_INGOT).build()).build();
 					supplier.pool(lootPool);
 				}
 			}
 		});
-
-		// rat kid painting
-		Registry.register(Registry.PAINTING_VARIANT, new Identifier(MOD_ID, "a_rat_in_time"), new PaintingVariant(64, 48));
 	}
 }
