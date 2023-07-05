@@ -76,5 +76,8 @@ public class RatsMischief implements ModInitializer {
 				}
 			}
 		});
+
+		// rat kid painting
+		Registry.register(Registry.PAINTING_VARIANT, new Identifier(MOD_ID, "a_rat_in_time"), new PaintingVariant(64, 48));
 	}
 }
