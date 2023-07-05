@@ -59,8 +59,6 @@ repositories {
 	maven { url "https://repo.unascribed.com" }
 }
 
-// All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
-// See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:intermediary-v2"

@@ -17,9 +17,9 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"init": "doctor4t.ratsmischief.common.RatsMischief",
-			"client_init": "doctor4t.ratsmischief.client.RatsMischiefClient",
-			"requiem:plugin": "doctor4t.ratsmischief.common.requiem.RatsMischiefRequiemPlugin"
+			"init": "ladysnake.ratsmischief.common.RatsMischief",
+			"client_init": "ladysnake.ratsmischief.client.RatsMischiefClient",
+			"requiem:plugin": "ladysnake.ratsmischief.common.requiem.RatsMischiefRequiemPlugin"
 		},
 		"depends": [
 			{
