@@ -20,7 +20,7 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
 
 	@Override
 	public Identifier getTextureResource(RatEntity rat) {
-		return RatsMischiefUtils.getRatTexture(rat.getRatType(), rat.hasCustomName() ? rat.getCustomName().getString().toLowerCase() : null, rat.getRatColor());
+		return RatsMischiefUtils.getRatTexture(rat.getRatType(), rat.getRatColor());
 	}
 
 	@Override

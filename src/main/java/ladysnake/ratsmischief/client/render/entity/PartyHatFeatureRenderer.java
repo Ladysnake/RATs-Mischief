@@ -15,7 +15,7 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import java.util.Set;
 
 public class PartyHatFeatureRenderer extends GeoLayerRenderer<RatEntity> {
-	public static final Set<RatEntity.Type> DISALLOWED_TYPES = Sets.immutableEnumSet(RatEntity.Type.RAT_KID, RatEntity.Type.BIGGIE_CHEESE, RatEntity.Type.JORATO);
+	public static final Set<RatEntity.Type> DISALLOWED_TYPES = Sets.immutableEnumSet(RatEntity.Type.RAT_KID, RatEntity.Type.BIGGIE_CHEESE, RatEntity.Type.REMY);
 	public static Identifier[] TEXTURES;
 
 	private final PartyHatEntityRenderer partyHatEntityRenderer;
@@ -27,7 +27,7 @@ public class PartyHatFeatureRenderer extends GeoLayerRenderer<RatEntity> {
 
 	@Override
 	public void render(MatrixStack matrixStackIn, VertexConsumerProvider bufferIn, int packedLightIn, RatEntity ratEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-		if (RatsMischiefUtils.IS_BIRTHDAY && !DISALLOWED_TYPES.contains(ratEntity.getRatType()) && !(ratEntity.hasCustomName() && ratEntity.getCustomName().getString().equalsIgnoreCase("remy"))) {
+		if (RatsMischiefUtils.IS_BIRTHDAY && !DISALLOWED_TYPES.contains(ratEntity.getRatType())) {
 			if (TEXTURES == null) {
 				TEXTURES = new Identifier[RatEntity.PartyHat.values().length];
 				for (RatEntity.PartyHat hat : RatEntity.PartyHat.values()) {
@@ -36,13 +36,13 @@ public class PartyHatFeatureRenderer extends GeoLayerRenderer<RatEntity> {
 			}
 			Identifier hatTexture = TEXTURES[ratEntity.getPartyHat().ordinal()];
 			this.partyHatEntityRenderer.render(this.getEntityModel().getModel(this.getEntityModel().getModelResource(ratEntity)),
-					ratEntity,
-					partialTicks,
-					RenderLayer.getEntityCutout(hatTexture),
-					matrixStackIn,
-					bufferIn,
-					bufferIn.getBuffer(RenderLayer.getEntityCutout(hatTexture)),
-					packedLightIn, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+				ratEntity,
+				partialTicks,
+				RenderLayer.getEntityCutout(hatTexture),
+				matrixStackIn,
+				bufferIn,
+				bufferIn.getBuffer(RenderLayer.getEntityCutout(hatTexture)),
+				packedLightIn, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
 		}
 	}
 }

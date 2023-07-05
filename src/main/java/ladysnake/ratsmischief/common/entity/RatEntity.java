@@ -83,7 +83,7 @@ import java.util.function.Predicate;
 
 public class RatEntity extends TameableEntity implements IAnimatable, Angerable {
 	public static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (itemEntity) -> !itemEntity.cannotPickup() && itemEntity.isAlive();
-	public static final List<Type> NATURAL_TYPES = ImmutableList.of(Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.LIGHT_BROWN, Type.RUSSIAN_BLUE);
+	public static final List<Type> NATURAL_TYPES = ImmutableList.of(Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.LIGHT_BROWN, Type.BLUE);
 	private static final List<PartyHat> PARTY_HATS = List.of(PartyHat.values());
 	private static final TrackedData<String> TYPE = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
 	private static final TrackedData<String> COLOR = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
@@ -575,12 +575,15 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			if (this.getCustomName() != null) {
 				switch (this.getCustomName().getString().toLowerCase(Locale.ROOT)) {
 					case "doctor4t" -> this.setRatType(Type.DOCTOR4T);
-					case "ratater" -> this.setRatType(Type.RATATER);
+					case "astron", "astronyu" -> this.setRatType(Type.ASTRONYU);
+
 					case "rat kid", "hat kid" -> this.setRatType(Type.RAT_KID);
+
+					case "remy" -> this.setRatType(Type.REMY);
+					case "ratater" -> this.setRatType(Type.RATATER);
 					case "jerma", "jerma985" -> this.setRatType(Type.JERMA);
 					case "biggie cheese" -> this.setRatType(Type.BIGGIE_CHEESE);
-					case "astron", "astronyu" -> this.setRatType(Type.ASTRONYU);
-					
+
 					case "gin" -> this.setRatType(Type.HUSKY);
 					case "splinter", "tonic" -> this.setRatType(Type.HUSKY_GHOST);
 					case "sai-sai", "shiro" -> this.setRatType(Type.WILD_GHOST);
@@ -1014,20 +1017,26 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 	public enum Type {
 		WILD(new Identifier(RatsMischief.MOD_ID, "textures/entity/wild.png")),
-		WILD_GHOST(new Identifier(RatsMischief.MOD_ID, "textures/entity/wild_ghost.png")),
 		ALBINO(new Identifier(RatsMischief.MOD_ID, "textures/entity/albino.png")),
 		BLACK(new Identifier(RatsMischief.MOD_ID, "textures/entity/black.png")),
 		GREY(new Identifier(RatsMischief.MOD_ID, "textures/entity/grey.png")),
 		HUSKY(new Identifier(RatsMischief.MOD_ID, "textures/entity/husky.png")),
-		HUSKY_GHOST(new Identifier(RatsMischief.MOD_ID, "textures/entity/husky_ghost.png")),
 		LIGHT_BROWN(new Identifier(RatsMischief.MOD_ID, "textures/entity/light_brown.png")),
 		BLUE(new Identifier(RatsMischief.MOD_ID, "textures/entity/blue.png")),
 		GOLD(new Identifier(RatsMischief.MOD_ID, "textures/entity/gold.png")),
-		DOCTOR4T(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/doctor4t.png")), RAT_KID(null),
+
+		RAT_KID(null),
+
+		DOCTOR4T(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/doctor4t.png")),
+		ASTRONYU(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/astronyu.png")),
+
+		REMY(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/remy.png")),
 		RATATER(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/ratater.png")),
 		JERMA(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/jerma.png")),
 		BIGGIE_CHEESE(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/biggie_cheese.png")),
-		ASTRONYU(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/astronyu.png"));
+
+		WILD_GHOST(new Identifier(RatsMischief.MOD_ID, "textures/entity/wild_ghost.png")),
+		HUSKY_GHOST(new Identifier(RatsMischief.MOD_ID, "textures/entity/husky_ghost.png"));
 
 		public final Identifier ratTexture;
 

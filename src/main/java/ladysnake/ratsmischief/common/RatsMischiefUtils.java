@@ -17,11 +17,11 @@ public class RatsMischiefUtils {
 	private static final LocalDate today = LocalDate.now();
 	public static final boolean IS_RAT_BIRTHDAY = LocalDate.of(today.getYear(), 7, 19).compareTo(today) * today.compareTo(LocalDate.of(today.getYear(), 7, 25)) >= 0;
 	public static final boolean IS_MISCHIEF_BIRTHDAY = (LocalDate.of(today.getYear(), 12, 28).compareTo(today) * today.compareTo(LocalDate.of(today.getYear(), 12, 31)) >= 0)
-			|| (LocalDate.of(today.getYear(), 1, 1).compareTo(today) * today.compareTo(LocalDate.of(today.getYear(), 1, 3)) >= 0);
+		|| (LocalDate.of(today.getYear(), 1, 1).compareTo(today) * today.compareTo(LocalDate.of(today.getYear(), 1, 3)) >= 0);
 	public static final boolean IS_BIRTHDAY = IS_RAT_BIRTHDAY || IS_MISCHIEF_BIRTHDAY;
 	public static Identifier[] RAT_KID_TEXTURES;
 
-	public static Identifier getRatTexture(RatEntity.Type ratType, String ratName, DyeColor ratColor) {
+	public static Identifier getRatTexture(RatEntity.Type ratType, DyeColor ratColor) {
 		// initializing
 		if (RAT_KID_TEXTURES == null) {
 			RAT_KID_TEXTURES = new Identifier[16];
@@ -30,9 +30,7 @@ public class RatsMischiefUtils {
 			}
 		}
 
-		if (ratType == RatEntity.Type.RUSSIAN_BLUE && ratName != null && ratName.equalsIgnoreCase("remy")) {
-			return REMY_TEXTURE;
-		} else if (ratType == RatEntity.Type.RAT_KID) {
+		if (ratType == RatEntity.Type.RAT_KID) {
 			return RAT_KID_TEXTURES[ratColor.getId()];
 		} else {
 			return ratType.ratTexture;

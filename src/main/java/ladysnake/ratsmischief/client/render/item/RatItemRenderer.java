@@ -45,7 +45,7 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 		RatEntity.Type ratType = RatItem.getRatType(stack);
 		String ratName = RatItem.getRatName(stack);
 		DyeColor ratColor = RatItem.getRatColor(stack);
-		Identifier ratTexture = RatsMischiefUtils.getRatTexture(ratType, ratName, ratColor);
+		Identifier ratTexture = RatsMischiefUtils.getRatTexture(ratType, ratColor);
 
 		currentTexture.set(ratTexture);
 
@@ -65,7 +65,7 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 		}
 
 		// party hat
-		if (RatsMischiefUtils.IS_BIRTHDAY && !PartyHatFeatureRenderer.DISALLOWED_TYPES.contains(ratType) && !(ratName != null && ratName.equalsIgnoreCase("remy"))) {
+		if (RatsMischiefUtils.IS_BIRTHDAY && !PartyHatFeatureRenderer.DISALLOWED_TYPES.contains(ratType)) {
 			if (stack.getNbt() != null
 					&& stack.getNbt().contains(RatsMischief.MOD_ID)
 					&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
