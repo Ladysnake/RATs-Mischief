@@ -577,12 +577,8 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 					case "doctor4t" -> this.setRatType(Type.DOCTOR4T);
 					case "ratater" -> this.setRatType(Type.RATATER);
 					case "rat kid", "hat kid" -> this.setRatType(Type.RAT_KID);
-					case "jotaro", "jorato" -> this.setRatType(Type.JORATO);
 					case "jerma", "jerma985" -> this.setRatType(Type.JERMA);
-					case "hollow rat", "hollow knight" -> this.setRatType(Type.HOLLOW);
-					case "rateline", "madeline" -> this.setRatType(Type.RATELINE);
 					case "biggie cheese" -> this.setRatType(Type.BIGGIE_CHEESE);
-					case "arathain" -> this.setRatType(Type.ARATHAIN);
 					case "astron", "astronyu" -> this.setRatType(Type.ASTRONYU);
 					case "splinter", "gin", "tonic" -> this.setRatType(Type.HUSKY);
 					case "sai-sai", "shiro" -> this.setRatType(Type.WILD);
@@ -1015,7 +1011,19 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 	public enum Type {
-		WILD(new Identifier(RatsMischief.MOD_ID, "textures/entity/wild.png")), ALBINO(new Identifier(RatsMischief.MOD_ID, "textures/entity/albino.png")), BLACK(new Identifier(RatsMischief.MOD_ID, "textures/entity/black.png")), GREY(new Identifier(RatsMischief.MOD_ID, "textures/entity/grey.png")), HUSKY(new Identifier(RatsMischief.MOD_ID, "textures/entity/husky.png")), LIGHT_BROWN(new Identifier(RatsMischief.MOD_ID, "textures/entity/light_brown.png")), RUSSIAN_BLUE(new Identifier(RatsMischief.MOD_ID, "textures/entity/russian_blue.png")), GOLD(new Identifier(RatsMischief.MOD_ID, "textures/entity/gold.png")), DOCTOR4T(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/doctor4t.png")), RAT_KID(null), RATATER(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/ratater.png")), JORATO(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/jorato.png")), JERMA(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/jerma.png")), HOLLOW(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/hollow.png")), RATELINE(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/rateline.png")), BIGGIE_CHEESE(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/biggie_cheese.png")), ARATHAIN(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/arathain.png")), ASTRONYU(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/astronyu.png"));
+		WILD(new Identifier(RatsMischief.MOD_ID, "textures/entity/wild.png")),
+		ALBINO(new Identifier(RatsMischief.MOD_ID, "textures/entity/albino.png")),
+		BLACK(new Identifier(RatsMischief.MOD_ID, "textures/entity/black.png")),
+		GREY(new Identifier(RatsMischief.MOD_ID, "textures/entity/grey.png")),
+		HUSKY(new Identifier(RatsMischief.MOD_ID, "textures/entity/husky.png")),
+		LIGHT_BROWN(new Identifier(RatsMischief.MOD_ID, "textures/entity/light_brown.png")),
+		BLUE(new Identifier(RatsMischief.MOD_ID, "textures/entity/blue.png")),
+		GOLD(new Identifier(RatsMischief.MOD_ID, "textures/entity/gold.png")),
+		DOCTOR4T(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/doctor4t.png")), RAT_KID(null),
+		RATATER(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/ratater.png")),
+		JERMA(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/jerma.png")),
+		BIGGIE_CHEESE(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/biggie_cheese.png")),
+		ASTRONYU(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/astronyu.png"));
 
 		public final Identifier ratTexture;
 
