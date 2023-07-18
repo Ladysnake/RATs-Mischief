@@ -1,10 +1,10 @@
 package ladysnake.ratsmischief.common.requiem;
 
-import ladysnake.ratsmischief.common.entity.RatEntity;
-import ladysnake.ratsmischief.common.init.ModEntities;
 import io.github.ladysnake.pal.AbilitySource;
 import io.github.ladysnake.pal.Pal;
 import io.github.ladysnake.pal.VanillaAbilities;
+import ladysnake.ratsmischief.common.entity.RatEntity;
+import ladysnake.ratsmischief.common.init.ModEntities;
 import ladysnake.requiem.api.v1.possession.PossessionComponent;
 import ladysnake.requiem.api.v1.remnant.MobResurrectable;
 import ladysnake.requiem.api.v1.remnant.RemnantComponent;

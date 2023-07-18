@@ -19,11 +19,11 @@ import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 public class RatItemRenderer extends GeoItemRenderer<RatItem> {
+	private ThreadLocal<Identifier> currentTexture = new ThreadLocal<>();
+
 	public RatItemRenderer() {
 		super(new RatItemModel());
 	}
-
-	private ThreadLocal<Identifier> currentTexture = new ThreadLocal<>();
 
 	@Override
 	public void render(RatItem animatable, MatrixStack matrices, VertexConsumerProvider bufferSource, int packedLight, ItemStack stack) {
@@ -34,10 +34,10 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 		matrices.translate(0.5f, 0.51f, 0.5f);
 
 		if (stack.getNbt() != null
-				&& stack.getNbt().contains(RatsMischief.MOD_ID)
-				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
-				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("Age")
-				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getInt("Age") < 0) {
+			&& stack.getNbt().contains(RatsMischief.MOD_ID)
+			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
+			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("Age")
+			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getInt("Age") < 0) {
 			matrices.translate(0, 0, -0.1f);
 			matrices.scale(0.5f, 0.5f, 0.5f);
 		}
@@ -56,10 +56,10 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 
 		// ender eye
 		if (stack.getNbt() != null
-				&& stack.getNbt().contains(RatsMischief.MOD_ID)
-				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
-				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("Spy")
-				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getBoolean("Spy")) {
+			&& stack.getNbt().contains(RatsMischief.MOD_ID)
+			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
+			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("Spy")
+			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getBoolean("Spy")) {
 			MinecraftClient.getInstance().getTextureManager().bindTexture(EnderEyeFeatureRenderer.TEXTURE);
 			this.render(model, animatable, 0.0F, RenderLayer.getEntityCutout(EnderEyeFeatureRenderer.TEXTURE), matrices, bufferSource, null, packedLight, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
 		}
@@ -67,9 +67,9 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 		// party hat
 		if (RatsMischiefUtils.IS_BIRTHDAY && !PartyHatFeatureRenderer.DISALLOWED_TYPES.contains(ratType)) {
 			if (stack.getNbt() != null
-					&& stack.getNbt().contains(RatsMischief.MOD_ID)
-					&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
-					&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("PartyHat")) {
+				&& stack.getNbt().contains(RatsMischief.MOD_ID)
+				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
+				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("PartyHat")) {
 				String hat = stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getString("PartyHat");
 				Identifier hatTexture = PartyHatFeatureRenderer.TEXTURES[RatEntity.PartyHat.valueOf(hat).ordinal()];
 

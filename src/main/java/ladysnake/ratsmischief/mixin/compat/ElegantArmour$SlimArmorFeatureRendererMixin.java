@@ -16,14 +16,14 @@ import xyz.amymialee.elegantarmour.client.SlimArmorFeatureRenderer;
 
 @Mixin(SlimArmorFeatureRenderer.class)
 public abstract class ElegantArmour$SlimArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> extends FeatureRenderer<T, M> {
-    public ElegantArmour$SlimArmorFeatureRendererMixin(FeatureRendererContext<T, M> context) {
-        super(context);
-    }
+	public ElegantArmour$SlimArmorFeatureRendererMixin(FeatureRendererContext<T, M> context) {
+		super(context);
+	}
 
-    @Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
-    private void amarite$hideHelmet(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, CallbackInfo ci) {
-        if (armorSlot == EquipmentSlot.HEAD && RatMasterMaskItem.isWearingMask(entity)) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
+	private void amarite$hideHelmet(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, CallbackInfo ci) {
+		if (armorSlot == EquipmentSlot.HEAD && RatMasterMaskItem.isWearingMask(entity)) {
+			ci.cancel();
+		}
+	}
 }

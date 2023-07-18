@@ -22,7 +22,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements PlayerRatOwner {
-	@Unique private boolean shouldRatsBringItems = true;
+	@Unique
+	private boolean shouldRatsBringItems = true;
 
 	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
 		super(entityType, world);

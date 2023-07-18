@@ -17,7 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
 public class EntityRendererMixin<T extends Entity> implements EntityRendererWrapper {
-	@Unique private EntityRendererFactory.Context context;
+	@Unique
+	private EntityRendererFactory.Context context;
 
 	@Inject(method = "<init>", at = @At("TAIL"))
 	private void mischief$init(EntityRendererFactory.Context ctx, CallbackInfo ci) {

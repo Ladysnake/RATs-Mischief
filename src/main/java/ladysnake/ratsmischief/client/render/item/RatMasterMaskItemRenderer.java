@@ -19,49 +19,49 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public class RatMasterMaskItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer, IdentifiableResourceReloadListener {
-    private final Identifier rendererId;
-    private final Identifier itemId;
-    private ItemRenderer itemRenderer;
-    private BakedModel inventoryModel;
-    private BakedModel wornModel;
+	private final Identifier rendererId;
+	private final Identifier itemId;
+	private ItemRenderer itemRenderer;
+	private BakedModel inventoryModel;
+	private BakedModel wornModel;
 
-    public RatMasterMaskItemRenderer(Identifier itemId) {
-        this.rendererId = new Identifier(itemId.getNamespace(), itemId.getPath() + "_renderer");
-        this.itemId = itemId;
-    }
+	public RatMasterMaskItemRenderer(Identifier itemId) {
+		this.rendererId = new Identifier(itemId.getNamespace(), itemId.getPath() + "_renderer");
+		this.itemId = itemId;
+	}
 
-    @Override
-    public Identifier getFabricId() {
-        return this.rendererId;
-    }
+	@Override
+	public Identifier getFabricId() {
+		return this.rendererId;
+	}
 
-    @Override
-    public CompletableFuture<Void> reload(Synchronizer synchronizer, ResourceManager manager, Profiler prepareProfiler, Profiler applyProfiler, Executor prepareExecutor, Executor applyExecutor) {
-        return synchronizer.whenPrepared(Unit.INSTANCE).thenRunAsync(() -> {
-            applyProfiler.startTick();
-            applyProfiler.push("listener");
-            final MinecraftClient client = MinecraftClient.getInstance();
-            this.itemRenderer = client.getItemRenderer();
-            this.inventoryModel = client.getBakedModelManager().getModel(new ModelIdentifier(this.itemId, "inventory"));
-            this.wornModel = client.getBakedModelManager().getModel(new ModelIdentifier(this.itemId + "_worn", "inventory"));
-            applyProfiler.pop();
-            applyProfiler.endTick();
-        }, applyExecutor);
-    }
+	@Override
+	public CompletableFuture<Void> reload(Synchronizer synchronizer, ResourceManager manager, Profiler prepareProfiler, Profiler applyProfiler, Executor prepareExecutor, Executor applyExecutor) {
+		return synchronizer.whenPrepared(Unit.INSTANCE).thenRunAsync(() -> {
+			applyProfiler.startTick();
+			applyProfiler.push("listener");
+			final MinecraftClient client = MinecraftClient.getInstance();
+			this.itemRenderer = client.getItemRenderer();
+			this.inventoryModel = client.getBakedModelManager().getModel(new ModelIdentifier(this.itemId, "inventory"));
+			this.wornModel = client.getBakedModelManager().getModel(new ModelIdentifier(this.itemId + "_worn", "inventory"));
+			applyProfiler.pop();
+			applyProfiler.endTick();
+		}, applyExecutor);
+	}
 
-    @Override
-    public void render(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        matrices.pop();
-        matrices.push();
-        if (mode == ModelTransformation.Mode.GUI || mode == ModelTransformation.Mode.GROUND || mode == ModelTransformation.Mode.FIXED) {
-            this.itemRenderer.renderItem(stack, mode, false, matrices, vertexConsumers, light, overlay, this.inventoryModel);
-        } else {
-            boolean leftHanded;
-            switch (mode) {
-                case FIRST_PERSON_LEFT_HAND, THIRD_PERSON_LEFT_HAND -> leftHanded = true;
-                default -> leftHanded = false;
-            }
+	@Override
+	public void render(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+		matrices.pop();
+		matrices.push();
+		if (mode == ModelTransformation.Mode.GUI || mode == ModelTransformation.Mode.GROUND || mode == ModelTransformation.Mode.FIXED) {
+			this.itemRenderer.renderItem(stack, mode, false, matrices, vertexConsumers, light, overlay, this.inventoryModel);
+		} else {
+			boolean leftHanded;
+			switch (mode) {
+				case FIRST_PERSON_LEFT_HAND, THIRD_PERSON_LEFT_HAND -> leftHanded = true;
+				default -> leftHanded = false;
+			}
 			this.itemRenderer.renderItem(stack, mode, leftHanded, matrices, vertexConsumers, light, overlay, this.wornModel);
-        }
-    }
+		}
+	}
 }

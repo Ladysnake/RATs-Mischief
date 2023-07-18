@@ -14,7 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
-	@Unique private DamageSource lastSource;
+	@Unique
+	private DamageSource lastSource;
 
 	@Inject(method = "damage", at = @At(value = "HEAD"))
 	private void mischief$logSource(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {

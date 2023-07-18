@@ -48,7 +48,8 @@ public class RatMasterOcarinaItem extends Item implements IClickConsumingItem {
 			switch (getAction(user.getStackInHand(hand))) {
 				case HARVEST -> goal = new HarvestPlantMealGoal(ratEntity);
 				case COLLECT -> ratEntity.removeCurrentActionGoal();
-				case SKIRMISH -> goal = new TargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
+				case SKIRMISH ->
+					goal = new TargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
 				case LOVE -> goal = new BreedGoal(ratEntity);
 			}
 			if (goal != null) {

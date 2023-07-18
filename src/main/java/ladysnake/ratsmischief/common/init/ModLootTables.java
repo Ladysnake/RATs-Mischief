@@ -21,21 +21,21 @@ public class ModLootTables {
 		LootTableEvents.MODIFY.register((resourceManager, lootManager, identifier, fabricLootSupplierBuilder, lootTableSetter) -> {
 			if (RatsMischief.ANCIENT_CITY_CHESTS.equals(identifier)) {
 				fabricLootSupplierBuilder.pool(new LootPool.Builder()
-						.rolls(ConstantLootNumberProvider.create(1))
-						.with(ItemEntry.builder(Items.BOOK).apply(() -> new LootFunction() {
-							@Override
-							public LootFunctionType getType() {
-								throw new UnsupportedOperationException();
-							}
+					.rolls(ConstantLootNumberProvider.create(1))
+					.with(ItemEntry.builder(Items.BOOK).apply(() -> new LootFunction() {
+						@Override
+						public LootFunctionType getType() {
+							throw new UnsupportedOperationException();
+						}
 
-							@Override
-							public ItemStack apply(ItemStack itemStack, LootContext lootContext) {
-								EnchantmentLevelEntry enchantment = new EnchantmentLevelEntry(ModEnchantments.RAT_CURSE, 1);
-								return EnchantedBookItem.forEnchantment(enchantment);
-							}
-						}).build())
-						.conditionally(RandomChanceLootCondition.builder(RAT_CURSE_CHANCE).build())
-						.build()
+						@Override
+						public ItemStack apply(ItemStack itemStack, LootContext lootContext) {
+							EnchantmentLevelEntry enchantment = new EnchantmentLevelEntry(ModEnchantments.RAT_CURSE, 1);
+							return EnchantedBookItem.forEnchantment(enchantment);
+						}
+					}).build())
+					.conditionally(RandomChanceLootCondition.builder(RAT_CURSE_CHANCE).build())
+					.build()
 				);
 			}
 		});

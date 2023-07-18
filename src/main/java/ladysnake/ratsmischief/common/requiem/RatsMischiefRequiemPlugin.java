@@ -22,6 +22,23 @@ public class RatsMischiefRequiemPlugin implements RequiemPlugin {
 	public static final RatifiedRemnantType RATIFIED_REMNANT_TYPE = new RatifiedRemnantType(RatifiedRemnantType.RatifiedRemnantState::new);
 	public static final RatifiedRemnantType SPYING_RAT_REMNANT_TYPE = new RatifiedRemnantType(RatifiedRemnantType.SpyingRatRemnantState::new);
 
+	public static boolean goBackToBody(ServerPlayerEntity player) {
+		if (getBody(player) instanceof PlayerShellEntity body) {
+			PossessionComponent.get(player).stopPossessing(true);
+			RemnantComponent.get(player).merge(body);
+			RemnantComponent.get(player).become(RemnantTypes.MORTAL);
+			return true;
+		}
+		return false;
+	}
+
+	@Nullable
+	private static Entity getBody(ServerPlayerEntity player) {
+		return PlayerBodyTracker.get(player).getAnchor()
+			.flatMap(a -> a.get(RequiemRecordTypes.ENTITY_REF))
+			.flatMap(ptr -> ptr.resolve(player.server)).orElse(null);
+	}
+
 	@Override
 	public void onRequiemInitialize() {
 		// always allow rat possession for rat players
@@ -46,23 +63,6 @@ public class RatsMischiefRequiemPlugin implements RequiemPlugin {
 			}
 			return 0;
 		});
-	}
-
-	public static boolean goBackToBody(ServerPlayerEntity player) {
-		if (getBody(player) instanceof PlayerShellEntity body) {
-			PossessionComponent.get(player).stopPossessing(true);
-			RemnantComponent.get(player).merge(body);
-			RemnantComponent.get(player).become(RemnantTypes.MORTAL);
-			return true;
-		}
-		return false;
-	}
-
-	@Nullable
-	private static Entity getBody(ServerPlayerEntity player) {
-		return PlayerBodyTracker.get(player).getAnchor()
-				.flatMap(a -> a.get(RequiemRecordTypes.ENTITY_REF))
-				.flatMap(ptr -> ptr.resolve(player.server)).orElse(null);
 	}
 
 	@Override

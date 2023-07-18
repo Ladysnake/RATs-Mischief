@@ -24,13 +24,13 @@ public class EnderEyeFeatureRenderer extends GeoLayerRenderer<RatEntity> {
 	public void render(MatrixStack matrixStackIn, VertexConsumerProvider bufferIn, int packedLightIn, RatEntity ratEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		if (ratEntity.isSpy() && !ratEntity.isInvisible()) {
 			this.enderEyeEntityRenderer.render(this.getEntityModel().getModel(this.getEntityModel().getModelResource(ratEntity)),
-					ratEntity,
-					partialTicks,
-					RenderLayer.getEntityCutout(TEXTURE),
-					matrixStackIn,
-					bufferIn,
-					bufferIn.getBuffer(RenderLayer.getEntityCutout(TEXTURE)),
-					packedLightIn, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+				ratEntity,
+				partialTicks,
+				RenderLayer.getEntityCutout(TEXTURE),
+				matrixStackIn,
+				bufferIn,
+				bufferIn.getBuffer(RenderLayer.getEntityCutout(TEXTURE)),
+				packedLightIn, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
 		}
 	}
 }

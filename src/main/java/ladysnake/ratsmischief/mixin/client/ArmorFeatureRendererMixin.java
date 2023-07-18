@@ -35,11 +35,16 @@ import java.util.Map;
 
 @Mixin(ArmorFeatureRenderer.class)
 public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> extends FeatureRenderer<T, M> {
-	@Unique private static final Map<String, Identifier> ARMOR_TEXTURE_CACHE = Maps.newHashMap();
-	@Unique private static final Map<String, Identifier> SLIM_ARMOR_TEXTURE_CACHE = Maps.newHashMap();
-	@Unique private PlayerEntityModel<LivingEntity> leggingsModel;
-	@Unique private PlayerEntityModel<LivingEntity> bodyModel;
-	@Unique private boolean slim = false;
+	@Unique
+	private static final Map<String, Identifier> ARMOR_TEXTURE_CACHE = Maps.newHashMap();
+	@Unique
+	private static final Map<String, Identifier> SLIM_ARMOR_TEXTURE_CACHE = Maps.newHashMap();
+	@Unique
+	private PlayerEntityModel<LivingEntity> leggingsModel;
+	@Unique
+	private PlayerEntityModel<LivingEntity> bodyModel;
+	@Unique
+	private boolean slim = false;
 
 	public ArmorFeatureRendererMixin(FeatureRendererContext<T, M> context) {
 		super(context);

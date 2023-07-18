@@ -110,11 +110,11 @@ public class RatMeleeAttackGoal extends Goal {
 			double d = this.rat.squaredDistanceTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
 			this.updateCountdownTicks = Math.max(this.updateCountdownTicks - 1, 0);
 			if ((this.pauseWhenMobIdle || this.rat.getVisibilityCache().canSee(livingEntity))
-					&& this.updateCountdownTicks <= 0
-					&& (
-					this.targetX == 0.0 && this.targetY == 0.0 && this.targetZ == 0.0
-							|| livingEntity.squaredDistanceTo(this.targetX, this.targetY, this.targetZ) >= 1.0
-							|| this.rat.getRandom().nextFloat() < 0.05F
+				&& this.updateCountdownTicks <= 0
+				&& (
+				this.targetX == 0.0 && this.targetY == 0.0 && this.targetZ == 0.0
+					|| livingEntity.squaredDistanceTo(this.targetX, this.targetY, this.targetZ) >= 1.0
+					|| this.rat.getRandom().nextFloat() < 0.05F
 			)) {
 				this.targetX = livingEntity.getX();
 				this.targetY = livingEntity.getY();

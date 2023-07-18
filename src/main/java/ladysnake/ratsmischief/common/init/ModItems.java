@@ -1,14 +1,7 @@
 package ladysnake.ratsmischief.common.init;
 
 import ladysnake.ratsmischief.common.RatsMischief;
-import ladysnake.ratsmischief.common.item.RatItem;
-import ladysnake.ratsmischief.common.item.RatMasterArmorItem;
-import ladysnake.ratsmischief.common.item.RatMasterCloakItem;
-import ladysnake.ratsmischief.common.item.RatMasterHoodItem;
-import ladysnake.ratsmischief.common.item.RatMasterMaskItem;
-import ladysnake.ratsmischief.common.item.RatMasterMirrorItem;
-import ladysnake.ratsmischief.common.item.RatMasterOcarinaItem;
-import ladysnake.ratsmischief.common.item.RatPouchItem;
+import ladysnake.ratsmischief.common.item.*;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;

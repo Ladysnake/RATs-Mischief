@@ -20,25 +20,25 @@ import java.util.List;
 import java.util.Optional;
 
 public class RatMasterMaskItem extends TrinketItem {
-    public RatMasterMaskItem(Settings settings) {
-        super(settings);
-    }
+	public RatMasterMaskItem(Settings settings) {
+		super(settings);
+	}
 
-    public static boolean isWearingMask(LivingEntity livingEntity) {
-        return getWornMask(livingEntity) != ItemStack.EMPTY;
-    }
+	public static boolean isWearingMask(LivingEntity livingEntity) {
+		return getWornMask(livingEntity) != ItemStack.EMPTY;
+	}
 
-    public static ItemStack getWornMask(LivingEntity livingEntity) {
-        Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(livingEntity);
-        if (component.isPresent()) {
-            for (Pair<SlotReference, ItemStack> pair : component.get().getAllEquipped()) {
-                if (pair.getRight().getItem() instanceof RatMasterMaskItem) {
-                    return pair.getRight();
-                }
-            }
-        }
-        return ItemStack.EMPTY;
-    }
+	public static ItemStack getWornMask(LivingEntity livingEntity) {
+		Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(livingEntity);
+		if (component.isPresent()) {
+			for (Pair<SlotReference, ItemStack> pair : component.get().getAllEquipped()) {
+				if (pair.getRight().getItem() instanceof RatMasterMaskItem) {
+					return pair.getRight();
+				}
+			}
+		}
+		return ItemStack.EMPTY;
+	}
 
 	public static int getOffset(ItemStack stack) {
 		if (stack.getNbt() == null) {
@@ -52,19 +52,19 @@ public class RatMasterMaskItem extends TrinketItem {
 		compound.putInt("offset", MialeeMath.clampLoop(compound.getInt("offset") + 1, -2, 3));
 	}
 
-    @Override
-    public Text getName(ItemStack stack) {
-        return MialeeText.withColor(super.getName(stack), 0x87FFBF);
-    }
+	@Override
+	public Text getName(ItemStack stack) {
+		return MialeeText.withColor(super.getName(stack), 0x87FFBF);
+	}
 
-    @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+	@Override
+	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
 		tooltip.add(Text.translatable("item.ratsmischief.rat_master_mask.desc1").formatted(Formatting.GRAY));
 		tooltip.add(Text.translatable("item.ratsmischief.rat_master_friendly_fire").formatted(Formatting.GRAY));
 		tooltip.add(Text.translatable("item.ratsmischief.rat_master_mask.desc.offset1").formatted(Formatting.GRAY));
 		if (stack.getNbt() != null) {
 			tooltip.add(Text.translatable("item.ratsmischief.rat_master_mask.desc.offset2", stack.getNbt().getInt("offset")).formatted(Formatting.GRAY));
 		}
-        super.appendTooltip(stack, world, tooltip, context);
-    }
+		super.appendTooltip(stack, world, tooltip, context);
+	}
 }

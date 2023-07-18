@@ -1,8 +1,8 @@
 package ladysnake.ratsmischief.client;
 
 import ladysnake.ratsmischief.client.render.entity.RatEntityRenderer;
-import ladysnake.ratsmischief.client.render.item.RatMasterMaskItemRenderer;
 import ladysnake.ratsmischief.client.render.item.RatItemRenderer;
+import ladysnake.ratsmischief.client.render.item.RatMasterMaskItemRenderer;
 import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.init.ModEntities;
 import ladysnake.ratsmischief.common.init.ModItems;

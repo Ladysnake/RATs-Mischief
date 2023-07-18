@@ -22,23 +22,23 @@ public class RatMasterMirrorItem extends Item {
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		if (!world.isClient()) {
 			RatEntity rat = world.getClosestEntity(
-					RatEntity.class,
-					TargetPredicate.createAttackable().setPredicate(r -> ((RatEntity)r).isOwner(user) && ((RatEntity) r).isSpy()),
-					user,
-					user.getX(),
-					user.getY(),
-					user.getZ(),
-					new Box(user.getBlockPos()).expand(160) // 16 chunks
+				RatEntity.class,
+				TargetPredicate.createAttackable().setPredicate(r -> ((RatEntity) r).isOwner(user) && ((RatEntity) r).isSpy()),
+				user,
+				user.getX(),
+				user.getY(),
+				user.getZ(),
+				new Box(user.getBlockPos()).expand(160) // 16 chunks
 			);
 			if (rat != null) {
 				RemnantComponent remnantComponent = RemnantComponent.get(user);
 				remnantComponent.become(RatsMischiefRequiemPlugin.SPYING_RAT_REMNANT_TYPE);
 				remnantComponent.splitPlayer(false)
-						.ifPresent(res -> {
-							res.soul().getItemCooldownManager().set(this, 40);
-							res.soul().networkHandler.requestTeleport(rat.getX(), rat.getY(), rat.getZ(), rat.getYaw(), rat.getPitch());
-							PossessionComponent.get(res.soul()).startPossessing(rat);
-						});
+					.ifPresent(res -> {
+						res.soul().getItemCooldownManager().set(this, 40);
+						res.soul().networkHandler.requestTeleport(rat.getX(), rat.getY(), rat.getZ(), rat.getYaw(), rat.getPitch());
+						PossessionComponent.get(res.soul()).startPossessing(rat);
+					});
 			}
 		}
 

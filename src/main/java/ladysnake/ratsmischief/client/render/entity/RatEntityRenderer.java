@@ -13,7 +13,10 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
@@ -55,7 +58,7 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 		this.ratTexture = this.getTexture(ratEntity);
 
 		super.renderEarly(ratEntity, stackIn, ticks, vertexConsumerProvider, vertexBuilder, packedLightIn, packedOverlayIn, red,
-				green, blue, partialTicks);
+			green, blue, partialTicks);
 	}
 
 	@Override
@@ -74,7 +77,7 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 			bufferIn = this.vertexConsumerProvider.getBuffer(RenderLayer.getEntityCutout(this.ratTexture));
 		}
 
-		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red	, green, blue, alpha);
+		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 	}
 
 	@Override
