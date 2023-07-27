@@ -2,6 +2,7 @@ package ladysnake.ratsmischief.common;
 
 import ladysnake.ratsmischief.client.render.item.recipe.SpyRatCraftingRecipe;
 import ladysnake.ratsmischief.common.init.*;
+import ladysnake.ratsmischief.common.world.RatSpawner;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
@@ -16,8 +17,10 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.Difficulty;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
+import org.quiltmc.qsl.lifecycle.api.event.ServerWorldTickEvents;
 import software.bernie.geckolib3.GeckoLib;
 
 public class RatsMischief implements ModInitializer {
@@ -44,6 +47,13 @@ public class RatsMischief implements ModInitializer {
 		ModEnchantments.initialize();
 		ModLootTables.initialize();
 		ModStatusEffects.initialize();
+
+		// custom rat spawner in abandoned villages
+		RatSpawner ratSpawner = new RatSpawner();
+		ServerWorldTickEvents.END.register((server, world) -> {
+			// spawn rats
+			ratSpawner.spawn(world, world.getDifficulty() != Difficulty.PEACEFUL, server.shouldSpawnAnimals());
+		});
 
 		// rat kid painting
 		Registry.register(Registry.PAINTING_VARIANT, new Identifier(MOD_ID, "a_rat_in_time"), new PaintingVariant(64, 48));
