@@ -584,9 +584,9 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 					case "jerma", "jerma985" -> this.setRatType(Type.JERMA);
 					case "biggie cheese" -> this.setRatType(Type.BIGGIE_CHEESE);
 
-					case "gin" -> this.setRatType(Type.HUSKY);
-					case "splinter", "tonic" -> this.setRatType(Type.HUSKY_GHOST);
-					case "sai-sai", "shiro" -> this.setRatType(Type.WILD_GHOST);
+//					case "gin" -> this.setRatType(Type.HUSKY);
+//					case "splinter", "tonic" -> this.setRatType(Type.HUSKY_GHOST);
+//					case "sai-sai", "shiro" -> this.setRatType(Type.WILD_GHOST);
 				}
 			}
 
@@ -1033,10 +1033,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		REMY(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/remy.png")),
 		RATATER(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/ratater.png")),
 		JERMA(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/jerma.png")),
-		BIGGIE_CHEESE(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/biggie_cheese.png")),
-
-		WILD_GHOST(new Identifier(RatsMischief.MOD_ID, "textures/entity/wild_ghost.png")),
-		HUSKY_GHOST(new Identifier(RatsMischief.MOD_ID, "textures/entity/husky_ghost.png"));
+		BIGGIE_CHEESE(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/biggie_cheese.png"));
 
 		public final Identifier ratTexture;
 
