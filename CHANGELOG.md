@@ -2,6 +2,53 @@
 Rat's Mischief 2.0 - 1.19.2
 ------------------------------------------------------
 - Rewrote the mod from scratch
+- Improved Rat models, textures, animations and added hurt and death sounds
+- Rats can now be picked up as items (by sneak right clicking on one that is your pet) and held in your hand
+  - When held in hand, Rats can be placed back down or thrown, and if aimed at a mob, stick on top of it to attack them
+  - Right-clicking a Rat in your inventory will set them to return to you and get back to your inventory automatically after being thrown
+- New Plague Rat mechanic: when two Rats affected with the same potion effect breed, the offspring has a chance to be a Plague Rat
+  - Plague Rats cannot be affected by their carried effect, but will transfer that effect to entities they attack.
+  - Combine this mechanic with the throwing mechanic to use Plague Rats with negative or positive potion effects, respectively as an offense or support tool
+- New Spy Rat mechanic: combining a Rat (as an item) with an Ender Eye and Rabbit Hide allows you to equip said rat as a Spy Rat, a rat that can be remote controlled using a Rat Master Mirror
+- Purpur Rat Pouch capacity reduced down to from 20 to 15
+- Added Clothed Ingots: the main material to craft Rat Master gear and armor. Can be obtained in Ancient City loot chests
+- Added the Rat Master Armor
+  - An armor set with Diamond level protection, specifically designed to use Rats with a "summoner" playstyle
+  - Allows the wearer to choose a bonus for each piece worn by right clicking them. Current bonuses are:
+    - 15% increased Rat damage resistance
+    - 25% increased Rat attack damage
+    - 25% increased Rat mining speed
+  - Hood and pauldrons can be visually toggled by shift right clicking on the Hood and Cloak items
+  - Wearing a full set prevents a player from hurting their own Rats
+  - Can be obtained by combining Diamond Armor pieces with a Clothed Ingot in a Smithing Table
+- Added the Rat Master Mask
+  - Replaces the Mask of Rat
+  - Prevents the wearer from hurting their own Rats
+  - Hides the wearer's name tag
+  - Can be obtained by combining a Skeleton Skull with a Clothed Ingot in a Smithing Table
+- Added the Curse of the Rat
+  - Curse of the Rat books can be found exclusively in Ancient City loot chests, and can be applied to Rat Master Armor pieces and the Rat Master Mask
+  - Causes a player to automatically transform into a Rat to flee combat whenever their health drops below 4 hearts. Duration of the Rat effect lasts 10 seconds per Cursed piece
+- Added a new pouch, the Rat Master Pouch, with a capacity of 20
+  - Can be obtained by combining a Purpur Pouch with a Clothed Ingot in a Smithing Table
+- Added the Rat Master Ocarina
+  - Replaces Rat Staves
+  - Can be used to give order to Rats. Sneak use to change order and use to give order. Current orders are:
+    - Harvest mature crops and plant held vegetable / seeds
+    - Mine and collect the block type the Ocarina was used on
+    - Attack all hostile entities on sight
+    - Breed animals that can be bred with the item each Rat is currently holding (including Rats)
+  - Right click in the inventory to toggle Rats bringing dropped items
+  - Can be obtained by combining a Goat Horn with a Clothed Ingot in a Smithing Table
+- Rat Master Mirror
+  - Allows the user to take control of their closest deployed and owned Spy Rat
+  - Can be obtained by combining an Ender Eye with a Clothed Ingot in a Smithing Table
+- Rats will now lift their tail when in breeding mode
+- Rats no longer take any fall damage
+- Rats now make a slapping sound when falling from high heights
+- Removed Elytrats
+- Removed the Arathain, Hollow Knight, Madeline and Jotaro Rat easter egg names
+- Migrated the mod to Quilt
 
 ------------------------------------------------------
 Rat's Mischief 1.4.0 - 1.19.2
