@@ -68,35 +68,31 @@ dependencies {
 	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
 	modImplementation "org.quiltmc:qsl:${qsl_version}+${minecraft_version}"
 
-	modImplementation "org.quiltmc.qsl:core:3.0.0-beta.25+1.19.2"
-
 	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}-${minecraft_version}"
 
 	// reach attributes
-	modImplementation "com.github.emilyploszaj:step-height-entity-attribute:v1.0.1"
-	include "com.github.emilyploszaj:step-height-entity-attribute:v1.0.1"
+	modImplementation("com.github.emilyploszaj:step-height-entity-attribute:v1.0.1")
+	include("com.github.emilyploszaj:step-height-entity-attribute:v1.0.1")
 
 	// mod menu
-	modCompileOnly "com.terraformersmc:modmenu:${mod_menu_version}"
-	modRuntimeOnly "com.terraformersmc:modmenu:${mod_menu_version}"
+	modLocalImplementation("com.terraformersmc:modmenu:${mod_menu_version}") { transitive = false }
 
 	// mixin extras
-	implementation include ("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
-	annotationProcessor ("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
+	implementation include("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
+	annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
 
 	// mialee misc
-	modImplementation include ("xyz.amymialee:mialeemisc:${project.mialeemisc_version}")
+	modImplementation include("xyz.amymialee:mialeemisc:${project.mialeemisc_version}")
 
 	// elegant armor
-    modCompileOnly ("xyz.amymialee:elegantarmour:${project.elegantarmour_version}")
-    modRuntimeOnly ("xyz.amymialee:elegantarmour:${project.elegantarmour_version}")
+    modLocalImplementation("xyz.amymialee:elegantarmour:${project.elegantarmour_version}") { transitive = false }
 
 	// ok zoomer
 //	runtimeOnly("com.github.EnnuiL:OkZoomer:1.19.2-SNAPSHOT")
 
-	modCompileOnly ("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
-	modImplementation "io.github.ladysnake:requiem-api:${project.requiem_version}"
-	modImplementation "io.github.ladysnake:requiem-core:${project.requiem_version}"
+	modCompileOnly("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
+	modImplementation("io.github.ladysnake:requiem-api:${project.requiem_version}")
+	modImplementation("io.github.ladysnake:requiem-core:${project.requiem_version}")
 	modImplementation include("io.github.ladysnake:requiem-lite:${project.requiem_version}")
 
 	// trinkets
