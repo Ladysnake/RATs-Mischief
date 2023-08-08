@@ -1,6 +1,6 @@
 plugins {
-	id 'io.github.ladysnake.chenille' version '0.11.3'
 	id 'maven-publish'
+	id 'io.github.ladysnake.chenille' version '0.11.3'
 }
 
 archivesBaseName = project.archives_base_name
@@ -25,7 +25,7 @@ repositories {
 	maven {
 		name = 'TerraformersMC'
 		url = 'https://maven.terraformersmc.com/'
-	}
+	 }
 
 	maven { url 'https://jitpack.io' }
 
@@ -63,7 +63,7 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:intermediary-v2"
 
-	modImplementation 'software.bernie.geckolib:geckolib-quilt-1.19:3.1.39'
+	modImplementation "software.bernie.geckolib:${project.geckolib_version}"
 
 	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
 	modImplementation "org.quiltmc:qsl:${qsl_version}+${minecraft_version}"

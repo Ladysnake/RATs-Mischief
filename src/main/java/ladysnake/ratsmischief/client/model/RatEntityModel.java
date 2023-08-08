@@ -46,8 +46,8 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
 
 		// sexually aroused rat
 		if (ratEntity.isAroused()) {
-			IBone tail = this.getAnimationProcessor().getBone("tail");
-			IBone tailend = this.getAnimationProcessor().getBone("tailend");
+			software.bernie.geckolib3.core.processor.IBone tail = this.getAnimationProcessor().getBone("tail");
+			software.bernie.geckolib3.core.processor.IBone tailend = this.getAnimationProcessor().getBone("tailend");
 
 			tail.setRotationX((float) (-45 * Math.PI / 180));
 			tailend.setRotationX((float) (-30 * Math.PI / 180));
