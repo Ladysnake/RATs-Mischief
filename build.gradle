@@ -39,7 +39,7 @@ repositories {
 	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 
 	// mialee misc
-	maven { url "https://repo.wawwior.me/repository/maven-public/" }
+	maven { url "https://maven.wawwior.me/" }
 
 	maven { url "https://maven.willbl.dev/releases" }
 
