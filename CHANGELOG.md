@@ -2,6 +2,7 @@
 Rat's Mischief 2.0.1 - 1.19.2
 ------------------------------------------------------
 - Fixed a server crash caused by the MialeeMisc library
+- Fixed Rat Master Armour slim arms not being slim
 
 ------------------------------------------------------
 Rat's Mischief 2.0 - 1.19.2

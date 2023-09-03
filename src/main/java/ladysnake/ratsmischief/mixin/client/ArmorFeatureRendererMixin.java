@@ -7,7 +7,6 @@ import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.item.RatMasterArmorItem;
 import ladysnake.ratsmischief.common.item.RatMasterCloakItem;
 import ladysnake.ratsmischief.common.item.RatMasterHoodItem;
-import ladysnake.ratsmischief.common.item.RatMasterMaskItem;
 import ladysnake.ratsmischief.common.util.EntityRendererWrapper;
 import ladysnake.ratsmischief.common.util.PlayerEntityRendererWrapper;
 import net.minecraft.client.render.OverlayTexture;
@@ -35,16 +34,11 @@ import java.util.Map;
 
 @Mixin(ArmorFeatureRenderer.class)
 public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> extends FeatureRenderer<T, M> {
-	@Unique
-	private static final Map<String, Identifier> ARMOR_TEXTURE_CACHE = Maps.newHashMap();
-	@Unique
-	private static final Map<String, Identifier> SLIM_ARMOR_TEXTURE_CACHE = Maps.newHashMap();
-	@Unique
-	private PlayerEntityModel<LivingEntity> leggingsModel;
-	@Unique
-	private PlayerEntityModel<LivingEntity> bodyModel;
-	@Unique
-	private boolean slim = false;
+	@Unique private static final Map<String, Identifier> ARMOR_TEXTURE_CACHE = Maps.newHashMap();
+	@Unique private static final Map<String, Identifier> SLIM_ARMOR_TEXTURE_CACHE = Maps.newHashMap();
+	@Unique private PlayerEntityModel<LivingEntity> leggingsModel;
+	@Unique private PlayerEntityModel<LivingEntity> bodyModel;
+	@Unique private boolean slim;
 
 	public ArmorFeatureRendererMixin(FeatureRendererContext<T, M> context) {
 		super(context);
@@ -54,10 +48,10 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 	private void mischief$init(FeatureRendererContext<T, M> context, A leggingsModel, A bodyModel, CallbackInfo ci) {
 		if (context instanceof EntityRendererWrapper wrapper) {
 			if (context instanceof PlayerEntityRendererWrapper playerWrapper) {
-				this.slim = playerWrapper.isSlim();
+				this.slim = playerWrapper.mischief$isSlim();
 			}
-			this.leggingsModel = new PlayerEntityModel<>(wrapper.getContext().getPart(RatsMischiefClient.RAT_MASTER_ARMOR_INNER_LAYER), false);
-			this.bodyModel = new PlayerEntityModel<>(wrapper.getContext().getPart(this.slim ? RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER), this.slim);
+			this.leggingsModel = new PlayerEntityModel<>(wrapper.mischief$getContext().getPart(RatsMischiefClient.RAT_MASTER_ARMOR_INNER_LAYER), this.slim);
+			this.bodyModel = new PlayerEntityModel<>(wrapper.mischief$getContext().getPart(this.slim ? RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER), this.slim);
 		}
 	}
 
@@ -66,10 +60,6 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 		ItemStack itemStack = entity.getEquippedStack(armorSlot);
 		if (itemStack.getItem() instanceof RatMasterArmorItem) {
 			this.renderRatArmor(matrices, vertexConsumers, entity, armorSlot, light);
-			ci.cancel();
-			return;
-		}
-		if (armorSlot == EquipmentSlot.HEAD && RatMasterMaskItem.isWearingMask(entity)) {
 			ci.cancel();
 		}
 	}

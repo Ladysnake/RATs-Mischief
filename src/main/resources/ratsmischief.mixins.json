@@ -24,8 +24,7 @@
     "client.HeadFeatureRendererMixin",
     "client.HeldItemRendererMixin",
     "client.ItemEntityRendererMixin",
-    "client.PlayerEntityRendererMixin",
-    "compat.ElegantArmour$SlimArmorFeatureRendererMixin"
+    "client.PlayerEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

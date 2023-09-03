@@ -33,7 +33,7 @@ public class EntityRendererMixin<T extends Entity> implements EntityRendererWrap
 	}
 
 	@Override
-	public EntityRendererFactory.Context getContext() {
+	public EntityRendererFactory.Context mischief$getContext() {
 		return this.context;
 	}
 }

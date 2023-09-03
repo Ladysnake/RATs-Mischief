@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlayerEntityRenderer.class)
 public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> implements PlayerEntityRendererWrapper {
 	@Unique
-	private boolean isSlim = false;
+	private boolean isSlim = true;
 
 	public PlayerEntityRendererMixin(EntityRendererFactory.Context ctx, PlayerEntityModel<AbstractClientPlayerEntity> model, float shadowRadius) {
 		super(ctx, model, shadowRadius);
@@ -36,7 +36,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 		}
 	}
 
-	@Inject(method = "<init>", at = @At("TAIL"))
+	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/PlayerEntityRenderer;addFeature(Lnet/minecraft/client/render/entity/feature/FeatureRenderer;)Z", ordinal = 0))
 	private void mischief$masterArmor(EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci) {
 		this.isSlim = slim;
 	}
@@ -57,7 +57,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 	}
 
 	@Override
-	public boolean isSlim() {
+	public boolean mischief$isSlim() {
 		return this.isSlim;
 	}
 }
