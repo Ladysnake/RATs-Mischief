@@ -166,10 +166,10 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		NbtCompound ratTag = getRatTag(stack, world);
-		MutableText ratType = Text.translatable("type.ratsmischief." + getRatType(stack).name().toLowerCase());
+		var ratTag = getRatTag(stack, world);
+		var ratType = Text.translatable("type.ratsmischief." + getRatType(stack).name().toLowerCase());
 
-		Style style = EMPTY.withColor(Formatting.DARK_GRAY);
+		var style = EMPTY.withColor(Formatting.DARK_GRAY);
 		if (ratTag.getString("RatType").equals(RatEntity.Type.GOLD.name())) {
 			style = EMPTY.withColor(Formatting.GOLD);
 		}
@@ -182,8 +182,8 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 		}
 
 		// potion genes
-		Identifier potionId = new Identifier(ratTag.getString("PotionGene"));
-		StatusEffect statusEffect = Registry.STATUS_EFFECT.get(potionId);
+		var potionId = new Identifier(ratTag.getString("PotionGene"));
+		var statusEffect = Registry.STATUS_EFFECT.get(potionId);
 		if (statusEffect != null) {
 			tooltip.add(Text.translatable("item.ratsmischief.rat.tooltip.potion").setStyle(EMPTY.withColor(Formatting.GRAY)).append(MialeeText.withColor(Text.translatable(statusEffect.getTranslationKey()).setStyle(EMPTY), statusEffect.getColor())));
 		}
