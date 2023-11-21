@@ -8,55 +8,31 @@ version = project.version
 group = project.maven_group
 
 repositories {
-	mavenLocal()
 	// publishing
 	maven {
 		name = "CurseForge"
 		url = "https://minecraft.curseforge.com/api/maven"
 	}
-
-	// cloth config
-	maven { url "https://maven.shedaniel.me/" }
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
+	}
 
 	// CCA, Requiem
 	chenille.repositories.ladysnake()
 
-	// mod menu
-	maven {
-		name = 'TerraformersMC'
-		url = 'https://maven.terraformersmc.com/'
-	 }
+	// Mod Menu
+	maven { url 'https://maven.terraformersmc.com/'}
 
-	maven { url 'https://jitpack.io' }
-
-	maven {
-		name "modrinth"
-		url "https://api.modrinth.com/maven"
-	}
-
-	maven { url 'https://masa.dy.fi/maven' }
-
+	// GeckoLib
 	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 
-	// mialee misc
-	maven { url "https://maven.willbl.dev/releases" }
+	// MialeeMisc
+	maven { url 'https://maven.willbl.dev/releases/' }
 
-	maven {
-		url = 'https://maven.jamieswhiteshirt.com/libs-release/'
-		content {
-			includeGroup 'com.jamieswhiteshirt'
-		}
-	}
-
-	maven {
-		url = 'https://oss.sonatype.org/content/repositories/snapshots'
-		content {
-			includeGroup 'me.lucko'
-		}
-	}
-
-	// ears
-	maven { url "https://repo.unascribed.com" }
+	maven { url 'https://jitpack.io' }
+	mavenCentral()
+	mavenLocal()
 }
 
 dependencies {
@@ -70,27 +46,24 @@ dependencies {
 
 	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}-${minecraft_version}"
 
-	// reach attributes
-	modImplementation("com.github.emilyploszaj:step-height-entity-attribute:v1.0.1")
-	include("com.github.emilyploszaj:step-height-entity-attribute:v1.0.1")
+	// SHEA
+	modImplementation include("com.github.emilyploszaj:step-height-entity-attribute:v1.0.1")
 
-	// mod menu
+	// Mod Menu
 	modLocalImplementation("com.terraformersmc:modmenu:${mod_menu_version}") { transitive = false }
 
-	// mixin extras
+	// MixinExtras
 	implementation include("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
 	annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
 
-	// mialee misc
+	// MialeeMisc
 	modImplementation include("xyz.amymialee:mialeemisc:${project.mialeemisc_version}")
 
-	// ok zoomer
-//	runtimeOnly("com.github.EnnuiL:OkZoomer:1.19.2-SNAPSHOT")
-
-	modCompileOnly("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
-	modImplementation("io.github.ladysnake:requiem-api:${project.requiem_version}")
-	modImplementation("io.github.ladysnake:requiem-core:${project.requiem_version}")
-	modImplementation include("io.github.ladysnake:requiem-lite:${project.requiem_version}")
+	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
+	//modCompileOnly("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
+	//modImplementation("io.github.ladysnake:requiem-api:${project.requiem_version}")
+	//modImplementation("io.github.ladysnake:requiem-core:${project.requiem_version}")
+	//modImplementation include("io.github.ladysnake:requiem-lite:${project.requiem_version}")
 
 	// trinkets
 	modImplementation ("dev.emi:trinkets:${project.trinkets_version}")

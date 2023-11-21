@@ -37,10 +37,6 @@
 			},
 			{
 				"id": "step-height-entity-attribute"
-			},
-			{
-				"id": "requiem",
-				"unless": "requiem-lite"
 			}
 		]
 	},

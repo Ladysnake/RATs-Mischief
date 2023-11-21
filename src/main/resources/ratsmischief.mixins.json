@@ -13,9 +13,7 @@
     "ScreenHandlerMixin",
     "SculkSensorBlockEntityMixin",
     "SculkShriekerBlockEntityMixin",
-    "WardenEntityMixin",
-    "compat.PlayerBodyTrackerMixin",
-    "compat.VanillaRequiemPluginMixin"
+    "WardenEntityMixin"
   ],
   "client": [
     "client.ArmorFeatureRendererMixin",
