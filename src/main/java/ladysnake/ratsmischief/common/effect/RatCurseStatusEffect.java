@@ -23,8 +23,8 @@ public class RatCurseStatusEffect extends StatusEffect {
 
 		if (entity instanceof PlayerEntity player) {
 			for (int i = 0; i < 5; i++) {
-				((ServerWorld) player.world).spawnParticles(ParticleTypes.LARGE_SMOKE, player.getX(), player.getY() + player.getHeight() / 2f, player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
-				((ServerWorld) player.world).spawnParticles(ParticleTypes.SMOKE, player.getX(), player.getY(), player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
+				((ServerWorld) player.getWorld()).spawnParticles(ParticleTypes.LARGE_SMOKE, player.getX(), player.getY() + player.getHeight() / 2f, player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
+				((ServerWorld) player.getWorld()).spawnParticles(ParticleTypes.SMOKE, player.getX(), player.getY(), player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
 			}
 
 			player.playSound(SoundEvents.ENTITY_ILLUSIONER_MIRROR_MOVE, SoundCategory.PLAYERS, 1.0f, 1.0f);
@@ -38,8 +38,8 @@ public class RatCurseStatusEffect extends StatusEffect {
 
 		if (entity instanceof PlayerEntity player) {
 			for (int i = 0; i < 5; i++) {
-				((ServerWorld) player.world).spawnParticles(ParticleTypes.LARGE_SMOKE, player.getX(), player.getY() + player.getHeight() / 2f, player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
-				((ServerWorld) player.world).spawnParticles(ParticleTypes.SMOKE, player.getX(), player.getY(), player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
+				((ServerWorld) player.getWorld()).spawnParticles(ParticleTypes.LARGE_SMOKE, player.getX(), player.getY() + player.getHeight() / 2f, player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
+				((ServerWorld) player.getWorld()).spawnParticles(ParticleTypes.SMOKE, player.getX(), player.getY(), player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
 			}
 
 			player.playSound(SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, SoundCategory.PLAYERS, 1.0f, 1.0f);

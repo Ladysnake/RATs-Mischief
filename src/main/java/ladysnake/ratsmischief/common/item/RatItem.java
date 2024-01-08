@@ -1,45 +1,51 @@
 package ladysnake.ratsmischief.common.item;
 
+import ladysnake.ratsmischief.client.render.item.RatItemRenderer;
 import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.init.ModEntities;
+import ladysnake.ratsmischief.mialeemisc.util.MialeeText;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.DyeColor;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.network.GeckoLibNetwork;
-import software.bernie.geckolib3.network.ISyncable;
-import software.bernie.geckolib3.util.GeckoLibUtil;
-import xyz.amymialee.mialeemisc.util.MialeeText;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
+import software.bernie.geckolib.animatable.client.RenderProvider;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static net.minecraft.text.Style.EMPTY;
 
-public class RatItem extends Item implements IAnimatable, ISyncable {
-	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+public class RatItem extends Item implements GeoItem {
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
 	public RatItem(Settings settings) {
 		super(settings);
-		GeckoLibNetwork.registerSyncable(this);
+		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 
 	public static void cycleRatReturn(ItemStack stack) {
@@ -96,23 +102,34 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 		return DyeColor.byName(ratColor.toLowerCase(), DyeColor.WHITE);
 	}
 
-	private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-		return PlayState.CONTINUE;
+	@Override
+	public void createRenderer(Consumer<Object> consumer) {
+		consumer.accept(new RenderProvider() {
+			private RatItemRenderer renderer;
+
+			@Override
+			public BuiltinModelItemRenderer getCustomRenderer() {
+				if (this.renderer == null)
+					renderer = new RatItemRenderer();
+
+				return renderer;
+			}
+		});
 	}
 
 	@Override
-	public void registerControllers(AnimationData data) {
-		AnimationController<RatItem> controller = new AnimationController<>(this, "idle", 20, this::predicate);
-		data.addAnimationController(controller);
+	public AnimatableInstanceCache getAnimatableInstanceCache() {
+		return this.cache;
 	}
 
 	@Override
-	public AnimationFactory getFactory() {
-		return this.factory;
+	public Supplier<Object> getRenderProvider() {
+		return this.renderProvider;
 	}
 
 	@Override
-	public void onAnimationSync(int id, int state) {
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+		controllers.add(new AnimationController<>(this, "idle", 20, state -> PlayState.CONTINUE));
 	}
 
 	@Override
@@ -183,7 +200,7 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 
 		// potion genes
 		var potionId = new Identifier(ratTag.getString("PotionGene"));
-		var statusEffect = Registry.STATUS_EFFECT.get(potionId);
+		var statusEffect = Registries.STATUS_EFFECT.get(potionId);
 		if (statusEffect != null) {
 			tooltip.add(Text.translatable("item.ratsmischief.rat.tooltip.potion").setStyle(EMPTY.withColor(Formatting.GRAY)).append(MialeeText.withColor(Text.translatable(statusEffect.getTranslationKey()).setStyle(EMPTY), statusEffect.getColor())));
 		}

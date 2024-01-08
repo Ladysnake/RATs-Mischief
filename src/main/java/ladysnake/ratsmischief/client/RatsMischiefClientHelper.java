@@ -20,7 +20,7 @@ public class RatsMischiefClientHelper {
 	public static boolean shouldRatsBringItems() {
 		PlayerEntity player = MinecraftClient.getInstance().player;
 		if (player instanceof PlayerRatOwner playerRatOwner) {
-			return playerRatOwner.shouldBringItems();
+			return playerRatOwner.ratsmischief$shouldBringItems();
 		}
 		return false;
 	}

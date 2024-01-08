@@ -5,8 +5,9 @@ import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.quiltmc.qsl.entity.api.QuiltEntityTypeBuilder;
 
 import java.util.LinkedHashMap;
@@ -24,6 +25,6 @@ public interface ModEntities {
 	}
 
 	static void initialize() {
-		ENTITIES.keySet().forEach(entityType -> Registry.register(Registry.ENTITY_TYPE, ENTITIES.get(entityType), entityType));
+		ENTITIES.keySet().forEach(entityType -> Registry.register(Registries.ENTITY_TYPE, ENTITIES.get(entityType), entityType));
 	}
 }

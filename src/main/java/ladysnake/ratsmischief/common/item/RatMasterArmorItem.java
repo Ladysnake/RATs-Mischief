@@ -1,6 +1,8 @@
 package ladysnake.ratsmischief.common.item;
 
 import ladysnake.ratsmischief.client.RatsMischiefClientHelper;
+import ladysnake.ratsmischief.mialeemisc.util.MialeeMath;
+import ladysnake.ratsmischief.mialeemisc.util.MialeeText;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -15,8 +17,6 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import xyz.amymialee.mialeemisc.util.MialeeMath;
-import xyz.amymialee.mialeemisc.util.MialeeText;
 
 import java.util.List;
 import java.util.Set;
@@ -24,7 +24,7 @@ import java.util.Set;
 public class RatMasterArmorItem extends ArmorItem {
 	public static final Set<EquipmentSlot> SLOTS = Set.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
 
-	public RatMasterArmorItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
+	public RatMasterArmorItem(ArmorMaterial material, ArmorSlot slot, Settings settings) {
 		super(material, slot, settings);
 	}
 
@@ -120,13 +120,13 @@ public class RatMasterArmorItem extends ArmorItem {
 		private static final int[] PROTECTION_AMOUNTS = new int[]{3, 6, 8, 3};
 
 		@Override
-		public int getDurability(EquipmentSlot slot) {
-			return BASE_DURABILITY[slot.getEntitySlotId()] * 38;
+		public int getDurability(ArmorSlot slot) {
+			return BASE_DURABILITY[slot.getEquipmentSlot().getEntitySlotId()] * 38;
 		}
 
 		@Override
-		public int getProtectionAmount(EquipmentSlot slot) {
-			return PROTECTION_AMOUNTS[slot.getEntitySlotId()];
+		public int getProtection(ArmorSlot slot) {
+			return PROTECTION_AMOUNTS[slot.getEquipmentSlot().getEntitySlotId()];
 		}
 
 		@Override

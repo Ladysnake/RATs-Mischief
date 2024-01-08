@@ -6,7 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -43,17 +43,17 @@ public class RatMasterMaskItemRenderer implements BuiltinItemRendererRegistry.Dy
 			final MinecraftClient client = MinecraftClient.getInstance();
 			this.itemRenderer = client.getItemRenderer();
 			this.inventoryModel = client.getBakedModelManager().getModel(new ModelIdentifier(this.itemId, "inventory"));
-			this.wornModel = client.getBakedModelManager().getModel(new ModelIdentifier(this.itemId + "_worn", "inventory"));
+			this.wornModel = client.getBakedModelManager().getModel(new ModelIdentifier(new Identifier(this.itemId + "_worn"), "inventory"));
 			applyProfiler.pop();
 			applyProfiler.endTick();
 		}, applyExecutor);
 	}
 
 	@Override
-	public void render(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+	public void render(ItemStack stack, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 		matrices.pop();
 		matrices.push();
-		if (mode == ModelTransformation.Mode.GUI || mode == ModelTransformation.Mode.GROUND || mode == ModelTransformation.Mode.FIXED) {
+		if (mode == ModelTransformationMode.GUI || mode == ModelTransformationMode.GROUND || mode == ModelTransformationMode.FIXED) {
 			this.itemRenderer.renderItem(stack, mode, false, matrices, vertexConsumers, light, overlay, this.inventoryModel);
 		} else {
 			boolean leftHanded;

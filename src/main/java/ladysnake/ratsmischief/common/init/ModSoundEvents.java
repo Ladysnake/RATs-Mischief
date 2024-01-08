@@ -1,9 +1,10 @@
 package ladysnake.ratsmischief.common.init;
 
 import ladysnake.ratsmischief.common.RatsMischief;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -19,12 +20,12 @@ public interface ModSoundEvents {
 
 	static void initialize() {
 		SOUND_EVENTS.keySet().forEach(soundEvent -> {
-			Registry.register(Registry.SOUND_EVENT, SOUND_EVENTS.get(soundEvent), soundEvent);
+			Registry.register(Registries.SOUND_EVENT, SOUND_EVENTS.get(soundEvent), soundEvent);
 		});
 	}
 
 	private static SoundEvent createSoundEvent(String path) {
-		SoundEvent soundEvent = new SoundEvent(new Identifier(RatsMischief.MOD_ID, path));
+		SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(new Identifier(RatsMischief.MOD_ID, path));
 		SOUND_EVENTS.put(soundEvent, new Identifier(RatsMischief.MOD_ID, path));
 		return soundEvent;
 	}

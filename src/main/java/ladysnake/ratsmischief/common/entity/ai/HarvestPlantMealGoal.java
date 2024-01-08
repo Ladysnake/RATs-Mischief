@@ -36,7 +36,7 @@ public class HarvestPlantMealGoal extends Goal {
 			for (BlockPos blockPos : BlockPos.iterateOutwards(this.rat.getBlockPos(), 8, 2, 8)) {
 				if (itemStack.isEmpty()) {
 					// harvest
-					BlockState blockState = this.rat.world.getBlockState(blockPos);
+					BlockState blockState = this.rat.getWorld().getBlockState(blockPos);
 					if (blockState.getBlock() instanceof CropBlock && ((CropBlock) blockState.getBlock()).isMature(blockState)) {
 						if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
 							this.targetBlockPos = blockPos;
@@ -45,8 +45,8 @@ public class HarvestPlantMealGoal extends Goal {
 					}
 				} else if (itemStack.getItem() instanceof AliasedBlockItem && ((AliasedBlockItem) itemStack.getItem()).getBlock() instanceof CropBlock) {
 					// plant
-					BlockState blockState = this.rat.world.getBlockState(blockPos.add(0, -1, 0));
-					if (blockState.getBlock() instanceof FarmlandBlock && this.rat.world.getBlockState(blockPos).isAir()) {
+					BlockState blockState = this.rat.getWorld().getBlockState(blockPos.add(0, -1, 0));
+					if (blockState.getBlock() instanceof FarmlandBlock && this.rat.getWorld().getBlockState(blockPos).isAir()) {
 						if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
 							this.targetBlockPos = blockPos;
 							return true;
@@ -54,8 +54,8 @@ public class HarvestPlantMealGoal extends Goal {
 					}
 				} else if (itemStack.getItem() instanceof BoneMealItem) {
 					// bonemeal
-					BlockState blockState = this.rat.world.getBlockState(blockPos);
-					if (blockState.getBlock() instanceof CropBlock && ((CropBlock) blockState.getBlock()).isFertilizable(this.rat.world, blockPos, this.rat.world.getBlockState(blockPos), this.rat.world.isClient())) {
+					BlockState blockState = this.rat.getWorld().getBlockState(blockPos);
+					if (blockState.getBlock() instanceof CropBlock && ((CropBlock) blockState.getBlock()).isFertilizable(this.rat.getWorld(), blockPos, this.rat.getWorld().getBlockState(blockPos), this.rat.getWorld().isClient())) {
 						if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
 							this.targetBlockPos = blockPos;
 							return true;
@@ -74,26 +74,26 @@ public class HarvestPlantMealGoal extends Goal {
 
 		if (itemStack.isEmpty()) {
 			// harvest
-			BlockState blockState = this.rat.world.getBlockState(this.targetBlockPos);
+			BlockState blockState = this.rat.getWorld().getBlockState(this.targetBlockPos);
 			if (!(blockState.getBlock() instanceof CropBlock && ((CropBlock) blockState.getBlock()).isMature(blockState))) {
 				this.canStart();
 			}
 
 			if (this.rat.squaredDistanceTo(this.targetBlockPos.getX(), this.targetBlockPos.getY(), this.targetBlockPos.getZ()) <= 5) {
-				this.rat.world.breakBlock(this.targetBlockPos, true, this.rat);
+				this.rat.getWorld().breakBlock(this.targetBlockPos, true, this.rat);
 				this.targetBlockPos = null;
 			} else {
 				this.rat.getNavigation().startMovingTo(this.targetBlockPos.getX(), this.targetBlockPos.getY(), this.targetBlockPos.getZ(), 1D);
 			}
 		} else if (itemStack.getItem() instanceof AliasedBlockItem && ((AliasedBlockItem) itemStack.getItem()).getBlock() instanceof CropBlock) {
 			// plant
-			BlockState blockState = this.rat.world.getBlockState(this.targetBlockPos.add(0, -1, 0));
-			if (!(blockState.getBlock() instanceof FarmlandBlock && this.rat.world.getBlockState(this.targetBlockPos).isAir())) {
+			BlockState blockState = this.rat.getWorld().getBlockState(this.targetBlockPos.add(0, -1, 0));
+			if (!(blockState.getBlock() instanceof FarmlandBlock && this.rat.getWorld().getBlockState(this.targetBlockPos).isAir())) {
 				this.canStart();
 			}
 
 			if (this.rat.squaredDistanceTo(this.targetBlockPos.getX(), this.targetBlockPos.getY(), this.targetBlockPos.getZ()) <= 5) {
-				this.rat.world.setBlockState(this.targetBlockPos, ((AliasedBlockItem) itemStack.getItem()).getBlock().getDefaultState());
+				this.rat.getWorld().setBlockState(this.targetBlockPos, ((AliasedBlockItem) itemStack.getItem()).getBlock().getDefaultState());
 				this.rat.getEquippedStack(EquipmentSlot.MAINHAND).decrement(1);
 				this.targetBlockPos = null;
 			} else {
@@ -101,13 +101,13 @@ public class HarvestPlantMealGoal extends Goal {
 			}
 		} else if (itemStack.getItem() instanceof BoneMealItem) {
 			// bonemeal
-			BlockState blockState = this.rat.world.getBlockState(this.targetBlockPos);
-			if (blockState.getBlock() instanceof CropBlock && ((CropBlock) blockState.getBlock()).isFertilizable(this.rat.world, this.targetBlockPos, this.rat.world.getBlockState(this.targetBlockPos), this.rat.world.isClient())) {
+			BlockState blockState = this.rat.getWorld().getBlockState(this.targetBlockPos);
+			if (blockState.getBlock() instanceof CropBlock && ((CropBlock) blockState.getBlock()).isFertilizable(this.rat.getWorld(), this.targetBlockPos, this.rat.getWorld().getBlockState(this.targetBlockPos), this.rat.getWorld().isClient())) {
 				this.canStart();
 			}
 
 			if (this.rat.squaredDistanceTo(this.targetBlockPos.getX(), this.targetBlockPos.getY(), this.targetBlockPos.getZ()) <= 5) {
-				BoneMealItem.useOnFertilizable(itemStack, this.rat.world, this.targetBlockPos);
+				BoneMealItem.useOnFertilizable(itemStack, this.rat.getWorld(), this.targetBlockPos);
 
 				ServerWorld serverWorld = (ServerWorld) this.rat.getWorld();
 

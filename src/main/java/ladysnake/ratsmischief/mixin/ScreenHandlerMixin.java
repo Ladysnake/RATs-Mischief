@@ -51,7 +51,7 @@ public class ScreenHandlerMixin {
 					ci.cancel();
 				} else if (stack.getItem() instanceof RatMasterOcarinaItem) {
 					if (player instanceof PlayerRatOwner playerRatOwner) {
-						playerRatOwner.setBringingItems(!playerRatOwner.shouldBringItems());
+						playerRatOwner.ratsmischief$setBringingItems(!playerRatOwner.ratsmischief$shouldBringItems());
 						player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
 						ci.cancel();
 					}

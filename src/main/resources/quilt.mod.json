@@ -24,19 +24,16 @@
 		},
 		"depends": [
 			{
-				"id": "quilted_fabric_api"
+				"id": "quilted_fabric_api",
+				"versions": "*"
 			},
 			{
-				"id": "geckolib3"
+				"id": "geckolib",
+				"versions": "*"
 			},
 			{
-				"id": "trinkets"
-			},
-			{
-				"id": "mialeemisc"
-			},
-			{
-				"id": "step-height-entity-attribute"
+				"id": "trinkets",
+				"versions": "*"
 			}
 		]
 	},

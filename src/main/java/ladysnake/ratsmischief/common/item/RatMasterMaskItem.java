@@ -4,6 +4,8 @@ import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketItem;
 import dev.emi.trinkets.api.TrinketsApi;
+import ladysnake.ratsmischief.mialeemisc.util.MialeeMath;
+import ladysnake.ratsmischief.mialeemisc.util.MialeeText;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -13,8 +15,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import xyz.amymialee.mialeemisc.util.MialeeMath;
-import xyz.amymialee.mialeemisc.util.MialeeText;
 
 import java.util.List;
 import java.util.Optional;

@@ -3,6 +3,7 @@ package ladysnake.ratsmischief.common.item;
 import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.init.ModEntities;
+import ladysnake.ratsmischief.mialeemisc.util.MialeeText;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
@@ -13,22 +14,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import static net.minecraft.text.Style.EMPTY;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import xyz.amymialee.mialeemisc.util.MialeeText;
 
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static net.minecraft.text.Style.EMPTY;
 
 public class RatPouchItem extends Item {
 	private static final Predicate<RatEntity> CLOSEST_RAT_PREDICATE = (ratEntity) -> ratEntity.isTamed();
@@ -136,7 +137,7 @@ public class RatPouchItem extends Item {
 
 			// potion genes
 			var potionId = new Identifier(((NbtCompound) ratTag).getString("PotionGene"));
-			var statusEffect = Registry.STATUS_EFFECT.get(potionId);
+			var statusEffect = Registries.STATUS_EFFECT.get(potionId);
 			if (statusEffect != null) {
 				text = text.append(" (").append(Text.translatable("item.ratsmischief.rat.tooltip.potion").setStyle(EMPTY.withColor(Formatting.GRAY)).append(MialeeText.withColor(Text.translatable(statusEffect.getTranslationKey()).setStyle(EMPTY), statusEffect.getColor()))).append(")");
 			}

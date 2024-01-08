@@ -8,16 +8,6 @@ version = project.version
 group = project.maven_group
 
 repositories {
-	// publishing
-	maven {
-		name = "CurseForge"
-		url = "https://minecraft.curseforge.com/api/maven"
-	}
-	maven {
-		name = "Modrinth"
-		url = "https://api.modrinth.com/maven"
-	}
-
 	// CCA, Requiem
 	chenille.repositories.ladysnake()
 
@@ -30,8 +20,18 @@ repositories {
 	// MialeeMisc
 	maven { url 'https://maven.willbl.dev/releases/' }
 
-	maven { url 'https://jitpack.io' }
+	// Publishing
+	maven {
+		name = "CurseForge"
+		url = "https://minecraft.curseforge.com/api/maven"
+	}
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
+	}
+
 	mavenCentral()
+	maven { url 'https://jitpack.io' }
 	mavenLocal()
 }
 
@@ -47,25 +47,24 @@ dependencies {
 	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}-${minecraft_version}"
 
 	// SHEA
-	modImplementation include("com.github.emilyploszaj:step-height-entity-attribute:v1.0.1")
+	modImplementation include("com.github.emilyploszaj:step-height-entity-attribute:${project.shea_version}")
 
 	// Mod Menu
 	modLocalImplementation("com.terraformersmc:modmenu:${mod_menu_version}") { transitive = false }
 
-	// MixinExtras
-	implementation include("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
-	annotationProcessor("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
-
 	// MialeeMisc
-	modImplementation include("xyz.amymialee:mialeemisc:${project.mialeemisc_version}")
+	//modImplementation include("xyz.amymialee:mialeemisc:${project.mialeemisc_version}")
 
+	// CCA
 	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
+
+	// Requiem
 	//modCompileOnly("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
 	//modImplementation("io.github.ladysnake:requiem-api:${project.requiem_version}")
 	//modImplementation("io.github.ladysnake:requiem-core:${project.requiem_version}")
 	//modImplementation include("io.github.ladysnake:requiem-lite:${project.requiem_version}")
 
-	// trinkets
+	// Trinkets
 	modImplementation ("dev.emi:trinkets:${project.trinkets_version}")
 }
 

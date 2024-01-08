@@ -22,7 +22,9 @@
     "client.HeadFeatureRendererMixin",
     "client.HeldItemRendererMixin",
     "client.ItemEntityRendererMixin",
-    "client.PlayerEntityRendererMixin"
+    "client.PlayerEntityRendererMixin",
+    "mialeemisc.client.ItemRendererMixin",
+    "mialeemisc.client.MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,8 +1,15 @@
 package ladysnake.ratsmischief.common;
 
 import ladysnake.ratsmischief.client.render.item.recipe.SpyRatCraftingRecipe;
-import ladysnake.ratsmischief.common.init.*;
+import ladysnake.ratsmischief.common.init.ModBlocks;
+import ladysnake.ratsmischief.common.init.ModEnchantments;
+import ladysnake.ratsmischief.common.init.ModEntities;
+import ladysnake.ratsmischief.common.init.ModItems;
+import ladysnake.ratsmischief.common.init.ModLootTables;
+import ladysnake.ratsmischief.common.init.ModSoundEvents;
+import ladysnake.ratsmischief.common.init.ModStatusEffects;
 import ladysnake.ratsmischief.common.world.RatSpawner;
+import ladysnake.ratsmischief.mialeemisc.MialeeMisc;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
@@ -15,13 +22,13 @@ import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Difficulty;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.quiltmc.qsl.lifecycle.api.event.ServerWorldTickEvents;
-import software.bernie.geckolib3.GeckoLib;
 
 public class RatsMischief implements ModInitializer {
 	public static final String MOD_ID = "ratsmischief";
@@ -36,8 +43,6 @@ public class RatsMischief implements ModInitializer {
 
 	@Override
 	public void onInitialize(ModContainer mod) {
-		GeckoLib.initialize();
-
 		// initializing stuff
 		ModEntities.initialize();
 		ModBlocks.initialize();
@@ -56,7 +61,7 @@ public class RatsMischief implements ModInitializer {
 		});
 
 		// rat kid painting
-		Registry.register(Registry.PAINTING_VARIANT, new Identifier(MOD_ID, "a_rat_in_time"), new PaintingVariant(64, 48));
+		Registry.register(Registries.PAINTING_VARIANT, new Identifier(MOD_ID, "a_rat_in_time"), new PaintingVariant(64, 48));
 
 		// clothed ingots and rat curse books spawning in ancient city chests
 		UniformLootNumberProvider lootTableRange = UniformLootNumberProvider.create(1, 1);
@@ -80,5 +85,7 @@ public class RatsMischief implements ModInitializer {
 				}
 			}
 		});
+
+		MialeeMisc.onInitialize();
 	}
 }
