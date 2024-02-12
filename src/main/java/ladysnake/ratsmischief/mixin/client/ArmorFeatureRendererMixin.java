@@ -42,7 +42,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 	@Unique
 	private PlayerEntityModel<LivingEntity> leggingsModel;
 	@Unique
-	private PlayerEntityModel<LivingEntity> bodyModel;
+	private PlayerEntityModel<LivingEntity> playerModel;
 	@Unique
 	private boolean slim = false;
 
@@ -57,7 +57,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 				this.slim = playerWrapper.isSlim();
 			}
 			this.leggingsModel = new PlayerEntityModel<>(wrapper.getContext().getPart(RatsMischiefClient.RAT_MASTER_ARMOR_INNER_LAYER), false);
-			this.bodyModel = new PlayerEntityModel<>(wrapper.getContext().getPart(this.slim ? RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER), this.slim);
+			this.playerModel = new PlayerEntityModel<>(wrapper.getContext().getPart(this.slim ? RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER), this.slim);
 		}
 	}
 
@@ -78,33 +78,47 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 	private void renderRatArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light) {
 		ItemStack itemStack = entity.getEquippedStack(armorSlot);
 		if (itemStack.getItem() instanceof RatMasterArmorItem armorItem) {
-			PlayerEntityModel<LivingEntity> model = this.getRatModel(armorSlot);
+			PlayerEntityModel<LivingEntity> armorModel = this.getRatModel(armorSlot);
 			if (armorItem.getSlotType() == armorSlot) {
 				{
-					model.handSwingProgress = this.getContextModel().handSwingProgress;
-					model.riding = this.getContextModel().riding;
-					model.child = this.getContextModel().child;
-					model.leftArmPose = this.getContextModel().leftArmPose;
-					model.rightArmPose = this.getContextModel().rightArmPose;
-					model.sneaking = this.getContextModel().sneaking;
-					model.head.copyTransform(this.getContextModel().head);
-					model.hat.copyTransform(this.getContextModel().hat);
-					model.body.copyTransform(this.getContextModel().body);
-					model.rightArm.copyTransform(this.getContextModel().rightArm);
-					model.leftArm.copyTransform(this.getContextModel().leftArm);
-					model.rightLeg.copyTransform(this.getContextModel().rightLeg);
-					model.leftLeg.copyTransform(this.getContextModel().leftLeg);
+					armorModel.handSwingProgress = this.getContextModel().handSwingProgress;
+					armorModel.riding = this.getContextModel().riding;
+					armorModel.child = this.getContextModel().child;
+					armorModel.leftArmPose = this.getContextModel().leftArmPose;
+					armorModel.rightArmPose = this.getContextModel().rightArmPose;
+					armorModel.sneaking = this.getContextModel().sneaking;
+					armorModel.head.copyTransform(this.getContextModel().head);
+					armorModel.hat.copyTransform(this.getContextModel().hat);
+					armorModel.body.copyTransform(this.getContextModel().body);
+					armorModel.rightArm.copyTransform(this.getContextModel().rightArm);
+					armorModel.leftArm.copyTransform(this.getContextModel().leftArm);
+					armorModel.rightLeg.copyTransform(this.getContextModel().rightLeg);
+					armorModel.leftLeg.copyTransform(this.getContextModel().leftLeg);
 				}
-				this.setRatVisible(model, armorSlot, itemStack);
-				this.setRatPoses(model, armorSlot);
-				this.renderRatArmorParts(matrices, vertexConsumers, light, armorItem, model, this.usesRatSecondLayer(armorSlot));
+				this.setRatVisible(armorModel, armorSlot, itemStack);
+				this.setRatPoses(armorModel, armorSlot);
+
+				if (!playerModel.body.visible) {
+					armorModel.body.visible = false;
+				}
+				if (!playerModel.leftLeg.visible) {
+					armorModel.leftLeg.visible = false;
+				}
+				if (!playerModel.rightLeg.visible) {
+					armorModel.rightLeg.visible = false;
+				}
+				if (!playerModel.head.visible) {
+					armorModel.head.visible = false;
+				}
+
+				this.renderRatArmorParts(matrices, vertexConsumers, light, armorItem, armorModel, this.usesRatSecondLayer(armorSlot));
 			}
 		}
 	}
 
 	@Unique
 	private PlayerEntityModel<LivingEntity> getRatModel(EquipmentSlot slot) {
-		return this.usesRatSecondLayer(slot) ? this.leggingsModel : this.bodyModel;
+		return this.usesRatSecondLayer(slot) ? this.leggingsModel : this.playerModel;
 	}
 
 	@Unique
