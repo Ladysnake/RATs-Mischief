@@ -84,9 +84,6 @@ dependencies {
 	// mialee misc
 	modImplementation include("xyz.amymialee:mialeemisc:${project.mialeemisc_version}")
 
-	// elegant armor
-    modLocalImplementation("xyz.amymialee:elegantarmour:${project.elegantarmour_version}") { transitive = false }
-
 	// ok zoomer
 //	runtimeOnly("com.github.EnnuiL:OkZoomer:1.19.2-SNAPSHOT")
 

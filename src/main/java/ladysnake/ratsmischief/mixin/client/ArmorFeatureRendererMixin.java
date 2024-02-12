@@ -7,7 +7,6 @@ import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.item.RatMasterArmorItem;
 import ladysnake.ratsmischief.common.item.RatMasterCloakItem;
 import ladysnake.ratsmischief.common.item.RatMasterHoodItem;
-import ladysnake.ratsmischief.common.item.RatMasterMaskItem;
 import ladysnake.ratsmischief.common.util.EntityRendererWrapper;
 import ladysnake.ratsmischief.common.util.PlayerEntityRendererWrapper;
 import net.minecraft.client.render.OverlayTexture;
@@ -54,7 +53,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 	private void mischief$init(FeatureRendererContext<T, M> context, A leggingsModel, A bodyModel, CallbackInfo ci) {
 		if (context instanceof EntityRendererWrapper wrapper) {
 			if (context instanceof PlayerEntityRendererWrapper playerWrapper) {
-				this.slim = playerWrapper.isSlim();
+				this.slim = playerWrapper.mischief$isSlim();
 			}
 			this.leggingsModel = new PlayerEntityModel<>(wrapper.getContext().getPart(RatsMischiefClient.RAT_MASTER_ARMOR_INNER_LAYER), false);
 			this.playerModel = new PlayerEntityModel<>(wrapper.getContext().getPart(this.slim ? RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER), this.slim);
@@ -66,10 +65,6 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 		ItemStack itemStack = entity.getEquippedStack(armorSlot);
 		if (itemStack.getItem() instanceof RatMasterArmorItem) {
 			this.renderRatArmor(matrices, vertexConsumers, entity, armorSlot, light);
-			ci.cancel();
-			return;
-		}
-		if (armorSlot == EquipmentSlot.HEAD && RatMasterMaskItem.isWearingMask(entity)) {
 			ci.cancel();
 		}
 	}

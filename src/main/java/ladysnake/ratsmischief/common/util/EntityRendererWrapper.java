@@ -3,5 +3,5 @@ package ladysnake.ratsmischief.common.util;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 
 public interface EntityRendererWrapper {
-	EntityRendererFactory.Context getContext();
+	EntityRendererFactory.Context mischief$getContext();
 }
