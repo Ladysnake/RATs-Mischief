@@ -187,7 +187,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 
 	@Unique
 	private Identifier getRatArmorTexture(ArmorItem item, boolean legs) {
-		String string = "textures/entity/armor/" + item.getMaterial().getName() + "_layer_" + (legs ? 2 : this.slim ? "1_slim" : 1) + ".png";
+		String string = "textures/models/armor/" + item.getMaterial().getName() + "_layer_" + (legs ? 2 : this.slim ? "1_slim" : 1) + ".png";
 		if (this.slim) {
 			return SLIM_ARMOR_TEXTURE_CACHE.computeIfAbsent(string, RatsMischief::id);
 		} else {
