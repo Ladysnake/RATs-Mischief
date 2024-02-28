@@ -28,6 +28,10 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 	public void render(ItemStack stack, ModelTransformationMode transformType, MatrixStack matrices, VertexConsumerProvider bufferSource, int packedLight, int packedOverlay) {
 //		super.render(stack, transformType, matrices, bufferSource, packedLight, packedOverlay);
 
+		this.animatable = (RatItem) stack.getItem();
+		this.currentItemStack = stack;
+		this.renderPerspective = transformType;
+
 		matrices.push();
 		matrices.translate(0.5f, 0.51f, 0.5f);
 
