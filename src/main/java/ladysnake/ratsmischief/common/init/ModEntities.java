@@ -20,7 +20,7 @@ public interface ModEntities {
 	EntityType<RatEntity> RAT = createEntity("rat", QuiltEntityTypeBuilder.<RatEntity>createMob().entityFactory(RatEntity::new).defaultAttributes(RatEntity.createRatAttributes()).setDimensions(EntityDimensions.changing(0.6F, 0.4F)).maxChunkTrackingRange(128).build());
 
 	private static <T extends EntityType<? extends Entity>> T createEntity(String name, T entity) {
-		ENTITIES.put(entity, new Identifier(RatsMischief.MOD_ID, name));
+		ENTITIES.put(entity, RatsMischief.id(name));
 		return entity;
 	}
 

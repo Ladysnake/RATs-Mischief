@@ -21,7 +21,7 @@ public interface ModBlocks {
 	}
 
 	private static <T extends Block> T createBlock(String name, T block, boolean createItem) {
-		BLOCKS.put(block, new Identifier(RatsMischief.MOD_ID, name));
+		BLOCKS.put(block, RatsMischief.id(name));
 		if (createItem) {
 			ModItems.ITEMS.put(new BlockItem(block, new QuiltItemSettings()), BLOCKS.get(block));
 		}

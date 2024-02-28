@@ -7,18 +7,28 @@ archivesBaseName = project.archives_base_name
 version = project.version
 group = project.maven_group
 
+loom {
+	mods {
+		"ratsmischief" {
+			sourceSet sourceSets.main
+		}
+	}
+}
+
 repositories {
+	mavenLocal()
+
 	// CCA, Requiem
 	chenille.repositories.ladysnake()
 
 	// Mod Menu
-	maven { url 'https://maven.terraformersmc.com/'}
+	maven { url = "https://maven.terraformersmc.com/" }
 
 	// GeckoLib
-	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+	maven { url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/" }
 
 	// MialeeMisc
-	maven { url 'https://maven.willbl.dev/releases/' }
+	maven { url = "https://maven.willbl.dev/releases/" }
 
 	// Publishing
 	maven {
@@ -31,32 +41,39 @@ repositories {
 	}
 
 	mavenCentral()
-	maven { url 'https://jitpack.io' }
-	mavenLocal()
+	maven { url = "https://jitpack.io" }
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:intermediary-v2"
 
-	modImplementation "software.bernie.geckolib:${project.geckolib_version}"
-
 	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
 	modImplementation "org.quiltmc:qsl:${qsl_version}+${minecraft_version}"
 
 	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}-${minecraft_version}"
 
+	modImplementation("software.bernie.geckolib:${project.geckolib_version}") {
+		exclude group: 'net.fabricmc'
+		exclude group: 'net.fabricmc.fabric-api'
+	}
+
 	// SHEA
-	modImplementation include("com.github.emilyploszaj:step-height-entity-attribute:${project.shea_version}")
+	modImplementation include("com.github.emilyploszaj:step-height-entity-attribute:${project.shea_version}") {
+		exclude group: 'net.fabricmc'
+		exclude group: 'net.fabricmc.fabric-api'
+	}
 
 	// Mod Menu
-	modLocalImplementation("com.terraformersmc:modmenu:${mod_menu_version}") { transitive = false }
+	modLocalRuntime("com.terraformersmc:modmenu:${mod_menu_version}") {
+		transitive = false
+	}
 
 	// MialeeMisc
 	//modImplementation include("xyz.amymialee:mialeemisc:${project.mialeemisc_version}")
 
 	// CCA
-	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
+	//modCompileOnly include("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
 
 	// Requiem
 	//modCompileOnly("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
@@ -65,7 +82,10 @@ dependencies {
 	//modImplementation include("io.github.ladysnake:requiem-lite:${project.requiem_version}")
 
 	// Trinkets
-	modImplementation ("dev.emi:trinkets:${project.trinkets_version}")
+	modImplementation("dev.emi:trinkets:${project.trinkets_version}") {
+		exclude group: 'net.fabricmc'
+		exclude group: 'net.fabricmc.fabric-api'
+	}
 }
 
 chenille {

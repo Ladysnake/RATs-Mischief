@@ -19,7 +19,7 @@ public interface ModStatusEffects {
 	StatusEffect RAT_CURSE_COOLDOWN = createStatusEffect("rat_curse_cooldown", new RatCurseCooldownStatusEffect(StatusEffectType.NEUTRAL, 0x31363F));
 
 	private static <T extends StatusEffect> T createStatusEffect(String name, T effect) {
-		EFFECTS.put(effect, new Identifier(RatsMischief.MOD_ID, name));
+		EFFECTS.put(effect, RatsMischief.id(name));
 		return effect;
 	}
 

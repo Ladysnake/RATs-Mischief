@@ -10,8 +10,8 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
 
 public class RatEntityModel extends GeoModel<RatEntity> {
-	private static final Identifier MODEL = new Identifier(RatsMischief.MOD_ID, "geo/entity/rat.geo.json");
-	private static final Identifier ANIMATION = new Identifier(RatsMischief.MOD_ID, "animations/entity/rat.animation.json");
+	private static final Identifier MODEL = RatsMischief.id("geo/entity/rat.geo.json");
+	private static final Identifier ANIMATION = RatsMischief.id("animations/entity/rat.animation.json");
 
 	@Override
 	public Identifier getModelResource(RatEntity rat) {

@@ -42,9 +42,9 @@ public class BreedGoal extends Goal {
 		ItemStack itemStack = this.rat.getEquippedStack(EquipmentSlot.MAINHAND);
 
 		if (this.rat.squaredDistanceTo(this.target.getX(), this.target.getY(), this.target.getZ()) <= 5) {
-			if (this.rat.getOwner() instanceof PlayerEntity) {
+			if (this.rat.getOwner() instanceof PlayerEntity owner) {
 				itemStack.decrement(1);
-				this.target.lovePlayer((PlayerEntity) this.rat.getOwner());
+				this.target.lovePlayer(owner);
 			}
 
 			this.target = null;

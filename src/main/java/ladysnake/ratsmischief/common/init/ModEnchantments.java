@@ -18,7 +18,7 @@ public interface ModEnchantments {
 
 	@SuppressWarnings("SameParameterValue")
 	private static Enchantment createEnchantment(String name, Enchantment entity) {
-		ENCHANTMENTS.put(entity, new Identifier(RatsMischief.MOD_ID, name));
+		ENCHANTMENTS.put(entity, RatsMischief.id(name));
 		return entity;
 	}
 

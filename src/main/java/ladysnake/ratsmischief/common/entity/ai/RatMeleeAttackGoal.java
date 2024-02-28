@@ -74,7 +74,7 @@ public class RatMeleeAttackGoal extends Goal {
 		} else if (!this.rat.isInWalkTargetRange(livingEntity.getBlockPos())) {
 			return false;
 		} else {
-			return !(livingEntity instanceof PlayerEntity) || !livingEntity.isSpectator() && !((PlayerEntity) livingEntity).isCreative();
+			return !(livingEntity instanceof PlayerEntity player) || !livingEntity.isSpectator() && !player.isCreative();
 		}
 	}
 

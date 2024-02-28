@@ -6,9 +6,9 @@ import net.minecraft.util.Identifier;
 import software.bernie.geckolib.model.GeoModel;
 
 public class RatItemModel extends GeoModel<RatItem> {
-	private static final Identifier MODEL = new Identifier(RatsMischief.MOD_ID, "geo/item/rat.geo.json");
-	private static final Identifier DEFAULT_TEXTURE = new Identifier(RatsMischief.MOD_ID, "textures/entity/wild.png");
-	private static final Identifier ANIMATION = new Identifier(RatsMischief.MOD_ID, "animations/item/rat.animation.json");
+	private static final Identifier MODEL = RatsMischief.id("geo/item/rat.geo.json");
+	private static final Identifier DEFAULT_TEXTURE = RatsMischief.id("textures/entity/wild.png");
+	private static final Identifier ANIMATION = RatsMischief.id("animations/item/rat.animation.json");
 
 	@Override
 	public Identifier getModelResource(RatItem rat) {

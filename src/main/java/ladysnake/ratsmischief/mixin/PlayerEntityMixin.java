@@ -47,12 +47,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerRa
 	}
 
 	@Override
-	public boolean ratsmischief$shouldBringItems() {
+	public boolean mischief$shouldBringItems() {
 		return this.shouldRatsBringItems;
 	}
 
 	@Override
-	public void ratsmischief$setBringingItems(boolean bringingItems) {
+	public void mischief$setBringingItems(boolean bringingItems) {
 		this.shouldRatsBringItems = bringingItems;
 	}
 

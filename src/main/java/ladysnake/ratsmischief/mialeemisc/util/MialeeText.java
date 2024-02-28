@@ -24,7 +24,7 @@ public class MialeeText {
 	 */
 	public static Text withoutItalics(Text text) {
 		List<Text> styled = text.setStyle(text.getStyle().withItalic(false));
-		if (styled.size() > 0) {
+		if (!styled.isEmpty()) {
 			return styled.get(0);
 		}
 		//MialeeMisc.LOGGER.error("Failed to remove italics from text: " + text.getString());

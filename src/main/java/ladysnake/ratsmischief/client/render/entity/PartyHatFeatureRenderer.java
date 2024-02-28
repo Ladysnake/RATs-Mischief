@@ -32,7 +32,7 @@ public class PartyHatFeatureRenderer extends GeoRenderLayer<RatEntity> {
 			if (TEXTURES == null) {
 				TEXTURES = new Identifier[RatEntity.PartyHat.values().length];
 				for (RatEntity.PartyHat hat : RatEntity.PartyHat.values()) {
-					TEXTURES[hat.ordinal()] = new Identifier(RatsMischief.MOD_ID, "textures/entity/birthday_hats/" + hat.toString().toLowerCase() + ".png");
+					TEXTURES[hat.ordinal()] = RatsMischief.id("textures/entity/birthday_hats/" + hat.toString().toLowerCase() + ".png");
 				}
 			}
 			Identifier hatTexture = TEXTURES[ratEntity.getPartyHat().ordinal()];

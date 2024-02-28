@@ -7,10 +7,10 @@ import net.minecraft.entity.damage.DamageType;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 
-public class ModDamageTypes {
-	public static final RegistryKey<DamageType> RAT = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, RatsMischief.id("rat"));
+public interface ModDamageTypes {
+	RegistryKey<DamageType> RAT = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, RatsMischief.id("rat"));
 
-	public static DamageSource ratDamage(RatEntity rat) {
+	 static DamageSource ratDamage(RatEntity rat) {
 		return new DamageSource(rat.getWorld().getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).getHolderOrThrow(RAT), rat);
 	}
 }

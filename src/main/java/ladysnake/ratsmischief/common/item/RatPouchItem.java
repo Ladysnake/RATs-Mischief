@@ -92,12 +92,12 @@ public class RatPouchItem extends Item {
 	public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
 		NbtList NbtList = user.getStackInHand(hand).getOrCreateSubNbt(RatsMischief.MOD_ID).getList("rats", NbtElement.COMPOUND_TYPE);
 
-		if (NbtList.size() < this.size && entity instanceof RatEntity && ((RatEntity) entity).getOwnerUuid() != null && ((RatEntity) entity).getOwnerUuid().equals(user.getUuid())) {
+		if (NbtList.size() < this.size && entity instanceof RatEntity rat && rat.getOwnerUuid() != null && rat.getOwnerUuid().equals(user.getUuid())) {
 			NbtCompound NbtCompound = new NbtCompound();
 			entity.saveNbt(NbtCompound);
 			NbtList.add(NbtCompound);
 			user.getStackInHand(hand).getOrCreateSubNbt(RatsMischief.MOD_ID).put("rats", NbtList);
-			((RatEntity) entity).playSpawnEffects();
+			rat.playSpawnEffects();
 			entity.remove(Entity.RemovalReason.DISCARDED);
 			user.getStackInHand(hand).getOrCreateSubNbt(RatsMischief.MOD_ID).putFloat("filled", 1F);
 
@@ -136,7 +136,7 @@ public class RatPouchItem extends Item {
 			}
 
 			// potion genes
-			var potionId = new Identifier(((NbtCompound) ratTag).getString("PotionGene"));
+			var potionId = Identifier.tryParse(((NbtCompound) ratTag).getString("PotionGene"));
 			var statusEffect = Registries.STATUS_EFFECT.get(potionId);
 			if (statusEffect != null) {
 				text = text.append(" (").append(Text.translatable("item.ratsmischief.rat.tooltip.potion").setStyle(EMPTY.withColor(Formatting.GRAY)).append(MialeeText.withColor(Text.translatable(statusEffect.getTranslationKey()).setStyle(EMPTY), statusEffect.getColor()))).append(")");

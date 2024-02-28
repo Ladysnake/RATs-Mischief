@@ -135,7 +135,7 @@ public class RatItem extends Item implements GeoItem {
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		if (!world.isClient()) {
-			RatEntity rat = this.getRatFromItem(world, user.getStackInHand(hand), new Vec3d(user.getX(), user.getEyeY() - 0.10000000149011612D, user.getZ()),
+			RatEntity rat = this.getRatFromItem(world, user.getStackInHand(hand), new Vec3d(user.getX(), user.getEyeY() - 0.1, user.getZ()),
 				hand == Hand.OFF_HAND ? PlayerInventory.OFF_HAND_SLOT : user.getInventory().getSlotWithStack(user.getStackInHand(hand)));
 			if (rat == null) {
 				return TypedActionResult.fail(user.getStackInHand(hand));
@@ -199,7 +199,7 @@ public class RatItem extends Item implements GeoItem {
 		}
 
 		// potion genes
-		var potionId = new Identifier(ratTag.getString("PotionGene"));
+		var potionId = Identifier.tryParse(ratTag.getString("PotionGene"));
 		var statusEffect = Registries.STATUS_EFFECT.get(potionId);
 		if (statusEffect != null) {
 			tooltip.add(Text.translatable("item.ratsmischief.rat.tooltip.potion").setStyle(EMPTY.withColor(Formatting.GRAY)).append(MialeeText.withColor(Text.translatable(statusEffect.getTranslationKey()).setStyle(EMPTY), statusEffect.getColor())));

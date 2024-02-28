@@ -1,9 +1,8 @@
 package ladysnake.ratsmischief.common.item;
 
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketItem;
 import dev.emi.trinkets.api.TrinketsApi;
+import ladysnake.ratsmischief.common.init.ModItems;
 import ladysnake.ratsmischief.mialeemisc.util.MialeeMath;
 import ladysnake.ratsmischief.mialeemisc.util.MialeeText;
 import net.minecraft.client.item.TooltipContext;
@@ -12,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,15 +27,14 @@ public class RatMasterMaskItem extends TrinketItem {
 	}
 
 	public static ItemStack getWornMask(LivingEntity livingEntity) {
-		Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(livingEntity);
-		if (component.isPresent()) {
-			for (Pair<SlotReference, ItemStack> pair : component.get().getAllEquipped()) {
-				if (pair.getRight().getItem() instanceof RatMasterMaskItem) {
-					return pair.getRight();
-				}
+		return TrinketsApi.getTrinketComponent(livingEntity).flatMap(h -> {
+			var results = h.getEquipped(ModItems.RAT_MASTER_MASK);
+			if (results.isEmpty()) {
+				return Optional.empty();
+			} else {
+				return Optional.of(results.get(0).getRight());
 			}
-		}
-		return ItemStack.EMPTY;
+		}).orElse(ItemStack.EMPTY);
 	}
 
 	public static int getOffset(ItemStack stack) {

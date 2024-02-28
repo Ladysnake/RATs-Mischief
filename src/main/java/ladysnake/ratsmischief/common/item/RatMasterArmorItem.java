@@ -1,6 +1,7 @@
 package ladysnake.ratsmischief.common.item;
 
 import ladysnake.ratsmischief.client.RatsMischiefClientHelper;
+import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.mialeemisc.util.MialeeMath;
 import ladysnake.ratsmischief.mialeemisc.util.MialeeText;
 import net.minecraft.client.item.TooltipContext;
@@ -15,8 +16,11 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.util.List;
 import java.util.Set;
@@ -116,6 +120,8 @@ public class RatMasterArmorItem extends ArmorItem {
 
 	public static class RatMasterArmorMaterial implements ArmorMaterial {
 		public static final RatMasterArmorMaterial INSTANCE = new RatMasterArmorMaterial();
+		private static final String NAME = "rat_master";
+		private static final Identifier TEXTURE = RatsMischief.id("textures/models/armor/" + NAME);
 		private static final int[] BASE_DURABILITY = new int[]{13, 15, 16, 11};
 		private static final int[] PROTECTION_AMOUNTS = new int[]{3, 6, 8, 3};
 
@@ -146,7 +152,7 @@ public class RatMasterArmorItem extends ArmorItem {
 
 		@Override
 		public String getName() {
-			return "rat_master";
+			return NAME;
 		}
 
 		@Override
@@ -157,6 +163,11 @@ public class RatMasterArmorItem extends ArmorItem {
 		@Override
 		public float getKnockbackResistance() {
 			return 0.0f;
+		}
+
+		@Override
+		public @ClientOnly @NotNull Identifier getTexture() {
+			return TEXTURE;
 		}
 	}
 }

@@ -12,10 +12,10 @@ import ladysnake.ratsmischief.common.init.ModDamageTypes;
 import ladysnake.ratsmischief.common.init.ModEntities;
 import ladysnake.ratsmischief.common.init.ModItems;
 import ladysnake.ratsmischief.common.init.ModSoundEvents;
+import ladysnake.ratsmischief.common.init.ModTags;
 import ladysnake.ratsmischief.common.item.RatMasterArmorItem;
-import ladysnake.ratsmischief.common.item.RatMasterOcarinaItem;
-import ladysnake.ratsmischief.common.item.RatPouchItem;
 import ladysnake.ratsmischief.common.util.PlayerRatOwner;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
@@ -415,7 +415,7 @@ public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
 		}
 
 		if (tag.contains("PotionGene")) {
-			Identifier id = new Identifier(tag.getString("PotionGene"));
+			Identifier id = Identifier.tryParse(tag.getString("PotionGene"));
 			StatusEffect potion = Registries.STATUS_EFFECT.get(id);
 			this.dataTracker.set(POTION_GENE, Registries.STATUS_EFFECT.getRawId(potion));
 		}
@@ -440,11 +440,6 @@ public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
 		if (this.getPotionGene() != null) {
 			tag.putString("PotionGene", String.valueOf(Registries.STATUS_EFFECT.getId(this.getPotionGene())));
 		}
-	}
-
-	@Override
-	public boolean isServer() {
-		return super.isServer();
 	}
 
 	@Override
@@ -731,7 +726,7 @@ public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
 					}
 
 					// sitting
-					if (!(item instanceof RatPouchItem) && !(item instanceof RatMasterOcarinaItem) && (!this.isBreedingItem(itemStack)) && !(itemStack.getItem() instanceof DyeItem && this.getRatType() == Type.RAT_KID)) {
+					if (!(itemStack.isIn(ModTags.RAT_POUCHES)) && !(itemStack.isOf(ModItems.RAT_MASTER_OCARINA)) && (!this.isBreedingItem(itemStack)) && !(itemStack.getItem() instanceof DyeItem && this.getRatType() == Type.RAT_KID)) {
 						this.setSitting(!this.isSitting());
 						return ActionResult.SUCCESS;
 					}
@@ -848,12 +843,12 @@ public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
 		if (!(target instanceof CreeperEntity || (target instanceof GhastEntity))) {
 			if (target instanceof RatEntity rat) {
 				return !rat.isTamed() || rat.getOwner() != owner;
-			} else if (target instanceof PlayerEntity && owner instanceof PlayerEntity && !((PlayerEntity) owner).shouldDamagePlayer((PlayerEntity) target)) {
+			} else if (target instanceof PlayerEntity targetPlayer && owner instanceof PlayerEntity ownerPlayer && !ownerPlayer.shouldDamagePlayer(targetPlayer)) {
 				return false;
-			} else if (target instanceof HorseEntity && ((HorseEntity) target).isTame()) {
+			} else if (target instanceof HorseEntity horse && horse.isTame()) {
 				return false;
 			} else {
-				return !(target instanceof TameableEntity) || !((TameableEntity) target).isTamed();
+				return !(target instanceof TameableEntity tameable) || !(tameable.isTamed());
 			}
 		} else {
 			return false;
@@ -1055,24 +1050,24 @@ public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
 	}
 
 	public enum Type {
-		WILD(new Identifier(RatsMischief.MOD_ID, "textures/entity/wild.png")),
-		ALBINO(new Identifier(RatsMischief.MOD_ID, "textures/entity/albino.png")),
-		BLACK(new Identifier(RatsMischief.MOD_ID, "textures/entity/black.png")),
-		GREY(new Identifier(RatsMischief.MOD_ID, "textures/entity/grey.png")),
-		HUSKY(new Identifier(RatsMischief.MOD_ID, "textures/entity/husky.png")),
-		LIGHT_BROWN(new Identifier(RatsMischief.MOD_ID, "textures/entity/light_brown.png")),
-		BLUE(new Identifier(RatsMischief.MOD_ID, "textures/entity/blue.png")),
-		GOLD(new Identifier(RatsMischief.MOD_ID, "textures/entity/gold.png")),
+		WILD(RatsMischief.id("textures/entity/wild.png")),
+		ALBINO(RatsMischief.id("textures/entity/albino.png")),
+		BLACK(RatsMischief.id("textures/entity/black.png")),
+		GREY(RatsMischief.id("textures/entity/grey.png")),
+		HUSKY(RatsMischief.id("textures/entity/husky.png")),
+		LIGHT_BROWN(RatsMischief.id("textures/entity/light_brown.png")),
+		BLUE(RatsMischief.id("textures/entity/blue.png")),
+		GOLD(RatsMischief.id("textures/entity/gold.png")),
 
 		RAT_KID(null),
 
-		DOCTOR4T(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/doctor4t.png")),
-		ASTRONYU(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/astronyu.png")),
+		DOCTOR4T(RatsMischief.id("textures/entity/named/doctor4t.png")),
+		ASTRONYU(RatsMischief.id("textures/entity/named/astronyu.png")),
 
-		REMY(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/remy.png")),
-		RATATER(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/ratater.png")),
-		JERMA(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/jerma.png")),
-		BIGGIE_CHEESE(new Identifier(RatsMischief.MOD_ID, "textures/entity/named/biggie_cheese.png"));
+		REMY(RatsMischief.id("textures/entity/named/remy.png")),
+		RATATER(RatsMischief.id("textures/entity/named/ratater.png")),
+		JERMA(RatsMischief.id("textures/entity/named/jerma.png")),
+		BIGGIE_CHEESE(RatsMischief.id("textures/entity/named/biggie_cheese.png"));
 
 		public final Identifier ratTexture;
 
@@ -1163,7 +1158,7 @@ public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
 		@Override
 		public boolean canStart() {
 			if (RatEntity.this.getOwner() instanceof PlayerRatOwner playerRatOwner) {
-				if (!playerRatOwner.ratsmischief$shouldBringItems()) {
+				if (!playerRatOwner.mischief$shouldBringItems()) {
 					return false;
 				}
 			}

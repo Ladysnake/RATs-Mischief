@@ -2,7 +2,6 @@ package ladysnake.ratsmischief.common.entity.ai;
 
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
@@ -10,6 +9,7 @@ import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.ai.pathing.LandPathNodeMaker;
 import net.minecraft.entity.ai.pathing.MobNavigation;
 import net.minecraft.entity.ai.pathing.PathNodeType;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
 
@@ -133,7 +133,7 @@ public class FollowOwnerRatGoal extends Goal {
 			return false;
 		} else {
 			BlockState blockState = this.world.getBlockState(pos.down());
-			if (!this.leavesAllowed && blockState.getBlock() instanceof LeavesBlock) {
+			if (!this.leavesAllowed && blockState.isIn(BlockTags.LEAVES)) {
 				return false;
 			} else {
 				BlockPos blockPos = pos.subtract(this.rat.getBlockPos());

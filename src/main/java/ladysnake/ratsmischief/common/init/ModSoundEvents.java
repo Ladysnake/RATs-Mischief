@@ -25,7 +25,7 @@ public interface ModSoundEvents {
 	}
 
 	private static SoundEvent createSoundEvent(String path) {
-		SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(new Identifier(RatsMischief.MOD_ID, path));
+		SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(RatsMischief.id(path));
 		SOUND_EVENTS.put(soundEvent, new Identifier(RatsMischief.MOD_ID, path));
 		return soundEvent;
 	}

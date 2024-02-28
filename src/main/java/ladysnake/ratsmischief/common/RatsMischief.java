@@ -8,6 +8,7 @@ import ladysnake.ratsmischief.common.init.ModItems;
 import ladysnake.ratsmischief.common.init.ModLootTables;
 import ladysnake.ratsmischief.common.init.ModSoundEvents;
 import ladysnake.ratsmischief.common.init.ModStatusEffects;
+import ladysnake.ratsmischief.common.init.ModTags;
 import ladysnake.ratsmischief.common.world.RatSpawner;
 import ladysnake.ratsmischief.mialeemisc.MialeeMisc;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
@@ -17,6 +18,7 @@ import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTables;
 import net.minecraft.loot.condition.RandomChanceLootCondition;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
@@ -35,7 +37,6 @@ public class RatsMischief implements ModInitializer {
 	public static final SpecialRecipeSerializer<SpyRatCraftingRecipe> SPY_RAT_RECIPE = RecipeSerializer.register(
 		"ratsmischief:crafting_special_spy_rat", new SpecialRecipeSerializer<>(SpyRatCraftingRecipe::new)
 	);
-	public static final Identifier ANCIENT_CITY_CHESTS = new Identifier("minecraft", "chests/ancient_city");
 
 	public static Identifier id(String path) {
 		return new Identifier(MOD_ID, path);
@@ -48,10 +49,11 @@ public class RatsMischief implements ModInitializer {
 		ModBlocks.initialize();
 //		ModItemGroup.initialize();
 		ModItems.initialize();
-		ModSoundEvents.initialize();
 		ModEnchantments.initialize();
 		ModLootTables.initialize();
+		ModSoundEvents.initialize();
 		ModStatusEffects.initialize();
+		ModTags.initialize();
 
 		// custom rat spawner in abandoned villages
 		RatSpawner ratSpawner = new RatSpawner();
@@ -61,12 +63,12 @@ public class RatsMischief implements ModInitializer {
 		});
 
 		// rat kid painting
-		Registry.register(Registries.PAINTING_VARIANT, new Identifier(MOD_ID, "a_rat_in_time"), new PaintingVariant(64, 48));
+		Registry.register(Registries.PAINTING_VARIANT, RatsMischief.id("a_rat_in_time"), new PaintingVariant(64, 48));
 
 		// clothed ingots and rat curse books spawning in ancient city chests
 		UniformLootNumberProvider lootTableRange = UniformLootNumberProvider.create(1, 1);
 		LootTableEvents.MODIFY.register((resourceManager, lootManager, id, supplier, setter) -> {
-			if (ANCIENT_CITY_CHESTS.equals(id)) {
+			if (LootTables.ANCIENT_CITY_CHEST.equals(id)) {
 				{ // clothed ingot
 					LootPool lootPool = LootPool.builder()
 						.rolls(lootTableRange)

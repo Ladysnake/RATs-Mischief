@@ -45,7 +45,7 @@ public interface ModItems {
 	Item RAT_MASTER_MASK = createItem("rat_master_mask", new RatMasterMaskItem(new QuiltItemSettings().maxCount(1)));
 
 	private static <T extends Item> T createItem(String name, T item) {
-		ITEMS.put(item, new Identifier(RatsMischief.MOD_ID, name));
+		ITEMS.put(item, RatsMischief.id(name));
 		return item;
 	}
 

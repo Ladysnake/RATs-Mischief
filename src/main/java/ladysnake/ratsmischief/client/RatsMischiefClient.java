@@ -49,11 +49,11 @@ public class RatsMischiefClient implements ClientModInitializer {
 		BuiltinItemRendererRegistry.INSTANCE.register(ModItems.RAT_MASTER_MASK, inventoryItemRenderer);
 		ModelLoadingPlugin.register(pluginContext -> {
             pluginContext.addModels(new ModelIdentifier(itemId, "inventory"));
-            pluginContext.addModels(new ModelIdentifier(new Identifier(itemId + "_worn"), "inventory"));
+            pluginContext.addModels(new ModelIdentifier(new Identifier(itemId.getNamespace(), itemId.getPath() + "_worn"), "inventory"));
         });
 
 		// model predicates
-		ModelPredicateProviderRegistry.register(new Identifier(RatsMischief.MOD_ID + ":filled"), (itemStack, world, livingEntity, seed) -> itemStack.getOrCreateSubNbt(RatsMischief.MOD_ID).getFloat("filled"));
+		ModelPredicateProviderRegistry.register(RatsMischief.id("filled"), (itemStack, world, livingEntity, seed) -> itemStack.getOrCreateSubNbt(RatsMischief.MOD_ID).getFloat("filled"));
 
 //		// block render layer map
 //		BlockRenderLayerMap.put(RenderLayer.getCutout(), ModBlock.MOD_BLOCK);
