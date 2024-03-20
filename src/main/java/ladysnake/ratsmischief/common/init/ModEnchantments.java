@@ -4,8 +4,9 @@ import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.enchantments.RatCurseEnchantment;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -17,11 +18,11 @@ public interface ModEnchantments {
 
 	@SuppressWarnings("SameParameterValue")
 	private static Enchantment createEnchantment(String name, Enchantment entity) {
-		ENCHANTMENTS.put(entity, new Identifier(RatsMischief.MOD_ID, name));
+		ENCHANTMENTS.put(entity, RatsMischief.id(name));
 		return entity;
 	}
 
 	static void initialize() {
-		ENCHANTMENTS.keySet().forEach(entityType -> Registry.register(Registry.ENCHANTMENT, ENCHANTMENTS.get(entityType), entityType));
+		ENCHANTMENTS.keySet().forEach(entityType -> Registry.register(Registries.ENCHANTMENT, ENCHANTMENTS.get(entityType), entityType));
 	}
 }

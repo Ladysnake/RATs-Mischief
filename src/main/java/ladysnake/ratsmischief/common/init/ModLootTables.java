@@ -1,12 +1,12 @@
 package ladysnake.ratsmischief.common.init;
 
-import ladysnake.ratsmischief.common.RatsMischief;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTables;
 import net.minecraft.loot.condition.RandomChanceLootCondition;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.entry.ItemEntry;
@@ -19,7 +19,7 @@ public class ModLootTables {
 
 	public static void initialize() {
 		LootTableEvents.MODIFY.register((resourceManager, lootManager, identifier, fabricLootSupplierBuilder, lootTableSetter) -> {
-			if (RatsMischief.ANCIENT_CITY_CHESTS.equals(identifier)) {
+			if (LootTables.ANCIENT_CITY_CHEST.equals(identifier)) {
 				fabricLootSupplierBuilder.pool(new LootPool.Builder()
 					.rolls(ConstantLootNumberProvider.create(1))
 					.with(ItemEntry.builder(Items.BOOK).apply(() -> new LootFunction() {

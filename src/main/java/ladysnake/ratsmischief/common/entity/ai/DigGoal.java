@@ -33,14 +33,14 @@ public class DigGoal extends Goal {
 			ItemStack itemStack = this.rat.getEquippedStack(EquipmentSlot.MAINHAND);
 			if (itemStack.isEmpty()) {
 				for (BlockPos blockPos : BlockPos.iterateOutwards(this.rat.getBlockPos(), 8, 2, 8)) {
-					BlockState blockState = this.rat.world.getBlockState(blockPos);
+					BlockState blockState = this.rat.getWorld().getBlockState(blockPos);
 					if (blockState.getBlock() == this.targetBlock) {
 						int strength = 0;
 						StatusEffectInstance effect = this.rat.getStatusEffect(StatusEffects.STRENGTH);
 						if (effect != null) {
 							strength = effect.getAmplifier() + 1;
 						}
-						if (blockState.getHardness(this.rat.world, blockPos) >= 0 && blockState.getHardness(this.rat.world, blockPos) <= 1f + strength) {
+						if (blockState.getHardness(this.rat.getWorld(), blockPos) >= 0 && blockState.getHardness(this.rat.getWorld(), blockPos) <= 1f + strength) {
 							if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
 								this.targetBlockPos = blockPos;
 								return true;
@@ -58,7 +58,7 @@ public class DigGoal extends Goal {
 		ItemStack itemStack = this.rat.getEquippedStack(EquipmentSlot.MAINHAND);
 
 		if (itemStack.isEmpty()) {
-			BlockState blockState = this.rat.world.getBlockState(this.targetBlockPos);
+			BlockState blockState = this.rat.getWorld().getBlockState(this.targetBlockPos);
 			if (blockState.getBlock() != this.targetBlock) {
 				this.canStart();
 				return;
@@ -74,10 +74,10 @@ public class DigGoal extends Goal {
 				float progressIncrease = 0.015f + 0.003f * haste;
 				progressIncrease *= RatMasterArmorItem.getMiningSpeedMultiplier(this.rat.getOwner());
 				this.breakProgress += progressIncrease;
-				this.rat.world.setBlockBreakingInfo(this.rat.getId(), this.targetBlockPos, (int) (this.breakProgress / this.rat.world.getBlockState(this.targetBlockPos).getHardness(this.rat.world, this.targetBlockPos) * 9));
-				if (this.breakProgress >= this.rat.world.getBlockState(this.targetBlockPos).getHardness(this.rat.world, this.targetBlockPos)) {
-					this.rat.world.setBlockBreakingInfo(this.rat.getId(), this.targetBlockPos, -1);
-					this.rat.world.breakBlock(this.targetBlockPos, true, this.rat);
+				this.rat.getWorld().setBlockBreakingInfo(this.rat.getId(), this.targetBlockPos, (int) (this.breakProgress / this.rat.getWorld().getBlockState(this.targetBlockPos).getHardness(this.rat.getWorld(), this.targetBlockPos) * 9));
+				if (this.breakProgress >= this.rat.getWorld().getBlockState(this.targetBlockPos).getHardness(this.rat.getWorld(), this.targetBlockPos)) {
+					this.rat.getWorld().setBlockBreakingInfo(this.rat.getId(), this.targetBlockPos, -1);
+					this.rat.getWorld().breakBlock(this.targetBlockPos, true, this.rat);
 					this.targetBlockPos = null;
 				}
 			} else {

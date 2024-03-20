@@ -14,7 +14,7 @@ package ladysnake.ratsmischief.common.init;//package doctor4t.ratsmischief.commo
 //	public static ItemGroup MOD_ITEMS;
 //
 //	public static void initialize() {
-//		MOD_ITEMS = FabricItemGroup.builder(new Identifier(RatsMischief.MOD_ID, "items"))
+//		MOD_ITEMS = FabricItemGroup.builder(RatsMischief.id("items"))
 //				.name(Text.literal("Explosive Ideas"))
 //				.icon(() -> new ItemStack(Items.TNT))
 //				.build();

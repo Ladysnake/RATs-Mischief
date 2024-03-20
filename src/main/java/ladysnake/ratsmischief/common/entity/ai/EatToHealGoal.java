@@ -31,7 +31,7 @@ public class EatToHealGoal extends Goal {
 
 	@Override
 	public void tick() {
-		if (!this.rat.world.isClient() && this.rat.isEating()) {
+		if (!this.rat.getWorld().isClient() && this.rat.isEating()) {
 			if (!this.rat.getMoveControl().isMoving()) {
 				super.tick();
 
@@ -39,10 +39,10 @@ public class EatToHealGoal extends Goal {
 
 				if (this.eatingTicks % 4 == 0 && this.eatingTicks > 0) {
 					if (this.rat.getMainHandStack().getItem().getUseAction(this.rat.getMainHandStack()) == UseAction.DRINK) {
-						this.rat.world.playSoundFromEntity(null, this.rat, this.rat.getMainHandStack().getItem().getDrinkSound(), SoundCategory.NEUTRAL, 0.01F, this.rat.getRandom().nextFloat() * 0.4F + 0.8F);
+						this.rat.getWorld().playSoundFromEntity(null, this.rat, this.rat.getMainHandStack().getItem().getDrinkSound(), SoundCategory.NEUTRAL, 0.01F, this.rat.getRandom().nextFloat() * 0.4F + 0.8F);
 					} else if (this.rat.getMainHandStack().getItem().getUseAction(this.rat.getMainHandStack()) == UseAction.EAT) {
-						((ServerWorld) this.rat.world).spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, this.rat.getMainHandStack()), this.rat.getX() + this.rat.getRandom().nextGaussian() / 20f, this.rat.getY() + this.rat.getRandom().nextGaussian() / 20f, this.rat.getZ() + this.rat.getRandom().nextGaussian() / 20f, 5, this.rat.getRandom().nextGaussian() / 20f, 0.2D + this.rat.getRandom().nextGaussian() / 20f, this.rat.getRandom().nextGaussian() / 20f, 0.025f);
-						this.rat.world.playSoundFromEntity(null, this.rat, this.rat.getMainHandStack().getItem().getEatSound(), SoundCategory.NEUTRAL, 0.01F, this.rat.getRandom().nextFloat() * 0.4F + 0.8F);
+						((ServerWorld) this.rat.getWorld()).spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, this.rat.getMainHandStack()), this.rat.getX() + this.rat.getRandom().nextGaussian() / 20f, this.rat.getY() + this.rat.getRandom().nextGaussian() / 20f, this.rat.getZ() + this.rat.getRandom().nextGaussian() / 20f, 5, this.rat.getRandom().nextGaussian() / 20f, 0.2D + this.rat.getRandom().nextGaussian() / 20f, this.rat.getRandom().nextGaussian() / 20f, 0.025f);
+						this.rat.getWorld().playSoundFromEntity(null, this.rat, this.rat.getMainHandStack().getItem().getEatSound(), SoundCategory.NEUTRAL, 0.01F, this.rat.getRandom().nextFloat() * 0.4F + 0.8F);
 					}
 				}
 
@@ -50,7 +50,7 @@ public class EatToHealGoal extends Goal {
 					if (this.rat.getMainHandStack().getItem() instanceof PotionItem) {
 						ItemStack stack = this.rat.getMainHandStack();
 
-						if (!this.rat.world.isClient()) {
+						if (!this.rat.getWorld().isClient()) {
 							List<StatusEffectInstance> list = PotionUtil.getPotionEffects(stack);
 
 							for (StatusEffectInstance statusEffectInstance : list) {
@@ -72,7 +72,7 @@ public class EatToHealGoal extends Goal {
 						this.rat.getMainHandStack().getItem().getFoodComponent().getStatusEffects().forEach(statusEffectInstanceFloatPair -> {
 							this.rat.addStatusEffect(statusEffectInstanceFloatPair.getFirst());
 						});
-						this.rat.getMainHandStack().getItem().finishUsing(this.rat.getMainHandStack(), this.rat.world, this.rat);
+						this.rat.getMainHandStack().getItem().finishUsing(this.rat.getMainHandStack(), this.rat.getWorld(), this.rat);
 					}
 
 					this.rat.setEating(false);

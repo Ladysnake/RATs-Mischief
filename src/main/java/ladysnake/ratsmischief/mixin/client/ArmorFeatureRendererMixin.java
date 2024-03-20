@@ -18,6 +18,7 @@ import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -50,13 +51,13 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 	}
 
 	@Inject(method = "<init>", at = @At("TAIL"))
-	private void mischief$init(FeatureRendererContext<T, M> context, A leggingsModel, A bodyModel, CallbackInfo ci) {
+	private void mischief$init(FeatureRendererContext<T, M> context, A leggingsModel, A bodyModel, BakedModelManager modelManager, CallbackInfo ci) {
 		if (context instanceof EntityRendererWrapper wrapper) {
 			if (context instanceof PlayerEntityRendererWrapper playerWrapper) {
 				this.slim = playerWrapper.mischief$isSlim();
 			}
-			this.leggingsModel = new PlayerEntityModel<>(wrapper.getContext().getPart(RatsMischiefClient.RAT_MASTER_ARMOR_INNER_LAYER), false);
-			this.playerModel = new PlayerEntityModel<>(wrapper.getContext().getPart(this.slim ? RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER), this.slim);
+			this.leggingsModel = new PlayerEntityModel<>(wrapper.mischief$getContext().getPart(RatsMischiefClient.RAT_MASTER_ARMOR_INNER_LAYER), this.slim);
+			this.playerModel = new PlayerEntityModel<>(wrapper.mischief$getContext().getPart(this.slim ? RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER), this.slim);
 		}
 	}
 
@@ -74,7 +75,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 		ItemStack itemStack = entity.getEquippedStack(armorSlot);
 		if (itemStack.getItem() instanceof RatMasterArmorItem armorItem) {
 			PlayerEntityModel<LivingEntity> armorModel = this.getRatModel(armorSlot);
-			if (armorItem.getSlotType() == armorSlot) {
+			if (armorItem.getPreferredSlot() == armorSlot) {
 				{
 					armorModel.handSwingProgress = this.getContextModel().handSwingProgress;
 					armorModel.riding = this.getContextModel().riding;
@@ -186,7 +187,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 
 	@Unique
 	private Identifier getRatArmorTexture(ArmorItem item, boolean legs) {
-		String string = "textures/entity/armor/" + item.getMaterial().getName() + "_layer_" + (legs ? 2 : this.slim ? "1_slim" : 1) + ".png";
+		String string = "textures/models/armor/" + item.getMaterial().getName() + "_layer_" + (legs ? 2 : this.slim ? "1_slim" : 1) + ".png";
 		if (this.slim) {
 			return SLIM_ARMOR_TEXTURE_CACHE.computeIfAbsent(string, RatsMischief::id);
 		} else {

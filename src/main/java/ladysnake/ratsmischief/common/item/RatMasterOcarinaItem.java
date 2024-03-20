@@ -5,6 +5,8 @@ import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.entity.ai.BreedGoal;
 import ladysnake.ratsmischief.common.entity.ai.DigGoal;
 import ladysnake.ratsmischief.common.entity.ai.HarvestPlantMealGoal;
+import ladysnake.ratsmischief.mialeemisc.items.IClickConsumingItem;
+import ladysnake.ratsmischief.mialeemisc.util.MialeeMath;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.ai.goal.Goal;
@@ -25,8 +27,6 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import xyz.amymialee.mialeemisc.items.IClickConsumingItem;
-import xyz.amymialee.mialeemisc.util.MialeeMath;
 
 import java.util.List;
 
@@ -57,7 +57,7 @@ public class RatMasterOcarinaItem extends Item implements IClickConsumingItem {
 			}
 		});
 		ItemStack stack = user.getStackInHand(hand);
-		world.playSoundFromEntity(null, user, SoundEvents.BLOCK_NOTE_BLOCK_FLUTE, user.getSoundCategory(), 1f, 0.5f + (stack.getOrCreateNbt().getInt("action") / 4f));
+		world.playSoundFromEntity(null, user, SoundEvents.BLOCK_NOTE_BLOCK_FLUTE.value(), user.getSoundCategory(), 1f, 0.5f + (stack.getOrCreateNbt().getInt("action") / 4f));
 		return TypedActionResult.success(user.getStackInHand(hand));
 	}
 

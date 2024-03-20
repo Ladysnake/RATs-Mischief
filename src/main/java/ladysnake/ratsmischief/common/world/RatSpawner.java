@@ -60,7 +60,6 @@ public class RatSpawner implements Spawner {
 	}
 
 	private int spawnInHouse(ServerWorld world, BlockPos pos) {
-		boolean i = true;
 		if (world.getPointOfInterestStorage().count((registryEntry) -> registryEntry.isRegistryKey(PointOfInterestTypes.HOME), pos, 48, PointOfInterestStorage.OccupationStatus.HAS_SPACE) > 4L) {
 			List<RatEntity> list = world.getNonSpectatingEntities(RatEntity.class, (new Box(pos)).expand(48.0D, 8.0D, 48.0D));
 			if (list.size() < 10) {

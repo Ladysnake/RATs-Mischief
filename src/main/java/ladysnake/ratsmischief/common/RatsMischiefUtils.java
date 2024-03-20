@@ -13,7 +13,7 @@ public class RatsMischiefUtils {
 	// DATES
 	public static final boolean IS_WORLD_RAT_DAY = DateTimeFormatter.ofPattern("dd/MM").format(LocalDateTime.now()).equals("04/04");
 	// RENDER
-	public static final Identifier REMY_TEXTURE = new Identifier(RatsMischief.MOD_ID, "textures/entity/named/remy.png");
+	public static final Identifier REMY_TEXTURE = RatsMischief.id("textures/entity/named/remy.png");
 	private static final LocalDate today = LocalDate.now();
 	public static final boolean IS_RAT_BIRTHDAY = LocalDate.of(today.getYear(), 7, 19).compareTo(today) * today.compareTo(LocalDate.of(today.getYear(), 7, 25)) >= 0;
 	public static final boolean IS_MISCHIEF_BIRTHDAY = (LocalDate.of(today.getYear(), 12, 28).compareTo(today) * today.compareTo(LocalDate.of(today.getYear(), 12, 31)) >= 0)
@@ -26,7 +26,7 @@ public class RatsMischiefUtils {
 		if (RAT_KID_TEXTURES == null) {
 			RAT_KID_TEXTURES = new Identifier[16];
 			for (DyeColor color : DyeColor.values()) {
-				RAT_KID_TEXTURES[color.getId()] = new Identifier(RatsMischief.MOD_ID, "textures/entity/rat_kid/rat_kid_" + color.getName().toLowerCase(Locale.ROOT) + ".png");
+				RAT_KID_TEXTURES[color.getId()] = RatsMischief.id("textures/entity/rat_kid/rat_kid_" + color.getName().toLowerCase(Locale.ROOT) + ".png");
 			}
 		}
 

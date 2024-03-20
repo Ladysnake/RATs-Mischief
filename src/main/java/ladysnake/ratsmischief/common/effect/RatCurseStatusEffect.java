@@ -1,9 +1,6 @@
 package ladysnake.ratsmischief.common.effect;
 
 import ladysnake.ratsmischief.common.init.ModStatusEffects;
-import ladysnake.ratsmischief.common.requiem.RatsMischiefRequiemPlugin;
-import ladysnake.requiem.api.v1.remnant.RemnantComponent;
-import ladysnake.requiem.common.remnant.RemnantTypes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
@@ -26,12 +23,12 @@ public class RatCurseStatusEffect extends StatusEffect {
 
 		if (entity instanceof PlayerEntity player) {
 			for (int i = 0; i < 5; i++) {
-				((ServerWorld) player.world).spawnParticles(ParticleTypes.LARGE_SMOKE, player.getX(), player.getY() + player.getHeight() / 2f, player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
-				((ServerWorld) player.world).spawnParticles(ParticleTypes.SMOKE, player.getX(), player.getY(), player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
+				((ServerWorld) player.getWorld()).spawnParticles(ParticleTypes.LARGE_SMOKE, player.getX(), player.getY() + player.getHeight() / 2f, player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
+				((ServerWorld) player.getWorld()).spawnParticles(ParticleTypes.SMOKE, player.getX(), player.getY(), player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
 			}
 
 			player.playSound(SoundEvents.ENTITY_ILLUSIONER_MIRROR_MOVE, SoundCategory.PLAYERS, 1.0f, 1.0f);
-			RemnantComponent.get(player).become(RatsMischiefRequiemPlugin.RATIFIED_REMNANT_TYPE);
+			//RemnantComponent.get(player).become(RatsMischiefRequiemPlugin.RATIFIED_REMNANT_TYPE);
 		}
 	}
 
@@ -41,13 +38,13 @@ public class RatCurseStatusEffect extends StatusEffect {
 
 		if (entity instanceof PlayerEntity player) {
 			for (int i = 0; i < 5; i++) {
-				((ServerWorld) player.world).spawnParticles(ParticleTypes.LARGE_SMOKE, player.getX(), player.getY() + player.getHeight() / 2f, player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
-				((ServerWorld) player.world).spawnParticles(ParticleTypes.SMOKE, player.getX(), player.getY(), player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
+				((ServerWorld) player.getWorld()).spawnParticles(ParticleTypes.LARGE_SMOKE, player.getX(), player.getY() + player.getHeight() / 2f, player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
+				((ServerWorld) player.getWorld()).spawnParticles(ParticleTypes.SMOKE, player.getX(), player.getY(), player.getZ(), 100, 0.5f, 1f, 0.5f, 0.01f);
 			}
 
 			player.playSound(SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, SoundCategory.PLAYERS, 1.0f, 1.0f);
 			player.addStatusEffect(new StatusEffectInstance(ModStatusEffects.RAT_CURSE_COOLDOWN, 1200, 0, false, false, true));
-			RemnantComponent.get(player).become(RemnantTypes.MORTAL);
+			//RemnantComponent.get(player).become(RemnantTypes.MORTAL);
 		}
 	}
 }
