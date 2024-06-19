@@ -31,14 +31,14 @@ public abstract class ItemEntityMixin extends Entity {
 		ItemStack stack = this.getStack();
 
 		if (stack.isOf(ModItems.RAT)) {
-			if (!this.world.isClient()) {
-				NbtCompound ratTag = RatItem.getRatTag(stack, this.world);
-				RatEntity rat = ModEntities.RAT.create(this.world);
+			if (!this.getWorld().isClient) {
+				NbtCompound ratTag = RatItem.getRatTag(stack, this.getWorld());
+				RatEntity rat = ModEntities.RAT.create(this.getWorld());
 				if (rat != null) {
 					rat.readNbt(ratTag);
 					rat.updatePosition(this.getX(), this.getY(), this.getZ());
 					rat.setPos(this.getX(), this.getY(), this.getZ());
-					this.world.spawnEntity(rat);
+					this.getWorld().spawnEntity(rat);
 					rat.setSitting(false);
 					stack.decrement(1);
 					ci.cancel();

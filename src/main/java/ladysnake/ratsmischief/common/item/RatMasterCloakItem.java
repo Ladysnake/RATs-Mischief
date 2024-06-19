@@ -1,7 +1,6 @@
 package ladysnake.ratsmischief.common.item;
 
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -13,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class RatMasterCloakItem extends RatMasterArmorItem {
-	public RatMasterCloakItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
+	public RatMasterCloakItem(ArmorMaterial material, ArmorSlot slot, Settings settings) {
 		super(material, slot, settings);
 	}
 

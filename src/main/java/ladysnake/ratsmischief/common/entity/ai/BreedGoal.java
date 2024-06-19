@@ -24,7 +24,7 @@ public class BreedGoal extends Goal {
 
 	@Override
 	public void start() {
-		if (!this.rat.getMainHandStack().isEmpty() && !this.rat.getWorld().getEntitiesByClass(AnimalEntity.class, this.rat.getBoundingBox().expand(16, 4, 16), animalEntity -> !this.rat.world.isClient() && animalEntity.getBreedingAge() == 0 && animalEntity.canEat() && animalEntity.isBreedingItem(this.rat.getMainHandStack())).isEmpty()) {
+		if (!this.rat.getMainHandStack().isEmpty() && !this.rat.getWorld().getEntitiesByClass(AnimalEntity.class, this.rat.getBoundingBox().expand(16, 4, 16), animalEntity -> !this.rat.getWorld().isClient() && animalEntity.getBreedingAge() == 0 && animalEntity.canEat() && animalEntity.isBreedingItem(this.rat.getMainHandStack())).isEmpty()) {
 			List<AnimalEntity> animalList = this.rat.getWorld().getEntitiesByClass(AnimalEntity.class, this.rat.getBoundingBox().expand(16, 4, 16), animalEntity -> animalEntity.getBreedingAge() == 0 && animalEntity.canEat() && animalEntity.isBreedingItem(this.rat.getMainHandStack()));
 			AnimalEntity closestAnimal = animalList.get(0);
 			for (AnimalEntity animalEntity : animalList) {
@@ -42,9 +42,9 @@ public class BreedGoal extends Goal {
 		ItemStack itemStack = this.rat.getEquippedStack(EquipmentSlot.MAINHAND);
 
 		if (this.rat.squaredDistanceTo(this.target.getX(), this.target.getY(), this.target.getZ()) <= 5) {
-			if (this.rat.getOwner() instanceof PlayerEntity) {
+			if (this.rat.getOwner() instanceof PlayerEntity owner) {
 				itemStack.decrement(1);
-				this.target.lovePlayer((PlayerEntity) this.rat.getOwner());
+				this.target.lovePlayer(owner);
 			}
 
 			this.target = null;

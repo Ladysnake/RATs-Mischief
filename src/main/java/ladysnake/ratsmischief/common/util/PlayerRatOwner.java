@@ -1,7 +1,7 @@
 package ladysnake.ratsmischief.common.util;
 
 public interface PlayerRatOwner {
-	boolean shouldBringItems();
+	boolean mischief$shouldBringItems();
 
-	void setBringingItems(boolean bringingItems);
+	void mischief$setBringingItems(boolean bringingItems);
 }

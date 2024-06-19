@@ -1,4 +1,4 @@
-package ladysnake.ratsmischief.mixin;//
+//package ladysnake.ratsmischief.mixin;
 ///*
 // * Requiem
 // * Copyright (C) 2017-2021 Ladysnake
