@@ -71,7 +71,7 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
 				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("PartyHat")) {
 				String hat = stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getString("PartyHat");
-				Identifier hatTexture = PartyHatFeatureRenderer.TEXTURES[RatEntity.PartyHat.valueOf(hat).ordinal()];
+				Identifier hatTexture = PartyHatFeatureRenderer.getTexture(RatEntity.PartyHat.valueOf(hat));
 
 				MinecraftClient.getInstance().getTextureManager().bindTexture(hatTexture);
 				this.render(model, animatable, 0.0F, RenderLayer.getEntityCutout(hatTexture), matrices, bufferSource, null, packedLight, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
