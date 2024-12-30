@@ -55,8 +55,8 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 			if (context instanceof PlayerEntityRendererWrapper playerWrapper) {
 				this.slim = playerWrapper.mischief$isSlim();
 			}
-			this.leggingsModel = new PlayerEntityModel<>(wrapper.getContext().getPart(RatsMischiefClient.RAT_MASTER_ARMOR_INNER_LAYER), false);
-			this.playerModel = new PlayerEntityModel<>(wrapper.getContext().getPart(this.slim ? RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER), this.slim);
+			this.leggingsModel = new PlayerEntityModel<>(wrapper.mischief$getContext().getPart(RatsMischiefClient.RAT_MASTER_ARMOR_INNER_LAYER), false);
+			this.playerModel = new PlayerEntityModel<>(wrapper.mischief$getContext().getPart(this.slim ? RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER), this.slim);
 		}
 	}
 
@@ -93,18 +93,18 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 				this.setRatVisible(armorModel, armorSlot, itemStack);
 				this.setRatPoses(armorModel, armorSlot);
 
-				if (!playerModel.body.visible) {
-					armorModel.body.visible = false;
-				}
-				if (!playerModel.leftLeg.visible) {
-					armorModel.leftLeg.visible = false;
-				}
-				if (!playerModel.rightLeg.visible) {
-					armorModel.rightLeg.visible = false;
-				}
-				if (!playerModel.head.visible) {
-					armorModel.head.visible = false;
-				}
+//				if (!playerModel.body.visible) {
+//					armorModel.body.visible = false;
+//				}
+//				if (!playerModel.leftLeg.visible) {
+//					armorModel.leftLeg.visible = false;
+//				}
+//				if (!playerModel.rightLeg.visible) {
+//					armorModel.rightLeg.visible = false;
+//				}
+//				if (!playerModel.head.visible) {
+//					armorModel.head.visible = false;
+//				}
 
 				this.renderRatArmorParts(matrices, vertexConsumers, light, armorItem, armorModel, this.usesRatSecondLayer(armorSlot));
 			}
