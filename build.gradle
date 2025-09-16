@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.9.+'
+	id 'fabric-loom' version '1.11-SNAPSHOT'
 }
 
 version = "${project.mod_version}+${project.minecraft_version}+fabric"
@@ -41,6 +41,12 @@ repositories {
 		name = 'JitPack'
 		url = 'https://jitpack.io/'
 	}
+	// Trinkets (Nexusrealms builds of Patbox's port)
+	maven {
+		name "Nexusrealms"
+		url "https://maven.riftrealms.de/releases"
+	}
+
 }
 
 dependencies {
