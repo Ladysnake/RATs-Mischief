@@ -11,6 +11,6 @@ public interface ModDamageTypes {
 	RegistryKey<DamageType> RAT = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, RatsMischief.id("rat"));
 
 	 static DamageSource ratDamage(RatEntity rat) {
-		return new DamageSource(rat.getWorld().getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(RAT), rat);
+		return new DamageSource(rat.getWorld().getRegistryManager().getOrThrow(RegistryKeys.DAMAGE_TYPE).getOrThrow(RAT), rat);
 	}
 }

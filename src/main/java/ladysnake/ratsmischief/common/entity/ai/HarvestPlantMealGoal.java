@@ -56,7 +56,7 @@ public class HarvestPlantMealGoal extends Goal {
 				} else if (itemStack.getItem() instanceof BoneMealItem) {
 					// bonemeal
 					BlockState blockState = this.rat.getWorld().getBlockState(blockPos);
-					if (blockState.getBlock() instanceof CropBlock crop && crop.isFertilizable(this.rat.getWorld(), blockPos, this.rat.getWorld().getBlockState(blockPos), this.rat.getWorld().isClient())) {
+					if (blockState.getBlock() instanceof CropBlock crop && crop.isFertilizable(this.rat.getWorld(), blockPos, this.rat.getWorld().getBlockState(blockPos))) {
 						if (this.rat.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1f)) {
 							this.targetBlockPos = blockPos;
 							return true;
@@ -103,7 +103,7 @@ public class HarvestPlantMealGoal extends Goal {
 		} else if (itemStack.getItem() instanceof BoneMealItem) {
 			// bonemeal
 			BlockState blockState = this.rat.getWorld().getBlockState(this.targetBlockPos);
-			if (blockState.getBlock() instanceof CropBlock crop && crop.isFertilizable(this.rat.getWorld(), this.targetBlockPos, this.rat.getWorld().getBlockState(this.targetBlockPos), this.rat.getWorld().isClient())) {
+			if (blockState.getBlock() instanceof CropBlock crop && crop.isFertilizable(this.rat.getWorld(), this.targetBlockPos, this.rat.getWorld().getBlockState(this.targetBlockPos))) {
 				this.canStart();
 			}
 

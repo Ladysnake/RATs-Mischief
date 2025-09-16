@@ -4,11 +4,7 @@ import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.pathing.BirdNavigation;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.ai.pathing.LandPathNodeMaker;
-import net.minecraft.entity.ai.pathing.MobNavigation;
-import net.minecraft.entity.ai.pathing.PathNodeType;
+import net.minecraft.entity.ai.pathing.*;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
@@ -128,7 +124,7 @@ public class FollowOwnerRatGoal extends Goal {
 	}
 
 	private boolean canTeleportTo(BlockPos pos) {
-		PathNodeType pathNodeType = LandPathNodeMaker.getLandNodeType(this.world, pos.mutableCopy());
+		PathNodeType pathNodeType = LandPathNodeMaker.getLandNodeType(new PathContext(this.world, this.rat), pos.mutableCopy());
 		if (pathNodeType != PathNodeType.WALKABLE) {
 			return false;
 		} else {

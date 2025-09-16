@@ -1,10 +1,13 @@
 package ladysnake.ratsmischief.common.entity.ai;
 
 import ladysnake.ratsmischief.common.entity.RatEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.TrackTargetGoal;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Box;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +28,7 @@ public class ChaseForFunGoal<T extends LivingEntity> extends TrackTargetGoal {
 		this(mob, targetClass, checkVisibility, checkCanNavigate, null);
 	}
 
-	public ChaseForFunGoal(MobEntity mob, Class<T> targetClass, boolean checkVisibility, boolean checkCanNavigate, @Nullable Predicate<LivingEntity> targetPredicate) {
+	public ChaseForFunGoal(MobEntity mob, Class<T> targetClass, boolean checkVisibility, boolean checkCanNavigate, @Nullable TargetPredicate.EntityPredicate targetPredicate) {
 		super(mob, checkVisibility, checkCanNavigate);
 		this.targetClass = targetClass;
 		this.setControls(EnumSet.of(Control.TARGET));
@@ -62,7 +65,19 @@ public class ChaseForFunGoal<T extends LivingEntity> extends TrackTargetGoal {
 	}
 
 	protected void findClosestTarget() {
-		this.targetEntity = this.mob.getWorld().getClosestEntity(this.targetClass, this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(), this.getSearchBox(10));
+		double d = (double)-1.0F;
+		LivingEntity entity = null;
+
+		for(LivingEntity entity1 : this.mob.getWorld().getEntitiesByClass(targetClass, this.getSearchBox(10), e -> true)) {
+			if (targetPredicate == null || targetPredicate.test((ServerWorld) this.mob.getWorld(), this.mob, entity1)) {
+				double e = entity1.squaredDistanceTo(this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
+				if (d == (double)-1.0F || e < d) {
+					d = e;
+					entity = entity1;
+				}
+			}
+		}
+		this.targetEntity = entity;
 	}
 
 	public void setTargetEntity(@Nullable LivingEntity targetEntity) {

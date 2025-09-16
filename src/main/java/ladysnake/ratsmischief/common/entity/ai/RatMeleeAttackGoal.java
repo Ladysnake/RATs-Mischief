@@ -6,6 +6,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.pathing.Path;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 
 import java.util.EnumSet;
@@ -71,7 +72,7 @@ public class RatMeleeAttackGoal extends Goal {
 			return false;
 		} else if (!this.pauseWhenMobIdle) {
 			return !this.rat.getNavigation().isIdle();
-		} else if (!this.rat.isInWalkTargetRange(livingEntity.getBlockPos())) {
+		} else if (!this.rat.isInAttackRange(livingEntity)) {
 			return false;
 		} else {
 			return !(livingEntity instanceof PlayerEntity player) || !livingEntity.isSpectator() && !player.isCreative();
@@ -140,10 +141,10 @@ public class RatMeleeAttackGoal extends Goal {
 
 	protected void attack(LivingEntity target, double squaredDistance) {
 		double d = this.getSquaredMaxAttackDistance(target);
-		if ((squaredDistance <= d || target.getFirstPassenger() == this.rat) && this.cooldown <= 0) {
+		if ((squaredDistance <= d || target.getFirstPassenger() == this.rat) && this.cooldown <= 0 && target.getWorld() instanceof ServerWorld world) {
 			this.resetCooldown();
 			this.rat.swingHand(Hand.MAIN_HAND);
-			this.rat.tryAttack(target);
+			this.rat.tryAttack(world, target);
 		}
 
 	}

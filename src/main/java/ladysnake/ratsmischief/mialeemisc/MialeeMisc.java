@@ -2,17 +2,19 @@ package ladysnake.ratsmischief.mialeemisc;
 
 import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.mialeemisc.items.IClickConsumingItem;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
 public class MialeeMisc {
-	public static final Identifier clickConsumePacket = RatsMischief.id("click_consume");
 
 	public static void onInitialize() {
-		ServerPlayNetworking.registerGlobalReceiver(clickConsumePacket, (minecraftServer, serverPlayer, serverPlayNetworkHandler, packetByteBuf, packetSender) -> minecraftServer.execute(() -> {
-			if (serverPlayer.getMainHandStack().getItem() instanceof IClickConsumingItem item) {
-				item.mialeeMisc$doAttack(serverPlayer);
+		PayloadTypeRegistry.playC2S().register(ClickConsumePayload.ID, ClickConsumePayload.PACKET_CODEC);
+		ServerPlayNetworking.registerGlobalReceiver(ClickConsumePayload.ID, (payload, context) -> {
+			if (context.player().getMainHandStack().getItem() instanceof IClickConsumingItem item) {
+				item.mialeeMisc$doAttack(context.player());
 			}
-		}));
+		});
 	}
 }

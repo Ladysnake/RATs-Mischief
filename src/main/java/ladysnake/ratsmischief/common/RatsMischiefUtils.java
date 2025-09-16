@@ -26,12 +26,12 @@ public class RatsMischiefUtils {
 		if (RAT_KID_TEXTURES == null) {
 			RAT_KID_TEXTURES = new Identifier[16];
 			for (DyeColor color : DyeColor.values()) {
-				RAT_KID_TEXTURES[color.getId()] = RatsMischief.id("textures/entity/rat_kid/rat_kid_" + color.getName().toLowerCase(Locale.ROOT) + ".png");
+				RAT_KID_TEXTURES[color.getIndex()] = RatsMischief.id("textures/entity/rat_kid/rat_kid_" + color.getId().toLowerCase(Locale.ROOT) + ".png");
 			}
 		}
 
 		if (ratType == RatEntity.Type.RAT_KID) {
-			return RAT_KID_TEXTURES[ratColor.getId()];
+			return RAT_KID_TEXTURES[ratColor.getIndex()];
 		} else {
 			return ratType.ratTexture;
 		}

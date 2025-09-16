@@ -1,6 +1,5 @@
 package ladysnake.ratsmischief.mixin;
 
-import ladysnake.ratsmischief.common.init.ModEnchantments;
 import ladysnake.ratsmischief.common.init.ModStatusEffects;
 import ladysnake.ratsmischief.common.util.PlayerRatOwner;
 import net.minecraft.enchantment.EnchantmentHelper;

@@ -2,6 +2,7 @@ package ladysnake.ratsmischief.common.world;
 
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.init.ModEntities;
+import net.minecraft.block.entity.Spawner;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.SpawnRestriction;
@@ -15,11 +16,10 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.SpawnHelper;
 import net.minecraft.world.poi.PointOfInterestStorage;
 import net.minecraft.world.poi.PointOfInterestTypes;
-import net.minecraft.world.spawner.Spawner;
 
 import java.util.List;
 
-public class RatSpawner implements Spawner {
+public class RatSpawner {
 	public static final int SPAWN_RADIUS = 100;
 	private int ticksUntilNextSpawn;
 
@@ -44,7 +44,9 @@ public class RatSpawner implements Spawner {
 							List<VillagerEntity> villagersNearby = world.getEntitiesByType(EntityType.VILLAGER, new Box(blockPos.getX() - SPAWN_RADIUS, blockPos.getY() - SPAWN_RADIUS, blockPos.getZ() - SPAWN_RADIUS, blockPos.getX() + SPAWN_RADIUS, blockPos.getY() + SPAWN_RADIUS, blockPos.getZ() + SPAWN_RADIUS), villagerEntity -> true);
 
 							if (villagersNearby.isEmpty() && world.isRegionLoaded(blockPos.getX() - 10, blockPos.getY() - 10, blockPos.getZ() - 10, blockPos.getX() + 10, blockPos.getY() + 10, blockPos.getZ() + 10)) {
-								if (SpawnHelper.canSpawn(SpawnRestriction.Location.ON_GROUND, world, blockPos, ModEntities.RAT)) {
+								//TODO Reimplement spawn restrictions
+								//if (SpawnHelper.spawn(SpawnRestriction.Location.ON_GROUND, world, blockPos, ModEntities.RAT);) {
+								if (true) {
 									for (int i = 0; i <= random.nextInt(5); i++) {
 										this.spawnInHouse(world, blockPos);
 									}
@@ -71,11 +73,11 @@ public class RatSpawner implements Spawner {
 	}
 
 	private int spawn(BlockPos pos, ServerWorld world) {
-		RatEntity catEntity = ModEntities.RAT.create(world);
+		RatEntity catEntity = ModEntities.RAT.create(world, SpawnReason.NATURAL);
 		if (catEntity == null) {
 			return 0;
 		} else {
-			catEntity.initialize(world, world.getLocalDifficulty(pos), SpawnReason.NATURAL, null, null);
+			catEntity.initialize(world, world.getLocalDifficulty(pos), SpawnReason.NATURAL, null);
 			catEntity.refreshPositionAndAngles(pos, 0.0F, 0.0F);
 			world.spawnEntityAndPassengers(catEntity);
 			return 1;

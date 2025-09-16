@@ -17,25 +17,29 @@ import net.minecraft.item.ItemGroups;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public interface ModItems {
 	Map<Item, Identifier> ITEMS = new LinkedHashMap<>();
 
 	//	Item MOD_ITEM = createItem("mod_item", new ModItem(new FabricItemSettings()));
-	Item RAT = createItem("rat", new RatItem(new FabricItemSettings().maxCount(1)));
-	Item RAT_SPAWN_EGG = createItem("rat_spawn_egg", new SpawnEggItem(ModEntities.RAT, 0x2E1C1C, 0x241317, new FabricItemSettings()));
+	Item RAT = createItem("rat", RatItem::new, new Item.Settings().maxCount(1));
+	//Item RAT_SPAWN_EGG = createItem("rat_spawn_egg", settings -> new SpawnEggItem(ModEntities.RAT, 0x2E1C1C, 0x241317, settings));
+	Item RAT_SPAWN_EGG = createItem("rat_spawn_egg", settings -> new SpawnEggItem(ModEntities.RAT,  settings), new Item.Settings());
 
-	Item LEATHER_RAT_POUCH = createItem("leather_rat_pouch", new RatPouchItem(new FabricItemSettings().maxCount(1), 5));
-	Item TWISTED_RAT_POUCH = createItem("twisted_rat_pouch", new RatPouchItem(new FabricItemSettings().maxCount(1), 10));
-	Item PURPUR_RAT_POUCH = createItem("purpur_rat_pouch", new RatPouchItem(new FabricItemSettings().maxCount(1), 15));
-	Item RAT_MASTER_POUCH = createItem("rat_master_pouch", new RatPouchItem(new FabricItemSettings().maxCount(1), 20));
+	Item LEATHER_RAT_POUCH = createItem("leather_rat_pouch", settings -> new RatPouchItem(settings, 5), new Item.Settings());
+	Item TWISTED_RAT_POUCH = createItem("twisted_rat_pouch", settings -> new RatPouchItem(settings, 10), new Item.Settings());
+	Item PURPUR_RAT_POUCH = createItem("purpur_rat_pouch", settings -> new RatPouchItem(settings, 15), new Item.Settings());
+	Item RAT_MASTER_POUCH = createItem("rat_master_pouch", settings -> new RatPouchItem(settings, 20), new Item.Settings());
 
-	Item CLOTHED_INGOT = createItem("clothed_ingot", new Item(new FabricItemSettings()));
+	Item CLOTHED_INGOT = createItem("clothed_ingot", Item::new, new Item.Settings());
 	Item RAT_MASTER_HOOD = createItem("rat_master_hood", new RatMasterHoodItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.HELMET, new FabricItemSettings()));
 	Item RAT_MASTER_CLOAK = createItem("rat_master_cloak", new RatMasterCloakItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.CHESTPLATE, new FabricItemSettings()));
 	Item RAT_MASTER_BREECHES = createItem("rat_master_breeches", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.LEGGINGS, new FabricItemSettings()));
@@ -44,7 +48,9 @@ public interface ModItems {
 	Item RAT_MASTER_OCARINA = createItem("rat_master_ocarina", new RatMasterOcarinaItem(new FabricItemSettings().maxCount(1)));
 	Item RAT_MASTER_MASK = createItem("rat_master_mask", new RatMasterMaskItem(new FabricItemSettings().maxCount(1)));
 
-	private static <T extends Item> T createItem(String name, T item) {
+	private static <T extends Item> T createItem(String name, Function<Item.Settings, T> itemFactory, Item.Settings settings) {
+		Identifier id = RatsMischief.id(name);
+		T item = itemFactory.apply(settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, id)));
 		ITEMS.put(item, RatsMischief.id(name));
 		return item;
 	}
