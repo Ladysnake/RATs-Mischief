@@ -9,9 +9,7 @@ import ladysnake.ratsmischief.common.item.RatMasterMaskItem;
 import ladysnake.ratsmischief.common.item.RatMasterMirrorItem;
 import ladysnake.ratsmischief.common.item.RatMasterOcarinaItem;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.SpawnEggItem;
@@ -22,6 +20,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -34,19 +33,19 @@ public interface ModItems {
 	//Item RAT_SPAWN_EGG = createItem("rat_spawn_egg", settings -> new SpawnEggItem(ModEntities.RAT, 0x2E1C1C, 0x241317, settings));
 	Item RAT_SPAWN_EGG = createItem("rat_spawn_egg", settings -> new SpawnEggItem(ModEntities.RAT,  settings), new Item.Settings());
 
-	Item LEATHER_RAT_POUCH = createItem("leather_rat_pouch", settings -> new RatPouchItem(settings, 5), new Item.Settings());
-	Item TWISTED_RAT_POUCH = createItem("twisted_rat_pouch", settings -> new RatPouchItem(settings, 10), new Item.Settings());
-	Item PURPUR_RAT_POUCH = createItem("purpur_rat_pouch", settings -> new RatPouchItem(settings, 15), new Item.Settings());
-	Item RAT_MASTER_POUCH = createItem("rat_master_pouch", settings -> new RatPouchItem(settings, 20), new Item.Settings());
+	Item LEATHER_RAT_POUCH = createItem("leather_rat_pouch", RatPouchItem::new, new Item.Settings().component(ModDataComponents.RAT_POUCH_CAPACITY, 5).component(ModDataComponents.RAT_POUCH_FILLED, false).component(ModDataComponents.STORED_RATS, new RatPouchItem.StoredRats(List.of())));
+	Item TWISTED_RAT_POUCH = createItem("twisted_rat_pouch", RatPouchItem::new, new Item.Settings().component(ModDataComponents.RAT_POUCH_CAPACITY, 10).component(ModDataComponents.RAT_POUCH_FILLED, false).component(ModDataComponents.STORED_RATS, new RatPouchItem.StoredRats(List.of())));
+	Item PURPUR_RAT_POUCH = createItem("purpur_rat_pouch", RatPouchItem::new, new Item.Settings().component(ModDataComponents.RAT_POUCH_CAPACITY, 15).component(ModDataComponents.RAT_POUCH_FILLED, false).component(ModDataComponents.STORED_RATS, new RatPouchItem.StoredRats(List.of())));
+	Item RAT_MASTER_POUCH = createItem("rat_master_pouch", RatPouchItem::new, new Item.Settings().component(ModDataComponents.RAT_POUCH_CAPACITY, 20).component(ModDataComponents.RAT_POUCH_FILLED, false).component(ModDataComponents.STORED_RATS, new RatPouchItem.StoredRats(List.of())));
 
 	Item CLOTHED_INGOT = createItem("clothed_ingot", Item::new, new Item.Settings());
-	Item RAT_MASTER_HOOD = createItem("rat_master_hood", new RatMasterHoodItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.HELMET, new FabricItemSettings()));
-	Item RAT_MASTER_CLOAK = createItem("rat_master_cloak", new RatMasterCloakItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.CHESTPLATE, new FabricItemSettings()));
-	Item RAT_MASTER_BREECHES = createItem("rat_master_breeches", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.LEGGINGS, new FabricItemSettings()));
-	Item RAT_MASTER_GREAVES = createItem("rat_master_greaves", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.BOOTS, new FabricItemSettings()));
-	Item RAT_MASTER_MIRROR = createItem("rat_master_mirror", new RatMasterMirrorItem(new FabricItemSettings().maxCount(1)));
-	Item RAT_MASTER_OCARINA = createItem("rat_master_ocarina", new RatMasterOcarinaItem(new FabricItemSettings().maxCount(1)));
-	Item RAT_MASTER_MASK = createItem("rat_master_mask", new RatMasterMaskItem(new FabricItemSettings().maxCount(1)));
+	//Item RAT_MASTER_HOOD = createItem("rat_master_hood", new RatMasterHoodItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.HELMET, new FabricItemSettings()));
+	//Item RAT_MASTER_CLOAK = createItem("rat_master_cloak", new RatMasterCloakItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.CHESTPLATE, new FabricItemSettings()));
+	//Item RAT_MASTER_BREECHES = createItem("rat_master_breeches", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.LEGGINGS, new FabricItemSettings()));
+	//Item RAT_MASTER_GREAVES = createItem("rat_master_greaves", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.BOOTS, new FabricItemSettings()));
+	Item RAT_MASTER_MIRROR = createItem("rat_master_mirror", RatMasterMirrorItem::new, new Item.Settings().maxCount(1));
+	Item RAT_MASTER_OCARINA = createItem("rat_master_ocarina", RatMasterOcarinaItem::new, new Item.Settings().maxCount(1).component(ModDataComponents.OCARINA_ACTION, RatMasterOcarinaItem.Action.HARVEST));
+	Item RAT_MASTER_MASK = createItem("rat_master_mask", RatMasterMaskItem::new, new Item.Settings().maxCount(1).component(ModDataComponents.RAT_MASTER_MASK_OFFSET, new RatMasterMaskItem.Offset(0)));
 
 	private static <T extends Item> T createItem(String name, Function<Item.Settings, T> itemFactory, Item.Settings settings) {
 		Identifier id = RatsMischief.id(name);
@@ -61,10 +60,10 @@ public interface ModItems {
 //			ModItemGroup.addToItemGroup(ModItemGroup.MOD_ITEMS, item);
 		});
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(entries -> {
-			entries.add(RAT_MASTER_HOOD);
-			entries.add(RAT_MASTER_CLOAK);
-			entries.add(RAT_MASTER_BREECHES);
-			entries.add(RAT_MASTER_GREAVES);
+			//entries.add(RAT_MASTER_HOOD);
+			//entries.add(RAT_MASTER_CLOAK);
+			//entries.add(RAT_MASTER_BREECHES);
+			//entries.add(RAT_MASTER_GREAVES);
 			entries.add(RAT_MASTER_MASK);
 		});
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> {

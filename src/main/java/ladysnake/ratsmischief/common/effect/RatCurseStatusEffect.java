@@ -39,7 +39,7 @@ public class RatCurseStatusEffect extends StatusEffect {
 	public void onRemoved(AttributeContainer attributeContainer) {
 	}
 	//TODO Figure out how to deal with this
-	@Override
+	/*@Override
 	public void onRemoved(LivingEntity entity,  int amplifier) {
 		super.onRemoved(entity, amplifier);
 
@@ -55,5 +55,5 @@ public class RatCurseStatusEffect extends StatusEffect {
 			player.addStatusEffect(new StatusEffectInstance(ModStatusEffects.RAT_CURSE_COOLDOWN, 1200, 0, false, false, true));
 			//RemnantComponent.get(player).become(RemnantTypes.MORTAL);
 		}
-	}
+	}*/
 }

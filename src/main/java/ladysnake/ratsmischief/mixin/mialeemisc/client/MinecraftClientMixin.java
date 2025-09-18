@@ -1,5 +1,6 @@
 package ladysnake.ratsmischief.mixin.mialeemisc.client;
 
+import ladysnake.ratsmischief.mialeemisc.ClickConsumePayload;
 import ladysnake.ratsmischief.mialeemisc.MialeeMisc;
 import ladysnake.ratsmischief.mialeemisc.items.IClickConsumingItem;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -21,7 +22,7 @@ public class MinecraftClientMixin {
 	private void mialeeMisc$cancelAttack(CallbackInfoReturnable<Boolean> cir) {
 		if (this.player != null) {
 			if (this.player.getMainHandStack().getItem() instanceof IClickConsumingItem) {
-				ClientPlayNetworking.send(MialeeMisc.clickConsumePacket, PacketByteBufs.empty());
+				ClientPlayNetworking.send(ClickConsumePayload.INSTANCE);
 				cir.setReturnValue(false);
 			}
 		}

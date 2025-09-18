@@ -1,6 +1,6 @@
 package ladysnake.ratsmischief.common.init;
 
-import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTables;
@@ -17,23 +17,24 @@ public class ModLootTables {
 
 	public static void initialize() {
 		// clothed ingots and rat curse books spawning in ancient city chests
-		LootTableEvents.MODIFY.register((resourceManager, lootManager, id, supplier, setter) -> {
-			if (LootTables.ANCIENT_CITY_CHEST.equals(id)) {
+		LootTableEvents.MODIFY.register((registryKey, builder, lootTableSource, wrapperLookup) -> {
+			if(LootTables.ANCIENT_CITY_CHEST.equals(registryKey)){
 				{ // clothed ingot
-					LootPool lootPool = LootPool.builder()
+					LootPool.Builder lootPool = LootPool.builder()
 						.rolls(CONST_1)
 						.conditionally(RandomChanceLootCondition.builder(CLOTHED_INGOT_CHANCE).build())
-						.with(ItemEntry.builder(ModItems.CLOTHED_INGOT).build()).build();
-					supplier.pool(lootPool);
+						.with(ItemEntry.builder(ModItems.CLOTHED_INGOT).build());
+					builder.pool(lootPool);
 				}
 				{ // rat curse book
-					LootPool lootPool = LootPool.builder()
+					LootPool.Builder lootPool = LootPool.builder()
 						.rolls(CONST_1)
 						.conditionally(RandomChanceLootCondition.builder(RAT_CURSE_CHANCE).build())
-						.with(ItemEntry.builder(Items.ENCHANTED_BOOK).apply((new SetEnchantmentsLootFunction.Builder()).enchantment(ModEnchantments.RAT_CURSE, CONST_1)).build()).build();
-					supplier.pool(lootPool);
+						.with(ItemEntry.builder(Items.ENCHANTED_BOOK).apply((new SetEnchantmentsLootFunction.Builder()).enchantment(wrapperLookup.getEntryOrThrow(ModEnchantments.RAT_CURSE), CONST_1)).build());
+					builder.pool(lootPool);
 				}
 			}
 		});
+
 	}
 }

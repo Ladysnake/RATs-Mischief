@@ -11,19 +11,19 @@ import ladysnake.ratsmischief.common.world.RatSpawner;
 import ladysnake.ratsmischief.mialeemisc.MialeeMisc;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.entity.decoration.painting.PaintingVariant;
-import net.minecraft.recipe.SpecialRecipeSerializer;
+import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.GameRules;
 
 public class RatsMischief implements ModInitializer {
 	public static final String MOD_ID = "ratsmischief";
-	public static final SpecialRecipeSerializer<SpyRatCraftingRecipe> SPY_RAT_RECIPE = Registry.register(Registries.RECIPE_SERIALIZER, id("crafting_special_spy_rat"), new SpecialRecipeSerializer<>(SpyRatCraftingRecipe::new));
+	public static final SpecialCraftingRecipe.SpecialRecipeSerializer<SpyRatCraftingRecipe> SPY_RAT_RECIPE = Registry.register(Registries.RECIPE_SERIALIZER, id("crafting_special_spy_rat"), new SpecialCraftingRecipe.SpecialRecipeSerializer<>(SpyRatCraftingRecipe::new));
 
 	public static Identifier id(String path) {
-		return new Identifier(MOD_ID, path);
+		return Identifier.of(MOD_ID, path);
 	}
 
 	@Override
@@ -42,11 +42,9 @@ public class RatsMischief implements ModInitializer {
 		RatSpawner ratSpawner = new RatSpawner();
 		ServerTickEvents.END_WORLD_TICK.register(world -> {
 			// spawn rats
-			ratSpawner.spawn(world, world.getDifficulty() != Difficulty.PEACEFUL, world.getServer().shouldSpawnAnimals());
+			ratSpawner.spawn(world, world.getDifficulty() != Difficulty.PEACEFUL, world.getServer().getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING));
 		});
 
-		// rat kid painting
-		Registry.register(Registries.PAINTING_VARIANT, RatsMischief.id("a_rat_in_time"), new PaintingVariant(64, 48));
 
 		MialeeMisc.onInitialize();
 	}

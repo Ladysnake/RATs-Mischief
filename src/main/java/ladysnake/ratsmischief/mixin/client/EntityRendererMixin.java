@@ -5,6 +5,7 @@ import ladysnake.ratsmischief.common.util.EntityRendererWrapper;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.render.entity.state.EntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
-public class EntityRendererMixin<T extends Entity> implements EntityRendererWrapper {
+public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> implements EntityRendererWrapper {
 	@Unique
 	private EntityRendererFactory.Context context;
 
@@ -26,7 +27,7 @@ public class EntityRendererMixin<T extends Entity> implements EntityRendererWrap
 	}
 
 	@Inject(method = "renderLabelIfPresent", at = @At("HEAD"), cancellable = true)
-	protected void mischief$hideNames(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
+	protected void mischief$hideNames(S state, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
 		if (entity instanceof LivingEntity living && RatMasterMaskItem.isWearingMask(living)) {
 			ci.cancel();
 		}

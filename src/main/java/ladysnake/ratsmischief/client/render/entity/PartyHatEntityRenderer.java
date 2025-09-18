@@ -4,12 +4,14 @@ import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.base.GeoRenderState;
 
-public class PartyHatEntityRenderer extends GeoEntityRenderer<RatEntity> {
+public class PartyHatEntityRenderer<R extends LivingEntityRenderState & GeoRenderState> extends GeoEntityRenderer<RatEntity, R> {
 	private Identifier texture;
 
 	protected PartyHatEntityRenderer(EntityRendererFactory.Context ctx, GeoModel<RatEntity> modelProvider) {
@@ -17,13 +19,12 @@ public class PartyHatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 	}
 
 	@Override
-	public void render(RatEntity entity, float entityYaw, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight) {
-		this.animatable = entity;
-
+	public void render(R renderState, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight) {
 		RenderLayer renderLayer = RenderLayer.getEntityCutout(this.texture);
-		this.defaultRender(poseStack, entity, bufferSource, renderLayer, bufferSource.getBuffer(renderLayer), entityYaw, partialTick, packedLight);
+		this.defaultRender(renderState, poseStack, bufferSource, renderLayer, bufferSource.getBuffer(renderLayer));
 		this.texture = null;
 	}
+
 
 	public void setTexture(Identifier texture) {
 		this.texture = texture;

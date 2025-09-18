@@ -15,13 +15,13 @@
     "WardenEntityMixin"
   ],
   "client": [
-    "client.ArmorFeatureRendererMixin",
     "client.BipedEntityModelMixin",
     "client.EntityRendererMixin",
     "client.HeadFeatureRendererMixin",
     "client.HeldItemRendererMixin",
     "client.ItemEntityRendererMixin",
     "client.PlayerEntityRendererMixin",
+    "client.PlayerEntityRenderStateMixin",
     "mialeemisc.client.ItemRendererMixin",
     "mialeemisc.client.MinecraftClientMixin"
   ],

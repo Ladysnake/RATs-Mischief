@@ -1,15 +1,15 @@
 package ladysnake.ratsmischief.mixin.mialeemisc.client;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+/*import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import ladysnake.ratsmischief.client.RatsMischiefClient;
 import ladysnake.ratsmischief.common.init.ModItems;
-import net.minecraft.client.render.item.ItemModels;
+import net.minecraft.client.data.ItemModels;
+import net.minecraft.client.item.ItemModelManager;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
+import net.minecraft.item.ItemDisplayContext;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,13 +20,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemRenderer.class)
 public abstract class ItemRendererMixin {
-	@Shadow
-	@Final
-	private ItemModels models;
 
-	@Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At("HEAD"))
-	private void mialeeMisc$nonheldItemModel(CallbackInfo ci, @Local(argsOnly = true) ItemStack stack, @Local(argsOnly = true) ModelTransformationMode renderMode, @Local(argsOnly = true) LocalRef<BakedModel> modelRef) {
-		if (stack.isOf(ModItems.RAT_MASTER_MASK) && (renderMode == ModelTransformationMode.GUI || renderMode == ModelTransformationMode.GROUND || renderMode == ModelTransformationMode.FIXED)) {
+	@Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemDisplayContext;IILnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/world/World;I)V", at = @At("HEAD"))
+	private void mialeeMisc$nonheldItemModel(CallbackInfo ci, @Local(argsOnly = true) ItemStack stack, @Local(argsOnly = true) ItemDisplayContext renderMode, @Local(argsOnly = true) LocalRef<BakedModel> modelRef) {
+		if (stack.isOf(ModItems.RAT_MASTER_MASK) && (renderMode == ItemDisplayContext.GUI || renderMode == ItemDisplayContext.GROUND || renderMode == ItemDisplayContext.FIXED)) {
 			modelRef.set(this.models.getModelManager().getModel(RatsMischiefClient.RAT_MASTER_MASK));
 		}
 	}
@@ -40,3 +37,5 @@ public abstract class ItemRendererMixin {
 		}
 	}
 }
+*/
+//TODO Fix this
