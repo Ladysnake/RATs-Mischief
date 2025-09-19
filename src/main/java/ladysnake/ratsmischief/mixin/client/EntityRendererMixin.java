@@ -1,11 +1,14 @@
 package ladysnake.ratsmischief.mixin.client;
 
+import dev.emi.trinkets.TrinketEntityRenderState;
+import ladysnake.ratsmischief.common.init.ModItems;
 import ladysnake.ratsmischief.common.item.RatMasterMaskItem;
 import ladysnake.ratsmischief.common.util.EntityRendererWrapper;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.state.EntityRenderState;
+import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -28,7 +31,7 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
 
 	@Inject(method = "renderLabelIfPresent", at = @At("HEAD"), cancellable = true)
 	protected void mischief$hideNames(S state, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-		if (entity instanceof LivingEntity living && RatMasterMaskItem.isWearingMask(living)) {
+		if (state instanceof TrinketEntityRenderState trinketEntityRenderState && trinketEntityRenderState.trinkets$getState().stream().anyMatch(itemStackSlotReferencePair -> itemStackSlotReferencePair.getLeft().isOf(ModItems.RAT_MASTER_MASK))) {
 			ci.cancel();
 		}
 	}

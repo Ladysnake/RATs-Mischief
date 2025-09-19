@@ -1,4 +1,4 @@
-package ladysnake.ratsmischief.mixin;
+/*package ladysnake.ratsmischief.mixin;
 
 import ladysnake.ratsmischief.common.init.ModItems;
 import ladysnake.ratsmischief.common.init.ModSoundEvents;
@@ -61,3 +61,4 @@ public class ScreenHandlerMixin {
 		}
 	}
 }
+*/

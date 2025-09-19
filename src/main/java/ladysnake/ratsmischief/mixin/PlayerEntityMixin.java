@@ -8,6 +8,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -35,14 +38,14 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerRa
 		}
 	}
 
-	@Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
-	public void ratsmischef$writeCustomDataToNbt(net.minecraft.nbt.NbtCompound nbt, CallbackInfo ci) {
-		nbt.putBoolean("shouldRatsBringItems", this.shouldRatsBringItems);
+	@Inject(method = "writeCustomData", at = @At("TAIL"))
+	public void ratsmischef$writeCustomDataToNbt(WriteView view, CallbackInfo ci) {
+		view.putBoolean("shouldRatsBringItems", this.shouldRatsBringItems);
 	}
 
-	@Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
-	public void ratsmischef$readCustomDataFromNbt(net.minecraft.nbt.NbtCompound nbt, CallbackInfo ci) {
-		this.shouldRatsBringItems = nbt.getBoolean("shouldRatsBringItems");
+	@Inject(method = "readCustomData", at = @At("TAIL"))
+	public void ratsmischef$readCustomDataFromNbt(ReadView view, CallbackInfo ci) {
+		this.shouldRatsBringItems = view.getBoolean("shouldRatsBringItems", false);
 	}
 
 	@Override
@@ -56,15 +59,15 @@ public abstract class PlayerEntityMixin extends LivingEntity implements PlayerRa
 	}
 
 	@Inject(method = "damage", at = @At("TAIL"))
-	public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+	public void damage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
 		if (this.getHealth() > 0f && this.getHealth() <= 8f && !this.hasStatusEffect(ModStatusEffects.RAT_CURSE) && !this.hasStatusEffect(ModStatusEffects.RAT_CURSE_COOLDOWN)) {
 			AtomicInteger ratCurseDuration = new AtomicInteger();
 
-			this.getArmorItems().forEach(itemStack -> {
+			/*this.getArmorItems().forEach(itemStack -> {
 				if (EnchantmentHelper.getLevel(ModEnchantments.RAT_CURSE, itemStack) > 0) {
 					ratCurseDuration.addAndGet(200);
 				}
-			});
+			});*/
 
 			if (ratCurseDuration.get() > 0) {
 				this.addStatusEffect(new StatusEffectInstance(ModStatusEffects.RAT_CURSE, ratCurseDuration.get(), 0, false, false, true));

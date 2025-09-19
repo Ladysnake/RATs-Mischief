@@ -1,3 +1,4 @@
+/*
 package ladysnake.ratsmischief.common.item;
 
 import ladysnake.ratsmischief.client.RatsMischiefClientHelper;
@@ -170,3 +171,4 @@ public class RatMasterArmorItem extends ArmorItem {
 //		}
 	}
 }
+*/

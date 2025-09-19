@@ -4,12 +4,10 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "CatEntityMixin",
-    "EnchantmentHelperMixin",
     "EntityMixin",
     "ItemEntityMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
-    "ScreenHandlerMixin",
     "SculkSensorBlockEntityMixin",
     "SculkShriekerBlockEntityMixin",
     "WardenEntityMixin"
@@ -17,12 +15,9 @@
   "client": [
     "client.BipedEntityModelMixin",
     "client.EntityRendererMixin",
-    "client.HeadFeatureRendererMixin",
     "client.HeldItemRendererMixin",
-    "client.ItemEntityRendererMixin",
     "client.PlayerEntityRendererMixin",
     "client.PlayerEntityRenderStateMixin",
-    "mialeemisc.client.ItemRendererMixin",
     "mialeemisc.client.MinecraftClientMixin"
   ],
   "injectors": {

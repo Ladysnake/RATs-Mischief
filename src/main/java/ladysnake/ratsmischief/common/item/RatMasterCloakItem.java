@@ -1,3 +1,4 @@
+/*
 package ladysnake.ratsmischief.common.item;
 
 import net.minecraft.client.item.TooltipContext;
@@ -36,3 +37,4 @@ public class RatMasterCloakItem extends RatMasterArmorItem {
 		super.appendTooltip(stack, world, tooltip, context);
 	}
 }
+*/
