@@ -61,10 +61,10 @@ public interface ModItems {
 //			ModItemGroup.addToItemGroup(ModItemGroup.MOD_ITEMS, item);
 		});
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(entries -> {
-			//entries.add(RAT_MASTER_HOOD);
-			//entries.add(RAT_MASTER_CLOAK);
-			//entries.add(RAT_MASTER_BREECHES);
-			//entries.add(RAT_MASTER_GREAVES);
+			entries.add(RAT_MASTER_HOOD);
+			entries.add(RAT_MASTER_CLOAK);
+			entries.add(RAT_MASTER_BREECHES);
+			entries.add(RAT_MASTER_GREAVES);
 			entries.add(RAT_MASTER_MASK);
 		});
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> {

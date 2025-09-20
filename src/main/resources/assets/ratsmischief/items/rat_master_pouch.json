@@ -1,0 +1,15 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "ratsmischief:item/rat_master_pouch"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "ratsmischief:item/rat_master_pouch_filled"
+    },
+    "property": "minecraft:has_component",
+    "component": "ratsmischief:rat_pouch_filled"
+  }
+}

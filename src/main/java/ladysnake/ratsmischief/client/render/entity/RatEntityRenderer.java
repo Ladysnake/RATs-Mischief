@@ -79,7 +79,7 @@ public class RatEntityRenderer<R extends LivingEntityRenderState & GeoRenderStat
 				poseStack.pop();
 
 				// restore the render buffer - GeckoLib expects this state otherwise you'll have weird texture issues
-				buffer = bufferSource.getBuffer(RenderLayer.getEntityCutout(this.getTextureLocation(renderState)));
+				//buffer = bufferSource.getBuffer(RenderLayer.getEntityCutout(this.getTextureLocation(renderState)));
 			}
 		}
 		super.renderRecursively(renderState, poseStack, bone, renderType, bufferSource, buffer, isReRender, packedLight, packedOverlay, renderColor);

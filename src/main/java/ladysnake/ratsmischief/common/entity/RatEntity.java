@@ -724,7 +724,7 @@ public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
 				player.getStackInHand(hand).decrement(1);
 
 				if (this.random.nextInt(Math.max(1, 6 - itemStack.get(DataComponentTypes.FOOD).nutrition())) == 0) {
-					this.setOwner(player);
+					setTamedBy(player);
 					this.navigation.stop();
 					this.setTarget(null);
 					this.getWorld().sendEntityStatus(this, (byte) 7);

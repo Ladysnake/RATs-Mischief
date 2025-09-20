@@ -56,7 +56,7 @@ public class RatPouchItem extends Item {
 				}
 
 				stack.set(ModDataComponents.STORED_RATS, new StoredRats(List.of()));
-				stack.set(ModDataComponents.RAT_POUCH_FILLED, false);
+				stack.remove(ModDataComponents.RAT_POUCH_FILLED);
 
 				return ActionResult.SUCCESS;
 			} else {

@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "ratsmischief:item/rat",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

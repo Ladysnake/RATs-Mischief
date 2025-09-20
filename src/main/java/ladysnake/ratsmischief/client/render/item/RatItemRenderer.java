@@ -5,6 +5,7 @@ import ladysnake.ratsmischief.client.render.entity.EnderEyeFeatureRenderer;
 import ladysnake.ratsmischief.client.render.entity.PartyHatFeatureRenderer;
 import ladysnake.ratsmischief.common.RatsMischiefUtils;
 import ladysnake.ratsmischief.common.entity.RatEntity;
+import ladysnake.ratsmischief.common.init.ModDataComponents;
 import ladysnake.ratsmischief.common.item.RatItem;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -66,6 +67,10 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 		this.currentRenderLayer = null;
 	}
 
+	@Override
+	public void addRenderData(RatItem animatable, RenderData relatedObject, GeoRenderState renderState) {
+		renderState.addGeckolibData(RatItemModel.RAT_DATA, relatedObject.itemStack().contains(ModDataComponents.RAT_ENTITY_DATA) ? relatedObject.itemStack().get(ModDataComponents.RAT_ENTITY_DATA).ratTag() : new NbtCompound());
+	}
 
 	private void bindTextureAndRender(Identifier texture, GeoRenderState renderState, MatrixStack poseStack, VertexConsumerProvider bufferSource) {
 		//MinecraftClient.getInstance().getTextureManager().bindTexture(texture);

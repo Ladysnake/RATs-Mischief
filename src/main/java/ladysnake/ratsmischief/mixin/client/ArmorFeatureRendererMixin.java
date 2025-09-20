@@ -125,12 +125,20 @@ public abstract class ArmorFeatureRendererMixin<S extends BipedEntityRenderState
 				if (!RatMasterHoodItem.isHidden(stack)) {
 					bipedModel.hat.visible = true;
 				}
+				bipedModel.rightLeg.visible = true;
+				bipedModel.leftLeg.visible = true;
+				bipedModel.rightPants.visible = true;
+				bipedModel.leftPants.visible = true;
 			}
 			case CHEST -> {
 				bipedModel.body.visible = true;
 				bipedModel.rightArm.visible = true;
 				bipedModel.leftArm.visible = true;
 				bipedModel.jacket.visible = true;
+				bipedModel.rightLeg.visible = true;
+				bipedModel.leftLeg.visible = true;
+				bipedModel.rightPants.visible = true;
+				bipedModel.leftPants.visible = true;
 				if (!RatMasterCloakItem.isStripped(stack)) {
 					bipedModel.rightSleeve.visible = true;
 					bipedModel.leftSleeve.visible = true;
@@ -158,17 +166,17 @@ public abstract class ArmorFeatureRendererMixin<S extends BipedEntityRenderState
 		switch (armorSlot) {
 			case CHEST -> {
 				model.jacket.copyTransform(model.body);
-				model.rightSleeve.copyTransform(model.rightArm);
-				model.leftSleeve.copyTransform(model.leftArm);
+				//model.rightSleeve.copyTransform(model.rightArm);
+				//model.leftSleeve.copyTransform(model.leftArm);
 			}
 			case LEGS -> {
 				model.jacket.copyTransform(model.body);
-				model.rightPants.copyTransform(model.rightLeg);
-				model.leftPants.copyTransform(model.leftLeg);
+				//model.rightPants.copyTransform(model.rightLeg);
+				//model.leftPants.copyTransform(model.leftLeg);
 			}
 			case FEET -> {
-				model.rightPants.copyTransform(model.rightLeg);
-				model.leftPants.copyTransform(model.leftLeg);
+				//model.rightPants.copyTransform(model.rightLeg);
+				//model.leftPants.copyTransform(model.leftLeg);
 			}
 		}
 	}
@@ -186,7 +194,7 @@ public abstract class ArmorFeatureRendererMixin<S extends BipedEntityRenderState
 
 	@Unique
 	private Identifier getRatArmorTexture(boolean legs) {
-		String string = "textures/entity/equipment/" + (legs ? "humanoid_leggings" : "humanoid") + "/rat_master" + (slim ? "_slim" : "") + ".png";
+		String string = "textures/entity/equipment/" + (legs ? "humanoid_leggings" : "humanoid") + "/rat_master" + (!legs && slim ? "_slim" : "") + ".png";
 		if (this.slim) {
 			return SLIM_ARMOR_TEXTURE_CACHE.computeIfAbsent(string, RatsMischief::id);
 		} else {
