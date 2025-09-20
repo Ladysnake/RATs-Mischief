@@ -65,8 +65,8 @@ public class RatPouchItem extends Item {
 				List<RatEntity> closestTamedRats = world.getEntitiesByClass(RatEntity.class, user.getBoundingBox().expand(16.0D), CLOSEST_RAT_PREDICATE);
 				List<RatEntity> closestOwnedRats = closestTamedRats.stream().filter(ratEntity -> ratEntity.getOwnerReference() != null && ratEntity.getOwnerReference().uuidEquals(user)).toList();
 
-				if (closestOwnedRats.size() > 0) {
-					for (int i = 0; i < this.size; i++) {
+				if (!closestOwnedRats.isEmpty()) {
+					for (int i = 0; i < stack.get(ModDataComponents.RAT_POUCH_CAPACITY); i++) {
 						if (i < closestOwnedRats.size()) {
 							NbtWriteView writeView = NbtWriteView.create(ErrorReporter.EMPTY, user.getWorld().getRegistryManager());
 							closestOwnedRats.get(i).writeData(writeView);

@@ -1,7 +1,6 @@
 package ladysnake.ratsmischief.common.entity;
 
 import com.google.common.collect.ImmutableList;
-import dev.emi.stepheightentityattribute.StepHeightEntityAttributeMain;
 import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.RatsMischiefUtils;
 import ladysnake.ratsmischief.common.entity.ai.ChaseForFunGoal;
@@ -12,6 +11,7 @@ import ladysnake.ratsmischief.common.init.*;
 import ladysnake.ratsmischief.common.item.RatMasterArmorItem;
 import ladysnake.ratsmischief.common.util.PlayerRatOwner;
 import ladysnake.ratsmischief.common.util.RatData;
+import ladysnake.ratsmischief.mixin.EntityEquipmentAccessor;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
@@ -97,11 +97,7 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
@@ -1041,6 +1037,9 @@ public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
 	public void removeCurrentActionGoal() {
 		this.goalSelector.remove(this.action);
 		this.action = null;
+	}
+	public EnumMap<EquipmentSlot, ItemStack> getEquipmentBySlot(){
+		return ((EntityEquipmentAccessor)equipment).getMap();
 	}
 	//TODO ??????? ?
 	//@Override

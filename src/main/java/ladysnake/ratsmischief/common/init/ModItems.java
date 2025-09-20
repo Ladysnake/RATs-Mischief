@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.item.equipment.EquipmentType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -39,10 +40,10 @@ public interface ModItems {
 	Item RAT_MASTER_POUCH = createItem("rat_master_pouch", RatPouchItem::new, new Item.Settings().component(ModDataComponents.RAT_POUCH_CAPACITY, 20).component(ModDataComponents.RAT_POUCH_FILLED, false).component(ModDataComponents.STORED_RATS, new RatPouchItem.StoredRats(List.of())));
 
 	Item CLOTHED_INGOT = createItem("clothed_ingot", Item::new, new Item.Settings());
-	//Item RAT_MASTER_HOOD = createItem("rat_master_hood", new RatMasterHoodItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.HELMET, new FabricItemSettings()));
-	//Item RAT_MASTER_CLOAK = createItem("rat_master_cloak", new RatMasterCloakItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.CHESTPLATE, new FabricItemSettings()));
-	//Item RAT_MASTER_BREECHES = createItem("rat_master_breeches", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.LEGGINGS, new FabricItemSettings()));
-	//Item RAT_MASTER_GREAVES = createItem("rat_master_greaves", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, ArmorItem.Type.BOOTS, new FabricItemSettings()));
+	Item RAT_MASTER_HOOD = createItem("rat_master_hood", RatMasterHoodItem::new, new Item.Settings().armor(RatMasterArmorItem.MATERIAL, EquipmentType.HELMET).component(ModDataComponents.USE_ALTERNATE_ARMOR, false).component(ModDataComponents.MASTER_ARMOR_BOOST, RatMasterArmorItem.MasterArmorBoost.NONE));
+	Item RAT_MASTER_CLOAK = createItem("rat_master_cloak", RatMasterCloakItem::new, new Item.Settings().armor(RatMasterArmorItem.MATERIAL, EquipmentType.CHESTPLATE).component(ModDataComponents.USE_ALTERNATE_ARMOR, false).component(ModDataComponents.MASTER_ARMOR_BOOST, RatMasterArmorItem.MasterArmorBoost.NONE));
+	Item RAT_MASTER_BREECHES = createItem("rat_master_breeches", RatMasterArmorItem::new, new Item.Settings().armor(RatMasterArmorItem.MATERIAL, EquipmentType.LEGGINGS).component(ModDataComponents.MASTER_ARMOR_BOOST, RatMasterArmorItem.MasterArmorBoost.NONE));
+	Item RAT_MASTER_GREAVES = createItem("rat_master_greaves", RatMasterArmorItem::new, new Item.Settings().armor(RatMasterArmorItem.MATERIAL, EquipmentType.BOOTS).component(ModDataComponents.MASTER_ARMOR_BOOST, RatMasterArmorItem.MasterArmorBoost.NONE));
 	Item RAT_MASTER_MIRROR = createItem("rat_master_mirror", RatMasterMirrorItem::new, new Item.Settings().maxCount(1));
 	Item RAT_MASTER_OCARINA = createItem("rat_master_ocarina", RatMasterOcarinaItem::new, new Item.Settings().maxCount(1).component(ModDataComponents.OCARINA_ACTION, RatMasterOcarinaItem.Action.HARVEST));
 	Item RAT_MASTER_MASK = createItem("rat_master_mask", RatMasterMaskItem::new, new Item.Settings().maxCount(1).component(ModDataComponents.RAT_MASTER_MASK_OFFSET, new RatMasterMaskItem.Offset(0)));

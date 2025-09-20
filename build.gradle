@@ -63,10 +63,10 @@ dependencies {
 	}
 
 	// SHEA
-	modImplementation include("com.github.emilyploszaj:step-height-entity-attribute:${project.shea_version}") {
+	/*modImplementation include("com.github.emilyploszaj:step-height-entity-attribute:${project.shea_version}") {
 		exclude group: 'net.fabricmc'
 		exclude group: 'net.fabricmc.fabric-api'
-	}
+	}*/
 
 	// Trinkets
 	modImplementation("dev.emi:trinkets:${project.trinkets_version}") {

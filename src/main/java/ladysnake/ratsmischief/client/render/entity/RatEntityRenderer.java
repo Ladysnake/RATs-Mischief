@@ -42,6 +42,8 @@ public class RatEntityRenderer<R extends LivingEntityRenderState & GeoRenderStat
 		renderState.addGeckolibData(RatEntityModel.FLYING_TICKET, animatable.isFlying());
 		renderState.addGeckolibData(RatEntityModel.AROUSED_TICKET, animatable.isAroused());
 		renderState.addGeckolibData(RatEntityModel.SPY_TICKET, animatable.isSpy());
+		renderState.addGeckolibData(RatEntityModel.SITTING_TICKET, animatable.isSitting());
+		renderState.addGeckolibData(DataTickets.EQUIPMENT_BY_SLOT, animatable.getEquipmentBySlot());
 	}
 
 	@Override
@@ -66,7 +68,7 @@ public class RatEntityRenderer<R extends LivingEntityRenderState & GeoRenderStat
 	public void renderRecursively(R renderState, MatrixStack poseStack, GeoBone bone, RenderLayer renderType, VertexConsumerProvider bufferSource, VertexConsumer buffer, boolean isReRender, int packedLight, int packedOverlay, int renderColor) {
 		if (bone.getName().equals("bodybone") && !(renderState.getGeckolibData(RatEntityModel.SITTING_TICKET) || renderState.sneaking)) {
 			ItemStack itemStack = (ItemStack) renderState.getGeckolibData(DataTickets.EQUIPMENT_BY_SLOT).get(EquipmentSlot.MAINHAND);
-			if (!itemStack.isEmpty()) {
+			if (itemStack != null && !itemStack.isEmpty()) {
 				poseStack.push();
 				poseStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 				poseStack.translate(bone.getPosX(), bone.getPosZ(), bone.getPosY() - 0.05);

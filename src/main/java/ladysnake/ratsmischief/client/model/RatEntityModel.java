@@ -14,8 +14,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.base.GeoRenderState;
 
 public class RatEntityModel extends GeoModel<RatEntity> {
-	private static final Identifier MODEL = RatsMischief.id("geo/entity/rat.geo.json");
-	private static final Identifier ANIMATION = RatsMischief.id("animations/entity/rat.animation.json");
+	private static final Identifier MODEL = RatsMischief.id("entity/rat");
+	private static final Identifier ANIMATION = RatsMischief.id("entity/rat");
 
 	public static final DataTicket<RatEntity.Type> TYPE_TICKET = DataTicket.create("rat_type", RatEntity.Type.class);
 	public static final DataTicket<DyeColor> DYE_COLOR_TICKET = DataTicket.create("rat_color", DyeColor.class);

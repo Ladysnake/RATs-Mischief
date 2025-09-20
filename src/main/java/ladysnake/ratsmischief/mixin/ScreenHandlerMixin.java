@@ -1,4 +1,4 @@
-/*package ladysnake.ratsmischief.mixin;
+package ladysnake.ratsmischief.mixin;
 
 import ladysnake.ratsmischief.common.init.ModItems;
 import ladysnake.ratsmischief.common.init.ModSoundEvents;
@@ -37,23 +37,23 @@ public class ScreenHandlerMixin {
 				if (stack.getItem() instanceof RatMasterArmorItem armorItem) {
 					boolean quickMove = actionType == SlotActionType.QUICK_MOVE;
 					armorItem.incrementType(stack, quickMove);
-					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
+					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, 0.8f, 1.5f);
 					ci.cancel();
 				} else if (stack.getItem() instanceof RatItem) {
 					NbtCompound ratTag = RatItem.getRatTag(stack);
-					if (ratTag == null || !ratTag.getBoolean("Spy")) {
+					if (ratTag == null || !ratTag.getBoolean("Spy", false)) {
 						RatItem.cycleRatReturn(stack);
-						player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
+						player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, 0.8f, 1.5f);
 						ci.cancel();
 					}
 				} else if (stack.isOf(ModItems.RAT_MASTER_MASK)) {
 					RatMasterMaskItem.incrementOffset(stack);
-					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
+					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, 0.8f, 1.5f);
 					ci.cancel();
 				} else if (stack.getItem() instanceof RatMasterOcarinaItem) {
 					if (player instanceof PlayerRatOwner playerRatOwner) {
 						playerRatOwner.mischief$setBringingItems(!playerRatOwner.mischief$shouldBringItems());
-						player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
+						player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE,0.8f, 1.5f);
 						ci.cancel();
 					}
 				}
@@ -61,4 +61,4 @@ public class ScreenHandlerMixin {
 		}
 	}
 }
-*/
+

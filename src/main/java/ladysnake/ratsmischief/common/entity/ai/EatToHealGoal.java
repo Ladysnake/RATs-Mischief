@@ -48,9 +48,9 @@ public class EatToHealGoal extends Goal {
 					if ((Object) this.rat.getMainHandStack().get(DataComponentTypes.CONSUMABLE) instanceof ConsumableComponent consumable) {
 						ItemStack stack = this.rat.getMainHandStack();
 
-						if (!this.rat.getWorld().isClient()) {
+						if (this.rat.getWorld() instanceof ServerWorld world) {
 							ItemStack result = consumable.finishConsumption(this.rat.getWorld(), this.rat, stack);
-							this.rat.dropStack(result);
+							this.rat.dropStack(world, result);
 						}
 
 						stack.decrement(1);

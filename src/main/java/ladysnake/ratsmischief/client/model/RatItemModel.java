@@ -9,9 +9,9 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.base.GeoRenderState;
 
 public class RatItemModel extends GeoModel<RatItem> {
-	private static final Identifier MODEL = RatsMischief.id("geo/item/rat.geo.json");
+	private static final Identifier MODEL = RatsMischief.id("item/rat");
 	private static final Identifier DEFAULT_TEXTURE = RatsMischief.id("textures/entity/wild.png");
-	private static final Identifier ANIMATION = RatsMischief.id("animations/item/rat.animation.json");
+	private static final Identifier ANIMATION = RatsMischief.id("item/rat");
 
 	public static final DataTicket<NbtCompound> RAT_DATA = DataTicket.create("rat_data", NbtCompound.class);
 

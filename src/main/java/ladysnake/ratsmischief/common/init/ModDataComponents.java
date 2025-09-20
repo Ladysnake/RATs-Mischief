@@ -2,6 +2,7 @@ package ladysnake.ratsmischief.common.init;
 
 import com.mojang.serialization.Codec;
 import ladysnake.ratsmischief.common.RatsMischief;
+import ladysnake.ratsmischief.common.item.RatMasterArmorItem;
 import ladysnake.ratsmischief.common.item.RatMasterMaskItem;
 import ladysnake.ratsmischief.common.item.RatMasterOcarinaItem;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
@@ -30,6 +31,8 @@ public interface ModDataComponents {
 	ComponentType<Integer> RAT_POUCH_CAPACITY = createComponentType("rat_pouch_capacity", Codec.INT, PacketCodecs.INTEGER);
 	ComponentType<Boolean> RAT_POUCH_FILLED = createComponentType("rat_pouch_filled", Codec.BOOL, PacketCodecs.BOOLEAN);
 	ComponentType<RatMasterMaskItem.Offset> RAT_MASTER_MASK_OFFSET = createComponentType("rat_master_mask_offset", RatMasterMaskItem.Offset.CODEC, RatMasterMaskItem.Offset.PACKET_CODEC);
+	ComponentType<RatMasterArmorItem.MasterArmorBoost> MASTER_ARMOR_BOOST = createComponentType("master_armor_boost", RatMasterArmorItem.MasterArmorBoost.CODEC, RatMasterArmorItem.MasterArmorBoost.PACKET_CODEC);
+	ComponentType<Boolean> USE_ALTERNATE_ARMOR = createComponentType("use_alternare_armor", Codec.BOOL, PacketCodecs.BOOLEAN);
 
 	private static <T> ComponentType<T> createComponentType(String name, Codec<T> codec, PacketCodec<? super RegistryByteBuf, T> packetCodec) {
 		ComponentType<T> componentType = ComponentType.<T>builder().codec(codec).packetCodec(packetCodec).build();
@@ -45,6 +48,7 @@ public interface ModDataComponents {
 		ComponentTooltipAppenderRegistry.addLast(OCARINA_ACTION);
 		ComponentTooltipAppenderRegistry.addLast(STORED_RATS);
 		ComponentTooltipAppenderRegistry.addLast(RAT_MASTER_MASK_OFFSET);
+		ComponentTooltipAppenderRegistry.addLast(MASTER_ARMOR_BOOST);
 
 	}
 }
