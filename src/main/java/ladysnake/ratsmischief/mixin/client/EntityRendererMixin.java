@@ -31,7 +31,7 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
 
 	@Inject(method = "renderLabelIfPresent", at = @At("HEAD"), cancellable = true)
 	protected void mischief$hideNames(S state, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-		if (state instanceof TrinketEntityRenderState trinketEntityRenderState && trinketEntityRenderState.trinkets$getState().stream().anyMatch(itemStackSlotReferencePair -> itemStackSlotReferencePair.getLeft().isOf(ModItems.RAT_MASTER_MASK))) {
+		if (state instanceof TrinketEntityRenderState trinketEntityRenderState && trinketEntityRenderState.trinkets$getState() != null && trinketEntityRenderState.trinkets$getState().stream().anyMatch(itemStackSlotReferencePair -> itemStackSlotReferencePair.getLeft().isOf(ModItems.RAT_MASTER_MASK))) {
 			ci.cancel();
 		}
 	}
