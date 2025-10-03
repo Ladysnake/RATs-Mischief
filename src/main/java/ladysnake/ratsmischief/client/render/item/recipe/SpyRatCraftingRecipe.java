@@ -34,6 +34,7 @@ public class SpyRatCraftingRecipe extends SpecialCraftingRecipe {
 
 	@Override
 	public boolean matches(CraftingRecipeInput inventory, World world) {
+		if(inventory.getHeight() < 3) return false;
 		for (int i = 0; i < 3; ++i) {
 			ItemStack itemStack = inventory.getStackInSlot(i);
 			if (!itemStack.isEmpty()) {

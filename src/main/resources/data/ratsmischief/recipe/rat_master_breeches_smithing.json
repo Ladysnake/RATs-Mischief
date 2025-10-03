@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "ratsmischief:clothed_ingot",
+  "base": "minecraft:diamond_leggings",
+  "result": {
+    "id": "ratsmischief:rat_master_breeches"
+  }
+}

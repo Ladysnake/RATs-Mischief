@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S#S",
+    "# #",
+    "###"
+  ],
+  "key": {
+    "#": "minecraft:popped_chorus_fruit",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "id": "ratsmischief:purpur_rat_pouch",
+    "count": 1
+  }
+}
