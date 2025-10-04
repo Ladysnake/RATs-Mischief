@@ -2,10 +2,10 @@ package ladysnake.ratsmischief.common.entity.ai;
 
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.pathing.*;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
 
@@ -25,7 +25,7 @@ public class FollowOwnerRatGoal extends Goal {
 
 	public FollowOwnerRatGoal(RatEntity rat, double speed, float minDistance, float maxDistance, boolean leavesAllowed) {
 		this.rat = rat;
-		this.world = rat.world;
+		this.world = rat.getWorld();
 		this.speed = speed;
 		this.navigation = rat.getNavigation();
 		this.minDistance = minDistance;
@@ -82,7 +82,7 @@ public class FollowOwnerRatGoal extends Goal {
 
 	@Override
 	public void tick() {
-		this.rat.getLookControl().lookAt(this.owner, 10.0F, (float) this.rat.getLookPitchSpeed());
+		this.rat.getLookControl().lookAt(this.owner, 10.0F, (float) this.rat.getMaxLookPitchChange());
 		if (--this.updateCountdownTicks <= 0) {
 			this.updateCountdownTicks = 10;
 			if (!this.rat.isLeashed() && !this.rat.hasVehicle()) {
@@ -124,12 +124,12 @@ public class FollowOwnerRatGoal extends Goal {
 	}
 
 	private boolean canTeleportTo(BlockPos pos) {
-		PathNodeType pathNodeType = LandPathNodeMaker.getLandNodeType(this.world, pos.mutableCopy());
+		PathNodeType pathNodeType = LandPathNodeMaker.getLandNodeType(new PathContext(this.world, this.rat), pos.mutableCopy());
 		if (pathNodeType != PathNodeType.WALKABLE) {
 			return false;
 		} else {
 			BlockState blockState = this.world.getBlockState(pos.down());
-			if (!this.leavesAllowed && blockState.getBlock() instanceof LeavesBlock) {
+			if (!this.leavesAllowed && blockState.isIn(BlockTags.LEAVES)) {
 				return false;
 			} else {
 				BlockPos blockPos = pos.subtract(this.rat.getBlockPos());

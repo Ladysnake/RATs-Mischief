@@ -1,23 +1,25 @@
 package ladysnake.ratsmischief.common.item;
 
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.TrinketComponent;
+import com.mojang.serialization.Codec;
 import dev.emi.trinkets.api.TrinketItem;
 import dev.emi.trinkets.api.TrinketsApi;
-import net.minecraft.client.item.TooltipContext;
+import io.netty.buffer.ByteBuf;
+import ladysnake.ratsmischief.common.init.ModDataComponents;
+import ladysnake.ratsmischief.common.init.ModItems;
+import ladysnake.ratsmischief.mialeemisc.util.MialeeMath;
+import ladysnake.ratsmischief.mialeemisc.util.MialeeText;
+import net.minecraft.component.ComponentsAccess;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.item.tooltip.TooltipAppender;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Pair;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
-import xyz.amymialee.mialeemisc.util.MialeeMath;
-import xyz.amymialee.mialeemisc.util.MialeeText;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class RatMasterMaskItem extends TrinketItem {
 	public RatMasterMaskItem(Settings settings) {
@@ -29,27 +31,22 @@ public class RatMasterMaskItem extends TrinketItem {
 	}
 
 	public static ItemStack getWornMask(LivingEntity livingEntity) {
-		Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(livingEntity);
-		if (component.isPresent()) {
-			for (Pair<SlotReference, ItemStack> pair : component.get().getAllEquipped()) {
-				if (pair.getRight().getItem() instanceof RatMasterMaskItem) {
-					return pair.getRight();
-				}
+		return TrinketsApi.getTrinketComponent(livingEntity).flatMap(h -> {
+			var results = h.getEquipped(ModItems.RAT_MASTER_MASK);
+			if (results.isEmpty()) {
+				return Optional.empty();
+			} else {
+				return Optional.of(results.get(0).getRight());
 			}
-		}
-		return ItemStack.EMPTY;
+		}).orElse(ItemStack.EMPTY);
 	}
 
 	public static int getOffset(ItemStack stack) {
-		if (stack.getNbt() == null) {
-			return 0;
-		}
-		return stack.getNbt().getInt("offset");
+		return stack.get(ModDataComponents.RAT_MASTER_MASK_OFFSET).offset();
 	}
 
 	public static void incrementOffset(ItemStack stack) {
-		NbtCompound compound = stack.getOrCreateNbt();
-		compound.putInt("offset", MialeeMath.clampLoop(compound.getInt("offset") + 1, -2, 3));
+		stack.set(ModDataComponents.RAT_MASTER_MASK_OFFSET, new Offset(MialeeMath.clampLoop(stack.get(ModDataComponents.RAT_MASTER_MASK_OFFSET).offset() + 1, -2, 3)));
 	}
 
 	@Override
@@ -57,14 +54,17 @@ public class RatMasterMaskItem extends TrinketItem {
 		return MialeeText.withColor(super.getName(stack), 0x87FFBF);
 	}
 
-	@Override
-	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(Text.translatable("item.ratsmischief.rat_master_mask.desc1").formatted(Formatting.GRAY));
-		tooltip.add(Text.translatable("item.ratsmischief.rat_master_friendly_fire").formatted(Formatting.GRAY));
-		tooltip.add(Text.translatable("item.ratsmischief.rat_master_mask.desc.offset1").formatted(Formatting.GRAY));
-		if (stack.getNbt() != null) {
-			tooltip.add(Text.translatable("item.ratsmischief.rat_master_mask.desc.offset2", stack.getNbt().getInt("offset")).formatted(Formatting.GRAY));
+	public record Offset(int offset) implements TooltipAppender {
+		public static final Codec<Offset> CODEC = Codec.INT.xmap(Offset::new, Offset::offset);
+		public static final PacketCodec<ByteBuf, Offset> PACKET_CODEC = PacketCodecs.INTEGER.xmap(Offset::new, Offset::offset);
+
+		@Override
+		public void appendTooltip(TooltipContext context, Consumer<Text> textConsumer, TooltipType type, ComponentsAccess components) {
+			textConsumer.accept(Text.translatable("item.ratsmischief.rat_master_mask.desc1").formatted(Formatting.GRAY));
+			textConsumer.accept(Text.translatable("item.ratsmischief.rat_master_friendly_fire").formatted(Formatting.GRAY));
+			textConsumer.accept(Text.translatable("item.ratsmischief.rat_master_mask.desc.offset1").formatted(Formatting.GRAY));
+			textConsumer.accept(Text.translatable("item.ratsmischief.rat_master_mask.desc.offset2", offset).formatted(Formatting.GRAY));
+
 		}
-		super.appendTooltip(stack, world, tooltip, context);
 	}
 }

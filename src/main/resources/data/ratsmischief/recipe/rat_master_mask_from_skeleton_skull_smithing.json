@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "ratsmischief:clothed_ingot",
+  "base": "minecraft:skeleton_skull",
+  "result": {
+    "id": "ratsmischief:rat_master_mask"
+  }
+}

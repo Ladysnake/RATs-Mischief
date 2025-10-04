@@ -3,92 +3,89 @@ package ladysnake.ratsmischief.client.render.item;
 import ladysnake.ratsmischief.client.model.RatItemModel;
 import ladysnake.ratsmischief.client.render.entity.EnderEyeFeatureRenderer;
 import ladysnake.ratsmischief.client.render.entity.PartyHatFeatureRenderer;
-import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.RatsMischiefUtils;
 import ladysnake.ratsmischief.common.entity.RatEntity;
+import ladysnake.ratsmischief.common.init.ModDataComponents;
 import ladysnake.ratsmischief.common.item.RatItem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.geo.render.built.GeoModel;
-import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
+import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.renderer.GeoItemRenderer;
+import software.bernie.geckolib.renderer.base.GeoRenderState;
 
 public class RatItemRenderer extends GeoItemRenderer<RatItem> {
-	private ThreadLocal<Identifier> currentTexture = new ThreadLocal<>();
+	private Identifier currentRatTexture = null;
+	private RenderLayer currentRenderLayer = null;
 
 	public RatItemRenderer() {
 		super(new RatItemModel());
 	}
 
 	@Override
-	public void render(RatItem animatable, MatrixStack matrices, VertexConsumerProvider bufferSource, int packedLight, ItemStack stack) {
-//		super.render(animatable, matrices, bufferSource, packedLight, stack);
+	public void render(GeoRenderState renderState, MatrixStack poseStack, VertexConsumerProvider bufferSource) {
+		NbtCompound ratNbt = renderState.getGeckolibData(RatItemModel.RAT_DATA);
 
-		GeoModel model = this.modelProvider.getModel(this.modelProvider.getModelResource(animatable));
-		matrices.push();
-		matrices.translate(0.5f, 0.51f, 0.5f);
+		poseStack.push();
+		poseStack.translate(0.0f, 0.01f, 0.0f);
 
-		if (stack.getNbt() != null
-			&& stack.getNbt().contains(RatsMischief.MOD_ID)
-			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
-			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("Age")
-			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getInt("Age") < 0) {
-			matrices.translate(0, 0, -0.1f);
-			matrices.scale(0.5f, 0.5f, 0.5f);
+		if (ratNbt.getInt("Age", 0) < 0) {
+			poseStack.translate(0, 0, -0.1f);
+			poseStack.translate(0.0f, 0.0f, 0.10f);
 		}
 
-		RatEntity.Type ratType = RatItem.getRatType(stack);
-		String ratName = RatItem.getRatName(stack);
-		DyeColor ratColor = RatItem.getRatColor(stack);
+//		String ratName = RatItem.getRatName(stack);
+
+		RatEntity.Type ratType = RatItem.getRatType(ratNbt);
+		DyeColor ratColor = RatItem.getRatColor(ratNbt);
+
 		Identifier ratTexture = RatsMischiefUtils.getRatTexture(ratType, ratColor);
+		this.currentRatTexture = ratTexture;
 
-		currentTexture.set(ratTexture);
-
-		MinecraftClient.getInstance().getTextureManager().bindTexture(ratTexture);
-		RenderLayer renderLayer = RenderLayer.getEntityCutout(ratTexture);
-
-		this.render(model, animatable, 0.0F, renderLayer, matrices, bufferSource, bufferSource.getBuffer(renderLayer), packedLight, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+		this.bindTextureAndRender(ratTexture, renderState, poseStack, bufferSource);
 
 		// ender eye
-		if (stack.getNbt() != null
-			&& stack.getNbt().contains(RatsMischief.MOD_ID)
-			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
-			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("Spy")
-			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getBoolean("Spy")) {
-			MinecraftClient.getInstance().getTextureManager().bindTexture(EnderEyeFeatureRenderer.TEXTURE);
-			this.render(model, animatable, 0.0F, RenderLayer.getEntityCutout(EnderEyeFeatureRenderer.TEXTURE), matrices, bufferSource, null, packedLight, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+		if (ratNbt.getBoolean("Spy", false)) {
+			this.bindTextureAndRender(EnderEyeFeatureRenderer.TEXTURE, renderState, poseStack, bufferSource);
 		}
 
 		// party hat
 		if (RatsMischiefUtils.IS_BIRTHDAY && !PartyHatFeatureRenderer.DISALLOWED_TYPES.contains(ratType)) {
-			if (stack.getNbt() != null
-				&& stack.getNbt().contains(RatsMischief.MOD_ID)
-				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
-				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("PartyHat")) {
-				String hat = stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getString("PartyHat");
+			if (ratNbt.contains("PartyHat")) {
+				String hat = ratNbt.getString("PartyHat", "");
 				Identifier hatTexture = PartyHatFeatureRenderer.TEXTURES[RatEntity.PartyHat.valueOf(hat).ordinal()];
 
-				MinecraftClient.getInstance().getTextureManager().bindTexture(hatTexture);
-				this.render(model, animatable, 0.0F, RenderLayer.getEntityCutout(hatTexture), matrices, bufferSource, null, packedLight, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+				this.bindTextureAndRender(hatTexture, renderState, poseStack, bufferSource);
 			}
 		}
 
-		matrices.pop();
-		currentTexture.remove();
+		poseStack.pop();
+		this.currentRatTexture = null;
+		this.currentRenderLayer = null;
 	}
 
 	@Override
-	public Identifier getTextureLocation(RatItem instance) {
-		return currentTexture.get() != null ? currentTexture.get() : super.getTextureLocation(instance);
+	public void addRenderData(RatItem animatable, RenderData relatedObject, GeoRenderState renderState) {
+		renderState.addGeckolibData(RatItemModel.RAT_DATA, relatedObject.itemStack().contains(ModDataComponents.RAT_ENTITY_DATA) ? relatedObject.itemStack().get(ModDataComponents.RAT_ENTITY_DATA).ratTag() : new NbtCompound());
+	}
+
+	private void bindTextureAndRender(Identifier texture, GeoRenderState renderState, MatrixStack poseStack, VertexConsumerProvider bufferSource) {
+		//MinecraftClient.getInstance().getTextureManager().bindTexture(texture);
+		this.currentRenderLayer = RenderLayer.getEntityCutout(texture);
+		super.render(renderState, poseStack, bufferSource);
 	}
 
 	@Override
-	public Identifier getTextureResource(RatItem entity) {
-		return currentTexture.get() != null ? currentTexture.get() : super.getTextureResource(entity);
+	public @Nullable RenderLayer getRenderType(GeoRenderState renderState, Identifier texture) {
+		return this.currentRenderLayer == null ? super.getRenderType(renderState, texture) : this.currentRenderLayer;
 	}
+
+	@Override
+	public Identifier getTextureLocation(GeoRenderState renderState) {
+		return this.currentRatTexture == null ? super.getTextureLocation(renderState) : this.currentRatTexture;
+	}
+
 }

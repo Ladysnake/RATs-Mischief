@@ -1,17 +1,15 @@
 package ladysnake.ratsmischief.common.enchantments;
 
-import ladysnake.ratsmischief.common.init.ModEnchantments;
 import ladysnake.ratsmischief.common.item.RatMasterArmorItem;
 import ladysnake.ratsmischief.common.item.RatMasterMaskItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-
-public class RatCurseEnchantment extends Enchantment {
-	public RatCurseEnchantment(Enchantment.Rarity weight, EquipmentSlot... slotTypes) {
+//TODO Reimplement as data-driven
+/*public class RatCurseEnchantment extends Enchantment {
+	public RatCurseEnchantment(Rarity weight, EquipmentSlot... slotTypes) {
 		super(weight, EnchantmentTarget.WEARABLE, slotTypes);
 	}
 
@@ -55,4 +53,4 @@ public class RatCurseEnchantment extends Enchantment {
 	public boolean isCursed() {
 		return true;
 	}
-}
+}*/

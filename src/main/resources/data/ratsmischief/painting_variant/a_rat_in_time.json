@@ -1,0 +1,13 @@
+{
+  "asset_id": "minecraft:a_rat_in_time",
+  "author": {
+    "color": "gray",
+    "translate": "painting.ratsmischief.a_rat_in_time.author"
+  },
+  "height": 4,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.ratsmischief.a_rat_in_time.title"
+  },
+  "width": 3
+}

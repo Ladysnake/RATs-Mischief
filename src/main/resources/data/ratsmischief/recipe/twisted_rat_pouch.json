@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S#S",
+    "# #",
+    "###"
+  ],
+  "key": {
+    "#": "minecraft:twisting_vines",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "id": "ratsmischief:twisted_rat_pouch",
+    "count": 1
+  }
+}

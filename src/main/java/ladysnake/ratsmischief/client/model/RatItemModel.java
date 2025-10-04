@@ -2,21 +2,26 @@ package ladysnake.ratsmischief.client.model;
 
 import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.item.RatItem;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.constant.dataticket.DataTicket;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.base.GeoRenderState;
 
-public class RatItemModel extends AnimatedGeoModel<RatItem> {
-	private static final Identifier MODEL = new Identifier(RatsMischief.MOD_ID, "geo/item/rat.geo.json");
-	private static final Identifier DEFAULT_TEXTURE = new Identifier(RatsMischief.MOD_ID, "textures/entity/wild.png");
-	private static final Identifier ANIMATION = new Identifier(RatsMischief.MOD_ID, "animations/item/rat.animation.json");
+public class RatItemModel extends GeoModel<RatItem> {
+	private static final Identifier MODEL = RatsMischief.id("item/rat");
+	private static final Identifier DEFAULT_TEXTURE = RatsMischief.id("textures/entity/wild.png");
+	private static final Identifier ANIMATION = RatsMischief.id("item/rat");
+
+	public static final DataTicket<NbtCompound> RAT_DATA = DataTicket.create("rat_data", NbtCompound.class);
 
 	@Override
-	public Identifier getModelResource(RatItem rat) {
+	public Identifier getModelResource(GeoRenderState renderState) {
 		return MODEL;
 	}
 
 	@Override
-	public Identifier getTextureResource(RatItem ratItem) {
+	public Identifier getTextureResource(GeoRenderState renderState) {
 		return DEFAULT_TEXTURE;
 	}
 

@@ -1,36 +1,52 @@
 package ladysnake.ratsmischief.common.item;
 
+import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
 import ladysnake.ratsmischief.client.RatsMischiefClientHelper;
-import net.minecraft.client.item.TooltipContext;
+import ladysnake.ratsmischief.common.RatsMischief;
+import ladysnake.ratsmischief.common.init.ModDataComponents;
+import ladysnake.ratsmischief.common.init.ModTags;
+import ladysnake.ratsmischief.mialeemisc.util.MialeeMath;
+import ladysnake.ratsmischief.mialeemisc.util.MialeeText;
+import ladysnake.ratsmischief.mixin.ArmorMaterialsMixin;
+import net.minecraft.component.ComponentsAccess;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.item.equipment.ArmorMaterial;
+import net.minecraft.item.equipment.EquipmentAsset;
+import net.minecraft.item.equipment.EquipmentAssetKeys;
+import net.minecraft.item.tooltip.TooltipAppender;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
-import xyz.amymialee.mialeemisc.util.MialeeMath;
-import xyz.amymialee.mialeemisc.util.MialeeText;
 
-import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
-public class RatMasterArmorItem extends ArmorItem {
+public class RatMasterArmorItem extends Item {
+	public static final RegistryKey<EquipmentAsset> ASSET_KEY = RegistryKey.of(EquipmentAssetKeys.REGISTRY_KEY, RatsMischief.id("rat_master"));
+
+	public static final ArmorMaterial MATERIAL = new ArmorMaterial(38,
+		ArmorMaterialsMixin.createDefenseMap(3, 6, 8, 3, 11),
+		16,
+		SoundEvents.ITEM_ARMOR_EQUIP_LEATHER,
+		2f,
+		0f,
+		ModTags.REPAIRS_RAT_MASTER_ARMOR,
+		ASSET_KEY);
 	public static final Set<EquipmentSlot> SLOTS = Set.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
 
-	public RatMasterArmorItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
-		super(material, slot, settings);
+	public RatMasterArmorItem(Settings settings) {
+		super(settings);
 	}
 
 	public static MasterArmorBoost getType(ItemStack stack) {
-		NbtCompound compound = stack.getOrCreateNbt();
-		return MasterArmorBoost.values()[MialeeMath.clampLoop(compound.getInt("type"), 0, MasterArmorBoost.values().length)];
+		return stack.get(ModDataComponents.MASTER_ARMOR_BOOST);
 	}
 
 	public static float getEquippedPieces(LivingEntity owner) {
@@ -89,74 +105,32 @@ public class RatMasterArmorItem extends ArmorItem {
 	}
 
 	public void incrementType(ItemStack stack, boolean sneaking) {
-		NbtCompound compound = stack.getOrCreateNbt();
-		compound.putInt("type", MialeeMath.clampLoop(compound.getInt("type") + 1, 1, MasterArmorBoost.values().length));
+		MasterArmorBoost masterArmorBoost = getType(stack);
+		int i = MialeeMath.clampLoop(masterArmorBoost.ordinal() + 1, 0, MasterArmorBoost.values().length);
+		stack.set(ModDataComponents.MASTER_ARMOR_BOOST, MasterArmorBoost.values()[i]);
 	}
 
-	@Override
-	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		switch (getType(stack)) {
-			case RESISTANCE ->
-				tooltip.add(MialeeText.withColor(Text.translatable("item.ratsmischief.rat_master_armor.tooltip.resistance"), 10044730));
-			case DAMAGE ->
-				tooltip.add(MialeeText.withColor(Text.translatable("item.ratsmischief.rat_master_armor.tooltip.damage"), 9643043));
-			case MINING_SPEED ->
-				tooltip.add(MialeeText.withColor(Text.translatable("item.ratsmischief.rat_master_armor.tooltip.mining_speed"), 14270531));
-		}
-		RatsMischiefClientHelper.addSetBonus(tooltip);
-		super.appendTooltip(stack, world, tooltip, context);
-	}
-
-	public enum MasterArmorBoost {
+	public enum MasterArmorBoost implements TooltipAppender {
 		NONE,
 		RESISTANCE,
 		DAMAGE,
-		MINING_SPEED
-	}
-
-	public static class RatMasterArmorMaterial implements ArmorMaterial {
-		public static final RatMasterArmorMaterial INSTANCE = new RatMasterArmorMaterial();
-		private static final int[] BASE_DURABILITY = new int[]{13, 15, 16, 11};
-		private static final int[] PROTECTION_AMOUNTS = new int[]{3, 6, 8, 3};
+		MINING_SPEED;
+		public static final Codec<MasterArmorBoost> CODEC = Codec.intRange(0, 3).xmap(integer -> MasterArmorBoost.values()[integer], Enum::ordinal);
+		public static final PacketCodec<ByteBuf, MasterArmorBoost> PACKET_CODEC =PacketCodecs.INTEGER.xmap(integer -> MasterArmorBoost.values()[integer], Enum::ordinal);
 
 		@Override
-		public int getDurability(EquipmentSlot slot) {
-			return BASE_DURABILITY[slot.getEntitySlotId()] * 38;
-		}
-
-		@Override
-		public int getProtectionAmount(EquipmentSlot slot) {
-			return PROTECTION_AMOUNTS[slot.getEntitySlotId()];
-		}
-
-		@Override
-		public int getEnchantability() {
-			return 16;
-		}
-
-		@Override
-		public SoundEvent getEquipSound() {
-			return SoundEvents.ITEM_ARMOR_EQUIP_LEATHER;
-		}
-
-		@Override
-		public Ingredient getRepairIngredient() {
-			return Ingredient.ofItems(Items.LEATHER);
-		}
-
-		@Override
-		public String getName() {
-			return "rat_master";
-		}
-
-		@Override
-		public float getToughness() {
-			return 2.0f;
-		}
-
-		@Override
-		public float getKnockbackResistance() {
-			return 0.0f;
+		public void appendTooltip(Item.TooltipContext context, Consumer<Text> textConsumer, TooltipType type, ComponentsAccess components) {
+			switch (this) {
+				case RESISTANCE ->
+					textConsumer.accept(MialeeText.withColor(Text.translatable("item.ratsmischief.rat_master_armor.tooltip.resistance"), 10044730));
+				case DAMAGE ->
+					textConsumer.accept(MialeeText.withColor(Text.translatable("item.ratsmischief.rat_master_armor.tooltip.damage"), 9643043));
+				case MINING_SPEED ->
+					textConsumer.accept(MialeeText.withColor(Text.translatable("item.ratsmischief.rat_master_armor.tooltip.mining_speed"), 14270531));
+			}
+			RatsMischiefClientHelper.addSetBonus(textConsumer);
 		}
 	}
+
+
 }
