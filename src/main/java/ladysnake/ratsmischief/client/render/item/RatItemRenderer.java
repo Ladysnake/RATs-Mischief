@@ -35,10 +35,10 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 		NbtCompound ratNbt = Optional.ofNullable(stack.getNbt()).map(nbt -> nbt.getCompound(RatsMischief.MOD_ID)).map(nbt -> nbt.getCompound("rat")).orElse(null);
 
 		poseStack.push();
-		poseStack.translate(0.5f, 0.51f, 0.5f);
+		poseStack.translate(0.0f, 0.01f, 0.0f);
 
 		if (ratNbt != null && ratNbt.contains("Age") && ratNbt.getInt("Age") < 0) {
-			poseStack.translate(0, 0, -0.1f);
+			poseStack.translate(0.25f, 0.25f, 0.25f);
 			poseStack.scale(0.5f, 0.5f, 0.5f);
 		}
 
