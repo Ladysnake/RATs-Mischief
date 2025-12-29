@@ -1,6 +1,6 @@
 
 {
-  "type": "minecraft:smithing",
+  "type": "minecraft:smithing_transform",
   "addition": {
     "item": "ratsmischief:clothed_ingot"
   },
@@ -9,5 +9,6 @@
   },
   "result": {
     "item": "ratsmischief:rat_master_greaves"
-  }
+  },
+  "template": []
 }

@@ -1,6 +1,5 @@
 {
   "required": true,
-  "minVersion": "0.8",
   "package": "ladysnake.ratsmischief.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
@@ -13,18 +12,17 @@
     "ScreenHandlerMixin",
     "SculkSensorBlockEntityMixin",
     "SculkShriekerBlockEntityMixin",
-    "WardenEntityMixin",
-    "compat.PlayerBodyTrackerMixin",
-    "compat.VanillaRequiemPluginMixin"
+    "WardenEntityMixin"
   ],
   "client": [
-    "client.ArmorFeatureRendererMixin",
     "client.BipedEntityModelMixin",
     "client.EntityRendererMixin",
     "client.HeadFeatureRendererMixin",
     "client.HeldItemRendererMixin",
     "client.ItemEntityRendererMixin",
-    "client.PlayerEntityRendererMixin"
+    "client.PlayerEntityRendererMixin",
+    "mialeemisc.client.ItemRendererMixin",
+    "mialeemisc.client.MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

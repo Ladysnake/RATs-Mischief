@@ -11,7 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 
 public class RatCurseEnchantment extends Enchantment {
-	public RatCurseEnchantment(Enchantment.Rarity weight, EquipmentSlot... slotTypes) {
+	public RatCurseEnchantment(Rarity weight, EquipmentSlot... slotTypes) {
 		super(weight, EnchantmentTarget.WEARABLE, slotTypes);
 	}
 

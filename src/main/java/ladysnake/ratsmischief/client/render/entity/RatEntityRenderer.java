@@ -1,96 +1,84 @@
 package ladysnake.ratsmischief.client.render.entity;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import ladysnake.ratsmischief.client.model.RatEntityModel;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DyeColor;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
-import software.bernie.geckolib3.geo.render.built.GeoBone;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import org.joml.Quaternionf;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
-	// variables needed for later
-	private ItemStack itemStack;
-	private VertexConsumerProvider vertexConsumerProvider;
-	private Identifier ratTexture;
-
 	public RatEntityRenderer(EntityRendererFactory.Context context) {
 		super(context, new RatEntityModel());
 		this.shadowRadius = 0.35f;
-		this.addLayer(new PartyHatFeatureRenderer(this, new PartyHatEntityRenderer(context, new RatEntityModel())));
-		this.addLayer(new EnderEyeFeatureRenderer(this, new EnderEyeEntityRenderer(context, new RatEntityModel())));
+		this.addRenderLayer(new EnderEyeFeatureRenderer(this, new EnderEyeEntityRenderer(context, new RatEntityModel())));
+		this.addRenderLayer(new PartyHatFeatureRenderer(this, new PartyHatEntityRenderer(context, new RatEntityModel())));
 	}
 
 	@Override
-	public Vec3d getPositionOffset(RatEntity rat, float tickDelta) {
-		if (rat.isSneaking()) {
+	public Vec3d getPositionOffset(RatEntity entity, float tickDelta) {
+		if (entity.isSneaking()) {
 			return new Vec3d(0, 0.15, 0);
 		}
 
-		return super.getPositionOffset(rat, tickDelta);
+		return super.getPositionOffset(entity, tickDelta);
 	}
 
 	@Override
-	public void render(RatEntity ratEntity, float entityYaw, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight) {
-		if (ratEntity.isFlying() && ratEntity.age < 5) {
+	public void render(RatEntity entity, float entityYaw, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight) {
+		if (entity.isFlying() && entity.age < 5) {
 			return;
 		}
 
-		super.render(ratEntity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
+		super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
 	}
 
 	@Override
-	public void renderEarly(RatEntity ratEntity, MatrixStack stackIn, float ticks, VertexConsumerProvider vertexConsumerProvider, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-		this.itemStack = ratEntity.isSitting() || ratEntity.isSneaking() ? ItemStack.EMPTY : ratEntity.getEquippedStack(EquipmentSlot.MAINHAND);
-		this.vertexConsumerProvider = vertexConsumerProvider;
-		this.ratTexture = this.getTexture(ratEntity);
+	public void renderRecursively(MatrixStack poseStack, RatEntity animatable, GeoBone bone, RenderLayer renderType, VertexConsumerProvider bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+		if (bone.getName().equals("bodybone") && !(animatable.isSitting() || animatable.isSneaking())) {
+			ItemStack itemStack = animatable.getEquippedStack(EquipmentSlot.MAINHAND);
+			if (!itemStack.isEmpty()) {
+				poseStack.push();
+				poseStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
+				poseStack.translate(bone.getPosX(), bone.getPosZ(), bone.getPosY() - 0.05);
+				poseStack.scale(0.7f, 0.7f, 0.7f);
+				poseStack.multiply(new Quaternionf(bone.getRotX(), bone.getRotZ(), bone.getRotY(), 1.0F));
 
-		super.renderEarly(ratEntity, stackIn, ticks, vertexConsumerProvider, vertexBuilder, packedLightIn, packedOverlayIn, red,
-			green, blue, partialTicks);
-	}
+				MinecraftClient.getInstance().getItemRenderer().renderItem(itemStack, ModelTransformationMode.THIRD_PERSON_RIGHT_HAND, packedLight, packedOverlay, poseStack, bufferSource, animatable.getWorld(), 0);
+				poseStack.pop();
 
-	@Override
-	public void renderRecursively(GeoBone bone, MatrixStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-		if (bone.getName().equals("bodybone")) {
-			stack.push();
-			stack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
-			stack.translate(bone.getPositionX(), bone.getPositionZ(), bone.getPositionY() - 0.05);
-			stack.scale(0.7f, 0.7f, 0.7f);
-			stack.multiply(new Quaternion(bone.getRotationX(), bone.getRotationZ(), bone.getRotationY(), false));
-
-			MinecraftClient.getInstance().getItemRenderer().renderItem(this.itemStack, ModelTransformation.Mode.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.vertexConsumerProvider, 0);
-			stack.pop();
-
-			// restore the render buffer - GeckoLib expects this state otherwise you'll have weird texture issues
-			bufferIn = this.vertexConsumerProvider.getBuffer(RenderLayer.getEntityCutout(this.ratTexture));
+				// restore the render buffer - GeckoLib expects this state otherwise you'll have weird texture issues
+				buffer = bufferSource.getBuffer(RenderLayer.getEntityCutout(this.getTexture(animatable)));
+			}
 		}
 
-		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+		super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
 	@Override
-	protected int getBlockLight(RatEntity rat, BlockPos blockPos) {
-		if (rat.getRatType() == RatEntity.Type.RAT_KID && rat.getRatColor() == DyeColor.PURPLE) {
+	public void scaleModelForRender(float widthScale, float heightScale, MatrixStack poseStack, RatEntity animatable, BakedGeoModel model, boolean isReRender, float partialTick, int packedLight, int packedOverlay) {
+		super.scaleModelForRender(animatable.isBaby() ? widthScale / 2 : widthScale, animatable.isBaby() ? heightScale / 2 : heightScale, poseStack, animatable, model, isReRender, partialTick, packedLight, packedOverlay);
+	}
+
+	@Override
+	protected int getBlockLight(RatEntity entity, BlockPos pos) {
+		if (entity.getRatType() == RatEntity.Type.RAT_KID && entity.getRatColor() == DyeColor.PURPLE) {
 			return 15;
 		} else {
-			return super.getBlockLight(rat, blockPos);
+			return super.getBlockLight(entity, pos);
 		}
-	}
-
-	@Override
-	public boolean shouldShowName(RatEntity animatable) {
-		return super.shouldShowName(animatable) && !animatable.isInvisible();
 	}
 }

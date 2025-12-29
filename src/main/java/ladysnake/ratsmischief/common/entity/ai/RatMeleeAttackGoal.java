@@ -28,7 +28,7 @@ public class RatMeleeAttackGoal extends Goal {
 		this.rat = rat;
 		this.speed = speed;
 		this.pauseWhenMobIdle = pauseWhenMobIdle;
-		this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
+		this.setControls(EnumSet.of(Control.MOVE, Control.LOOK));
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class RatMeleeAttackGoal extends Goal {
 			return false;
 		}
 
-		long l = this.rat.world.getTime();
+		long l = this.rat.getWorld().getTime();
 		if (l - this.lastUpdateTime < 20L) {
 			return false;
 		} else {
@@ -74,7 +74,7 @@ public class RatMeleeAttackGoal extends Goal {
 		} else if (!this.rat.isInWalkTargetRange(livingEntity.getBlockPos())) {
 			return false;
 		} else {
-			return !(livingEntity instanceof PlayerEntity) || !livingEntity.isSpectator() && !((PlayerEntity) livingEntity).isCreative();
+			return !(livingEntity instanceof PlayerEntity player) || !livingEntity.isSpectator() && !player.isCreative();
 		}
 	}
 
@@ -98,7 +98,7 @@ public class RatMeleeAttackGoal extends Goal {
 	}
 
 	@Override
-	public boolean requiresUpdateEveryTick() {
+	public boolean shouldRunEveryTick() {
 		return true;
 	}
 

@@ -62,7 +62,7 @@ public class ChaseForFunGoal<T extends LivingEntity> extends TrackTargetGoal {
 	}
 
 	protected void findClosestTarget() {
-		this.targetEntity = this.mob.world.getClosestEntity(this.targetClass, this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(), this.getSearchBox(10));
+		this.targetEntity = this.mob.getWorld().getClosestEntity(this.targetClass, this.targetPredicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(), this.getSearchBox(10));
 	}
 
 	public void setTargetEntity(@Nullable LivingEntity targetEntity) {

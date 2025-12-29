@@ -22,10 +22,8 @@ public abstract class HeldItemRendererMixin {
 	@Inject(method = "renderFirstPersonItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z", ordinal = 0))
 	public void renderFirstPersonItem(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack itemStack, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
 		if (itemStack.getItem() instanceof RatItem) {
-			boolean bl = hand == Hand.MAIN_HAND;
-			Arm arm = bl ? player.getMainArm() : player.getMainArm().getOpposite();
 			matrices.push();
-			this.renderArmHoldingItem(matrices, vertexConsumers, light, equipProgress, swingProgress, arm);
+			this.renderArmHoldingItem(matrices, vertexConsumers, light, equipProgress, swingProgress, hand == Hand.MAIN_HAND ? player.getMainArm() : player.getMainArm().getOpposite());
 			matrices.pop();
 		}
 	}

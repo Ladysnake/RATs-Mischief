@@ -8,87 +8,83 @@ import ladysnake.ratsmischief.common.RatsMischiefUtils;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.item.RatItem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.geo.render.built.GeoModel;
-import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
+import software.bernie.geckolib.renderer.GeoItemRenderer;
+
+import java.util.Optional;
 
 public class RatItemRenderer extends GeoItemRenderer<RatItem> {
-	private ThreadLocal<Identifier> currentTexture = new ThreadLocal<>();
+	private Identifier currentRatTexture = null;
+	private RenderLayer currentRenderLayer = null;
 
 	public RatItemRenderer() {
 		super(new RatItemModel());
 	}
 
 	@Override
-	public void render(RatItem animatable, MatrixStack matrices, VertexConsumerProvider bufferSource, int packedLight, ItemStack stack) {
-//		super.render(animatable, matrices, bufferSource, packedLight, stack);
+	public void render(ItemStack stack, ModelTransformationMode transformType, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight, int packedOverlay) {
+//		super.render(stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
 
-		GeoModel model = this.modelProvider.getModel(this.modelProvider.getModelResource(animatable));
-		matrices.push();
-		matrices.translate(0.5f, 0.51f, 0.5f);
+		NbtCompound ratNbt = Optional.ofNullable(stack.getNbt()).map(nbt -> nbt.getCompound(RatsMischief.MOD_ID)).map(nbt -> nbt.getCompound("rat")).orElse(null);
 
-		if (stack.getNbt() != null
-			&& stack.getNbt().contains(RatsMischief.MOD_ID)
-			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
-			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("Age")
-			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getInt("Age") < 0) {
-			matrices.translate(0, 0, -0.1f);
-			matrices.scale(0.5f, 0.5f, 0.5f);
+		poseStack.push();
+		poseStack.translate(0.0f, 0.01f, 0.0f);
+
+		if (ratNbt != null && ratNbt.contains("Age") && ratNbt.getInt("Age") < 0) {
+			poseStack.translate(0.25f, 0.25f, 0.25f);
+			poseStack.scale(0.5f, 0.5f, 0.5f);
 		}
 
+//		String ratName = RatItem.getRatName(stack);
+
 		RatEntity.Type ratType = RatItem.getRatType(stack);
-		String ratName = RatItem.getRatName(stack);
 		DyeColor ratColor = RatItem.getRatColor(stack);
+
 		Identifier ratTexture = RatsMischiefUtils.getRatTexture(ratType, ratColor);
+		this.currentRatTexture = ratTexture;
 
-		currentTexture.set(ratTexture);
-
-		MinecraftClient.getInstance().getTextureManager().bindTexture(ratTexture);
-		RenderLayer renderLayer = RenderLayer.getEntityCutout(ratTexture);
-
-		this.render(model, animatable, 0.0F, renderLayer, matrices, bufferSource, bufferSource.getBuffer(renderLayer), packedLight, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+		this.bindTextureAndRender(ratTexture, stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
 
 		// ender eye
-		if (stack.getNbt() != null
-			&& stack.getNbt().contains(RatsMischief.MOD_ID)
-			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
-			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("Spy")
-			&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getBoolean("Spy")) {
-			MinecraftClient.getInstance().getTextureManager().bindTexture(EnderEyeFeatureRenderer.TEXTURE);
-			this.render(model, animatable, 0.0F, RenderLayer.getEntityCutout(EnderEyeFeatureRenderer.TEXTURE), matrices, bufferSource, null, packedLight, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+		if (ratNbt != null && ratNbt.contains("Spy") && ratNbt.getBoolean("Spy")) {
+			this.bindTextureAndRender(EnderEyeFeatureRenderer.TEXTURE, stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
 		}
 
 		// party hat
 		if (RatsMischiefUtils.IS_BIRTHDAY && !PartyHatFeatureRenderer.DISALLOWED_TYPES.contains(ratType)) {
-			if (stack.getNbt() != null
-				&& stack.getNbt().contains(RatsMischief.MOD_ID)
-				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).contains("rat")
-				&& stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").contains("PartyHat")) {
-				String hat = stack.getNbt().getCompound(RatsMischief.MOD_ID).getCompound("rat").getString("PartyHat");
+			if (ratNbt != null && ratNbt.contains("PartyHat")) {
+				String hat = ratNbt.getString("PartyHat");
 				Identifier hatTexture = PartyHatFeatureRenderer.TEXTURES[RatEntity.PartyHat.valueOf(hat).ordinal()];
 
-				MinecraftClient.getInstance().getTextureManager().bindTexture(hatTexture);
-				this.render(model, animatable, 0.0F, RenderLayer.getEntityCutout(hatTexture), matrices, bufferSource, null, packedLight, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+				this.bindTextureAndRender(hatTexture, stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
 			}
 		}
 
-		matrices.pop();
-		currentTexture.remove();
+		poseStack.pop();
+		this.currentRatTexture = null;
+		this.currentRenderLayer = null;
+	}
+
+	private void bindTextureAndRender(Identifier texture, ItemStack stack, ModelTransformationMode transformType, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight, int packedOverlay) {
+		MinecraftClient.getInstance().getTextureManager().bindTexture(texture);
+		this.currentRenderLayer = RenderLayer.getEntityCutout(texture);
+		super.render(stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
+	}
+
+	@Override
+	public RenderLayer getRenderType(RatItem animatable, Identifier texture, VertexConsumerProvider bufferSource, float partialTick) {
+		return this.currentRenderLayer == null ? super.getRenderType(animatable, texture, bufferSource, partialTick) : this.currentRenderLayer;
 	}
 
 	@Override
 	public Identifier getTextureLocation(RatItem instance) {
-		return currentTexture.get() != null ? currentTexture.get() : super.getTextureLocation(instance);
-	}
-
-	@Override
-	public Identifier getTextureResource(RatItem entity) {
-		return currentTexture.get() != null ? currentTexture.get() : super.getTextureResource(entity);
+		return this.currentRatTexture == null ? super.getTextureLocation(instance) : this.currentRatTexture;
 	}
 }

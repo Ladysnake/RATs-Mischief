@@ -1,0 +1,39 @@
+{
+	"schemaVersion": 1,
+	"id": "ratsmischief",
+	"version": "${version}",
+	"name": "RAT's Mischief",
+	"description": "Adds rats to Minecraft: smart, versatile and adorable pets!",
+	"authors": [
+		"doctor4t (Author)"
+	],
+	"contributors": [
+		"AmyMialee (Programmer)",
+		"Arathain (Artist)",
+		"Luxintrus (Artist)",
+		"Pyrofab (Contributor)"
+	],
+	"contact": {
+		"homepage": "https://ladysnake.org/wiki/rats-mischief/"
+	},
+	"icon": "assets/ratsmischief/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"ladysnake.ratsmischief.common.RatsMischief"
+		],
+		"client": [
+			"ladysnake.ratsmischief.client.RatsMischiefClient"
+		]
+	},
+	"mixins": [
+		"ratsmischief.mixins.json"
+	],
+	"depends": {
+		"fabricloader": "*",
+		"minecraft": ">=1.20",
+		"fabric-api": "*",
+		"geckolib": "*",
+		"trinkets": "*"
+	}
+}

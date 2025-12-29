@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.EntityDamageSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,10 +23,8 @@ public abstract class LivingEntityMixin {
 
 	@WrapOperation(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V"))
 	private void mischief$lessKnockback(LivingEntity entity, double x, double y, double z, Operation<Void> operation) {
-		if (this.lastSource instanceof EntityDamageSource entityDamageSource) {
-			if (entityDamageSource.getAttacker() instanceof RatEntity) {
-				return;
-			}
+		if (this.lastSource.getAttacker() instanceof RatEntity) {
+			return;
 		}
 		operation.call(entity, x, y, z);
 	}

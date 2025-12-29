@@ -6,7 +6,6 @@ import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Arm;
-import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,7 +33,7 @@ public class BipedEntityModelMixin<T extends LivingEntity> {
 	private void positionLeftArm(T entity, CallbackInfo ci) {
 		if (this.leftArmPose == BipedEntityModel.ArmPose.BOW_AND_ARROW) {
 			if (entity instanceof PlayerEntity player) {
-				if (player.getMainArm() == Arm.LEFT ? player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.RAT) : player.getStackInHand(Hand.OFF_HAND).isOf(ModItems.RAT)) {
+				if (player.getMainArm() == Arm.LEFT ? player.getMainHandStack().isOf(ModItems.RAT) : player.getOffHandStack().isOf(ModItems.RAT)) {
 					this.leftArm.yaw = 0.1F + this.head.yaw + 0.4F;
 					this.leftArm.pitch = (float) (-Math.PI / 2) + this.head.pitch;
 					ci.cancel();
@@ -47,7 +46,7 @@ public class BipedEntityModelMixin<T extends LivingEntity> {
 	private void positionRightArm(T entity, CallbackInfo ci) {
 		if (this.rightArmPose == BipedEntityModel.ArmPose.BOW_AND_ARROW) {
 			if (entity instanceof PlayerEntity player) {
-				if (player.getMainArm() == Arm.RIGHT ? player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.RAT) : player.getStackInHand(Hand.OFF_HAND).isOf(ModItems.RAT)) {
+				if (player.getMainArm() == Arm.RIGHT ? player.getMainHandStack().isOf(ModItems.RAT) : player.getOffHandStack().isOf(ModItems.RAT)) {
 					this.rightArm.yaw = -0.1F + this.head.yaw;
 					this.rightArm.pitch = (float) (-Math.PI / 2) + this.head.pitch;
 					ci.cancel();
