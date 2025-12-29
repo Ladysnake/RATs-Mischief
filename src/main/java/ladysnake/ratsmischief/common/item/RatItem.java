@@ -151,6 +151,10 @@ public class RatItem extends Item implements GeoItem {
 	@Override
 	public ActionResult useOnBlock(ItemUsageContext context) {
 		PlayerEntity owner = context.getPlayer();
+		if (owner == null) {
+			return ActionResult.PASS;
+		}
+
 		Hand hand = context.getHand();
 		World world = context.getWorld();
 
