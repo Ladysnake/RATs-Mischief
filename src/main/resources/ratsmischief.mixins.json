@@ -15,7 +15,6 @@
     "WardenEntityMixin"
   ],
   "client": [
-    "client.ArmorFeatureRendererMixin",
     "client.BipedEntityModelMixin",
     "client.EntityRendererMixin",
     "client.HeadFeatureRendererMixin",

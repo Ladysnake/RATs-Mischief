@@ -1,11 +1,13 @@
 package ladysnake.ratsmischief.client;
 
+import ladysnake.ratsmischief.client.render.RatMasterArmorRenderer;
 import ladysnake.ratsmischief.client.render.entity.RatEntityRenderer;
 import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.init.ModEntities;
 import ladysnake.ratsmischief.common.init.ModItems;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
@@ -55,5 +57,8 @@ public class RatsMischiefClient implements ClientModInitializer {
 
 //		// entity renderer registration
 //		EntityRendererRegistry.register(ModEntities.MOD_ENTITY, ModEntityRenderer::new);
+
+		// armor renderer registration
+		ArmorRenderer.register(RatMasterArmorRenderer.INSTANCE, ModItems.RAT_MASTER_HOOD, ModItems.RAT_MASTER_CLOAK, ModItems.RAT_MASTER_BREECHES, ModItems.RAT_MASTER_GREAVES);
 	}
 }
