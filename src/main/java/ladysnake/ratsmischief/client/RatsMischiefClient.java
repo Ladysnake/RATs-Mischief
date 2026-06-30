@@ -31,6 +31,7 @@ public class RatsMischiefClient implements ClientModInitializer {
 	public static final EntityModelLayer RAT_MASTER_ARMOR_INNER_LAYER = new EntityModelLayer(RatsMischief.id("rat_master_inner_layer"), "main");
 	public static final EntityModelLayer RAT_MASTER_ARMOR_OUTER_LAYER = new EntityModelLayer(RatsMischief.id("rat_master_outer_layer"), "main");
 	public static final EntityModelLayer RAT_MASTER_ARMOR_OUTER_LAYER_SLIM = new EntityModelLayer(RatsMischief.id("rat_master_outer_layer_slim"), "main");
+    public static boolean isSlim = true; // Used while initiating Armour renderers
 
 	static {
 		ModelPredicateProviderRegistry.register(ModItems.RAT_MASTER_OCARINA, new Identifier("action"), (stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("action") / 4f);

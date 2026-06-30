@@ -8,7 +8,6 @@ import ladysnake.ratsmischief.common.item.RatMasterArmorItem;
 import ladysnake.ratsmischief.common.item.RatMasterCloakItem;
 import ladysnake.ratsmischief.common.item.RatMasterHoodItem;
 import ladysnake.ratsmischief.common.util.EntityRendererWrapper;
-import ladysnake.ratsmischief.common.util.PlayerEntityRendererWrapper;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -51,13 +50,10 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 
 	@Inject(method = "<init>", at = @At("TAIL"))
 	private void mischief$init(FeatureRendererContext<T, M> context, A leggingsModel, A bodyModel, CallbackInfo ci) {
-		if (context instanceof EntityRendererWrapper wrapper) {
-			if (context instanceof PlayerEntityRendererWrapper playerWrapper) {
-				this.slim = playerWrapper.mischief$isSlim();
-			}
-			this.leggingsModel = new PlayerEntityModel<>(wrapper.mischief$getContext().getPart(RatsMischiefClient.RAT_MASTER_ARMOR_INNER_LAYER), false);
-			this.playerModel = new PlayerEntityModel<>(wrapper.mischief$getContext().getPart(this.slim ? RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER), this.slim);
-		}
+		if (!(context instanceof EntityRendererWrapper wrapper)) return;
+		this.slim = RatsMischiefClient.isSlim;
+		this.leggingsModel = new PlayerEntityModel<>(wrapper.mischief$getContext().getPart(RatsMischiefClient.RAT_MASTER_ARMOR_INNER_LAYER), false);
+		this.playerModel = new PlayerEntityModel<>(wrapper.mischief$getContext().getPart(this.slim ? RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER_SLIM : RatsMischiefClient.RAT_MASTER_ARMOR_OUTER_LAYER), this.slim);
 	}
 
 	@Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
