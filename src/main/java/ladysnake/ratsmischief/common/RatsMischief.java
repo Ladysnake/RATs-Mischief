@@ -70,13 +70,13 @@ public class RatsMischief implements ModInitializer {
 					supplier.pool(lootPool);
 				}
 				{ // rat curse book
-					ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
-					EnchantedBookItem.addEnchantment(book, new EnchantmentLevelEntry(ModEnchantments.RAT_CURSE, 1));
-					LootPool lootPool = LootPool.builder()
-						.rolls(lootTableRange)
-						.conditionally(RandomChanceLootCondition.builder(0.3f).build())
-						.with(ItemEntry.builder(ModItems.CLOTHED_INGOT).build()).build();
-					supplier.pool(lootPool);
+//					ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
+//					EnchantedBookItem.addEnchantment(book, new EnchantmentLevelEntry(ModEnchantments.RAT_CURSE, 1));
+//					LootPool lootPool = LootPool.builder()
+//						.rolls(lootTableRange)
+//						.conditionally(RandomChanceLootCondition.builder(0.3f).build())
+//						.with(ItemEntry.builder(ModItems.CLOTHED_INGOT).build()).build();
+//					supplier.pool(lootPool);
 				}
 			}
 		});

@@ -1,6 +1,5 @@
 plugins {
-	id 'maven-publish'
-	id 'io.github.ladysnake.chenille' version '0.11.3'
+	id 'org.quiltmc.loom' version '1.4-SNAPSHOT'
 }
 
 archivesBaseName = project.archives_base_name
@@ -8,7 +7,9 @@ version = project.version
 group = project.maven_group
 
 repositories {
+	mavenCentral()
 	mavenLocal()
+
 	// publishing
 	maven {
 		name = "CurseForge"
@@ -18,8 +19,8 @@ repositories {
 	// cloth config
 	maven { url "https://maven.shedaniel.me/" }
 
-	// CCA, Requiem
-	chenille.repositories.ladysnake()
+	// CCA
+	maven { url 'https://maven.ladysnake.org/releases/' }
 
 	// mod menu
 	maven {
@@ -75,7 +76,7 @@ dependencies {
 	include("com.github.emilyploszaj:step-height-entity-attribute:v1.0.1")
 
 	// mod menu
-	modLocalImplementation("com.terraformersmc:modmenu:${mod_menu_version}") { transitive = false }
+	modImplementation("com.terraformersmc:modmenu:${mod_menu_version}") { transitive = false }
 
 	// mixin extras
 	implementation include("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
@@ -87,24 +88,19 @@ dependencies {
 	// ok zoomer
 //	runtimeOnly("com.github.EnnuiL:OkZoomer:1.19.2-SNAPSHOT")
 
-	modCompileOnly("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
-	modImplementation("io.github.ladysnake:requiem-api:${project.requiem_version}")
-	modImplementation("io.github.ladysnake:requiem-core:${project.requiem_version}")
-	modImplementation include("io.github.ladysnake:requiem-lite:${project.requiem_version}")
+//	modImplementation include('com.github.lucko:fabric-permissions-api:v0.1')
+//	modCompileOnly("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
+//	modImplementation("io.github.ladysnake:requiem-api:${project.requiem_version}")
+//	modImplementation("io.github.ladysnake:requiem-core:${project.requiem_version}")
+//	modImplementation include("io.github.ladysnake:requiem-lite:${project.requiem_version}")
+
+	// cca
+	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
+	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
+	modImplementation include("dev.onyxstudios.cardinal-components-api:cardinal-components-world:${project.cca_version}")
 
 	// trinkets
 	modImplementation ("dev.emi:trinkets:${project.trinkets_version}")
-}
-
-chenille {
-	javaVersion = 17
-	configurePublishing {
-		mainArtifact = remapJar.archiveFile
-		withLadysnakeMaven()
-		withCurseforgeRelease()
-		withGithubRelease()
-		withModrinthRelease()
-	}
 }
 
 processResources {

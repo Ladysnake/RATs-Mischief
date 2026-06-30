@@ -19,8 +19,7 @@
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
 			"init": "ladysnake.ratsmischief.common.RatsMischief",
-			"client_init": "ladysnake.ratsmischief.client.RatsMischiefClient",
-			"requiem:plugin": "ladysnake.ratsmischief.common.requiem.RatsMischiefRequiemPlugin"
+			"client_init": "ladysnake.ratsmischief.client.RatsMischiefClient"
 		},
 		"depends": [
 			{
@@ -37,10 +36,6 @@
 			},
 			{
 				"id": "step-height-entity-attribute"
-			},
-			{
-				"id": "requiem",
-				"unless": "requiem-lite"
 			}
 		]
 	},
