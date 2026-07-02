@@ -18,14 +18,14 @@ import net.minecraft.util.profiler.Profiler;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-public class RatMasterMaskItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer, IdentifiableResourceReloadListener {
+public class MaskItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer, IdentifiableResourceReloadListener {
 	private final Identifier rendererId;
 	private final Identifier itemId;
 	private ItemRenderer itemRenderer;
 	private BakedModel inventoryModel;
 	private BakedModel wornModel;
 
-	public RatMasterMaskItemRenderer(Identifier itemId) {
+	public MaskItemRenderer(Identifier itemId) {
 		this.rendererId = new Identifier(itemId.getNamespace(), itemId.getPath() + "_renderer");
 		this.itemId = itemId;
 	}
@@ -53,15 +53,7 @@ public class RatMasterMaskItemRenderer implements BuiltinItemRendererRegistry.Dy
 	public void render(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 		matrices.pop();
 		matrices.push();
-		if (mode == ModelTransformation.Mode.GUI || mode == ModelTransformation.Mode.GROUND || mode == ModelTransformation.Mode.FIXED) {
-			this.itemRenderer.renderItem(stack, mode, false, matrices, vertexConsumers, light, overlay, this.inventoryModel);
-		} else {
-			boolean leftHanded;
-			switch (mode) {
-				case FIRST_PERSON_LEFT_HAND, THIRD_PERSON_LEFT_HAND -> leftHanded = true;
-				default -> leftHanded = false;
-			}
-			this.itemRenderer.renderItem(stack, mode, leftHanded, matrices, vertexConsumers, light, overlay, this.wornModel);
-		}
+
+		this.itemRenderer.renderItem(stack, mode, false, matrices, vertexConsumers, light, overlay, mode == ModelTransformation.Mode.HEAD ? this.wornModel : this.inventoryModel);
 	}
 }

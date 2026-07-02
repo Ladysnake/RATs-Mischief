@@ -1,8 +1,9 @@
 package ladysnake.ratsmischief.client;
 
+import ladysnake.ratsmischief.client.model.RatMasterPlayerEntityModel;
 import ladysnake.ratsmischief.client.render.entity.RatEntityRenderer;
+import ladysnake.ratsmischief.client.render.item.MaskItemRenderer;
 import ladysnake.ratsmischief.client.render.item.RatItemRenderer;
-import ladysnake.ratsmischief.client.render.item.RatMasterMaskItemRenderer;
 import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.init.ModEntities;
 import ladysnake.ratsmischief.common.init.ModItems;
@@ -17,8 +18,8 @@ import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.model.Dilation;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.ModelIdentifier;
+import net.minecraft.item.Item;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -39,9 +40,9 @@ public class RatsMischiefClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient(ModContainer mod) {
-		EntityModelLayerRegistry.registerModelLayer(RAT_MASTER_ARMOR_INNER_LAYER, () -> TexturedModelData.of(PlayerEntityModel.getTexturedModelData(new Dilation(0.28f), false), 64, 64));
-		EntityModelLayerRegistry.registerModelLayer(RAT_MASTER_ARMOR_OUTER_LAYER, () -> TexturedModelData.of(PlayerEntityModel.getTexturedModelData(new Dilation(0.29f), false), 64, 64));
-		EntityModelLayerRegistry.registerModelLayer(RAT_MASTER_ARMOR_OUTER_LAYER_SLIM, () -> TexturedModelData.of(PlayerEntityModel.getTexturedModelData(new Dilation(0.29f), true), 64, 64));
+		EntityModelLayerRegistry.registerModelLayer(RAT_MASTER_ARMOR_INNER_LAYER, () -> TexturedModelData.of(RatMasterPlayerEntityModel.getTexturedModelData(new Dilation(0.28f), false), 64, 64));
+		EntityModelLayerRegistry.registerModelLayer(RAT_MASTER_ARMOR_OUTER_LAYER, () -> TexturedModelData.of(RatMasterPlayerEntityModel.getTexturedModelData(new Dilation(0.29f), false), 64, 64));
+		EntityModelLayerRegistry.registerModelLayer(RAT_MASTER_ARMOR_OUTER_LAYER_SLIM, () -> TexturedModelData.of(RatMasterPlayerEntityModel.getTexturedModelData(new Dilation(0.29f), true), 64, 64));
 
 		ModParticles.registerFactories();
 		ModParticles.init();
@@ -49,19 +50,22 @@ public class RatsMischiefClient implements ClientModInitializer {
 		EntityRendererRegistry.register(ModEntities.RAT, RatEntityRenderer::new);
 		GeoItemRenderer.registerItemRenderer(ModItems.RAT, new RatItemRenderer());
 
-		Identifier itemId = Registry.ITEM.getId(ModItems.RAT_MASTER_MASK);
-		RatMasterMaskItemRenderer inventoryItemRenderer = new RatMasterMaskItemRenderer(itemId);
-		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(inventoryItemRenderer);
-		BuiltinItemRendererRegistry.INSTANCE.register(ModItems.RAT_MASTER_MASK, inventoryItemRenderer);
-		ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
-			out.accept(new ModelIdentifier(itemId, "inventory"));
-			out.accept(new ModelIdentifier(itemId + "_worn", "inventory"));
-		});
-		MialeeMiscClient.INVENTORY_ITEMS.add(ModItems.RAT_MASTER_MASK);
+		// mask renderer
+		Item[] masks = {ModItems.RAT_MASTER_MASK, ModItems.GILDED_HORNS};
+		for (Item mask : masks) {
+			Identifier itemId = Registry.ITEM.getId(mask);
+			MaskItemRenderer inventoryItemRenderer = new MaskItemRenderer(itemId);
+			ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(inventoryItemRenderer);
+			BuiltinItemRendererRegistry.INSTANCE.register(mask, inventoryItemRenderer);
+			ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
+				out.accept(new ModelIdentifier(itemId, "inventory"));
+				out.accept(new ModelIdentifier(itemId + "_worn", "inventory"));
+			});
+			MialeeMiscClient.INVENTORY_ITEMS.add(mask);
+		}
 
 		// model predicates
 		FabricModelPredicateProviderRegistry.register(new Identifier(RatsMischief.MOD_ID + ":filled"), (itemStack, world, livingEntity, seed) -> itemStack.getOrCreateSubNbt(RatsMischief.MOD_ID).getFloat("filled"));
-
 
 //		// block render layer map
 //		BlockRenderLayerMap.put(RenderLayer.getCutout(), ModBlock.MOD_BLOCK);

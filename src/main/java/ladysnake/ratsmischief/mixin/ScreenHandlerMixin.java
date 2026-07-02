@@ -1,5 +1,6 @@
 package ladysnake.ratsmischief.mixin;
 
+import ladysnake.ratsmischief.common.init.ModItems;
 import ladysnake.ratsmischief.common.init.ModSoundEvents;
 import ladysnake.ratsmischief.common.item.RatItem;
 import ladysnake.ratsmischief.common.item.RatMasterArmorItem;
@@ -45,7 +46,7 @@ public class ScreenHandlerMixin {
 						player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
 						ci.cancel();
 					}
-				} else if (stack.getItem() instanceof RatMasterMaskItem) {
+				} else if (stack.isOf(ModItems.RAT_MASTER_MASK)) {
 					RatMasterMaskItem.incrementOffset(stack);
 					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
 					ci.cancel();

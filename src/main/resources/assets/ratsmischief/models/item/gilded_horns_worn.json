@@ -1,0 +1,86 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"1": "ratsmischief:entity/armor/gilded_horns",
+		"particle": "ratsmischief:entity/armor/gilded_horns"
+	},
+	"elements": [
+		{
+			"from": [-6, 3, 8],
+			"to": [4, 15, 8],
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [3, 12, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 5, 6], "texture": "#1"},
+				"east": {"uv": [0, 0, 0, 6], "texture": "#1"},
+				"south": {"uv": [5, 0, 10, 6], "texture": "#1"},
+				"west": {"uv": [5, 0, 5, 6], "texture": "#1"},
+				"up": {"uv": [5, 0, 0, 0], "texture": "#1"},
+				"down": {"uv": [10, 0, 5, 0], "texture": "#1"}
+			}
+		},
+		{
+			"from": [12, 3, 8],
+			"to": [22, 15, 8],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [13, 12, 8]},
+			"faces": {
+				"north": {"uv": [0.5, 6, 5.5, 12], "texture": "#1"},
+				"east": {"uv": [0.5, 6, 0.5, 12], "texture": "#1"},
+				"south": {"uv": [5.5, 6, 10.5, 12], "texture": "#1"},
+				"west": {"uv": [5.5, 6, 5.5, 12], "texture": "#1"},
+				"up": {"uv": [5.5, 6, 0.5, 6], "texture": "#1"},
+				"down": {"uv": [10.5, 6, 5.5, 6], "texture": "#1"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [-20, 135, 20],
+			"translation": [1.75, 2.75, -1.25],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [-20, 135, 20],
+			"translation": [1.75, 2.75, -1.25],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"firstperson_righthand": {
+			"rotation": [-20, 135, 20],
+			"translation": [1.75, 2.75, -1.25],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"firstperson_lefthand": {
+			"rotation": [-20, 135, 20],
+			"translation": [1.75, 2.75, -1.25],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"ground": {
+			"rotation": [-20, 135, 20],
+			"translation": [0, 2.75, 0],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"gui": {
+			"rotation": [20, 140, 0],
+			"translation": [0.5, 2.75, 0],
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"head": {
+			"translation": [0, 4.75, 0],
+			"scale": [1.6, 1.6, 1.6]
+		},
+		"fixed": {
+			"translation": [0, 2.5, 5.25]
+		}
+	},
+	"groups": [
+		{
+			"name": "Horns",
+			"origin": [8, 24, 8],
+			"scope": 0,
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}

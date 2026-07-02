@@ -17,7 +17,7 @@ public class RatMasterHoodItem extends RatMasterArmorItem {
 		super(material, slot, settings);
 	}
 
-	public static boolean isHidden(ItemStack stack) {
+	public static boolean isDown(ItemStack stack) {
 		return stack.getOrCreateNbt().getBoolean("hidden");
 	}
 

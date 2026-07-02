@@ -4,6 +4,7 @@ import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketItem;
 import dev.emi.trinkets.api.TrinketsApi;
+import ladysnake.ratsmischief.common.init.ModItems;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,10 @@ import java.util.Optional;
 public class RatMasterMaskItem extends TrinketItem {
 	public RatMasterMaskItem(Settings settings) {
 		super(settings);
+	}
+
+	public static boolean isIdentityHidden(LivingEntity livingEntity) {
+		return getWornMask(livingEntity).isOf(ModItems.RAT_MASTER_MASK);
 	}
 
 	public static boolean isWearingMask(LivingEntity livingEntity) {
@@ -50,11 +55,6 @@ public class RatMasterMaskItem extends TrinketItem {
 	public static void incrementOffset(ItemStack stack) {
 		NbtCompound compound = stack.getOrCreateNbt();
 		compound.putInt("offset", MialeeMath.clampLoop(compound.getInt("offset") + 1, -2, 3));
-	}
-
-	@Override
-	public Text getName(ItemStack stack) {
-		return MialeeText.withColor(super.getName(stack), 0x87FFBF);
 	}
 
 	@Override

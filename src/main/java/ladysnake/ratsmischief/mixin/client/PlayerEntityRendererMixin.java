@@ -32,8 +32,8 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 		}
 	}
 
-	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/EntityRendererFactory$Context;getPart(Lnet/minecraft/client/render/entity/model/EntityModelLayer;)Lnet/minecraft/client/model/ModelPart;", ordinal = 0))
-	private static void mischief$masterArmor(EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci) {
+	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/EntityRendererFactory$Context;getPart(Lnet/minecraft/client/render/entity/model/EntityModelLayer;)Lnet/minecraft/client/model/ModelPart;", ordinal = 1))
+	private void mischief$masterArmor(EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci) {
 		RatsMischiefClient.isSlim = slim;
 	}
 

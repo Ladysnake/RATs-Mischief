@@ -35,6 +35,13 @@ public interface ModItems {
 	Item RAT_MASTER_OCARINA = createItem("rat_master_ocarina", new RatMasterOcarinaItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
 	Item RAT_MASTER_MASK = createItem("rat_master_mask", new RatMasterMaskItem(new QuiltItemSettings().group(ItemGroup.COMBAT).maxCount(1)));
 
+	Item GILDED_RAT_MASTER_HOOD = createItem("gilded_rat_master_hood", new RatMasterHoodItem(RatMasterArmorItem.GildedRatMasterArmorMaterial.INSTANCE, EquipmentSlot.HEAD, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item GILDED_RAT_MASTER_CLOAK = createItem("gilded_rat_master_cloak", new RatMasterCloakItem(RatMasterArmorItem.GildedRatMasterArmorMaterial.INSTANCE, EquipmentSlot.CHEST, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item GILDED_RAT_MASTER_BREECHES = createItem("gilded_rat_master_breeches", new RatMasterArmorItem(RatMasterArmorItem.GildedRatMasterArmorMaterial.INSTANCE, EquipmentSlot.LEGS, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item GILDED_RAT_MASTER_GREAVES = createItem("gilded_rat_master_greaves", new RatMasterArmorItem(RatMasterArmorItem.GildedRatMasterArmorMaterial.INSTANCE, EquipmentSlot.FEET, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item GILDED_HORNS = createItem("gilded_horns", new RatMasterMaskItem(new QuiltItemSettings().group(ItemGroup.COMBAT).maxCount(1)));
+
+
 	private static <T extends Item> T createItem(String name, T item) {
 		ITEMS.put(item, new Identifier(RatsMischief.MOD_ID, name));
 		return item;

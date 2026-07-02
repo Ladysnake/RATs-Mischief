@@ -27,7 +27,7 @@ public class EntityRendererMixin<T extends Entity> implements EntityRendererWrap
 
 	@Inject(method = "renderLabelIfPresent", at = @At("HEAD"), cancellable = true)
 	protected void mischief$hideNames(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-		if (entity instanceof LivingEntity living && RatMasterMaskItem.isWearingMask(living)) {
+		if (entity instanceof LivingEntity living && RatMasterMaskItem.isIdentityHidden(living)) {
 			ci.cancel();
 		}
 	}
