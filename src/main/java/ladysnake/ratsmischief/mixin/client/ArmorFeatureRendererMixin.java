@@ -39,11 +39,11 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 	@Unique
 	private static final Map<String, Identifier> SLIM_ARMOR_TEXTURE_CACHE = Maps.newHashMap();
 	@Unique
-	private RatMasterPlayerEntityModel<LivingEntity> headModel;
+	private RatMasterPlayerEntityModel<T> headModel;
 	@Unique
-	private RatMasterPlayerEntityModel<LivingEntity> chestModel;
+	private RatMasterPlayerEntityModel<T> chestModel;
 	@Unique
-	private RatMasterPlayerEntityModel<LivingEntity> legsModel;
+	private RatMasterPlayerEntityModel<T> legsModel;
 	@Unique
 	private boolean slim = false;
 
@@ -73,7 +73,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 	private void renderRatArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light) {
 		ItemStack itemStack = entity.getEquippedStack(armorSlot);
 		if (itemStack.getItem() instanceof RatMasterArmorItem armorItem) {
-			RatMasterPlayerEntityModel<LivingEntity> armorModel = this.getRatModel(armorSlot);
+			RatMasterPlayerEntityModel<T> armorModel = this.getRatModel(armorSlot);
 			if (armorItem.getSlotType() == armorSlot) {
 				{
 					armorModel.handSwingProgress = this.getContextModel().handSwingProgress;
@@ -82,13 +82,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 					armorModel.leftArmPose = this.getContextModel().leftArmPose;
 					armorModel.rightArmPose = this.getContextModel().rightArmPose;
 					armorModel.sneaking = this.getContextModel().sneaking;
-					armorModel.head.copyTransform(this.getContextModel().head);
-					armorModel.hat.copyTransform(this.getContextModel().hat);
-					armorModel.body.copyTransform(this.getContextModel().body);
-					armorModel.rightArm.copyTransform(this.getContextModel().rightArm);
-					armorModel.leftArm.copyTransform(this.getContextModel().leftArm);
-					armorModel.rightLeg.copyTransform(this.getContextModel().rightLeg);
-					armorModel.leftLeg.copyTransform(this.getContextModel().leftLeg);
+					this.getContextModel().setAttributes(armorModel);
 				}
 				this.setRatVisible(armorModel, armorSlot, itemStack);
 				this.setRatPoses(armorModel, armorSlot);
@@ -112,7 +106,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 	}
 
 	@Unique
-	private RatMasterPlayerEntityModel<LivingEntity> getRatModel(EquipmentSlot slot) {
+	private RatMasterPlayerEntityModel<T> getRatModel(EquipmentSlot slot) {
 		return switch (getArmorPart(slot)) {
 			case HOOD -> headModel;
 			case CHEST -> chestModel;
@@ -121,7 +115,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 	}
 
 	@Unique
-	protected void setRatVisible(RatMasterPlayerEntityModel<LivingEntity> bipedModel, EquipmentSlot slot, ItemStack stack) {
+	protected void setRatVisible(RatMasterPlayerEntityModel<T> bipedModel, EquipmentSlot slot, ItemStack stack) {
 		bipedModel.setVisible(false);
 		switch (slot) {
 			case HEAD -> {
@@ -156,7 +150,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 	}
 
 	@Unique
-	private void setRatPoses(RatMasterPlayerEntityModel<LivingEntity> model, EquipmentSlot armorSlot) {
+	private void setRatPoses(RatMasterPlayerEntityModel<T> model, EquipmentSlot armorSlot) {
 		switch (armorSlot) {
 			case CHEST -> {
 				model.jacket.copyTransform(model.body);
@@ -176,7 +170,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 	}
 
 	@Unique
-	private void renderRatArmorParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItem item, RatMasterPlayerEntityModel<LivingEntity> model, RatMasterPlayerEntityModel.ArmorPart armorPart, boolean hoodDown) {
+	private void renderRatArmorParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItem item, RatMasterPlayerEntityModel<T> model, RatMasterPlayerEntityModel.ArmorPart armorPart, boolean hoodDown) {
 		VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumers, RenderLayer.getArmorCutoutNoCull(this.getRatArmorTexture(item, armorPart, hoodDown)), false, false);
 		model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0F);
 	}
