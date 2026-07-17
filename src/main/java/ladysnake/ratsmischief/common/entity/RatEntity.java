@@ -19,6 +19,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.EndGatewayBlockEntity;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.FuzzyTargeting;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -187,6 +188,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 	@Override
 	protected void initGoals() {
+//		this.goalSelector.add(1, new RunOutOfPouchGoal(this, 1.0D));
 		this.goalSelector.add(1, new SwimGoal(this));
 		this.goalSelector.add(2, new SitGoal(this));
 //		this.goalSelector.add(3, new EatToHealGoal(this));
@@ -660,7 +662,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 	@Override
 	public void pushAwayFrom(Entity entity) {
-		if (entity instanceof RatEntity) {
+		if (entity instanceof RatEntity && this.age > 40) {
 			super.pushAwayFrom(entity);
 		}
 	}
@@ -1157,4 +1159,22 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			return super.shouldContinue() && !RatEntity.this.isSpy() && !RatEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && RatEntity.this.isTamed() && !RatEntity.this.isSitting() && !RatEntity.this.isEating() && RatEntity.this.getOwner() != null && RatEntity.this.getOwner().isAlive() && ((PlayerEntity) RatEntity.this.getOwner()).getInventory().getEmptySlot() >= 0;
 		}
 	}
+
+	public class RunOutOfPouchGoal extends WanderAroundGoal {
+		public RunOutOfPouchGoal(RatEntity rat, double speed) {
+			super(rat, speed);
+		}
+
+		@Override
+		public boolean canStart() {
+			return this.mob.age < 40;
+		}
+
+		@Nullable
+		@Override
+		protected Vec3d getWanderTarget() {
+			return new Vec3d(this.mob.getX() + random.nextInt(10) - 5, this.mob.getY(), this.mob.getZ() + random.nextInt(10) - 5);
+		}
+	}
+
 }

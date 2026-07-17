@@ -71,8 +71,7 @@ public class RatCarnyxItem extends Item implements IClickConsumingItem {
 		ItemStack stack = serverPlayerEntity.getStackInHand(serverPlayerEntity.getActiveHand());
 		NbtCompound nbt = stack.getOrCreateNbt();
 
-		final boolean gather;
-		gather = !RatPouchItem.hasPouchesWithRats(serverPlayerEntity);
+		final boolean gather = serverPlayerEntity.isSneaking();
 
 		ServerWorld serverWorld = (ServerWorld) serverPlayerEntity.world;
 		boolean success = false;
