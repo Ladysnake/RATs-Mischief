@@ -1,7 +1,6 @@
 package ladysnake.ratsmischief.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import ladysnake.ratsmischief.client.RatsMischiefClient;
 import ladysnake.ratsmischief.common.init.ModItems;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -30,11 +29,6 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 		if (stack.isOf(ModItems.RAT)) {
 			cir.setReturnValue(BipedEntityModel.ArmPose.BOW_AND_ARROW);
 		}
-	}
-
-	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/EntityRendererFactory$Context;getPart(Lnet/minecraft/client/render/entity/model/EntityModelLayer;)Lnet/minecraft/client/model/ModelPart;", ordinal = 1))
-	private void mischief$masterArmor(EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci) {
-		RatsMischiefClient.isSlim = slim;
 	}
 
 	@Inject(method = "setModelPose", at = @At(value = "TAIL"))

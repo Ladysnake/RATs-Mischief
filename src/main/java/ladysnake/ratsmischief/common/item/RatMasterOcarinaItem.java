@@ -18,10 +18,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -38,6 +35,11 @@ public class RatMasterOcarinaItem extends Item implements IClickConsumingItem {
 	public static Action getAction(ItemStack stack) {
 		NbtCompound compound = stack.getOrCreateNbt();
 		return Action.values()[MialeeMath.clampLoop(compound.getInt("action"), 0, Action.values().length)];
+	}
+
+	@Override
+	public UseAction getUseAction(ItemStack stack) {
+		return UseAction.TOOT_HORN;
 	}
 
 	@Override

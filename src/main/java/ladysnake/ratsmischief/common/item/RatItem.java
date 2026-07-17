@@ -4,19 +4,15 @@ import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.init.ModEntities;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -28,7 +24,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
-import xyz.amymialee.mialeemisc.util.MialeeText;
 
 import java.util.List;
 
@@ -182,11 +177,11 @@ public class RatItem extends Item implements IAnimatable, ISyncable {
 		}
 
 		// potion genes
-		var potionId = new Identifier(ratTag.getString("PotionGene"));
-		var statusEffect = Registry.STATUS_EFFECT.get(potionId);
-		if (statusEffect != null) {
-			tooltip.add(Text.translatable("item.ratsmischief.rat.tooltip.potion").setStyle(EMPTY.withColor(Formatting.GRAY)).append(MialeeText.withColor(Text.translatable(statusEffect.getTranslationKey()).setStyle(EMPTY), statusEffect.getColor())));
-		}
+//		var potionId = new Identifier(ratTag.getString("PotionGene"));
+//		var statusEffect = Registry.STATUS_EFFECT.get(potionId);
+//		if (statusEffect != null) {
+//			tooltip.add(Text.translatable("item.ratsmischief.rat.tooltip.potion").setStyle(EMPTY.withColor(Formatting.GRAY)).append(MialeeText.withColor(Text.translatable(statusEffect.getTranslationKey()).setStyle(EMPTY), statusEffect.getColor())));
+//		}
 
 		// set to return
 		if (ratTag.getBoolean("ShouldReturnToOwnerInventory")) {

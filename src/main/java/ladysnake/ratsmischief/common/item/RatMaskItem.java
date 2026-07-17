@@ -15,13 +15,12 @@ import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import xyz.amymialee.mialeemisc.util.MialeeMath;
-import xyz.amymialee.mialeemisc.util.MialeeText;
 
 import java.util.List;
 import java.util.Optional;
 
-public class RatMasterMaskItem extends TrinketItem {
-	public RatMasterMaskItem(Settings settings) {
+public class RatMaskItem extends TrinketItem {
+	public RatMaskItem(Settings settings) {
 		super(settings);
 	}
 
@@ -37,7 +36,7 @@ public class RatMasterMaskItem extends TrinketItem {
 		Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(livingEntity);
 		if (component.isPresent()) {
 			for (Pair<SlotReference, ItemStack> pair : component.get().getAllEquipped()) {
-				if (pair.getRight().getItem() instanceof RatMasterMaskItem) {
+				if (pair.getRight().getItem() instanceof RatMaskItem) {
 					return pair.getRight();
 				}
 			}
@@ -59,7 +58,7 @@ public class RatMasterMaskItem extends TrinketItem {
 
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(Text.translatable("item.ratsmischief.rat_master_mask.desc1").formatted(Formatting.GRAY));
+		if (stack.isOf(ModItems.RAT_MASTER_MASK)) tooltip.add(Text.translatable("item.ratsmischief.rat_master_mask.desc1").formatted(Formatting.GRAY));
 		tooltip.add(Text.translatable("item.ratsmischief.rat_master_friendly_fire").formatted(Formatting.GRAY));
 		tooltip.add(Text.translatable("item.ratsmischief.rat_master_mask.desc.offset1").formatted(Formatting.GRAY));
 		if (stack.getNbt() != null) {

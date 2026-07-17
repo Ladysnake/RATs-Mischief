@@ -3,17 +3,27 @@ package ladysnake.ratsmischief.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import ladysnake.ratsmischief.common.entity.RatEntity;
+import ladysnake.ratsmischief.common.item.RatPouchItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.EntityDamageSource;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.collection.DefaultedList;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
+
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
+	@Shadow
+	protected abstract void playHurtSound(DamageSource source);
+
 	@Unique
 	private DamageSource lastSource;
 
@@ -30,5 +40,26 @@ public abstract class LivingEntityMixin {
 			}
 		}
 		operation.call(entity, x, y, z);
+	}
+
+	@Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;tryUseTotem(Lnet/minecraft/entity/damage/DamageSource;)Z"), cancellable = true)
+	private void mischief$koRat(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+		if ((Object) this instanceof RatEntity rat) {
+			LivingEntity owner = rat.getOwner();
+			if (rat.isFromPouch() && owner instanceof PlayerEntity player) {
+				List<DefaultedList<ItemStack>> combinedInventory = ((PlayerInventoryAccessor) player.getInventory()).ratsmischief$getCombinedInventory();
+				for (List<ItemStack> list : combinedInventory) {
+					for (int i = 0; i < list.size(); ++i) {
+						ItemStack itemStack = list.get(i);
+						if (itemStack.getItem() instanceof RatPouchItem) {
+							if (RatPouchItem.storeRat(rat, itemStack, true)) {
+								this.playHurtSound(source);
+								cir.setReturnValue(false);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }

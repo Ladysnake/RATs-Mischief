@@ -1,7 +1,7 @@
 package ladysnake.ratsmischief.common.entity.ai;
 
 import ladysnake.ratsmischief.common.entity.RatEntity;
-import ladysnake.ratsmischief.common.item.RatMasterArmorItem;
+import ladysnake.ratsmischief.common.item.RatArmorItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
@@ -72,7 +72,7 @@ public class DigGoal extends Goal {
 
 			if (this.rat.squaredDistanceTo(this.targetBlockPos.getX(), this.targetBlockPos.getY(), this.targetBlockPos.getZ()) <= 5) {
 				float progressIncrease = 0.015f + 0.003f * haste;
-				progressIncrease *= RatMasterArmorItem.getMiningSpeedMultiplier(this.rat.getOwner());
+				progressIncrease *= RatArmorItem.getMiningSpeedMultiplier(this.rat.getOwner());
 				this.breakProgress += progressIncrease;
 				this.rat.world.setBlockBreakingInfo(this.rat.getId(), this.targetBlockPos, (int) (this.breakProgress / this.rat.world.getBlockState(this.targetBlockPos).getHardness(this.rat.world, this.targetBlockPos) * 9));
 				if (this.breakProgress >= this.rat.world.getBlockState(this.targetBlockPos).getHardness(this.rat.world, this.targetBlockPos)) {

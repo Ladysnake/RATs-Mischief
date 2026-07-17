@@ -4,15 +4,13 @@ import com.google.common.collect.ImmutableList;
 import dev.emi.stepheightentityattribute.StepHeightEntityAttributeMain;
 import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.RatsMischiefUtils;
-import ladysnake.ratsmischief.common.entity.ai.ChaseForFunGoal;
-import ladysnake.ratsmischief.common.entity.ai.EatToHealGoal;
 import ladysnake.ratsmischief.common.entity.ai.FollowOwnerRatGoal;
 import ladysnake.ratsmischief.common.entity.ai.RatMeleeAttackGoal;
 import ladysnake.ratsmischief.common.init.ModDamageSources;
 import ladysnake.ratsmischief.common.init.ModEntities;
 import ladysnake.ratsmischief.common.init.ModItems;
 import ladysnake.ratsmischief.common.init.ModSoundEvents;
-import ladysnake.ratsmischief.common.item.RatMasterArmorItem;
+import ladysnake.ratsmischief.common.item.RatArmorItem;
 import ladysnake.ratsmischief.common.item.RatMasterOcarinaItem;
 import ladysnake.ratsmischief.common.item.RatPouchItem;
 import ladysnake.ratsmischief.common.util.PlayerRatOwner;
@@ -37,7 +35,6 @@ import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -82,7 +79,12 @@ import java.util.*;
 import java.util.function.Predicate;
 
 public class RatEntity extends TameableEntity implements IAnimatable, Angerable {
-	public static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (itemEntity) -> !itemEntity.cannotPickup() && itemEntity.isAlive();
+	public static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (itemEntity) -> {
+		if (!itemEntity.cannotPickup()) {
+			itemEntity.isAlive();
+		}
+		return false;
+	};
 	public static final List<Type> NATURAL_TYPES = ImmutableList.of(Type.ALBINO, Type.BLACK, Type.GREY, Type.HUSKY, Type.LIGHT_BROWN, Type.BLUE);
 	private static final List<PartyHat> PARTY_HATS = List.of(PartyHat.values());
 	private static final TrackedData<String> TYPE = DataTracker.registerData(RatEntity.class, TrackedDataHandlerRegistry.STRING);
@@ -104,6 +106,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	public int actionTimer = 0;
 	private UUID targetUuid;
 	private boolean shouldReturnToPlayerInventory = false;
+	private boolean fromPouch = false;
 
 	public RatEntity(EntityType<? extends TameableEntity> type, World worldIn) {
 		super(type, worldIn);
@@ -186,11 +189,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	protected void initGoals() {
 		this.goalSelector.add(1, new SwimGoal(this));
 		this.goalSelector.add(2, new SitGoal(this));
-		this.goalSelector.add(3, new EatToHealGoal(this));
+//		this.goalSelector.add(3, new EatToHealGoal(this));
 		this.goalSelector.add(3, new PounceAtTargetGoal(this, 0.3F));
 		this.goalSelector.add(4, new RatMeleeAttackGoal(this, 1.0D, true));
-		this.goalSelector.add(5, new PickupItemGoal());
-		this.goalSelector.add(5, new BringItemToOwnerGoal(this, 1.0D, false));
+//		this.goalSelector.add(5, new PickupItemGoal()); // TODO: Re-enable
+//		this.goalSelector.add(5, new BringItemToOwnerGoal(this, 1.0D, false)); // TODO: Re-enable
 		this.goalSelector.add(6, new FollowOwnerRatGoal(this, 1.0D, 20.0F, 2.0F, false));
 		this.goalSelector.add(7, new AnimalMateGoal(this, 1.0D));
 		this.goalSelector.add(8, new WanderAroundFarGoal(this, 1.0D));
@@ -200,7 +203,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		this.targetSelector.add(2, new AttackWithOwnerGoal(this));
 		this.targetSelector.add(3, new RevengeGoal(this).setGroupRevenge());
 		this.targetSelector.add(4, new TargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
-		this.targetSelector.add(8, new ChaseForFunGoal<>(this, CatEntity.class, true));
+//		this.targetSelector.add(8, new ChaseForFunGoal<>(this, CatEntity.class, true));
 		this.targetSelector.add(8, new UniversalAngerGoal<>(this, true));
 	}
 
@@ -337,6 +340,10 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	public void readCustomDataFromNbt(NbtCompound tag) {
 		super.readCustomDataFromNbt(tag);
 
+		if (tag.contains("FromPouch")) {
+			this.setFromPouch(tag.getBoolean("FromPouch"));
+		}
+
 		if (tag.contains("RatType")) {
 			this.setRatType(Type.valueOf(tag.getString("RatType")));
 		}
@@ -389,6 +396,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	public void writeCustomDataToNbt(NbtCompound tag) {
 		super.writeCustomDataToNbt(tag);
 
+		tag.putBoolean("FromPouch", this.isFromPouch());
 		tag.putString("RatType", this.getRatType().toString());
 		tag.putBoolean("ShouldReturnToOwnerInventory", this.shouldReturnToOwnerInventory());
 		tag.putString("Color", this.getRatColor().getName());
@@ -658,6 +666,11 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 	@Override
+	public void kill() {
+		super.kill();
+	}
+
+	@Override
 	public ActionResult interactMob(PlayerEntity player, Hand hand) {
 		ItemStack itemStack = player.getStackInHand(hand);
 		Item item = itemStack.getItem();
@@ -832,12 +845,12 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	@Override
 	public boolean tryAttack(Entity target) {
 		float damage = (float) this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-		damage *= RatMasterArmorItem.getDamageMultiplier(this.getOwner());
+		damage *= RatArmorItem.getDamageMultiplier(this.getOwner());
 		target.timeUntilRegen = 0;
 		if (target.damage(ModDamageSources.ratDamage(this), damage)) {
-			if (this.getPotionGene() != null && target instanceof LivingEntity livingEntity) {
-				livingEntity.addStatusEffect(new StatusEffectInstance(this.getPotionGene(), 5 * 20));
-			}
+//			if (this.getPotionGene() != null && target instanceof LivingEntity livingEntity) {
+//				livingEntity.addStatusEffect(new StatusEffectInstance(this.getPotionGene(), 5 * 20));
+//			}
 			this.applyDamageEffects(this, target);
 			this.onAttacking(target);
 			return true;
@@ -886,7 +899,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 			if (entity != null && !(entity instanceof PlayerEntity) && !(entity instanceof PersistentProjectileEntity)) {
 				amount = (amount + 1.0F) / 2.0F;
 			}
-			amount *= RatMasterArmorItem.getResistanceMultiplier(this.getOwner());
+			amount *= RatArmorItem.getResistanceMultiplier(this.getOwner());
 			return super.damage(source, amount);
 		}
 	}
@@ -894,7 +907,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	@Override
 	public boolean isInvulnerableTo(DamageSource damageSource) {
 		if (damageSource instanceof EntityDamageSource entityDamageSource) {
-			if (entityDamageSource.getAttacker() == this.getOwner() && RatMasterArmorItem.getEquippedPieces(this.getOwner()) >= 4) {
+			if (entityDamageSource.getAttacker() == this.getOwner() && RatArmorItem.getEquippedPieces(this.getOwner()) >= 4) {
 				return true;
 			}
 		}
@@ -926,7 +939,7 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 
 	@Override
 	public boolean canPickUpLoot() {
-		return !this.isSitting();
+		return false; // TODO: Re-enable
 	}
 
 	@Override
@@ -1013,6 +1026,14 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	public void removeCurrentActionGoal() {
 		this.goalSelector.remove(this.action);
 		this.action = null;
+	}
+
+	public boolean isFromPouch() {
+		return fromPouch;
+	}
+
+	public void setFromPouch(boolean fromPouch) {
+		this.fromPouch = true;
 	}
 
 	public enum Type {

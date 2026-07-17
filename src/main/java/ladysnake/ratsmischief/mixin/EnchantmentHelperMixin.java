@@ -2,13 +2,8 @@ package ladysnake.ratsmischief.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import ladysnake.ratsmischief.common.init.ModEnchantments;
-import ladysnake.ratsmischief.common.item.RatMasterArmorItem;
-import ladysnake.ratsmischief.common.item.RatMasterMaskItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnchantmentTarget;
-import net.minecraft.item.Item;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 

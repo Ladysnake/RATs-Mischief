@@ -1,6 +1,6 @@
 package ladysnake.ratsmischief.mixin.client;
 
-import ladysnake.ratsmischief.common.item.RatMasterMaskItem;
+import ladysnake.ratsmischief.common.item.RatMaskItem;
 import ladysnake.ratsmischief.common.util.EntityRendererWrapper;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
@@ -27,7 +27,7 @@ public class EntityRendererMixin<T extends Entity> implements EntityRendererWrap
 
 	@Inject(method = "renderLabelIfPresent", at = @At("HEAD"), cancellable = true)
 	protected void mischief$hideNames(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-		if (entity instanceof LivingEntity living && RatMasterMaskItem.isIdentityHidden(living)) {
+		if (entity instanceof LivingEntity living && RatMaskItem.isIdentityHidden(living)) {
 			ci.cancel();
 		}
 	}

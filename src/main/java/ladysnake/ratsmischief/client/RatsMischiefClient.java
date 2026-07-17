@@ -1,6 +1,7 @@
 package ladysnake.ratsmischief.client;
 
 import ladysnake.ratsmischief.client.model.RatMasterPlayerEntityModel;
+import ladysnake.ratsmischief.client.render.armor.RatMasterArmorRenderer;
 import ladysnake.ratsmischief.client.render.entity.RatEntityRenderer;
 import ladysnake.ratsmischief.client.render.item.MaskItemRenderer;
 import ladysnake.ratsmischief.client.render.item.RatItemRenderer;
@@ -9,6 +10,7 @@ import ladysnake.ratsmischief.common.init.ModEntities;
 import ladysnake.ratsmischief.common.init.ModItems;
 import ladysnake.ratsmischief.common.init.ModParticles;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -32,7 +34,6 @@ public class RatsMischiefClient implements ClientModInitializer {
 	public static final EntityModelLayer RAT_MASTER_ARMOR_INNER_LAYER = new EntityModelLayer(RatsMischief.id("rat_master_inner_layer"), "main");
 	public static final EntityModelLayer RAT_MASTER_ARMOR_OUTER_LAYER = new EntityModelLayer(RatsMischief.id("rat_master_outer_layer"), "main");
 	public static final EntityModelLayer RAT_MASTER_ARMOR_OUTER_LAYER_SLIM = new EntityModelLayer(RatsMischief.id("rat_master_outer_layer_slim"), "main");
-    public static boolean isSlim = true; // Used while initiating Armour renderers
 
 	static {
 		ModelPredicateProviderRegistry.register(ModItems.RAT_MASTER_OCARINA, new Identifier("action"), (stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("action") / 4f);
@@ -51,7 +52,7 @@ public class RatsMischiefClient implements ClientModInitializer {
 		GeoItemRenderer.registerItemRenderer(ModItems.RAT, new RatItemRenderer());
 
 		// mask renderer
-		Item[] masks = {ModItems.RAT_MASTER_MASK, ModItems.GILDED_HORNS};
+		Item[] masks = {ModItems.RAT_MASTER_MASK, ModItems.RAT_BELLICIST_HORNS};
 		for (Item mask : masks) {
 			Identifier itemId = Registry.ITEM.getId(mask);
 			MaskItemRenderer inventoryItemRenderer = new MaskItemRenderer(itemId);
@@ -67,10 +68,10 @@ public class RatsMischiefClient implements ClientModInitializer {
 		// model predicates
 		FabricModelPredicateProviderRegistry.register(new Identifier(RatsMischief.MOD_ID + ":filled"), (itemStack, world, livingEntity, seed) -> itemStack.getOrCreateSubNbt(RatsMischief.MOD_ID).getFloat("filled"));
 
-//		// block render layer map
-//		BlockRenderLayerMap.put(RenderLayer.getCutout(), ModBlock.MOD_BLOCK);
-
-//		// entity renderer registration
-//		EntityRendererRegistry.register(ModEntities.MOD_ENTITY, ModEntityRenderer::new);
+		// custom armor model renderer
+		ArmorRenderer.register(new RatMasterArmorRenderer(),
+			ModItems.RAT_MASTER_HOOD, ModItems.RAT_MASTER_CLOAK, ModItems.RAT_MASTER_BREECHES, ModItems.RAT_MASTER_GREAVES,
+			ModItems.RAT_BELLICIST_HOOD, ModItems.RAT_BELLICIST_CLOAK, ModItems.RAT_BELLICIST_BREECHES, ModItems.RAT_BELLICIST_GREAVES
+		);
 	}
 }

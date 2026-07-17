@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "ratsmischief:item/gilded_horns"
+    "layer0": "ratsmischief:item/rat_bellicist_carnyx"
   }
 }

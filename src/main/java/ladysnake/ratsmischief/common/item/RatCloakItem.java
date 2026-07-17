@@ -12,20 +12,20 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class RatMasterHoodItem extends RatMasterArmorItem {
-	public RatMasterHoodItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
+public class RatCloakItem extends RatArmorItem {
+	public RatCloakItem(ArmorMaterial material, EquipmentSlot slot, Settings settings) {
 		super(material, slot, settings);
 	}
 
-	public static boolean isDown(ItemStack stack) {
-		return stack.getOrCreateNbt().getBoolean("hidden");
+	public static boolean isStripped(ItemStack stack) {
+		return stack.getOrCreateNbt().getBoolean("stripped");
 	}
 
 	@Override
 	public void incrementType(ItemStack stack, boolean sneaking) {
 		if (sneaking) {
 			NbtCompound compound = stack.getOrCreateNbt();
-			compound.putBoolean("hidden", !compound.getBoolean("hidden"));
+			compound.putBoolean("stripped", !compound.getBoolean("stripped"));
 			return;
 		}
 		super.incrementType(stack, false);
@@ -33,7 +33,7 @@ public class RatMasterHoodItem extends RatMasterArmorItem {
 
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(Text.translatable("item.ratsmischief.rat_master_hood.tooltip." + stack.getOrCreateNbt().getBoolean("hidden")).formatted(Formatting.GRAY));
+		tooltip.add(Text.translatable("item.ratsmischief.rat_master_cloak.tooltip." + stack.getOrCreateNbt().getBoolean("stripped")).formatted(Formatting.GRAY));
 		super.appendTooltip(stack, world, tooltip, context);
 	}
 }

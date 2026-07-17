@@ -7,34 +7,18 @@ package ladysnake.ratsmischief.client.model;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import ladysnake.ratsmischief.mixin.accessor.PlayerEntityModelAccessor;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Arm;
 import net.minecraft.util.random.RandomGenerator;
 
-import java.util.List;
-
-public class RatMasterPlayerEntityModel<T extends LivingEntity> extends BipedEntityModel<T> {
-	private final List<ModelPart> parts;
-	public final ModelPart leftSleeve;
-	public final ModelPart rightSleeve;
-	public final ModelPart leftPants;
-	public final ModelPart rightPants;
-	public final ModelPart jacket;
-	private final boolean thinArms;
-
+public class RatMasterPlayerEntityModel<T extends LivingEntity> extends PlayerEntityModel<T> {
 	public RatMasterPlayerEntityModel(ModelPart root, boolean thinArms) {
-		super(root, RenderLayer::getEntityTranslucent);
-		this.thinArms = thinArms;
-		this.leftSleeve = root.getChild("left_sleeve");
-		this.rightSleeve = root.getChild("right_sleeve");
-		this.leftPants = root.getChild("left_pants");
-		this.rightPants = root.getChild("right_pants");
-		this.jacket = root.getChild("jacket");
-		this.parts = root.traverse().filter((part) -> !part.isEmpty()).collect(ImmutableList.toImmutableList());
+		super(root, thinArms);
 	}
 
 	public static ModelData getTexturedModelData(Dilation dilation, boolean slim) {
@@ -56,6 +40,11 @@ public class RatMasterPlayerEntityModel<T extends LivingEntity> extends BipedEnt
 		modelPartData.addChild("left_pants", ModelPartBuilder.create().uv(0, 48).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(d)), ModelTransform.pivot(1.9F, 12.0F, 0.0F));
 		modelPartData.addChild("right_pants", ModelPartBuilder.create().uv(0, 32).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, dilation.add(d)), ModelTransform.pivot(-1.9F, 12.0F, 0.0F));
 		modelPartData.addChild("jacket", ModelPartBuilder.create().uv(16, 32).cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, dilation.add(d)), ModelTransform.NONE);
+
+		modelPartData.addChild("ear", ModelPartBuilder.create(), ModelTransform.NONE);
+		modelPartData.addChild("cloak", ModelPartBuilder.create(), ModelTransform.NONE);
+		modelPartData.addChild("jacket", ModelPartBuilder.create(), ModelTransform.NONE);
+
 		return modelData;
 	}
 
@@ -83,7 +72,7 @@ public class RatMasterPlayerEntityModel<T extends LivingEntity> extends BipedEnt
 
 	public void setArmAngle(Arm arm, MatrixStack matrices) {
 		ModelPart modelPart = this.getArm(arm);
-		if (this.thinArms) {
+		if (((PlayerEntityModelAccessor) this).ratsmischief$thinArms()) {
 			float f = 0.5F * (float) (arm == Arm.RIGHT ? 1 : -1);
 			modelPart.pivotX += f;
 			modelPart.rotate(matrices);
@@ -95,7 +84,8 @@ public class RatMasterPlayerEntityModel<T extends LivingEntity> extends BipedEnt
 	}
 
 	public ModelPart getRandomPart(RandomGenerator random) {
-		return this.parts.get(random.nextInt(this.parts.size()));
+		PlayerEntityModelAccessor playerEntityModelAccessor = (PlayerEntityModelAccessor) this;
+		return playerEntityModelAccessor.ratsmischief$parts().get(random.nextInt(playerEntityModelAccessor.ratsmischief$parts().size()));
 	}
 
 	public enum ArmorPart {

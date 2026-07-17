@@ -10,18 +10,20 @@
     "ItemEntityMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
+    "PlayerInventoryAccessor",
     "ScreenHandlerMixin",
     "SculkSensorBlockEntityMixin",
     "SculkShriekerBlockEntityMixin",
     "WardenEntityMixin"
   ],
   "client": [
-    "client.ArmorFeatureRendererMixin",
+    "accessor.PlayerEntityModelAccessor",
     "client.BipedEntityModelMixin",
     "client.EntityRendererMixin",
     "client.HeadFeatureRendererMixin",
     "client.HeldItemRendererMixin",
     "client.ItemEntityRendererMixin",
+    "client.ItemRendererMixin",
     "client.PlayerEntityRendererMixin"
   ],
   "injectors": {

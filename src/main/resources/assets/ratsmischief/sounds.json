@@ -29,5 +29,11 @@
       "random/click"
     ],
     "subtitle": "ratsmischief.subtitles.item.rat_toggle"
+  },
+  "item.carnyx": {
+    "sounds": [
+      "ratsmischief:carnyx"
+    ],
+    "subtitle": "ratsmischief.subtitles.item.carnyx"
   }
 }

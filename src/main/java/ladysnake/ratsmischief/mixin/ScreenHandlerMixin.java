@@ -3,8 +3,8 @@ package ladysnake.ratsmischief.mixin;
 import ladysnake.ratsmischief.common.init.ModItems;
 import ladysnake.ratsmischief.common.init.ModSoundEvents;
 import ladysnake.ratsmischief.common.item.RatItem;
-import ladysnake.ratsmischief.common.item.RatMasterArmorItem;
-import ladysnake.ratsmischief.common.item.RatMasterMaskItem;
+import ladysnake.ratsmischief.common.item.RatArmorItem;
+import ladysnake.ratsmischief.common.item.RatMaskItem;
 import ladysnake.ratsmischief.common.item.RatMasterOcarinaItem;
 import ladysnake.ratsmischief.common.util.PlayerRatOwner;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,7 +34,7 @@ public class ScreenHandlerMixin {
 			if (button == 1) {
 				Slot slot = this.slots.get(slotIndex);
 				ItemStack stack = slot.getStack();
-				if (stack.getItem() instanceof RatMasterArmorItem armorItem) {
+				if (stack.getItem() instanceof RatArmorItem armorItem) {
 					boolean quickMove = actionType == SlotActionType.QUICK_MOVE;
 					armorItem.incrementType(stack, quickMove);
 					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
@@ -47,7 +47,7 @@ public class ScreenHandlerMixin {
 						ci.cancel();
 					}
 				} else if (stack.isOf(ModItems.RAT_MASTER_MASK)) {
-					RatMasterMaskItem.incrementOffset(stack);
+					RatMaskItem.incrementOffset(stack);
 					player.playSound(ModSoundEvents.ITEM_RAT_TOGGLE, SoundCategory.PLAYERS, 0.9f, 1.5f);
 					ci.cancel();
 				} else if (stack.getItem() instanceof RatMasterOcarinaItem) {

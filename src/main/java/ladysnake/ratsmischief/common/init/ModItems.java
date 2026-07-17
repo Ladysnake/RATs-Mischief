@@ -27,19 +27,20 @@ public interface ModItems {
 	Item RAT_MASTER_POUCH = createItem("rat_master_pouch", new RatPouchItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1), 20));
 
 	Item CLOTHED_INGOT = createItem("clothed_ingot", new Item(new QuiltItemSettings().group(ItemGroup.MISC)));
-	Item RAT_MASTER_HOOD = createItem("rat_master_hood", new RatMasterHoodItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.HEAD, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item RAT_MASTER_CLOAK = createItem("rat_master_cloak", new RatMasterCloakItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.CHEST, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item RAT_MASTER_BREECHES = createItem("rat_master_breeches", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.LEGS, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item RAT_MASTER_GREAVES = createItem("rat_master_greaves", new RatMasterArmorItem(RatMasterArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.FEET, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_MASTER_HOOD = createItem("rat_master_hood", new RatHoodItem(RatArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.HEAD, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_MASTER_CLOAK = createItem("rat_master_cloak", new RatCloakItem(RatArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.CHEST, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_MASTER_BREECHES = createItem("rat_master_breeches", new RatArmorItem(RatArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.LEGS, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_MASTER_GREAVES = createItem("rat_master_greaves", new RatArmorItem(RatArmorItem.RatMasterArmorMaterial.INSTANCE, EquipmentSlot.FEET, new QuiltItemSettings().group(ItemGroup.COMBAT)));
 	Item RAT_MASTER_MIRROR = createItem("rat_master_mirror", new RatMasterMirrorItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
 	Item RAT_MASTER_OCARINA = createItem("rat_master_ocarina", new RatMasterOcarinaItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
-	Item RAT_MASTER_MASK = createItem("rat_master_mask", new RatMasterMaskItem(new QuiltItemSettings().group(ItemGroup.COMBAT).maxCount(1)));
+	Item RAT_MASTER_MASK = createItem("rat_master_mask", new RatMaskItem(new QuiltItemSettings().group(ItemGroup.COMBAT).maxCount(1)));
 
-	Item GILDED_RAT_MASTER_HOOD = createItem("gilded_rat_master_hood", new RatMasterHoodItem(RatMasterArmorItem.GildedRatMasterArmorMaterial.INSTANCE, EquipmentSlot.HEAD, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item GILDED_RAT_MASTER_CLOAK = createItem("gilded_rat_master_cloak", new RatMasterCloakItem(RatMasterArmorItem.GildedRatMasterArmorMaterial.INSTANCE, EquipmentSlot.CHEST, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item GILDED_RAT_MASTER_BREECHES = createItem("gilded_rat_master_breeches", new RatMasterArmorItem(RatMasterArmorItem.GildedRatMasterArmorMaterial.INSTANCE, EquipmentSlot.LEGS, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item GILDED_RAT_MASTER_GREAVES = createItem("gilded_rat_master_greaves", new RatMasterArmorItem(RatMasterArmorItem.GildedRatMasterArmorMaterial.INSTANCE, EquipmentSlot.FEET, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item GILDED_HORNS = createItem("gilded_horns", new RatMasterMaskItem(new QuiltItemSettings().group(ItemGroup.COMBAT).maxCount(1)));
+	Item RAT_BELLICIST_HOOD = createItem("rat_bellicist_hood", new RatHoodItem(RatArmorItem.RatBellicistArmorMaterial.INSTANCE, EquipmentSlot.HEAD, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_BELLICIST_CLOAK = createItem("rat_bellicist_cloak", new RatCloakItem(RatArmorItem.RatBellicistArmorMaterial.INSTANCE, EquipmentSlot.CHEST, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_BELLICIST_BREECHES = createItem("rat_bellicist_breeches", new RatArmorItem(RatArmorItem.RatBellicistArmorMaterial.INSTANCE, EquipmentSlot.LEGS, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_BELLICIST_GREAVES = createItem("rat_bellicist_greaves", new RatArmorItem(RatArmorItem.RatBellicistArmorMaterial.INSTANCE, EquipmentSlot.FEET, new QuiltItemSettings().group(ItemGroup.COMBAT)));
+	Item RAT_BELLICIST_HORNS = createItem("rat_bellicist_horns", new RatMaskItem(new QuiltItemSettings().group(ItemGroup.COMBAT).maxCount(1)));
+	Item RAT_BELLICIST_CARNYX = createItem("rat_bellicist_carnyx", new RatCarnyxItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
 
 
 	private static <T extends Item> T createItem(String name, T item) {
