@@ -182,7 +182,7 @@ public class RatArmorItem extends ArmorItem {
 
 		@Override
 		public SoundEvent getEquipSound() {
-			return SoundEvents.ITEM_ARMOR_EQUIP_LEATHER;
+			return SoundEvents.ITEM_ARMOR_EQUIP_GOLD;
 		}
 
 		@Override
@@ -197,12 +197,12 @@ public class RatArmorItem extends ArmorItem {
 
 		@Override
 		public float getToughness() {
-			return 2.0f;
+			return 3.0f;
 		}
 
 		@Override
 		public float getKnockbackResistance() {
-			return 0.0f;
+			return 0.1f;
 		}
 	}
 }
