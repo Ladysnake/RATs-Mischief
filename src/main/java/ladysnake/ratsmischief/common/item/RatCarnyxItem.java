@@ -72,7 +72,7 @@ public class RatCarnyxItem extends Item implements IClickConsumingItem {
 		NbtCompound nbt = stack.getOrCreateNbt();
 
 		final boolean gather;
-		gather = !RatPouchItem.getClosestRatsInRadius(world, serverPlayerEntity, 20f).isEmpty() && RatPouchItem.getFreeSlotCount(serverPlayerEntity) > 0;
+		gather = !RatPouchItem.hasPouchesWithRats(serverPlayerEntity);
 
 		ServerWorld serverWorld = (ServerWorld) serverPlayerEntity.world;
 		boolean success = false;

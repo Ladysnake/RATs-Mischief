@@ -156,6 +156,19 @@ public class RatPouchItem extends Item {
 		return ret;
 	}
 
+	public static boolean hasPouchesWithRats(ServerPlayerEntity player) {
+		List<DefaultedList<ItemStack>> combinedInventory = ((PlayerInventoryAccessor) player.getInventory()).ratsmischief$getCombinedInventory();
+		int ret = 0;
+		for (List<ItemStack> list : combinedInventory) {
+			for (ItemStack itemStack : list) {
+				if (itemStack.getItem() instanceof RatPouchItem ratPouchItem&& RatPouchItem.getFreeSlotCount(itemStack) < ratPouchItem.size) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	private static int getFreeSlotCount(ItemStack itemStack) {
 		return ((RatPouchItem) itemStack.getItem()).size - itemStack.getOrCreateSubNbt(RatsMischief.MOD_ID).getList("rats", NbtType.COMPOUND).size();
 	}
