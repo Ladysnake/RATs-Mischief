@@ -24,6 +24,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -69,24 +70,15 @@ public class RatPouchItem extends Item {
 			int countSpawned = 0;
 			if (world instanceof ServerWorld serverWorld) {
 				NbtList newList = new NbtList();
-				for (NbtElement ratTag : nbt.getList("rats", NbtType.COMPOUND)) {
-					RatEntity rat = ModEntities.RAT.create(world);
+				NbtList ratNbtList = nbt.getList("rats", NbtType.COMPOUND);
+				for (NbtElement ratTag : ratNbtList) {
 					NbtCompound nbtCompound = (NbtCompound) ratTag;
 					if (nbtCompound.contains("KO") && nbtCompound.getBoolean("KO")) {
 						newList.add(ratTag);
-						continue;
 					} else {
+						releaseRat((ServerPlayerEntity) user, nbtCompound);
 						countSpawned++;
 					}
-					nbtCompound.remove("UUID");
-					rat.readNbt(nbtCompound);
-					rat.updatePosition(user.getX(), user.getY(), user.getZ());
-					rat.setPos(user.getX(), user.getY(), user.getZ());
-					rat.setOwner(user); // Failsafe cause sometimes rats on CSMP aren't the same owner, possibly due to nicknames?
-					rat.setFromPouch(true);
-					rat.setVelocity(Vec3d.ZERO);
-					rat.fallDistance = 0f;
-					world.spawnEntity(rat);
 				}
 
 				nbt.put("rats", newList);
@@ -109,6 +101,25 @@ public class RatPouchItem extends Item {
 				return TypedActionResult.fail(stack);
 			}
 		}
+	}
+
+	private static void releaseRat(ServerPlayerEntity user, NbtCompound ratNbt) {
+		ServerWorld world = user.getWorld();
+		RatEntity rat = ModEntities.RAT.create(world);
+		ratNbt.remove("UUID");
+		rat.readNbt(ratNbt);
+		rat.updatePosition(user.getX(), user.getY(), user.getZ());
+		rat.setPos(user.getX(), user.getY(), user.getZ());
+		rat.setOwner(user); // Failsafe cause sometimes rats aren't the same owner, possibly due to nicknames?
+		rat.setFromPouch(true);
+
+		rat.setYaw(world.random.nextFloat() * 360);
+		rat.setPitch(0f);
+		Vec3d dir = rat.getRotationVector().normalize().multiply(.5f);
+		rat.setVelocity(dir);
+
+		rat.fallDistance = 0f;
+		world.spawnEntity(rat);
 	}
 
 	public static List<RatEntity> getClosestRatsInRadius(World world, PlayerEntity user, float radius) {

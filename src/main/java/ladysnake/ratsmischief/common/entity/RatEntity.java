@@ -19,7 +19,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.EndGatewayBlockEntity;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.FuzzyTargeting;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -658,6 +657,18 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 				this.world.addParticle(ParticleTypes.ENTITY_EFFECT, this.getParticleX(0.5), this.getRandomBodyY(), this.getParticleZ(0.5), d, e, f);
 			}
 		}
+	}
+
+	@Override
+	protected void tickCramming() {
+		if (this.age > 40) {
+			super.tickCramming();
+		}
+	}
+
+	@Override
+	public boolean isPushable() {
+		return super.isPushable() && this.age > 40;
 	}
 
 	@Override

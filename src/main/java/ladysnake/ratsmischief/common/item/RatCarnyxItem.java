@@ -1,8 +1,10 @@
 package ladysnake.ratsmischief.common.item;
 
+import ladysnake.ratsmischief.client.RatsMischiefClientHelper;
 import ladysnake.ratsmischief.common.init.ModSoundEvents;
 import ladysnake.ratsmischief.mixin.PlayerInventoryAccessor;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,13 +13,12 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
+import net.minecraft.text.Text;
+import net.minecraft.util.*;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import xyz.amymialee.mialeemisc.items.IClickConsumingItem;
 
 import java.util.List;
@@ -95,4 +96,11 @@ public class RatCarnyxItem extends Item implements IClickConsumingItem {
 			serverWorld.playSound(null, serverPlayerEntity.getX(), serverPlayerEntity.getY(), serverPlayerEntity.getZ(), ModSoundEvents.ITEM_CARNYX, serverPlayerEntity.getSoundCategory(), 2f, 1f + (gather ? .25f : 0f));
 		}
 	}
+
+	@Override
+	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+		tooltip.add(Text.translatable("item.ratsmischief.rat_bellicist_carnyx.tooltip").formatted(Formatting.GRAY));
+		super.appendTooltip(stack, world, tooltip, context);
+	}
+
 }
