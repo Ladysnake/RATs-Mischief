@@ -40,8 +40,6 @@ public class RatEntityModel extends AnimatedGeoModel<RatEntity> {
 			head.setRotationX(MathHelper.clamp(-ratEntity.getPitch(), 0, 90) * ((float) Math.PI / 180F));
 			leftEar.setRotationX(MathHelper.clamp(ratEntity.getPitch(), -90, 0) * 1.4f * ((float) Math.PI / 180F));
 			rightEar.setRotationX(MathHelper.clamp(ratEntity.getPitch(), -90, 0) * 1.4f * ((float) Math.PI / 180F));
-
-//            head.setRotationY(ratEntity.getHeadYaw() * ((float) Math.PI / 180F));
 		}
 
 		// sexually aroused rat

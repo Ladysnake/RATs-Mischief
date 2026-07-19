@@ -106,7 +106,7 @@ public class RatPouchItem extends Item {
 	private static void releaseRat(ServerPlayerEntity user, NbtCompound ratNbt) {
 		ServerWorld world = user.getWorld();
 		RatEntity rat = ModEntities.RAT.create(world);
-		ratNbt.remove("UUID");
+		cleanNbt(ratNbt);
 		rat.readNbt(ratNbt);
 		rat.updatePosition(user.getX(), user.getY(), user.getZ());
 		rat.setPos(user.getX(), user.getY(), user.getZ());
@@ -205,7 +205,7 @@ public class RatPouchItem extends Item {
 				filled = 0f;
 			}
 			rat.saveNbt(nbtCompound);
-			nbtCompound.remove("UUID");
+			cleanNbt(nbtCompound);
 			nbtList.add(nbtCompound);
 			nbt.put("rats", nbtList);
 
@@ -218,6 +218,30 @@ public class RatPouchItem extends Item {
 		} else {
 			return false;
 		}
+	}
+
+	private static void cleanNbt(NbtCompound nbtCompound) {
+		nbtCompound.remove("InLove");
+		nbtCompound.remove("LoveCause");
+		nbtCompound.remove("Leash");
+		nbtCompound.remove("ActiveEffects");
+		nbtCompound.remove("AbsorptionAmount");
+		nbtCompound.remove("HurtTime");
+		nbtCompound.remove("DeathTime");
+		nbtCompound.remove("FallFlying");
+		nbtCompound.remove("SleepingX");
+		nbtCompound.remove("SleepingY");
+		nbtCompound.remove("SleepingZ");
+		nbtCompound.remove("Pos");
+		nbtCompound.remove("Motion");
+		nbtCompound.remove("Rotation");
+		nbtCompound.remove("FallDistance");
+		nbtCompound.remove("Fire");
+		nbtCompound.remove("Air");
+		nbtCompound.remove("OnGround");
+		nbtCompound.remove("PortalCooldown");
+		nbtCompound.remove("UUID");
+		nbtCompound.remove("TicksFrozen");
 	}
 
 	@Override
