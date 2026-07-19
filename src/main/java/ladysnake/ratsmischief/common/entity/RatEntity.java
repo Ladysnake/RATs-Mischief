@@ -346,7 +346,19 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		}
 
 		if (tag.contains("RatType")) {
-			this.setRatType(Type.valueOf(tag.getString("RatType")));
+			Type ratType = Type.WILD;
+			String string = tag.getString("RatType");
+			for (Type value : Type.values()) {
+				if (string.equalsIgnoreCase("russian_blue")) {
+					ratType = Type.BLUE;
+					break;
+				}
+				if (value.name().equalsIgnoreCase(string)) {
+					ratType = value;
+					break;
+				}
+			}
+			this.setRatType(ratType);
 		}
 		this.readAngerFromNbt(this.world, tag);
 
