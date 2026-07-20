@@ -34,6 +34,7 @@ public class PartyHatFeatureRenderer extends GeoLayerRenderer<RatEntity> {
 					TEXTURES[hat.ordinal()] = new Identifier(RatsMischief.MOD_ID, "textures/entity/birthday_hats/" + hat.toString().toLowerCase() + ".png");
 				}
 			}
+			if (TEXTURES == null) return;
 			Identifier hatTexture = TEXTURES[ratEntity.getPartyHat().ordinal()];
 			this.partyHatEntityRenderer.render(this.getEntityModel().getModel(this.getEntityModel().getModelResource(ratEntity)),
 				ratEntity,
