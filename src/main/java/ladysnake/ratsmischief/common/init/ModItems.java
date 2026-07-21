@@ -39,7 +39,7 @@ public interface ModItems {
 	Item RAT_BELLICIST_CLOAK = createItem("rat_bellicist_cloak", new RatCloakItem(RatArmorItem.RatBellicistArmorMaterial.INSTANCE, EquipmentSlot.CHEST, new QuiltItemSettings().group(ItemGroup.COMBAT)));
 	Item RAT_BELLICIST_BREECHES = createItem("rat_bellicist_breeches", new RatArmorItem(RatArmorItem.RatBellicistArmorMaterial.INSTANCE, EquipmentSlot.LEGS, new QuiltItemSettings().group(ItemGroup.COMBAT)));
 	Item RAT_BELLICIST_GREAVES = createItem("rat_bellicist_greaves", new RatArmorItem(RatArmorItem.RatBellicistArmorMaterial.INSTANCE, EquipmentSlot.FEET, new QuiltItemSettings().group(ItemGroup.COMBAT)));
-	Item RAT_BELLICIST_HORNS = createItem("rat_bellicist_horns", new RatMaskItem(new QuiltItemSettings().group(ItemGroup.COMBAT).maxCount(1)));
+	Item RAT_BELLICIST_HORNS = createItem("rat_bellicist_horns", new RatHornsItem(new QuiltItemSettings().group(ItemGroup.COMBAT).maxCount(1)));
 	Item RAT_BELLICIST_CARNYX = createItem("rat_bellicist_carnyx", new RatCarnyxItem(new QuiltItemSettings().group(ItemGroup.TOOLS).maxCount(1)));
 
 
