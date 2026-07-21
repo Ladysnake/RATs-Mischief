@@ -19,7 +19,8 @@
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
 			"init": "ladysnake.ratsmischief.common.RatsMischief",
-			"client_init": "ladysnake.ratsmischief.client.RatsMischiefClient"
+			"client_init": "ladysnake.ratsmischief.client.RatsMischiefClient",
+			"cardinal-components-entity": "ladysnake.ratsmischief.common.RatsMischief"
 		},
 		"depends": [
 			{
