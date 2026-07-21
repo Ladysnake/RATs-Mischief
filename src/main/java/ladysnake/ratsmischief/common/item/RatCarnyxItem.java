@@ -99,7 +99,6 @@ public class RatCarnyxItem extends Item implements IClickConsumingItem {
 
 	@Override
 	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(Text.translatable("item.ratsmischief.rat_bellicist_carnyx.tooltip").formatted(Formatting.GRAY));
 		super.appendTooltip(stack, world, tooltip, context);
 	}
 
