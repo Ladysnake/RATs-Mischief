@@ -3,14 +3,13 @@ package ladysnake.ratsmischief.common.item;
 import dev.emi.trinkets.api.TrinketItem;
 import ladysnake.ratsmischief.common.cca.RatHornsComponent;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-public class RatHornsItem extends Item {
+public class RatHornsItem extends TrinketItem {
     public RatHornsItem(Settings settings) {
         super(settings);
     }
