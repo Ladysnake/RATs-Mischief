@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "addition": {
+    "item": "ashendawn:dusks_epitaph_shard"
+  },
+  "base": {
+    "item": "ratsmischief:rat_master_hood"
+  },
+  "result": {
+    "item": "ratsmischief:rat_bellicist_hood"
+  }
+}
