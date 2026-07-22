@@ -121,6 +121,30 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 		return NATURAL_TYPES.get(random.nextInt(NATURAL_TYPES.size()));
 	}
 
+	public static void cleanNbt(NbtCompound nbtCompound) {
+		nbtCompound.remove("InLove");
+		nbtCompound.remove("LoveCause");
+		nbtCompound.remove("Leash");
+		nbtCompound.remove("ActiveEffects");
+		nbtCompound.remove("AbsorptionAmount");
+		nbtCompound.remove("HurtTime");
+		nbtCompound.remove("DeathTime");
+		nbtCompound.remove("FallFlying");
+		nbtCompound.remove("SleepingX");
+		nbtCompound.remove("SleepingY");
+		nbtCompound.remove("SleepingZ");
+		nbtCompound.remove("Pos");
+		nbtCompound.remove("Motion");
+		nbtCompound.remove("Rotation");
+		nbtCompound.remove("FallDistance");
+		nbtCompound.remove("Fire");
+		nbtCompound.remove("Air");
+		nbtCompound.remove("OnGround");
+		nbtCompound.remove("PortalCooldown");
+		nbtCompound.remove("UUID");
+		nbtCompound.remove("TicksFrozen");
+	}
+
 	@Override
 	protected void initEquipment(RandomGenerator random, LocalDifficulty localDifficulty) {
 		// try spawning with cake on birthday
@@ -1058,7 +1082,18 @@ public class RatEntity extends TameableEntity implements IAnimatable, Angerable 
 	}
 
 	public void setFromPouch(boolean fromPouch) {
-		this.fromPouch = true;
+		this.fromPouch = fromPouch;
+	}
+
+	public NbtCompound getRatNbt(boolean ko) {
+		NbtCompound nbtCompound = new NbtCompound();
+		if (ko) {
+			this.setHealth(this.getMaxHealth());
+			nbtCompound.putBoolean("KO", true);
+		}
+		this.saveNbt(nbtCompound);
+		cleanNbt(nbtCompound);
+		return nbtCompound;
 	}
 
 	public enum Type {

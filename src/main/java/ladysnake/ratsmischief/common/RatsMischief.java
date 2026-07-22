@@ -3,17 +3,17 @@ package ladysnake.ratsmischief.common;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
+import dev.onyxstudios.cca.api.v3.scoreboard.ScoreboardComponentFactoryRegistry;
+import dev.onyxstudios.cca.api.v3.scoreboard.ScoreboardComponentInitializer;
 import ladysnake.ratsmischief.client.render.item.recipe.SpyRatCraftingRecipe;
+import ladysnake.ratsmischief.common.cca.KORatsScoreboardComponent;
 import ladysnake.ratsmischief.common.cca.RatHornsComponent;
+import ladysnake.ratsmischief.common.entity.RatEntity;
 import ladysnake.ratsmischief.common.init.*;
 import ladysnake.ratsmischief.common.world.RatSpawner;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
-import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.condition.RandomChanceLootCondition;
 import net.minecraft.loot.entry.ItemEntry;
@@ -26,15 +26,18 @@ import net.minecraft.world.Difficulty;
 import org.jetbrains.annotations.NotNull;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
+import org.quiltmc.qsl.lifecycle.api.event.ServerWorldLoadEvents;
 import org.quiltmc.qsl.lifecycle.api.event.ServerWorldTickEvents;
 import software.bernie.geckolib3.GeckoLib;
 
-public class RatsMischief implements ModInitializer, EntityComponentInitializer {
+public class RatsMischief implements ModInitializer, EntityComponentInitializer, ScoreboardComponentInitializer {
 	public static final String MOD_ID = "ratsmischief";
 	public static final SpecialRecipeSerializer<SpyRatCraftingRecipe> SPY_RAT_RECIPE = RecipeSerializer.register(
 		"ratsmischief:crafting_special_spy_rat", new SpecialRecipeSerializer<>(SpyRatCraftingRecipe::new)
 	);
 	public static final Identifier ANCIENT_CITY_CHESTS = new Identifier("minecraft", "chests/ancient_city");
+
+	public static RatEntity DEFAULT_RAT;
 
 	public static Identifier id(String path) {
 		return new Identifier(MOD_ID, path);
@@ -86,10 +89,21 @@ public class RatsMischief implements ModInitializer, EntityComponentInitializer 
 				}
 			}
 		});
+
+		// init default rat
+		ServerWorldLoadEvents.LOAD.register((server, world) -> {
+			DEFAULT_RAT = ModEntities.RAT.create(world);
+			DEFAULT_RAT.setRatType(RatEntity.Type.WILD);
+		});
 	}
 
 	@Override
 	public void registerEntityComponentFactories(@NotNull EntityComponentFactoryRegistry registry) {
 		registry.beginRegistration(PlayerEntity.class, RatHornsComponent.KEY).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).end(RatHornsComponent::new);
+	}
+
+	@Override
+	public void registerScoreboardComponentFactories(ScoreboardComponentFactoryRegistry registry) {
+		registry.registerScoreboardComponent(KORatsScoreboardComponent.KEY, KORatsScoreboardComponent::new);
 	}
 }

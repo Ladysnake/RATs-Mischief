@@ -1,6 +1,9 @@
 package ladysnake.ratsmischief.common;
 
 import ladysnake.ratsmischief.common.entity.RatEntity;
+import ladysnake.ratsmischief.common.init.ModEntities;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 
@@ -36,4 +39,12 @@ public class RatsMischiefUtils {
 			return ratType.ratTexture;
 		}
 	}
+
+	public static RatEntity getRatFromNbt(NbtCompound ratNbt, ServerWorld world) {
+		RatEntity rat = ModEntities.RAT.create(world);
+		RatEntity.cleanNbt(ratNbt);
+		rat.readNbt(ratNbt);
+		return rat;
+	}
+
 }

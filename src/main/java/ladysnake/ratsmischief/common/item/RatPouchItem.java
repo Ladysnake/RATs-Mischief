@@ -1,14 +1,16 @@
 package ladysnake.ratsmischief.common.item;
 
 import ladysnake.ratsmischief.common.RatsMischief;
+import ladysnake.ratsmischief.common.RatsMischiefUtils;
 import ladysnake.ratsmischief.common.entity.RatEntity;
-import ladysnake.ratsmischief.common.init.ModEntities;
+import ladysnake.ratsmischief.common.init.ModItems;
 import ladysnake.ratsmischief.mixin.PlayerInventoryAccessor;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -24,7 +26,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +42,21 @@ public class RatPouchItem extends Item {
 	public RatPouchItem(Settings settings, int size) {
 		super(settings);
 		this.size = size;
+	}
+
+	@Override
+	public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
+		if (this.isInGroup(group)) {
+			ItemStack emptyStack = new ItemStack(this);
+			stacks.add(emptyStack);
+
+			ItemStack filledStack = emptyStack.copy();
+			NbtCompound ratNbt = RatsMischief.DEFAULT_RAT.getRatNbt(false);
+			for (int i = 0; i < this.size; i++) {
+				RatPouchItem.storeRat(ratNbt, filledStack, false);
+			}
+			stacks.add(filledStack);
+		}
 	}
 
 	@Override
@@ -91,7 +107,7 @@ public class RatPouchItem extends Item {
 			if (!closestOwnedRats.isEmpty()) {
 				for (int i = 0; i < ((RatPouchItem) stack.getItem()).size; i++) {
 					for (RatEntity closestOwnedRat : closestOwnedRats) {
-						if (!storeRat(closestOwnedRat, stack, false)) {
+						if (!storeRatAndPlayEffects(closestOwnedRat, stack, false)) {
 							break;
 						}
 					}
@@ -105,9 +121,7 @@ public class RatPouchItem extends Item {
 
 	private static void releaseRat(ServerPlayerEntity user, NbtCompound ratNbt) {
 		ServerWorld world = user.getWorld();
-		RatEntity rat = ModEntities.RAT.create(world);
-		cleanNbt(ratNbt);
-		rat.readNbt(ratNbt);
+		RatEntity rat = RatsMischiefUtils.getRatFromNbt(ratNbt, world);
 		rat.updatePosition(user.getX(), user.getY(), user.getZ());
 		rat.setPos(user.getX(), user.getY(), user.getZ());
 		rat.setOwner(user); // Failsafe cause sometimes rats aren't the same owner, possibly due to nicknames?
@@ -172,7 +186,7 @@ public class RatPouchItem extends Item {
 		int ret = 0;
 		for (List<ItemStack> list : combinedInventory) {
 			for (ItemStack itemStack : list) {
-				if (itemStack.getItem() instanceof RatPouchItem ratPouchItem&& RatPouchItem.getFreeSlotCount(itemStack) < ratPouchItem.size) {
+				if (itemStack.getItem() instanceof RatPouchItem ratPouchItem && RatPouchItem.getFreeSlotCount(itemStack) < ratPouchItem.size) {
 					return true;
 				}
 			}
@@ -187,61 +201,78 @@ public class RatPouchItem extends Item {
 	@Override
 	public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
 		if (entity instanceof RatEntity rat && rat.getOwnerUuid() != null && rat.getOwnerUuid().equals(user.getUuid())) {
-			return storeRat(rat, user.getStackInHand(hand), false) ? ActionResult.SUCCESS : ActionResult.FAIL;
+			return storeRatAndPlayEffects(rat, user.getStackInHand(hand), false) ? ActionResult.SUCCESS : ActionResult.FAIL;
 		} else {
 			return ActionResult.PASS;
 		}
 	}
 
-	public static boolean storeRat(RatEntity rat, ItemStack itemStack, boolean ko) {
-		NbtList nbtList = itemStack.getOrCreateSubNbt(RatsMischief.MOD_ID).getList("rats", NbtElement.COMPOUND_TYPE);
-		if (rat.world instanceof ServerWorld serverWorld && !rat.isRemoved() && nbtList.size() < ((RatPouchItem) itemStack.getItem()).size) {
-			NbtCompound nbtCompound = new NbtCompound();
-			NbtCompound nbt = itemStack.getOrCreateSubNbt(RatsMischief.MOD_ID);
-			float filled = 1f;
-			if (ko) {
-				rat.setHealth(rat.getMaxHealth());
-				nbtCompound.putBoolean("KO", true);
-				filled = 0f;
+	public static boolean storeRatInInventory(RatEntity rat, PlayerEntity owner, boolean ko) {
+		if (owner == null) return false;
+
+		List<DefaultedList<ItemStack>> combinedInventory = ((PlayerInventoryAccessor) owner.getInventory()).ratsmischief$getCombinedInventory();
+		for (List<ItemStack> list : combinedInventory) {
+			for (ItemStack itemStack : list) {
+				if (itemStack.getItem() instanceof RatPouchItem) {
+					if (storeRatAndPlayEffects(rat, itemStack, ko)) {
+						return true;
+					}
+				}
 			}
-			rat.saveNbt(nbtCompound);
-			cleanNbt(nbtCompound);
-			nbtList.add(nbtCompound);
-			nbt.put("rats", nbtList);
+		}
 
-			serverWorld.spawnParticles(ParticleTypes.SMOKE, rat.getX(), rat.getY() + rat.getHeight() * .5, rat.getZ(), 3, 0.15, 0.15, 0.15, 0.f);
-			serverWorld.playSound(null, rat.getX(), rat.getY(), rat.getZ(), SoundEvents.ITEM_BUNDLE_INSERT, SoundCategory.NEUTRAL, .15f, 1f);
+		return false;
+	}
 
-			rat.discard();
-			nbt.putFloat("filled", nbt.getFloat("filled") == 1f ? 1f : filled);
+	public static boolean storeRatInInventory(NbtCompound ratNbt, PlayerEntity owner, boolean ko) {
+		if (owner == null) return false;
+
+		List<DefaultedList<ItemStack>> combinedInventory = ((PlayerInventoryAccessor) owner.getInventory()).ratsmischief$getCombinedInventory();
+		for (List<ItemStack> list : combinedInventory) {
+			for (ItemStack itemStack : list) {
+				if (itemStack.getItem() instanceof RatPouchItem) {
+					if (storeRat(ratNbt, itemStack, ko)) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean storeRatAndPlayEffects(RatEntity rat, ItemStack itemStack, boolean ko) {
+		if (rat.world instanceof ServerWorld serverWorld && !rat.isRemoved() && storeRat(rat.getRatNbt(ko), itemStack, ko)) {
+			playRatStoreEffects(rat, serverWorld);
+
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	private static void cleanNbt(NbtCompound nbtCompound) {
-		nbtCompound.remove("InLove");
-		nbtCompound.remove("LoveCause");
-		nbtCompound.remove("Leash");
-		nbtCompound.remove("ActiveEffects");
-		nbtCompound.remove("AbsorptionAmount");
-		nbtCompound.remove("HurtTime");
-		nbtCompound.remove("DeathTime");
-		nbtCompound.remove("FallFlying");
-		nbtCompound.remove("SleepingX");
-		nbtCompound.remove("SleepingY");
-		nbtCompound.remove("SleepingZ");
-		nbtCompound.remove("Pos");
-		nbtCompound.remove("Motion");
-		nbtCompound.remove("Rotation");
-		nbtCompound.remove("FallDistance");
-		nbtCompound.remove("Fire");
-		nbtCompound.remove("Air");
-		nbtCompound.remove("OnGround");
-		nbtCompound.remove("PortalCooldown");
-		nbtCompound.remove("UUID");
-		nbtCompound.remove("TicksFrozen");
+	public static void playRatStoreEffects(RatEntity rat, ServerWorld serverWorld) {
+		serverWorld.spawnParticles(ParticleTypes.SMOKE, rat.getX(), rat.getY() + rat.getHeight() * .5, rat.getZ(), 3, 0.15, 0.15, 0.15, 0.f);
+		serverWorld.playSound(null, rat.getX(), rat.getY(), rat.getZ(), SoundEvents.ITEM_BUNDLE_INSERT, SoundCategory.NEUTRAL, .15f, 1f);
+		rat.discard();
+	}
+
+	public static boolean storeRat(NbtCompound ratNbt, ItemStack itemStack, boolean ko) {
+		NbtList nbtList = itemStack.getOrCreateSubNbt(RatsMischief.MOD_ID).getList("rats", NbtElement.COMPOUND_TYPE);
+		if (nbtList.size() < ((RatPouchItem) itemStack.getItem()).size) {
+			NbtCompound nbt = itemStack.getOrCreateSubNbt(RatsMischief.MOD_ID);
+
+			float filled = ko ? 0f : 1f;
+
+			nbtList.add(ratNbt);
+			nbt.put("rats", nbtList);
+
+			nbt.putFloat("filled", nbt.getFloat("filled") == 1f ? 1f : filled);
+
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override

@@ -20,7 +20,8 @@
 		"entrypoints": {
 			"init": "ladysnake.ratsmischief.common.RatsMischief",
 			"client_init": "ladysnake.ratsmischief.client.RatsMischiefClient",
-			"cardinal-components-entity": "ladysnake.ratsmischief.common.RatsMischief"
+			"cardinal-components-entity": "ladysnake.ratsmischief.common.RatsMischief",
+			"cardinal-components-scoreboard": "ladysnake.ratsmischief.common.RatsMischief"
 		},
 		"depends": [
 			{
@@ -41,7 +42,8 @@
 		]
 	},
 	"cardinal-components": [
-		"ratsmischief:rathorns"
+		"ratsmischief:rathorns",
+		"ratsmischief:korats"
 	],
 	"mixin": "ratsmischief.mixins.json"
 }
